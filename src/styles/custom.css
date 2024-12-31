@@ -1,0 +1,56 @@
+/* handle up rounded tab */
+.rounded-tab-up {
+  --r: 25px;
+  line-height: 1.8;
+  padding-inline: 0.5em;
+  border-inline: var(--r) solid #0000;
+  border-radius: 0 0 calc(2 * var(--r)) calc(2 * var(--r)) / var(--r);
+  mask: radial-gradient(var(--r) at var(--r) 100%, #0000 98%, #000 101%)
+      calc(-1 * var(--r)) 0/100% var(--r) repeat-x,
+    conic-gradient(#000 0 0) padding-box;
+}
+/* handle down rounded tab */
+.rounded-tab-down {
+  --r: 25px; /* control the radius */
+  line-height: 1.8; /* control the height */
+  padding-inline: 0.5em;
+  border-inline: var(--r) solid #0000;
+  border-radius: calc(2 * var(--r)) calc(2 * var(--r)) 0 0 / var(--r);
+  mask: radial-gradient(var(--r) at var(--r) 0, #0000 98%, #000 101%)
+      calc(-1 * var(--r)) 100%/100% var(--r) repeat-x,
+    conic-gradient(#000 0 0) padding-box;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.rounded-tab-up-sm {
+  --r: 16px;
+  line-height: 1.8;
+  padding-inline: 0.5em;
+  border-inline: var(--r) solid #0000;
+  border-radius: 0 0 calc(2 * var(--r)) calc(2 * var(--r)) / var(--r);
+  mask: radial-gradient(var(--r) at var(--r) 100%, #0000 98%, #000 101%)
+      calc(-1 * var(--r)) 0/100% var(--r) repeat-x,
+    conic-gradient(#000 0 0) padding-box;
+}
+/* handle down rounded tab */
+.rounded-tab-down-sm {
+  --r: 16px; /* control the radius */
+  line-height: 1.8; /* control the height */
+  padding-inline: 0.5em;
+  border-inline: var(--r) solid #0000;
+  border-radius: calc(2 * var(--r)) calc(2 * var(--r)) 0 0 / var(--r);
+  mask: radial-gradient(var(--r) at var(--r) 0, #0000 98%, #000 101%)
+      calc(-1 * var(--r)) 100%/100% var(--r) repeat-x,
+    conic-gradient(#000 0 0) padding-box;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.circle-cut {
+  --r: 20px; /* cut size */
+  /* height: 250px; */
+  /* aspect-ratio: 1.2; */
+  border-radius: 20px;
+  mask: radial-gradient(var(--r) at var(--r), #0000 calc(100% - 1px), #000)
+    calc(-1 * var(--r));
+}
