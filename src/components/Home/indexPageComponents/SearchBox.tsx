@@ -14,11 +14,12 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import VillaIcon from "@mui/icons-material/Villa";
 import FlightSearchFormOnDesktop from "@/components/FlightSection/FlightSearchForm/FlightSearchFormOnDesktop";
 import ResidenceSearchFormOnDesktop from "@/components/ResidenceSection/ResidenceSearchForm/ResidenceSearchFormOnDesktop";
+import { useGlobalContext } from "@/context/store";
 const SearchBox = () => {
   // initial states
-  const [tabValue, setTabValue] = useState<string>("1");
+  const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
   const handleChangeTab = (newValue: string) => {
-    setTabValue(newValue);
+    setTabValueSearchBox(newValue);
   };
 
   const renderComingSoon = () => {
@@ -34,10 +35,10 @@ const SearchBox = () => {
     );
   };
   const getBgImage = () => {
-    switch (tabValue) {
+    switch (tabValueSearchBox) {
       case "1":
         return "flight-pattern.svg";
-      case "5":
+      case "2":
         return "residence-pattern.svg";
       default:
         return "flight-pattern.svg";
@@ -55,10 +56,10 @@ const SearchBox = () => {
     }
   };
   const renderForm = () => {
-    switch (tabValue) {
+    switch (tabValueSearchBox) {
       case "1":
         return <FlightSearchFormOnDesktop />;
-      case "5":
+      case "2":
         return <ResidenceSearchFormOnDesktop />;
       default:
         return renderComingSoon();
@@ -67,21 +68,23 @@ const SearchBox = () => {
   const renderTab = () => {
     const tabs = [
       { id: "1", label: "پرواز" },
-      { id: "2", label: "قطار" },
+      { id: "2", label: "هتل و اقامتگاه" },
       { id: "3", label: "اتوبوس" },
       { id: "4", label: "تور" },
-      { id: "5", label: "هتل و اقامتگاه" },
+      { id: "5", label: "قطار" },
     ];
 
     return (
       <div
         className={`grid grid-cols-10 gap-0 bg-primary-main rounded-tab-down w-4/5 p-0 ${
-          tabValue === "1" ? "border-r-paper" : "border-r-primary-main"
-        } ${tabValue === "5" ? "border-l-paper" : "border-l-primary-main"}`}
+          tabValueSearchBox === "1" ? "border-r-paper" : "border-r-primary-main"
+        } ${
+          tabValueSearchBox === "5" ? "border-l-paper" : "border-l-primary-main"
+        }`}
       >
         {tabs.map((tab, index) => {
           // const isEven = index % 2 === 0;
-          const isActive = tabValue === tab.id;
+          const isActive = tabValueSearchBox === tab.id;
           return (
             <span
               key={tab.id}
@@ -89,12 +92,14 @@ const SearchBox = () => {
               className={`text-paper hover:cursor-pointer ${
                 isActive ? "rounded-tab-down" : ""
               } col-span-2 flex items-center justify-center font-semibold h-12 ${
-                tabValue === "1"
+                tabValueSearchBox === "1"
                   ? "border-r-0 rounded-r-none"
-                  : tabValue === "5"
+                  : tabValueSearchBox === "5"
                   ? "border-l-0 rounded-l-none"
                   : ""
-              }  ${tabValue === tab.id ? "bg-paper text-primary-main" : ""}`}
+              }  ${
+                tabValueSearchBox === tab.id ? "bg-paper text-primary-main" : ""
+              }`}
             >
               {tab.label}
             </span>

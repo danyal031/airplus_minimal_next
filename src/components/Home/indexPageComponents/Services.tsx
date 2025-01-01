@@ -21,7 +21,7 @@ const Services = () => {
         description: "تور گردشگری ترکیه",
       },
       {
-        title: "تور گردشگری ارمنستان",
+        title: "پیشنهاد تور های کریسمس",
         image: "test2.jpg",
         description: "تور گردشگری ارمنستان",
       },
@@ -33,43 +33,45 @@ const Services = () => {
             <Paper
               elevation={0}
               key={tourismTour.title}
-              className="p-4 rounded-xl grid grid-cols-12 gap-0 max-h-60"
+              className="p-4 rounded-xl"
             >
-              <div className="aspect-video relative h-full  col-span-9 overflow-hidden">
-                <Image
-                  style={{
-                    WebkitMaskImage: `url('/assets/images/test/pic.png')`,
-                    WebkitMaskSize: "contain",
-                    WebkitMaskRepeat: "no-repeat",
-                    WebkitMaskPosition: "center",
-                    maskImage: `url('/assets/images/test/pic.png')`,
-                    maskSize: "contain",
-                    maskRepeat: "no-repeat",
-                    maskPosition: "center",
-                  }}
-                  src={`/assets/images/test/${tourismTour.image}`}
-                  alt={tourismTour.title}
-                  className="object-cover"
-                  fill
-                />
-              </div>
-
-              <div className="col-span-3 flex flex-col items-end justify-between pb-10">
-                <div className="flex flex-col items-end justify-center gap-1">
-                  <span className="text-base truncate font-semibold text-text-main">
-                    {tourismTour.title}
-                  </span>
-                  <p className="text-sm font-bold opacity-30 text-text-main">
-                    {tourismTour.description}
-                  </p>
+              <div className="grid grid-cols-12 gap-0 relative">
+                <div className="aspect-video relative col-span-9 overflow-hidden">
+                  <Image
+                    style={{
+                      WebkitMaskImage: `url('/assets/images/test/pic.png')`,
+                      WebkitMaskSize: "contain",
+                      WebkitMaskRepeat: "no-repeat",
+                      WebkitMaskPosition: "center",
+                      maskImage: `url('/assets/images/test/pic.png')`,
+                      maskSize: "contain",
+                      maskRepeat: "no-repeat",
+                      maskPosition: "center",
+                    }}
+                    src={`/assets/images/test/${tourismTour.image}`}
+                    alt={tourismTour.title}
+                    className="object-cover"
+                    fill
+                  />
                 </div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className="rounded-lg"
-                >
-                  خرید تور
-                </Button>
+
+                <div className="col-span-3 flex flex-col items-end justify-between pb-10 z-[2]">
+                  <div className="flex flex-col items-end justify-center gap-1">
+                    <span className="text-base truncate font-semibold lg:max-w-40 xl:max-w-52 text-text-main">
+                      {tourismTour.title}
+                    </span>
+                    <p className="text-sm font-bold opacity-30 text-text-main">
+                      {tourismTour.description}
+                    </p>
+                  </div>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className="rounded-lg"
+                  >
+                    خرید تور
+                  </Button>
+                </div>
               </div>
             </Paper>
           ))}

@@ -2,7 +2,9 @@
 import { CacheProvider } from "@emotion/react";
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useContext,
   useEffect,
   useMemo,
@@ -17,10 +19,20 @@ import axios from "axios";
 import { getConfig } from "@/global-files/axioses";
 
 // Define combined context type
-interface ContextProps {}
+interface ContextProps {
+  global: {
+    tabValueSearchBox: string;
+    setTabValueSearchBox: Dispatch<SetStateAction<string>>;
+  };
+}
 
 // Create combined context
-const GlobalContext = createContext<ContextProps>({});
+const GlobalContext = createContext<ContextProps>({
+  global: {
+    tabValueSearchBox: "1",
+    setTabValueSearchBox: () => {},
+  },
+});
 
 interface GlobalContextProviderProps {
   children: ReactNode;
@@ -33,7 +45,7 @@ export const GlobalContextProvider = ({
   // global
   const [config, setConfig] = useState<any>(null);
   const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
-
+  const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
   const theme = useMemo(() => getTheme("light"), []);
 
   // handle get config
@@ -55,7 +67,14 @@ export const GlobalContextProvider = ({
       .catch(() => {});
   }, []);
   return (
-    <GlobalContext.Provider value={{}}>
+    <GlobalContext.Provider
+      value={{
+        global: {
+          tabValueSearchBox,
+          setTabValueSearchBox,
+        },
+      }}
+    >
       <head>
         <link
           rel="icon"

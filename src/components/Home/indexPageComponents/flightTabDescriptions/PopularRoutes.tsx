@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState } from "react";
 import FlightIcon from "@mui/icons-material/Flight";
-import { Divider } from "@mui/material";
+import { Divider, IconButton } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -12,14 +12,26 @@ import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRig
 const PopularRoutes = () => {
   // initial states
   const [tabValue, setTabValue] = useState<string>("1");
-  const swiperRef = useRef<any>(null);
-  const handlePrev = () => {
-    swiperRef.current.swiper.slidePrev();
+  const ticketsRef = useRef<HTMLDivElement>(null);
+  const handleScrollLeft = () => {
+    if (ticketsRef.current) {
+      ticketsRef.current.scrollBy({ left: -200, behavior: "smooth" });
+    }
   };
 
-  const handleNext = () => {
-    swiperRef.current.swiper.slideNext();
+  const handleScrollRight = () => {
+    if (ticketsRef.current) {
+      ticketsRef.current.scrollBy({ left: 200, behavior: "smooth" });
+    }
   };
+  // const swiperRef = useRef<any>(null);
+  // const handlePrev = () => {
+  //   swiperRef.current.swiper.slidePrev();
+  // };
+
+  // const handleNext = () => {
+  //   swiperRef.current.swiper.slideNext();
+  // };
 
   const handleChangeTab = (newValue: string) => {
     setTabValue(newValue);
@@ -35,15 +47,15 @@ const PopularRoutes = () => {
 
     return (
       <>
-        <div className="bg-paper px-2 w-2/5 border-[3px] border-primary-main pb-1 grid grid-cols-10 gap-0 rounded-full">
+        <div className="bg-paper px-2 w-2/5 pb-1 grid grid-cols-10 gap-0 rounded-lg">
           {routes.map((service) => {
             const isActive = tabValue === service.id;
             return (
               <span
                 key={service.id}
                 onClick={() => handleChangeTab(service.id)}
-                className={`truncate col-span-2 text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-7 rounded-tab-up-sm ${
-                  isActive ? "bg-primary-main text-paper" : "text-primary-main"
+                className={`truncate col-span-2 text-primary-main text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${
+                  isActive ? "bg-main" : "bg-paper"
                 }`}
               >
                 {service.label}
@@ -117,11 +129,58 @@ const PopularRoutes = () => {
         price: 1500000,
       },
     ];
-    const [thumbsSwiper, setThumbsSwiper] = useState<null>(null);
+    // const [thumbsSwiper, setThumbsSwiper] = useState<null>(null);
 
     return (
       <>
         <div className="relative">
+          <IconButton
+            className="absolute top-1/2 -left-4 transform -translate-y-1/2 z-10 bg-primary-main rounded-full p-1"
+            onClick={handleScrollLeft}
+          >
+            <ChevronLeftOutlinedIcon fontSize="medium" className="text-paper" />
+          </IconButton>
+          <div
+            ref={ticketsRef}
+            className="flex items-center justify-start gap-3 overflow-x-auto"
+            style={{ scrollBehavior: "smooth", scrollbarWidth: "none" }}
+          >
+            {tickets.map((ticket) => (
+              <div
+                key={ticket.id}
+                style={{ aspectRatio: 2.2 }}
+                className="circle-cut flex flex-col justify-between bg-paper h-32 shadow-md p-4"
+              >
+                <div className="flex justify-between items-center text-sm font-bold text-text-main">
+                  <span>{ticket.origin}</span>
+                  <div className="flex items-center justify-center w-full">
+                    <div className="w-full px-2">
+                      <Divider variant="fullWidth" className="w-full">
+                        <FlightIcon className="text-primary-main -rotate-90" />
+                      </Divider>
+                    </div>
+                  </div>
+                  <span>{ticket.destination}</span>
+                </div>
+                <div className="border-dashed border-t border-divider my-2 mx-4"></div>
+                <div className="flex justify-between items-center text-sm font-semibold text-text-main">
+                  <span>کمترین قیمت:</span>
+                  <span>{ticket.price.toLocaleString()} تومان</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <IconButton
+            className="absolute top-1/2 -right-4 transform -translate-y-1/2 z-10 bg-primary-main rounded-full p-1"
+            onClick={handleScrollRight}
+          >
+            <KeyboardArrowRightOutlinedIcon
+              fontSize="medium"
+              className="text-paper"
+            />
+          </IconButton>
+        </div>
+        {/* <div className="relative">
           <Swiper
             modules={[Navigation]}
             spaceBetween={1}
@@ -170,7 +229,7 @@ const PopularRoutes = () => {
               onClick={handlePrev}
             />
           </div>
-        </div>
+        </div> */}
       </>
     );
   };

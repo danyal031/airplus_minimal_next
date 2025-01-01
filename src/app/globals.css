@@ -40,13 +40,13 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #969696;
+  background: #a21441;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #696969;
+  background: #a21441;
 }
 
 /* end style scrollbar  */
