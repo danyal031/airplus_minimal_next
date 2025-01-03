@@ -1,57 +1,8 @@
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
-const PopularDestinations = () => {
-  // initial states
-  const [destinationsTab, setDestinationsTab] = useState<string>("1");
-
-  const handleChangeTab = (tabValue: string) => {
-    setDestinationsTab(tabValue);
-  };
-
-  const renderTab = () => {
-    const tabList = [
-      {
-        id: "1",
-        label: "داخلی",
-      },
-      {
-        id: "2",
-        label: "خارجی",
-      },
-    ];
-    return (
-      <>
-        <div className="grid grid-cols-2 gap-0 bg-paper rounded-full min-w-72 p-0 overflow-hidden">
-          {tabList.map((tab) => {
-            const isActive = destinationsTab === tab.id;
-            return (
-              <>
-                {" "}
-                <span
-                  key={tab.id}
-                  onClick={() => handleChangeTab(tab.id)}
-                  className={`h-9 hover:cursor-pointer col-span-1 flex items-center justify-center font-semibold  ${
-                    isActive
-                      ? "bg-primary-main text-paper z-[1]"
-                      : "text-primary-main bg-paper z-[0]"
-                  } ${
-                    destinationsTab === "1"
-                      ? "rounded-r-none border-r-0 rounded-tab-down-sm -ml-4"
-                      : "rounded-l-none border-l-0 rounded-tab-up-sm -mr-4"
-                  }`}
-                >
-                  {tab.label}
-                </span>
-              </>
-            );
-          })}
-        </div>
-      </>
-    );
-  };
-
-  const renderInternalDestinationsTabContent = () => {
+const PopularResidence = () => {
+  const renderPopularResidences = () => {
     const internalResidences = [
       [
         {
@@ -134,39 +85,18 @@ const PopularDestinations = () => {
       </>
     );
   };
-  const renderForeignerDestinationsTabContent = () => {
-    return <></>;
-  };
-
-  const renderDestinationsTabContent = () => {
-    switch (destinationsTab) {
-      case "1":
-        return <>{renderInternalDestinationsTabContent()}</>;
-      case "2":
-        return renderInternalDestinationsTabContent();
-
-      // return renderForeignerDestinationsTabContent();
-    }
-  };
-
   return (
     <div className="grid grid-cols-12 gap-6">
       <div className="col-span-12 flex flex-col items-center justify-center gap-1">
         <span className="text-text-main text-lg font-bold">
-          مقصدهای پرطرفدار
-        </span>
-        <span className="text-text-main text-sm font-semibold">
-          خارجی/داخلی{" "}
+          هتل ها و اقامتگاه های محبوب{" "}
         </span>
       </div>
-      <div className="col-span-12 flex items-center justify-center">
-        {renderTab()}
-      </div>
-      <div className="col-span-12">{renderDestinationsTabContent()}</div>
+
+      <div className="col-span-12">{renderPopularResidences()}</div>
     </div>
   );
 };
-
 interface RenderImageComponentProps {
   index: number;
   element: any;
@@ -187,16 +117,16 @@ const RenderImageComponent: FC<RenderImageComponentProps> = ({
         <Image
           style={{
             WebkitMaskImage:
-              index % 2 !== 0
-                ? `url('/assets/images/test/pic2up.svg')`
-                : `url('/assets/images/test/pic2bottom.svg')`,
+              index % 2 === 0
+                ? `url('/assets/images/test/pic2left.svg')`
+                : `url('/assets/images/test/pic2right.svg')`,
             WebkitMaskSize: "cover",
             WebkitMaskRepeat: "no-repeat",
             WebkitMaskPosition: "center",
             maskImage:
-              index % 2 !== 0
-                ? `url('/assets/images/test/pic2up.svg')`
-                : `url('/assets/images/test/pic2bottom.svg')`,
+              index % 2 === 0
+                ? `url('/assets/images/test/pic2left.svg')`
+                : `url('/assets/images/test/pic2right.svg')`,
             maskSize: "cover",
             maskRepeat: "no-repeat",
             maskPosition: "center",
@@ -210,4 +140,4 @@ const RenderImageComponent: FC<RenderImageComponentProps> = ({
     </>
   );
 };
-export default PopularDestinations;
+export default PopularResidence;

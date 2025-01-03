@@ -6,6 +6,8 @@ import FrequentlyQuestions from "./flightTabDescriptions/FrequentlyQuestions";
 import FlightDescription from "./flightTabDescriptions/FlightDescription";
 import TypesAccommodation from "./residenceTabDescriptions/TypesAccommodation";
 import PopularDestinations from "./residenceTabDescriptions/PopularDestinations";
+import PopularResidence from "./residenceTabDescriptions/PopularResidence";
+import ResidenceFrequentlyQuestions from "./residenceTabDescriptions/ResidenceFrequentlyQuestions";
 
 const TabDescriptionsComponent = () => {
   // initial states
@@ -26,6 +28,8 @@ const TabDescriptionsComponent = () => {
           <>
             <TypesAccommodation />
             <PopularDestinations />
+            <PopularResidence />
+            <ResidenceFrequentlyQuestions />
           </>
         );
     }

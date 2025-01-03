@@ -1,14 +1,12 @@
 "use client";
 import { useTheme } from "@mui/material";
 import React, { useState } from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-const FrequentlyQuestions = () => {
+const ResidenceFrequentlyQuestions = () => {
   // initial states
   const [openQuestionId, setOpenQuestionId] = useState<null | number>(null);
   const theme = useTheme();
-
   const renderQuestions = () => {
     const questions = [
       {
@@ -245,4 +243,4 @@ const FrequentlyQuestions = () => {
   );
 };
 
-export default FrequentlyQuestions;
+export default ResidenceFrequentlyQuestions;
