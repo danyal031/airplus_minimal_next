@@ -7,60 +7,60 @@ const PopularResidence = () => {
       [
         {
           id: 1,
-          label: "هتل های شیراز",
+          label: "درباری",
           cover: "shiraz.jpg",
         },
         {
           id: 2,
-          label: "هتل های کیش",
+          label: "آرامیس",
           cover: "kish.jpg",
         },
       ],
       [
         {
           id: 1,
-          label: "هتل های شیراز",
+          label: "شمس",
           cover: "shiraz.jpg",
         },
         {
           id: 2,
-          label: "هتل های کیش",
+          label: "اسپادانا",
           cover: "kish.jpg",
         },
       ],
       [
         {
           id: 3,
-          label: "هتل های اصفهان",
+          label: "عالی قاپو",
           cover: "esfahan.jpg",
         },
         {
           id: 4,
-          label: "هتل های تبریز",
+          label: "پتروشیمی",
           cover: "tabriz.jpg",
         },
       ],
       [
         {
           id: 5,
-          label: "هتل های قزوین",
+          label: "سینا",
           cover: "qazvin.jpg",
         },
         {
           id: 6,
-          label: "هتل های قزوین",
+          label: "ایرانیان",
           cover: "qazvin.jpg",
         },
       ],
       [
         {
           id: 7,
-          label: "هتل های قزوین",
+          label: "مرمر",
           cover: "qazvin.jpg",
         },
         {
           id: 8,
-          label: "هتل های قزوین",
+          label: "مینو",
           cover: "qazvin.jpg",
         },
       ],
@@ -114,6 +114,13 @@ const RenderImageComponent: FC<RenderImageComponentProps> = ({
           index % 2 !== 0 ? "-mr-[60px]" : ""
         } aspect-video relative overflow-hidden min-w-60 min-h-36`}
       >
+        <span
+          className={`h-5 w-20 absolute text-center text-xs font-semibold text-text-main truncate ${
+            index % 2 === 0 ? "bottom-0 right-14" : "top-0 right-[105px]"
+          } z-[3]`}
+        >
+          {element.label}
+        </span>
         <Image
           style={{
             WebkitMaskImage:

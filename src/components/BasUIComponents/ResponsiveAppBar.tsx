@@ -15,6 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AvatarDropdown from "./AvatarDropdown";
 
 const ResponsiveAppBar = () => {
   // initial states
@@ -74,14 +75,7 @@ const ResponsiveAppBar = () => {
             >
               Helpix
             </Button>
-            <Button
-              className="rounded-lg"
-              color="primary"
-              variant="contained"
-              size="medium"
-            >
-              ورود | ثبت نام
-            </Button>
+            <AvatarDropdown />
           </div>
         </Toolbar>
       </Container>

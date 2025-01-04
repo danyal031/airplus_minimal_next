@@ -13,24 +13,58 @@ import {
 import { ThemeProvider } from "@mui/material/styles";
 import { cacheRtl, getTheme } from "@/app/theme/theme";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import ProgressLoading from "@/components/BasUIComponents/ProgressLoading";
 import axios from "axios";
 import { getConfig } from "@/global-files/axioses";
+import {
+  AlertDetailsDataType,
+  defaultAlertDetails,
+} from "@/DataTypes/globalTypes";
+import { UserDataType } from "@/DataTypes/user";
+import { LoginDialog } from "@/components/Login/LoginDialog";
 
 // Define combined context type
 interface ContextProps {
+  loginContext: {
+    openLoginDialog: boolean;
+    setOpenLoginDialog: Dispatch<SetStateAction<boolean>>;
+  };
+  userContext: {
+    userId: string;
+    setUserId: Dispatch<SetStateAction<string>>;
+    userData: UserDataType | null;
+    setUserData: Dispatch<SetStateAction<UserDataType | null>>;
+  };
   global: {
     tabValueSearchBox: string;
     setTabValueSearchBox: Dispatch<SetStateAction<string>>;
+    showAlertDetails: AlertDetailsDataType;
+    setShowAlertDetails: Dispatch<SetStateAction<AlertDetailsDataType>>;
+    showProgress: boolean;
+    setShowProgress: Dispatch<SetStateAction<boolean>>;
   };
 }
 
 // Create combined context
 const GlobalContext = createContext<ContextProps>({
+  loginContext: {
+    openLoginDialog: false,
+    setOpenLoginDialog: () => {},
+  },
+  userContext: {
+    userId: "",
+    setUserId: () => {},
+    userData: null,
+    setUserData: () => {},
+  },
   global: {
     tabValueSearchBox: "1",
     setTabValueSearchBox: () => {},
+    showAlertDetails: defaultAlertDetails,
+    setShowAlertDetails: () => {},
+    showProgress: false,
+    setShowProgress: () => {},
   },
 });
 
@@ -42,11 +76,22 @@ interface GlobalContextProviderProps {
 export const GlobalContextProvider = ({
   children,
 }: GlobalContextProviderProps) => {
+  // login
+  const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
+  const [userId, setUserId] = useState("");
+  const [userData, setUserData] = useState<UserDataType | null>(null);
   // global
+  const [showProgress, setShowProgress] = useState<boolean>(false);
   const [config, setConfig] = useState<any>(null);
   const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
   const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
+  const [showAlertDetails, setShowAlertDetails] =
+    useState<AlertDetailsDataType>(defaultAlertDetails);
   const theme = useMemo(() => getTheme("light"), []);
+  // handle user data
+  useEffect(() => {
+    setUserData(JSON.parse(localStorage.getItem("minimal_user") as string));
+  }, []);
 
   // handle get config
   useEffect(() => {
@@ -69,9 +114,15 @@ export const GlobalContextProvider = ({
   return (
     <GlobalContext.Provider
       value={{
+        loginContext: { openLoginDialog, setOpenLoginDialog },
+        userContext: { userId, setUserId, userData, setUserData },
         global: {
           tabValueSearchBox,
           setTabValueSearchBox,
+          showAlertDetails,
+          setShowAlertDetails,
+          showProgress,
+          setShowProgress,
         },
       }}
     >
@@ -88,7 +139,7 @@ export const GlobalContextProvider = ({
             <>
               <CssBaseline />
               {children}
-              {/* <Snackbar
+              <Snackbar
                 open={showAlertDetails.showAlert}
                 onClose={() => {
                   setShowAlertDetails((pre) => ({
@@ -112,9 +163,9 @@ export const GlobalContextProvider = ({
                 >
                   {showAlertDetails.alertMessage}
                 </Alert>
-              </Snackbar> */}
-              {/* {openLoginDialog && <LoginDialog />} */}
-              {/* {showProgress && <ProgressLoading />} */}
+              </Snackbar>
+              {openLoginDialog && <LoginDialog />}
+              {showProgress && <ProgressLoading />}
               {/* {isLoading && <ProgressLoading />} */}
             </>
           ) : (

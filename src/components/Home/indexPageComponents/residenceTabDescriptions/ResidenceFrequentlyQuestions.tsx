@@ -1,5 +1,5 @@
 "use client";
-import { useTheme } from "@mui/material";
+import { Collapse, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -45,23 +45,31 @@ const ResidenceFrequentlyQuestions = () => {
         answer:
           "برای استفاده از خدمات ما میتوانید از طریق سایت یا اپلیکیشن ما اقدام نمایید.",
       },
+      {
+        id: 7,
+        question: "چطور میتوانم از خدمات شما استفاده کنم؟",
+        answer:
+          "برای استفاده از خدمات ما میتوانید از طریق سایت یا اپلیکیشن ما اقدام نمایید.",
+      },
     ];
 
     return (
       <>
-        <div className="grid grid-cols-1 gap-3 border-4 border-paper border-r-0 rounded-xl p-6 h-auto overflow-y-auto max-h-[490px] pt-16 relative">
+        <div className="border-2 border-paper border-r-0 rounded-xl h-auto p-5 pt-16 relative">
           <span className="h-12 text-primary-main w-fit font-semibold text-base rounded-tab-up absolute top-0 left-1/2 -translate-x-1/2 bg-paper flex items-center justify-center truncate">
-            سوالات متداول{" "}
+            سوالات متداول
           </span>
-          {questions.map((question) => (
-            <>
+          <div className="max-h-[490px] overflow-y-auto grid grid-cols-1 gap-3 p-5">
+            {questions.map((question) => (
               <div
                 key={question.id}
                 className={`${
                   openQuestionId === question.id
                     ? "border border-primary-main"
                     : ""
-                } grid grid-cols-1 gap-3 py-3 px-6 bg-paper rounded-xl w-full justify-self-center`}
+                } grid grid-cols-1 gap-3 py-4 ${
+                  openQuestionId === question.id ? "pb-4" : "pb-1"
+                } px-4 bg-paper rounded-xl w-full justify-self-center`}
               >
                 <div className="flex justify-between items-center">
                   <div className="flex items-center justify-center gap-4">
@@ -78,7 +86,6 @@ const ResidenceFrequentlyQuestions = () => {
                     >
                       {question.id < 10 ? `0${question.id}` : question.id}
                     </span>
-
                     <div className="flex items-center justify-start">
                       <span className="text-text-main font-bold text-sm">
                         {question.question}
@@ -104,16 +111,21 @@ const ResidenceFrequentlyQuestions = () => {
                       <AddIcon fontSize="medium" color="primary" />
                     )}
                   </span>
-                </div>{" "}
-                {openQuestionId === question.id && (
+                </div>
+
+                <Collapse
+                  in={openQuestionId === question.id}
+                  timeout="auto"
+                  // unmountOnExit
+                >
                   <div className="py-3 px-6 bg-main border border-primary-main text-text-main rounded-lg">
                     <span className="text-justify">{question.answer}</span>
                   </div>
-                )}
+                </Collapse>
               </div>
-            </>
-          ))}
-        </div>
+            ))}
+          </div>
+        </div>{" "}
       </>
     );
   };
@@ -199,11 +211,11 @@ const ResidenceFrequentlyQuestions = () => {
     ];
     return (
       <>
-        <div className="bg-paper rounded-xl border-2 border-primary-main p-5 max-h-[490px] overflow-y-auto pt-16 relative">
+        <div className="bg-paper rounded-xl border-2 border-primary-main p-5 pt-16 relative">
           <span className="h-12 text-paper w-fit font-semibold text-base rounded-tab-up absolute top-0 left-1/2 -translate-x-1/2 bg-primary-main flex items-center justify-center truncate">
             همه چیز درباره بلیت هواپیما
           </span>
-          <div className="flex flex-col items-stretch justify-start gap-3 max-h-full">
+          <div className="grid grid-cols-1 gap-6 max-h-[490px] overflow-y-auto p-5">
             {questionsList.map((item) => {
               return (
                 <>

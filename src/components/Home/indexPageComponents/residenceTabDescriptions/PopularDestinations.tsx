@@ -184,6 +184,13 @@ const RenderImageComponent: FC<RenderImageComponentProps> = ({
           index % 2 !== 0 ? "-mr-[60px]" : ""
         } aspect-video relative overflow-hidden min-w-60 min-h-36`}
       >
+        <span
+          className={`h-5 w-20 absolute text-center text-xs font-semibold text-text-main truncate ${
+            index % 2 === 0 ? "top-0 right-14" : "bottom-0 right-[105px]"
+          } z-[3]`}
+        >
+          {element.label}
+        </span>
         <Image
           style={{
             WebkitMaskImage:

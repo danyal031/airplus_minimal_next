@@ -32,7 +32,7 @@ body {
 }
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f0f8ffdb;
+  background: #dfdddd;
   border-radius: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -40,13 +40,13 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #9a9a9bdb;
+  background: #a21441;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #9a9a9bdb;
+  background: #a21441;
 }
 
 /* end style scrollbar  */
