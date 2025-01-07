@@ -9,6 +9,7 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   Menu,
   MenuItem,
@@ -131,11 +132,10 @@ export default function AvatarDropdown({ className = "" }: Props) {
               disablePadding
               className="border-x border-primary-main"
             >
-              <ListItem
-                style={{
-                  padding: "10px 16px",
-                  display: "flex",
-                  alignItems: "center",
+              <ListItemButton
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push("/account");
                 }}
               >
                 <ListItemText
@@ -147,23 +147,23 @@ export default function AvatarDropdown({ className = "" }: Props) {
                     },
                   }}
                 />
-              </ListItem>
+              </ListItemButton>
               <Divider variant="fullWidth" />
-              <ListItem className="opacity-30">
+              <ListItemButton className="opacity-30">
                 <ListItemText primary="سفرها" />
-              </ListItem>
+              </ListItemButton>
               <Divider variant="fullWidth" />
-              <ListItem className="opacity-30">
+              <ListItemButton className="opacity-30">
                 <ListItemText primary="نشان‌ها" />
-              </ListItem>
+              </ListItemButton>
               <Divider variant="fullWidth" />
-              <ListItem className="opacity-30">
+              <ListItemButton className="opacity-30">
                 <ListItemText primary="پیام‌ها" />
-              </ListItem>
+              </ListItemButton>
               <Divider variant="fullWidth" />
-              <ListItem className="opacity-30">
+              <ListItemButton className="opacity-30">
                 <ListItemText primary="درخواست پشتیبانی" />
-              </ListItem>
+              </ListItemButton>
               <Divider variant="fullWidth" />
               <Button
                 onClick={() => {

@@ -23,7 +23,7 @@ export default function RootLayout({
         <GlobalContextProvider>
           <div className="flex flex-col min-h-screen">
             <ResponsiveAppBar />
-            <div className="flex-grow w-full bg-main">{children}</div>
+            <div className="flex-grow w-full bg-main py-16">{children}</div>
             <ResponsiveFooter />
           </div>
         </GlobalContextProvider>

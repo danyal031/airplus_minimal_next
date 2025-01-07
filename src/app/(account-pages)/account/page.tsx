@@ -1,7 +1,8 @@
-import React from "react";
+import UserPanelContainer from "@/components/AccountComponents/UserPanelContainer";
+import React, { FC } from "react";
 
-const Page = () => {
-  return <div>Page</div>;
+const AccountPage = () => {
+  return <UserPanelContainer />;
 };
 
-export default Page;
+export default AccountPage;

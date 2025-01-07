@@ -5,7 +5,7 @@ import TabDescriptionsComponent from "./indexPageComponents/TabDescriptionsCompo
 
 const HomeComponents = () => {
   return (
-    <div className="container my-16 grid grid-cols-1 gap-14">
+    <div className="container grid grid-cols-1 gap-14">
       <SearchBox />
       <Services />
       <TabDescriptionsComponent />
