@@ -1,19 +1,29 @@
+"use client";
 import { Button, IconButton, TextField } from "@mui/material";
 import React from "react";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import LoopIcon from "@mui/icons-material/Loop";
+import DatePickerComponent from "@/components/BasUIComponents/datePickersComponents/DatePickerComponent";
+import { useGlobalContext } from "@/context/store";
 
 const tab = "\xa0\xa0\xa0";
 
 const FlightSearchFormOnDesktop = () => {
+  // initial states
+  const { fromDate, setFromDate, toDate, setToDate } =
+    useGlobalContext().flightContext.searchContext;
   const renderDatePicker = () => {
     return (
       <>
-        <div className="flex items-center justify-center gap-2">
-          <TextField size="small" label="تاریخ رفت" />
-          <TextField size="small" label="تاریخ برگشت" />
-        </div>
+        <DatePickerComponent
+          showProgress={true}
+          fromDate={fromDate}
+          toDate={toDate}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
+          forcedReturn={false}
+        />
       </>
     );
   };

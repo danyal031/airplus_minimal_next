@@ -23,6 +23,7 @@ import {
 } from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
 import { LoginDialog } from "@/components/Login/LoginDialog";
+import { TypeDropOffLocationType } from "@/DataTypes/flight/flightTicke";
 
 // Define combined context type
 interface ContextProps {
@@ -43,6 +44,18 @@ interface ContextProps {
     setShowAlertDetails: Dispatch<SetStateAction<AlertDetailsDataType>>;
     showProgress: boolean;
     setShowProgress: Dispatch<SetStateAction<boolean>>;
+  };
+  flightContext: {
+    searchContext: {
+      dropOffLocationType: TypeDropOffLocationType;
+      setDropOffLocationType: Dispatch<SetStateAction<TypeDropOffLocationType>>;
+      travelRoute: TypeDropOffLocationType;
+      setTravelRoute: Dispatch<SetStateAction<TypeDropOffLocationType>>;
+      fromDate: string | null;
+      setFromDate: Dispatch<SetStateAction<string | null>>;
+      toDate: string | null;
+      setToDate: Dispatch<SetStateAction<string | null>>;
+    };
   };
 }
 
@@ -66,6 +79,18 @@ const GlobalContext = createContext<ContextProps>({
     showProgress: false,
     setShowProgress: () => {},
   },
+  flightContext: {
+    searchContext: {
+      dropOffLocationType: "oneWay",
+      setDropOffLocationType: () => {},
+      travelRoute: "oneWay",
+      setTravelRoute: () => {},
+      fromDate: null,
+      setFromDate: () => {},
+      toDate: null,
+      setToDate: () => {},
+    },
+  },
 });
 
 interface GlobalContextProviderProps {
@@ -87,6 +112,14 @@ export const GlobalContextProvider = ({
   const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
+  // search flight
+  const [dropOffLocationType, setDropOffLocationType] =
+    useState<TypeDropOffLocationType>("oneWay");
+  const [travelRoute, setTravelRoute] =
+    useState<TypeDropOffLocationType>("oneWay");
+  const [fromDate, setFromDate] = useState<string | null>(null);
+  const [toDate, setToDate] = useState<string | null>(null);
+  //
   const theme = useMemo(() => getTheme("light"), []);
   // handle user data
   useEffect(() => {
@@ -123,6 +156,19 @@ export const GlobalContextProvider = ({
           setShowAlertDetails,
           showProgress,
           setShowProgress,
+        },
+
+        flightContext: {
+          searchContext: {
+            dropOffLocationType,
+            setDropOffLocationType,
+            travelRoute,
+            setTravelRoute,
+            fromDate,
+            setFromDate,
+            setToDate,
+            toDate,
+          },
         },
       }}
     >
