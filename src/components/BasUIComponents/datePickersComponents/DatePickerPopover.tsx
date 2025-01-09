@@ -13,6 +13,7 @@ import {
   InputAdornment,
   Popover,
   TextField,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
@@ -120,6 +121,8 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
     }
     if (secondSelectedDay) {
       setToDate(applyMask("date", secondSelectedDay));
+    } else {
+      setToDate(null);
     }
   }, [firstSelectedDay, secondSelectedDay]);
 
@@ -326,7 +329,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                               onClick={(event) => {
                                 event.stopPropagation();
                                 setDropOffLocationType("oneWay");
-                                setToDate(null);
+                                setSecondSelectedDay(null);
                               }}
                             >
                               <ClearIcon
@@ -510,197 +513,6 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
           {popoverContent}
         </Popover>
       </>
-      // <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-      //   <DialogTitle>انتخاب تاریخ</DialogTitle>
-      //   <DialogContent>
-      //     <DialogContentText className="overflow-x-hidden p-0"></DialogContentText>
-      //     <div className="flex justify-between items-center mb-8">
-      //       <button
-      //         onClick={() => changeMonth("prev")}
-      //         className="px-4 py-2 bg-gray-200 rounded-lg shadow-md hover:bg-gray-300 transition-all duration-300"
-      //       >
-      //         قبلی
-      //       </button>
-
-      //       <div className="grow grid grid-cols-1 md:grid-cols-2 px-5 gap-4">
-      //         <div
-      //           className={
-      //             enableInputClass +
-      //             "flex justify-between items-center gap-2 p-4 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300"
-      //           }
-      //           style={{ boxShadow: "0 4px 15px rgba(173, 216, 230, 0.3)" }}
-      //         >
-      //           <span className="text-sm font-medium text-gray-700">
-      //             {forcedReturn &&
-      //               (firstSelectedDay ? (
-      //                 <span className="text-sm font-medium text-gray-700">
-      //                   {applyMask("date", firstSelectedDay)}
-      //                 </span>
-      //               ) : (
-      //                 <span className="text-sm font-medium text-gray-700">
-      //                   تاریخ ورود
-      //                 </span>
-      //               ))}
-      //             {!forcedReturn &&
-      //               (firstSelectedDay ? (
-      //                 <span className="text-sm font-medium text-gray-700">
-      //                   {applyMask("date", firstSelectedDay)}
-      //                 </span>
-      //               ) : (
-      //                 <span className="text-sm font-medium text-gray-700">
-      //                   تاریخ رفت
-      //                 </span>
-      //               ))}
-      //           </span>
-      //         </div>
-      //         <div
-      //           className={
-      //             (dropOffLocationType == "roundTrip"
-      //               ? enableInputClass
-      //               : disableInputClass) +
-      //             "flex justify-between items-center gap-2 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-      //           }
-      //           onClick={() => {
-      //             if (!forcedReturn) {
-      //               setDropOffLocationType((preValue) => {
-      //                 if (preValue == "roundTrip") return "oneWay";
-      //                 return "roundTrip";
-      //               });
-      //               setSecondSelectedDay(null);
-      //               setToDate(null);
-      //             }
-      //           }}
-      //           style={{ boxShadow: "0 4px 15px rgba(144, 238, 144, 0.3)" }}
-      //         >
-      //           {forcedReturn &&
-      //             (secondSelectedDay ? (
-      //               <span className="text-sm font-medium text-gray-700">
-      //                 {applyMask("date", secondSelectedDay)}
-      //               </span>
-      //             ) : (
-      //               <span className="text-sm font-medium text-gray-700">
-      //                 تاریخ خروج
-      //               </span>
-      //             ))}
-      //           {!forcedReturn &&
-      //             (secondSelectedDay ? (
-      //               <span className="text-sm font-medium text-gray-700">
-      //                 {applyMask("date", secondSelectedDay)}
-      //               </span>
-      //             ) : dropOffLocationType == "roundTrip" ? (
-      //               <span className="text-sm font-medium text-gray-700">
-      //                 تاریخ برگشت
-      //               </span>
-      //             ) : (
-      //               <span className="text-sm font-medium text-gray-300">
-      //                 تاریخ برگشت (کلیک کنید)
-      //               </span>
-      //             ))}
-      //           {!forcedReturn &&
-      //             (dropOffLocationType == "roundTrip" ? (
-      //               <HighlightOffIcon className="text-lg text-red-500" />
-      //             ) : (
-      //               <AddCircleOutlineIcon className="text-lg text-green-500" />
-      //             ))}
-      //         </div>
-      //       </div>
-
-      //       <button
-      //         onClick={() => changeMonth("next")}
-      //         className="px-4 py-2 bg-gray-200 rounded-lg shadow-md hover:bg-gray-300 transition-all duration-300"
-      //       >
-      //         بعدی
-      //       </button>
-      //     </div>
-      //     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-      //       {/* first month */}
-      //       <div className="w-full">
-      //         <div className="flex justify-center items-center mb-4 text-xl font-bold">
-      //           {monthNames[currentMonths[0].month - 1]} {currentMonths[0].year}
-      //         </div>
-      //         <div className="grid grid-cols-7 gap-2 text-center text-gray-700 font-semibold">
-      //           <div className="flex justify-center items-center">ش</div>
-      //           <div className="flex justify-center items-center">ی</div>
-      //           <div className="flex justify-center items-center">د</div>
-      //           <div className="flex justify-center items-center">س</div>
-      //           <div className="flex justify-center items-center">چ</div>
-      //           <div className="flex justify-center items-center">پ</div>
-      //           <div className="flex justify-center items-center">ج</div>
-      //         </div>
-      //         <div className="grid grid-cols-7 gap-2 mt-4">
-      //           {renderDays(
-      //             currentMonths[0].year,
-      //             currentMonths[0].month,
-      //             currentMonths[0].daysInMonth,
-      //             currentMonths[0].startDay
-      //           )}
-      //         </div>
-      //       </div>
-
-      //       {/* second month */}
-      //       <div className="w-full">
-      //         <div className="flex justify-center items-center mb-4 text-xl font-bold">
-      //           {monthNames[currentMonths[1].month - 1]} {currentMonths[1].year}
-      //         </div>
-      //         <div className="grid grid-cols-7 gap-2 text-center text-gray-700 font-semibold">
-      //           <div className="flex justify-center items-center">ش</div>
-      //           <div className="flex justify-center items-center">ی</div>
-      //           <div className="flex justify-center items-center">د</div>
-      //           <div className="flex justify-center items-center">س</div>
-      //           <div className="flex justify-center items-center">چ</div>
-      //           <div className="flex justify-center items-center">پ</div>
-      //           <div className="flex justify-center items-center">ج</div>
-      //         </div>
-      //         <div className="grid grid-cols-7 gap-2 mt-4">
-      //           {renderDays(
-      //             currentMonths[1].year,
-      //             currentMonths[1].month,
-      //             currentMonths[1].daysInMonth,
-      //             currentMonths[1].startDay
-      //           )}
-      //         </div>
-      //       </div>
-      //     </div>
-      //   </DialogContent>
-      //   <DialogActions>
-      //     <div className="w-full grid md:grid-cols-4 grid-cols-2 gap-2" dir="ltr">
-      //       <div>
-      //         <Button
-      //           disabled={
-      //             !forcedReturn
-      //               ? dropOffLocationType == "roundTrip"
-      //                 ? secondSelectedDay
-      //                   ? false
-      //                   : true
-      //                 : firstSelectedDay
-      //                 ? false
-      //                 : true
-      //               : secondSelectedDay
-      //               ? false
-      //               : true
-      //           }
-      //           className="w-full px-5 "
-      //           type="submit"
-      //           variant="contained"
-      //           color="primary"
-      //           onClick={handleConfirm}
-      //         >
-      //           تایید
-      //         </Button>
-      //       </div>
-      //       <div>
-      //         <Button
-      //           className="w-full px-5 "
-      //           variant="contained"
-      //           color="secondary"
-      //           onClick={handleClose}
-      //         >
-      //           انصراف
-      //         </Button>
-      //       </div>
-      //     </div>
-      //   </DialogActions>
-      // </Dialog>
     );
   };
 
