@@ -33,12 +33,13 @@ const ResponsiveAppBar = () => {
       target: "_blank",
     },
     { title: "مجله", link: "http://mag.savosh.com", target: "_blank" },
+    { title: "درباره ما", link: "/about-us", target: "_self" },
   ];
   return (
     <AppBar position="sticky" className="border-b-2 border-paper">
       <Container maxWidth="lg" className="">
-        <Toolbar disableGutters className="grid grid-cols-3">
-          <div className="flex items-center justify-start">
+        <Toolbar disableGutters className="grid grid-cols-12">
+          <div className="flex items-center justify-start col-span-3">
             <Image
               src={
                 (process.env.NEXT_PUBLIC_MEDIA_URL_1 as string) +
@@ -54,7 +55,7 @@ const ResponsiveAppBar = () => {
               className="cursor-pointer"
             />
           </div>
-          <div className="flex items-center justify-center gap-16">
+          <div className="flex items-center justify-center gap-16 truncate col-span-6">
             {pages.map((page, index) => (
               <Link
                 key={index}
@@ -67,7 +68,7 @@ const ResponsiveAppBar = () => {
               </Link>
             ))}
           </div>
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center justify-end gap-3 col-span-3">
             <Button
               variant="contained"
               size="medium"
