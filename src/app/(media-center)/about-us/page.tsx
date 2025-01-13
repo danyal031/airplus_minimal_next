@@ -73,7 +73,7 @@ const page = () => {
     );
   };
   return (
-    <div className="bg-paper rounded-xl p-8 grid grid-cols-1 gap-12">
+    <div className="grid grid-cols-1 gap-12">
       {renderAboutAndTargetContent()}
       {renderFeatures()}
     </div>

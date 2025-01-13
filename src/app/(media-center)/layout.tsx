@@ -14,9 +14,9 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
   const renderTab = () => {
     const tabs = [
       { id: "1", label: "درباره ما", link: "/about-us" },
-      { id: "2", label: "ارتباط با ما", link: "/" },
-      { id: "3", label: "همکاری باما", link: "/" },
-      { id: "4", label: "افتخارات", link: "/" },
+      { id: "2", label: "ارتباط با ما", link: "/contact" },
+      { id: "3", label: "همکاری باما", link: "/cooperation" },
+      { id: "4", label: "افتخارات", link: "/honors" },
     ];
     return (
       <>
@@ -62,7 +62,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
           style={{
             position: "relative",
             width: "100%",
-            backgroundImage: `url('/assets/images/mediaCenterBanners/media-center.svg')`,
+            backgroundImage: `url('/assets/images/mediaCenter/media-center.svg')`,
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
             overflow: "hidden", // Hide overflowing content
@@ -73,10 +73,10 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
     );
   };
   return (
-    <div className="grid grid-cols-1 gap-0">
+    <div className="grid grid-cols-1 gap-0 container">
       {renderMediaCenterListOption()}
       <div className="flex items-center justify-center">{renderTab()}</div>
-      <div className="container">{children}</div>
+      <div className="bg-paper rounded-xl p-8">{children}</div>
     </div>
   );
 };
