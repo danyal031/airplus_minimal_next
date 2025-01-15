@@ -1,7 +1,13 @@
 "use client";
 import React, { FC, Fragment, useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
-import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -34,9 +40,30 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
     useGlobalContext().flightContext.searchContext;
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const anchor = event.currentTarget;
+    const rect = anchor.getBoundingClientRect();
+    const popoverHeight = 365; // ارتفاع تقریبی Popover
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    if (spaceBelow < popoverHeight) {
+      const offset = 120;
+      const scrollAmount = popoverHeight - spaceBelow;
+      window.scrollBy({ top: scrollAmount, behavior: "smooth" });
+    }
+
+    setAnchorEl(anchor);
+    setOpenDatePickerPopover(true);
+  };
+
   return (
     <>
-      <div className="flex items-center justify-center gap-2">
+      <div
+        className="flex items-center justify-center gap-2 px-2"
+        onClick={(e: any) => {
+          setAnchorEl(e.currentTarget);
+        }}
+      >
         {" "}
         <DatePickerPopover
           open={openDatePickerPopover}
@@ -57,8 +84,7 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
           variant="outlined"
           value={fromDate ? fromDate : ""}
           onClick={(e: any) => {
-            setOpenDatePickerPopover(true);
-            setAnchorEl(e.currentTarget);
+            handlePopoverOpen(e);
           }}
           InputProps={{
             readOnly: true,
@@ -73,17 +99,12 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
           variant="outlined"
           value={toDate ? toDate : ""}
           onClick={(e: any) => {
+            handlePopoverOpen(e);
+
             if (forcedReturn) {
-              setOpenDatePickerPopover(true);
-              setAnchorEl(e.currentTarget);
             } else {
               if (dropOffLocationType === "oneWay") {
                 setDropOffLocationType("roundTrip");
-                setOpenDatePickerPopover(true);
-                setAnchorEl(e.currentTarget);
-              } else {
-                setOpenDatePickerPopover(true);
-                setAnchorEl(e.currentTarget);
               }
             }
           }}
@@ -131,8 +152,8 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
                         </IconButton>
                       ) : (
                         <IconButton
-                          onClick={() => {
-                            setOpenDatePickerPopover(true);
+                          onClick={(e) => {
+                            handlePopoverOpen(e);
                             setDropOffLocationType("roundTrip");
                           }}
                         >

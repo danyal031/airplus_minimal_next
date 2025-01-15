@@ -32,6 +32,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { useGlobalContext } from "@/context/store";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 interface DatePickerPopoverDataType {
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -160,7 +162,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
         <div className="w-full flex justify-center items-center">
           <div
             key={i}
-            className={`w-12 h-12 flex flex-col items-center justify-center`}
+            className={`flex flex-col items-center justify-center bg-purple-400`}
           ></div>
         </div>
       );
@@ -181,7 +183,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
         <div className="w-full flex justify-center items-center">
           <div
             key={dayId}
-            className={`aspect-square w-10 flex flex-col items-center justify-center rounded-xl border cursor-pointer transition-all duration-300
+            className={`aspect-square w-8 flex flex-col items-center justify-center rounded-xl border cursor-pointer transition-all duration-300 
               ${dayId < currentDate && "cursor-auto"} 
               ${
                 dayId == currentDate &&
@@ -224,7 +226,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
               }
             }}
           >
-            <span className="text-[10px] md:text-sm">{i}</span>
+            <span className="text-[10px] md:text-xs">{i}</span>
             {/* {i % 2 === 1 ? (
               <span
                 className={`text-[6px] md:text-[10px] ${
@@ -259,16 +261,17 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
     const popoverContent = (
       <>
         <div className="grid grid-cols-1 gap-4">
-          <div className="flex items-center justify-between gap-14">
+          <div className="flex items-center justify-between gap-5">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-primary-main font-semibold text-sm bg-main p-2 rounded-xl">
+              <span className="text-primary-main font-semibold text-sm bg-main p-2 rounded-xl flex items-center justify-center gap-1">
+                <CalendarMonthIcon fontSize="small" color="primary" />
                 تقویم میلادی
               </span>
               <span className="text-primary-main font-semibold text-sm bg-main p-2 rounded-xl">
                 امروز
               </span>
             </div>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 min-w-[430px] max-w-[430px]">
               {" "}
               <TextField
                 label={forcedReturn ? "تاریخ ورود" : "تاریخ رفت"}
@@ -379,10 +382,10 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
               />
             </div>
           </div>
-          <div className="p-2 grid grid-cols-2 gap-0 rounded-xl bg-main px-1">
+          <div className="p-1 grid grid-cols-2 gap-0 rounded-xl bg-main px-1">
             <div className="flex items-center justify-center relative">
               <div className="flex items-center justify-start absolute right-0">
-                <IconButton onClick={() => changeMonth("prev")}>
+                <IconButton size="small" onClick={() => changeMonth("prev")}>
                   <KeyboardArrowRightIcon color="primary" fontSize="small" />
                 </IconButton>
               </div>
@@ -401,7 +404,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                 </span>
               </div>{" "}
               <div className="flex items-center justify-end justify-self-end absolute left-0">
-                <IconButton onClick={() => changeMonth("next")}>
+                <IconButton size="small" onClick={() => changeMonth("next")}>
                   <KeyboardArrowLeftIcon color="primary" fontSize="small" />
                 </IconButton>
               </div>{" "}
@@ -411,7 +414,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {/* first month */}
             <div className="">
-              <div className="grid grid-cols-7 gap-2 text-center text-text-main font-bold">
+              <div className="text-sm grid grid-cols-7 gap-1 text-center text-text-main font-bold">
                 <div className="flex justify-center items-center">ش</div>
                 <div className="flex justify-center items-center">ی</div>
                 <div className="flex justify-center items-center">د</div>
@@ -432,7 +435,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
 
             {/* second month */}
             <div className="">
-              <div className="grid grid-cols-7 gap-2 text-center text-text-main font-bold">
+              <div className="text-sm grid grid-cols-7 gap-1 text-center text-text-main font-bold">
                 <div className="flex justify-center items-center">ش</div>
                 <div className="flex justify-center items-center">ی</div>
                 <div className="flex justify-center items-center">د</div>
@@ -452,16 +455,42 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-text-main font-semibold text-sm">
-              رفت 15 خرداد
-            </span>
+            <div className="flex items-center justify-center gap-1">
+              <span className="text-text-main font-semibold text-sm">
+                {firstSelectedDay ? (
+                  <>
+                    رفت{" "}
+                    <span className="text-primary-main font-bold">
+                      {Number(firstSelectedDay.slice(6, 8))}
+                    </span>{" "}
+                    <span className="text-primary-main font-bold">
+                      {monthNames[Number(firstSelectedDay.slice(4, 6)) - 1]}
+                    </span>
+                  </>
+                ) : (
+                  "تاریخی انتخاب نشده"
+                )}
+              </span>
+              {secondSelectedDay && (
+                <span className="text-text-main font-semibold text-sm">
+                  برگشت{" "}
+                  <span className="text-primary-main font-bold">
+                    {Number(secondSelectedDay.slice(6, 8))}
+                  </span>{" "}
+                  <span className="text-primary-main font-bold">
+                    {monthNames[Number(secondSelectedDay.slice(4, 6)) - 1]}
+                  </span>
+                </span>
+              )}
+            </div>
+
             <div className="flex items-center justify-center gap-2">
               <Button
                 onClick={clearSelectedDates}
                 variant="contained"
                 className="rounded-lg text-primary-main"
                 color="inherit"
-                size="medium"
+                size="small"
               >
                 پاک کردن
               </Button>
@@ -482,7 +511,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                 onClick={handleConfirm}
                 variant="contained"
                 color="primary"
-                size="medium"
+                size="small"
                 className="rounded-lg"
               >
                 تایید
@@ -492,22 +521,23 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
         </div>
       </>
     );
+
     return (
       <>
         <Popover
+          // disablePortal={true}
           anchorEl={anchorEl}
           onClose={handleClose}
           open={open}
           anchorOrigin={{
             vertical: "top",
-            horizontal: "center",
+            horizontal: "left",
           }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
+          sx={{
+            marginTop: "-4px",
           }}
           classes={{
-            paper: "p-6 border-2 border-primary-main rounded-xl",
+            paper: "p-2 border-2 border-primary-main rounded-xl",
           }}
         >
           {popoverContent}

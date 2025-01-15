@@ -1,15 +1,11 @@
+import axios from "axios";
+import { convertJalaliToMiladiDate, convertToGregorian } from "./function";
 import {
   authInputType,
   authSubmitInputType,
   baseDataDataType,
 } from "@/DataTypes/globalTypes";
-import axios from "axios";
-import {
-  AirportDataType,
-  FlightTicketDataType,
-  onlineFlightSearchInputType,
-} from "@/DataTypes/flightTicket";
-import { convertJalaliToMiladiDate, convertToGregorian } from "./function";
+import { onlineFlightSearchInputType } from "@/DataTypes/flight/flightTicke";
 
 // axios.defaults.headers.common["Authorization"] =
 //   "Bearer " + localStorage.getItem("access_token");

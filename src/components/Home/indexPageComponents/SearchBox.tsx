@@ -1,6 +1,6 @@
 "use client";
 import Lottie from "lottie-react";
-import React, { useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import comingSoonLottie from "../../../../public/assets/lottie/coming_soon_lottie.json";
 import { Tab } from "@mui/material";
 import { motion } from "framer-motion";
@@ -15,7 +15,14 @@ import VillaIcon from "@mui/icons-material/Villa";
 import FlightSearchFormOnDesktop from "@/components/FlightSection/FlightSearchForm/FlightSearchFormOnDesktop";
 import ResidenceSearchFormOnDesktop from "@/components/ResidenceSection/ResidenceSearchForm/ResidenceSearchFormOnDesktop";
 import { useGlobalContext } from "@/context/store";
-const SearchBox = () => {
+import { AirportDataType } from "@/DataTypes/flight/flightTicke";
+interface SearchBoxProps {
+  airports: AirportDataType[] | [];
+}
+const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
+  useEffect(() => {
+    console.log("airports list: ", airports);
+  }, [airports]);
   // initial states
   const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
   const handleChangeTab = (newValue: string) => {
