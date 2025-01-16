@@ -20,9 +20,12 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import warrantyLottie from "../../../public/assets/lottie/warranty.json";
 import Lottie from "lottie-react";
+import { ConfigDataType } from "@/DataTypes/globalTypes";
 const ResponsiveFooter = () => {
   // initial states
-  const [config, setConfig] = React.useState<any>(null);
+  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
+    null
+  );
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
 

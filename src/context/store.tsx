@@ -19,6 +19,7 @@ import axios from "axios";
 import { getConfig } from "@/global-files/axioses";
 import {
   AlertDetailsDataType,
+  ConfigDataType,
   defaultAlertDetails,
 } from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
@@ -107,7 +108,7 @@ export const GlobalContextProvider = ({
   const [userData, setUserData] = useState<UserDataType | null>(null);
   // global
   const [showProgress, setShowProgress] = useState<boolean>(false);
-  const [config, setConfig] = useState<any>(null);
+  const [config, setConfig] = useState<null | ConfigDataType>(null);
   const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
   const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
   const [showAlertDetails, setShowAlertDetails] =

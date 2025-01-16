@@ -16,10 +16,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AvatarDropdown from "./AvatarDropdown";
+import { ConfigDataType } from "@/DataTypes/globalTypes";
 
 const ResponsiveAppBar = () => {
   // initial states
-  const [config, setConfig] = React.useState<any>(null);
+  const [config, setConfig] = React.useState<null | ConfigDataType>(null);
 
   // handle initial value
   useEffect(() => {
