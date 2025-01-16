@@ -27,7 +27,7 @@ import {
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ClearIcon from "@mui/icons-material/Clear";
-import { TypeDropOffLocationType } from "@/DataTypes/flight/flightTicke";
+import { TypeDropOffLocationType } from "@/DataTypes/flight/flightTicket";
 import AddIcon from "@mui/icons-material/Add";
 import { useGlobalContext } from "@/context/store";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";

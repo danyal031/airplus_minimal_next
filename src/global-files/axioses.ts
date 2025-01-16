@@ -5,7 +5,7 @@ import {
   authSubmitInputType,
   baseDataDataType,
 } from "@/DataTypes/globalTypes";
-import { onlineFlightSearchInputType } from "@/DataTypes/flight/flightTicke";
+import { onlineFlightSearchInputType } from "@/DataTypes/flight/flightTicket";
 
 // axios.defaults.headers.common["Authorization"] =
 //   "Bearer " + localStorage.getItem("access_token");

@@ -24,7 +24,10 @@ import {
 } from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
 import { LoginDialog } from "@/components/Login/LoginDialog";
-import { TypeDropOffLocationType } from "@/DataTypes/flight/flightTicke";
+import {
+  AirportDataType,
+  TypeDropOffLocationType,
+} from "@/DataTypes/flight/flightTicket";
 
 // Define combined context type
 interface ContextProps {
@@ -56,6 +59,10 @@ interface ContextProps {
       setFromDate: Dispatch<SetStateAction<string | null>>;
       toDate: string | null;
       setToDate: Dispatch<SetStateAction<string | null>>;
+      origin: AirportDataType | undefined;
+      setOrigin: Dispatch<SetStateAction<AirportDataType | undefined>>;
+      destination: AirportDataType | undefined;
+      setDestination: Dispatch<SetStateAction<AirportDataType | undefined>>;
     };
   };
 }
@@ -90,6 +97,10 @@ const GlobalContext = createContext<ContextProps>({
       setFromDate: () => {},
       toDate: null,
       setToDate: () => {},
+      origin: undefined,
+      setOrigin: () => {},
+      destination: undefined,
+      setDestination: () => {},
     },
   },
 });
@@ -120,6 +131,10 @@ export const GlobalContextProvider = ({
     useState<TypeDropOffLocationType>("oneWay");
   const [fromDate, setFromDate] = useState<string | null>(null);
   const [toDate, setToDate] = useState<string | null>(null);
+  const [origin, setOrigin] = useState<AirportDataType | undefined>(undefined);
+  const [destination, setDestination] = useState<AirportDataType | undefined>(
+    undefined
+  );
   //
   const theme = useMemo(() => getTheme("light"), []);
   // handle user data
@@ -169,6 +184,10 @@ export const GlobalContextProvider = ({
             setFromDate,
             setToDate,
             toDate,
+            origin,
+            setOrigin,
+            destination,
+            setDestination,
           },
         },
       }}

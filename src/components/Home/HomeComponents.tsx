@@ -3,7 +3,7 @@ import SearchBox from "./indexPageComponents/SearchBox";
 import Services from "./indexPageComponents/Services";
 import TabDescriptionsComponent from "./indexPageComponents/TabDescriptionsComponent";
 import { getAirportsInServer } from "@/global-files/fetches";
-import { AirportDataType } from "@/DataTypes/flight/flightTicke";
+import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 
 const HomeComponents = async () => {
   const airports: AirportDataType[] = await getAirportsInServer();

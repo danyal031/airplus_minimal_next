@@ -15,7 +15,7 @@ import VillaIcon from "@mui/icons-material/Villa";
 import FlightSearchFormOnDesktop from "@/components/FlightSection/FlightSearchForm/FlightSearchFormOnDesktop";
 import ResidenceSearchFormOnDesktop from "@/components/ResidenceSection/ResidenceSearchForm/ResidenceSearchFormOnDesktop";
 import { useGlobalContext } from "@/context/store";
-import { AirportDataType } from "@/DataTypes/flight/flightTicke";
+import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 interface SearchBoxProps {
   airports: AirportDataType[] | [];
 }
