@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -22,11 +22,14 @@ import warrantyLottie from "../../../public/assets/lottie/warranty.json";
 import Lottie from "lottie-react";
 const ResponsiveFooter = () => {
   // initial states
-  const [config, setConfig] = React.useState<any>(
-    JSON.parse(localStorage.getItem("minimal_config") as string)
-  );
+  const [config, setConfig] = React.useState<any>(null);
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
+
+  // handle initial value
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
   const renderSlogans = () => {
     const slogans = [
       {

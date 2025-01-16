@@ -1,14 +1,18 @@
 "use client";
 import { Button, Card, Paper } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Services = () => {
   // initial states
   const [tabValue, setTabValue] = useState<string>("1");
-  const [config, setConfig] = React.useState<any>(
-    JSON.parse(localStorage.getItem("minimal_config") as string)
-  );
+  const [config, setConfig] = React.useState<any>(null);
+
+  // handle initial value
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
+
   const handleChangeTab = (newValue: string) => {
     setTabValue(newValue);
   };

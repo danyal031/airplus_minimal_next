@@ -10,7 +10,7 @@ import {
   TextField,
   Toolbar,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,9 +19,12 @@ import AvatarDropdown from "./AvatarDropdown";
 
 const ResponsiveAppBar = () => {
   // initial states
-  const [config, setConfig] = React.useState<any>(
-    JSON.parse(localStorage.getItem("minimal_config") as string)
-  );
+  const [config, setConfig] = React.useState<any>(null);
+
+  // handle initial value
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
 
   const router = useRouter();
 
