@@ -26,6 +26,7 @@ import { UserDataType } from "@/DataTypes/user";
 import { LoginDialog } from "@/components/Login/LoginDialog";
 import {
   AirportDataType,
+  FlightResponseDataType,
   TypeDropOffLocationType,
 } from "@/DataTypes/flight/flightTicket";
 
@@ -63,6 +64,22 @@ interface ContextProps {
       setOrigin: Dispatch<SetStateAction<AirportDataType | undefined>>;
       destination: AirportDataType | undefined;
       setDestination: Dispatch<SetStateAction<AirportDataType | undefined>>;
+      airports: AirportDataType[] | [];
+      setAirports: Dispatch<SetStateAction<AirportDataType[] | []>>;
+      ticketLoading: boolean;
+      setTicketLoading: Dispatch<SetStateAction<boolean>>;
+      changeStatusRequest: boolean;
+      setChangeStatusRequest: Dispatch<SetStateAction<boolean>>;
+      isInitialSearchDone: boolean;
+      setIsInitialSearchDone: Dispatch<SetStateAction<boolean>>;
+      searchFlightResponseData: FlightResponseDataType | null;
+      setSearchFlightResponseData: Dispatch<
+        SetStateAction<FlightResponseDataType | null>
+      >;
+      filteredSearchFlightResponseData: FlightResponseDataType | null;
+      setFilteredSearchFlightResponseData: Dispatch<
+        SetStateAction<FlightResponseDataType | null>
+      >;
     };
   };
 }
@@ -101,6 +118,18 @@ const GlobalContext = createContext<ContextProps>({
       setOrigin: () => {},
       destination: undefined,
       setDestination: () => {},
+      airports: [],
+      setAirports: () => {},
+      ticketLoading: false,
+      setTicketLoading: () => {},
+      changeStatusRequest: false,
+      setChangeStatusRequest: () => {},
+      isInitialSearchDone: false,
+      setIsInitialSearchDone: () => {},
+      searchFlightResponseData: null,
+      setSearchFlightResponseData: () => {},
+      filteredSearchFlightResponseData: null,
+      setFilteredSearchFlightResponseData: () => {},
     },
   },
 });
@@ -125,6 +154,18 @@ export const GlobalContextProvider = ({
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
   // search flight
+  const [
+    filteredSearchFlightResponseData,
+    setFilteredSearchFlightResponseData,
+  ] = useState<FlightResponseDataType | null>(null);
+  const [searchFlightResponseData, setSearchFlightResponseData] =
+    useState<FlightResponseDataType | null>(null);
+  const [isInitialSearchDone, setIsInitialSearchDone] =
+    useState<boolean>(false);
+  const [changeStatusRequest, setChangeStatusRequest] =
+    useState<boolean>(false);
+  const [ticketLoading, setTicketLoading] = useState<boolean>(false);
+  const [airports, setAirports] = useState<AirportDataType[] | []>([]);
   const [dropOffLocationType, setDropOffLocationType] =
     useState<TypeDropOffLocationType>("oneWay");
   const [travelRoute, setTravelRoute] =
@@ -188,6 +229,18 @@ export const GlobalContextProvider = ({
             setOrigin,
             destination,
             setDestination,
+            airports,
+            setAirports,
+            ticketLoading,
+            setTicketLoading,
+            changeStatusRequest,
+            setChangeStatusRequest,
+            isInitialSearchDone,
+            setIsInitialSearchDone,
+            searchFlightResponseData,
+            setSearchFlightResponseData,
+            filteredSearchFlightResponseData,
+            setFilteredSearchFlightResponseData,
           },
         },
       }}

@@ -20,15 +20,16 @@ interface SearchBoxProps {
   airports: AirportDataType[] | [];
 }
 const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
-  useEffect(() => {
-    console.log("airports list: ", airports);
-  }, [airports]);
   // initial states
   const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
+  const { setAirports } = useGlobalContext().flightContext.searchContext;
   const handleChangeTab = (newValue: string) => {
     setTabValueSearchBox(newValue);
   };
-
+  useEffect(() => {
+    console.log("airports list: ", airports);
+    setAirports(airports);
+  }, [airports]);
   const renderComingSoon = () => {
     return (
       <div className="w-full relative rounded-xl bg-paper p-6 min-h-16 flex gap-5 items-center justify-center">
