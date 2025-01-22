@@ -88,8 +88,8 @@ const FlightSearchFormOnDesktop = () => {
             handleClickSubmit();
           }}
           variant="contained"
-          size="medium"
-          className="w-full min-h-full rounded-lg"
+          size="small"
+          className="w-full h-full rounded-lg"
         >
           جستجو
         </Button>
@@ -98,12 +98,19 @@ const FlightSearchFormOnDesktop = () => {
   };
   return (
     <div className="bg-paper w-full rounded-xl p-5">
-      <div className="flex items-center justify-center gap-5">
-        <div className="flex-grow">
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-6">
           <RoundWayInput />
         </div>
-        <div className="min-w-[430px] max-w-[430px]">{renderDatePicker()}</div>
-        <div className="min-w-40">{renderConfirmButton()}</div>
+        <div className="col-span-4">{renderDatePicker()}</div>
+
+        <div className="col-span-2">{renderConfirmButton()}</div>
+
+        {/* <div className="flex-grow">
+          <RoundWayInput />
+        </div> */}
+        {/* <div className="min-w-[430px] max-w-[430px]">{renderDatePicker()}</div> */}
+        {/* <div className="min-w-40 h-full">{renderConfirmButton()}</div> */}
       </div>
     </div>
   );
