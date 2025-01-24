@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import leftArrow from "../../../../public/assets/images/flightSection/left-arrow.svg";
+import leftArrow from "/public/assets/images/flightSection/left-arrow.svg";
 import Image from "next/image";
 import airplaneDownArrow from "../../../../public/assets/images/flightSection/airplane-down-arrow.svg";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
@@ -83,82 +83,195 @@ export default TicketsList;
 const TicketCard = () => {
   // initial states
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [typeDetailsTab, setTypeDetailsTab] = useState<string>("1");
 
   // handle change show details
   const handleChangeShowDetails = () => {
     setShowDetails(!showDetails);
   };
-  const renderDetails = () => {
-    const flightDetails = <></>;
 
-    const refundsRules = <></>;
-    return (
+  // handle change type details tab
+  const handleChangeTypeDetailsTab = (newValue: string) => {
+    setTypeDetailsTab(newValue);
+  };
+
+  const renderDetails = () => {
+    const flightDetails = (
       <>
-        <div className="bg-paper rounded-lg p-4 grid grid-cols-12 gap-5">
-          <div className="col-span-4 grid grid-cols-1 gap-1">
-            <span className="text-text-main text-sm truncate font-semibold">
-              اصفهان(فرودگاه بین المللی شهید بهشتی)
-            </span>
-            <div className="grid grid-cols-1">
-              <span className="text-gray-400 text-xs font-semibold">
-                23:30 شنبه 22 دی
-              </span>
-              <div className="flex items-center justify-start gap-2">
-                {/* <Image
-                  alt="airplane-Down-Arrow"
-                  src={airplaneDownArrow}
-                  width={20}
-                  height={350}
-                /> */}
-                <div className="min-h-20 border-2 border-main border-dashed"></div>
-                <span className="text-xs text-gray-400 border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
-                  <AccessAlarmIcon className="text-sm" />۱ ساعت و ۳۰ دقیقه
-                </span>
-              </div>
-              <span className="text-gray-400 text-xs font-semibold">
-                00:00 شنبه 22 دی
-              </span>
-            </div>
-            <span className="text-text-main text-sm truncate font-semibold">
-              اصفهان(فرودگاه بین المللی شهید بهشتی)
-            </span>
+        <div className="grid grid-cols-3 gap-0 w-full">
+          <div className="p-2 col-span-2 border-l-2 border-paper border-dashed grid grid-cols-4 gap-2">
+            <div className=""></div>
+            <div className="text-text-main text-sm font-semibold">بزرگسال</div>
+            <div className="text-text-main text-sm font-semibold">کودک</div>
+            <div className="text-text-main text-sm font-semibold">نوزاد</div>
+            <div className="text-text-main text-sm font-semibold">بارمجاز</div>
+            <div className="text-gray-400 text-xs">20kg</div>
+            <div className="text-gray-400 text-xs">20kg</div>
+            <div className="text-gray-400 text-xs">20kg</div>
+            <div className="text-text-main text-sm font-semibold">قیمت</div>
+            <div className="text-gray-400 text-xs">20kg</div>
+            <div className="text-gray-400 text-xs">20kg</div>
+            <div className="text-gray-400 text-xs">20kg</div>
           </div>
-          <div className="col-span-8 bg-main rounded-xl grid grid-cols-3 gap-0">
-            <div className="col-span-2 border-l-2 border-paper border-dashed"></div>
-            <div className="col-span-1 grid grid-cols-1 gap-3 p-2 px-3">
-              <div className="flex items-center justify-between">
-                <span className="text-text-main text-sm font-semibold">
-                  شماره پرواز
-                </span>
-                <span className="text-gray-400 text-sm">5624</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-main text-sm font-semibold">
-                  شماره پرواز
-                </span>
-                <span className="text-gray-400 text-sm">5624</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-main text-sm font-semibold">
-                  شماره پرواز
-                </span>
-                <span className="text-gray-400 text-sm">5624</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-main text-sm font-semibold">
-                  شماره پرواز
-                </span>
-                <span className="text-gray-400 text-sm">5624</span>
-              </div>
+          <div className="p-2 col-span-1 grid grid-cols-1 gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-text-main text-sm font-semibold">
+                شماره پرواز
+              </span>
+              <span className="text-gray-400 text-sm">5624</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-main text-sm font-semibold">
+                شماره پرواز
+              </span>
+              <span className="text-gray-400 text-sm">5624</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-main text-sm font-semibold">
+                شماره پرواز
+              </span>
+              <span className="text-gray-400 text-sm">5624</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-main text-sm font-semibold">
+                شماره پرواز
+              </span>
+              <span className="text-gray-400 text-sm">5624</span>
             </div>
           </div>
         </div>
       </>
     );
+
+    const rules = [
+      {
+        id: 1,
+        title: "استرداد تا قبل از ساعت ۱۲:۰۰ هفت روز قبل از پرواز",
+        penalty: "۳۰  درصد جریمه",
+      },
+      {
+        id: 2,
+        title: "استرداد تا قبل از ساعت ۱۲:۰۰ هفت روز قبل از پرواز",
+        penalty: "۳۰  درصد جریمه",
+      },
+      {
+        id: 3,
+        title: "استرداد تا قبل از ساعت ۱۲:۰۰ هفت روز قبل از پرواز",
+        penalty: "۳۰  درصد جریمه",
+      },
+      {
+        id: 4,
+        title: "استرداد تا قبل از ساعت ۱۲:۰۰ هفت روز قبل از پرواز",
+        penalty: "۳۰  درصد جریمه",
+      },
+      {
+        id: 5,
+        title: "استرداد تا قبل از ساعت ۱۲:۰۰ هفت روز قبل از پرواز",
+        penalty: "۳۰  درصد جریمه",
+      },
+      {
+        id: 6,
+        title: "استرداد تا قبل از ساعت ۱۲:۰۰ هفت روز قبل از پرواز",
+        penalty: "۳۰  درصد جریمه",
+      },
+      {
+        id: 7,
+        title: "استرداد تا قبل از ساعت ۱۲:۰۰ هفت روز قبل از پرواز",
+        penalty: "۳۰  درصد جریمه",
+      },
+    ];
+
+    const refundsRules = (
+      <>
+        <div className="w-full overflow-x-auto flex items-center justify-start gap-2 p-2">
+          {rules.map((rule) => {
+            return (
+              <>
+                <div className="grid grid-cols-1 gap-3 border border-dashed border-primary-main rounded-2xl p-3 min-w-36">
+                  <span className="text-text-main text-xs font-semibold text-justify">
+                    {rule.title}
+                  </span>
+                  <span className="flex items-center justify-center text-primary-main text-xs font-semibold">
+                    {rule.penalty}
+                  </span>
+                </div>
+              </>
+            );
+          })}
+        </div>
+      </>
+    );
+
+    const TypeDetailsOptions = [
+      {
+        id: "1",
+        label: "اطلاعات پرواز",
+      },
+      {
+        id: "2",
+        label: "قوانین استرداد",
+      },
+    ];
+
+    return (
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-4 grid grid-cols-1 gap-1">
+          <span className="text-text-main text-sm truncate font-semibold">
+            اصفهان(فرودگاه بین المللی شهید بهشتی)
+          </span>
+          <div className="grid grid-cols-1">
+            <span className="text-gray-400 text-xs font-semibold">
+              23:30 شنبه 22 دی
+            </span>
+            <div className="flex items-center justify-start gap-2">
+              {/* <Image
+                  alt="airplane-Down-Arrow"
+                  src={airplaneDownArrow}
+                  width={20}
+                  height={350}
+                /> */}
+              <div className="min-h-20 border-2 border-main border-dashed"></div>
+              <span className="text-xs text-gray-400 border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
+                <AccessAlarmIcon className="text-sm" />۱ ساعت و ۳۰ دقیقه
+              </span>
+            </div>
+            <span className="text-gray-400 text-xs font-semibold">
+              00:00 شنبه 22 دی
+            </span>
+          </div>
+          <span className="text-text-main text-sm truncate font-semibold">
+            اصفهان(فرودگاه بین المللی شهید بهشتی)
+          </span>
+        </div>
+        <div className="col-span-8 bg-main rounded-xl flex flex-col items-start justify-start gap-0">
+          <div className="flex items-center justify-start gap-0">
+            {TypeDetailsOptions.map((tab) => {
+              const isActive = typeDetailsTab === tab.id;
+              return (
+                <span
+                  key={tab.id}
+                  onClick={() => handleChangeTypeDetailsTab(tab.id)}
+                  className={`truncate text-primary-main text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${
+                    isActive ? "bg-paper" : "bg-main"
+                  }`}
+                >
+                  {tab.label}
+                </span>
+              );
+            })}
+          </div>
+          {typeDetailsTab === "1" ? flightDetails : refundsRules}
+        </div>
+      </div>
+    );
   };
   return (
     <>
-      <div className="bg-main rounded-xl grid grid-cols-4 gap-0 overflow-hidden">
+      <div
+        className={`bg-main rounded-xl grid grid-cols-4 gap-0 overflow-hidden px-2 ${
+          showDetails ? "pb-2" : ""
+        }`}
+      >
         <div className="col-span-3 grid grid-cols-12 gap-0">
           <div className="col-span-2 flex items-center justify-center">
             <div className="p-2 rounded-xl flex flex-col items-center justify-center gap-0 border border-primary-main">
@@ -221,7 +334,9 @@ const TicketCard = () => {
         </div>
 
         {showDetails && (
-          <div className="col-span-4 p-2 pt-0">{renderDetails()}</div>
+          <div className="bg-paper rounded-lg p-4 col-span-4">
+            {renderDetails()}
+          </div>
         )}
       </div>
     </>
