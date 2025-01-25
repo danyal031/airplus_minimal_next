@@ -14,16 +14,14 @@ const FlightListingContainer: FC<FlightListingContainerProps> = ({
   // initial states
   const { setAirports } = useGlobalContext().flightContext.searchContext;
   // handle initial airports data
-  useEffect(() => {
-    setAirports(airports);
-  }, []);
+  // useEffect(() => {
+  //   setAirports(airports);
+  // }, []);
   return (
     <div className="container">
       <div className="fixed w-full left-1/2 -translate-x-1/2 container z-10">
         <Suspense>
-          <ListingFlightHeader
-          // airports={airports}
-          />
+          <ListingFlightHeader airports={airports} />
         </Suspense>
       </div>
       {/* <SectionGridFilterCard/> */}

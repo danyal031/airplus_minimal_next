@@ -43,7 +43,7 @@ export interface FlightTicketDataType {
   Remarks: Remarks;
   ReturningFlight: boolean | ReturningFlight2;
   Steps: boolean;
-  Classes: Class[];
+  Classes: Class[] | Class;
 }
 
 export interface Class {

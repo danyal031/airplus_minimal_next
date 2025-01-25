@@ -33,8 +33,12 @@ export const formatInputWithOutCommas = (input: number | string): string => {
 };
 export function convertPersianToEnglishNumbers(input: string): string {
   if (!input) {
-    return input;
+    return input; // return early if the input is null or undefined
   }
+
+  // Ensure input is a string
+  input = String(input);
+
   const persianDigits: string[] = [
     "۰",
     "۱",

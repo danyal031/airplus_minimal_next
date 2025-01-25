@@ -285,14 +285,14 @@ const PriceRateBox = () => {
       { id: 5, label: "پنجشنبه", price: 1400 },
       { id: 6, label: "جمعه", price: 1500 },
       { id: 7, label: "شنبه", price: 1600 },
-      // { id: 8, label: "پنجشنبه", price: 1600 },
-      // { id: 9, label: "پنجشنبه", price: 1600 },
-      // { id: 10, label: "شنبه", price: 1600 },
-      // { id: 11, label: "شنبه", price: 1600 },
-      // { id: 12, label: "پنجشنبه", price: 1600 },
-      // { id: 13, label: "شنبه", price: 1600 },
-      // { id: 14, label: "پنجشنبه", price: 1600 },
-      // { id: 15, label: "شنبه", price: 1600 },
+      { id: 8, label: "پنجشنبه", price: 1600 },
+      { id: 9, label: "پنجشنبه", price: 1600 },
+      { id: 10, label: "شنبه", price: 1600 },
+      { id: 11, label: "شنبه", price: 1600 },
+      { id: 12, label: "پنجشنبه", price: 1600 },
+      { id: 13, label: "شنبه", price: 1600 },
+      { id: 14, label: "پنجشنبه", price: 1600 },
+      { id: 15, label: "شنبه", price: 1600 },
     ];
     return (
       <>
@@ -300,7 +300,7 @@ const PriceRateBox = () => {
           {dates.map((date) => (
             <div
               key={date.id}
-              className="min-w-16 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-1"
+              className="min-w-24 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-2"
             >
               <span className="font-semibold text-sm">{date.label}</span>
               <span className="text-gray-400 text-xs">{date.price}</span>

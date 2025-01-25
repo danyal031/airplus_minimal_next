@@ -27,6 +27,7 @@ import { LoginDialog } from "@/components/Login/LoginDialog";
 import {
   AirportDataType,
   FlightResponseDataType,
+  FlightTicketDataType,
   TypeDropOffLocationType,
 } from "@/DataTypes/flight/flightTicket";
 
@@ -80,6 +81,14 @@ interface ContextProps {
       setFilteredSearchFlightResponseData: Dispatch<
         SetStateAction<FlightResponseDataType | null>
       >;
+      selectedWentFlight: FlightTicketDataType | null;
+      setSelectedWentFlight: Dispatch<
+        SetStateAction<FlightTicketDataType | null>
+      >;
+      selectedReturnFlight: FlightTicketDataType | null;
+      setSelectedReturnFlight: Dispatch<
+        SetStateAction<FlightTicketDataType | null>
+      >;
     };
   };
 }
@@ -130,6 +139,10 @@ const GlobalContext = createContext<ContextProps>({
       setSearchFlightResponseData: () => {},
       filteredSearchFlightResponseData: null,
       setFilteredSearchFlightResponseData: () => {},
+      selectedWentFlight: null,
+      setSelectedWentFlight: () => {},
+      selectedReturnFlight: null,
+      setSelectedReturnFlight: () => {},
     },
   },
 });
@@ -154,6 +167,10 @@ export const GlobalContextProvider = ({
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
   // search flight
+  const [selectedWentFlight, setSelectedWentFlight] =
+    useState<FlightTicketDataType | null>(null);
+  const [selectedReturnFlight, setSelectedReturnFlight] =
+    useState<FlightTicketDataType | null>(null);
   const [
     filteredSearchFlightResponseData,
     setFilteredSearchFlightResponseData,
@@ -241,6 +258,10 @@ export const GlobalContextProvider = ({
             setSearchFlightResponseData,
             filteredSearchFlightResponseData,
             setFilteredSearchFlightResponseData,
+            selectedWentFlight,
+            setSelectedWentFlight,
+            selectedReturnFlight,
+            setSelectedReturnFlight,
           },
         },
       }}

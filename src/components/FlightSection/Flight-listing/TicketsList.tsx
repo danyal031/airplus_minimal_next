@@ -1,5 +1,6 @@
-import { Button } from "@mui/material";
-import React, { useState } from "react";
+"use client";
+import { Box, Button } from "@mui/material";
+import React, { FC, useState } from "react";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -7,9 +8,27 @@ import leftArrow from "/public/assets/images/flightSection/left-arrow.svg";
 import Image from "next/image";
 import airplaneDownArrow from "../../../../public/assets/images/flightSection/airplane-down-arrow.svg";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
+import { useGlobalContext } from "@/context/store";
+import { motion } from "framer-motion";
+import { FlightTicketDataType } from "@/DataTypes/flight/flightTicket";
+import {
+  calculateTimeDistance,
+  convertToPersianDate,
+  formatInputWithCommas,
+} from "@/global-files/function";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
+import { Route } from "next";
+
 const TicketsList = () => {
   // initial states
   const [filterTabValue, setFilterTabValue] = useState<string>("1");
+  const {
+    travelRoute,
+    filteredSearchFlightResponseData,
+    selectedWentFlight,
+    selectedReturnFlight,
+  } = useGlobalContext().flightContext.searchContext;
   // handle change of filter tab
   const handleFilterTabChange = (newValue: string) => {
     setFilterTabValue(newValue);
@@ -47,7 +66,6 @@ const TicketsList = () => {
     );
   };
 
-  const tickets = [1, 2, 3, 4];
   return (
     <div className="grid grid-cols-1 gap-2">
       <div className="flex items-center justify-start">
@@ -65,13 +83,45 @@ const TicketsList = () => {
           {renderFilterTab()}
         </div>
         <div className="grid grid-cols-1 gap-3">
-          {tickets.map((ticket) => {
+          {travelRoute === "oneWay"
+            ? filteredSearchFlightResponseData?.Went.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                  animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                  transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                >
+                  <TicketCard key={index} data={item} index={index} />
+                </motion.div>
+              ))
+            : !selectedWentFlight
+            ? filteredSearchFlightResponseData?.Went.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                  animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                  transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                >
+                  <TicketCard key={index} data={item} index={index} />
+                </motion.div>
+              ))
+            : filteredSearchFlightResponseData?.Return.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                  animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                  transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                >
+                  <TicketCard key={index} data={item} index={index} />
+                </motion.div>
+              ))}
+          {/* {tickets.map((ticket) => {
             return (
               <>
                 <TicketCard />
               </>
             );
-          })}
+          })} */}
         </div>
       </div>
     </div>
@@ -80,10 +130,75 @@ const TicketsList = () => {
 
 export default TicketsList;
 
-const TicketCard = () => {
+export interface TicketCardProps {
+  data: FlightTicketDataType;
+  index: number;
+}
+const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
   // initial states
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [typeDetailsTab, setTypeDetailsTab] = useState<string>("1");
+  const {
+    selectedWentFlight,
+    selectedReturnFlight,
+    setSelectedWentFlight,
+    setSelectedReturnFlight,
+    travelRoute,
+  } = useGlobalContext().flightContext.searchContext;
+  const router = useRouter();
+  // handle choose ticket
+  const createSearchparams = (
+    wentTicket: FlightTicketDataType,
+    returnTicket: FlightTicketDataType | false
+  ) => {
+    return {
+      wentTicket: wentTicket,
+      returnTicket: returnTicket,
+    };
+  };
+  const handleChooseTicket = (
+    data: FlightTicketDataType,
+    classIndex: number = 0
+  ) => {
+    if (travelRoute === "oneWay") {
+      if (Array.isArray(data.Classes)) {
+        setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
+        const queryParams = createSearchparams(
+          { ...data, Classes: data.Classes[classIndex] },
+          false
+        );
+        const local_id = uuidv4().substr(0, 6);
+        localStorage.setItem(local_id, JSON.stringify(queryParams));
+        router.push(`/flight/checkout?factor=${local_id}` as Route);
+      }
+    } else {
+      if (!selectedWentFlight) {
+        if (Array.isArray(data.Classes)) {
+          setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
+          if (selectedReturnFlight) {
+            const queryParams = createSearchparams(
+              { ...data, Classes: data.Classes[classIndex] },
+              selectedReturnFlight
+            );
+            const local_id = uuidv4().substr(0, 6);
+            localStorage.setItem(local_id, JSON.stringify(queryParams));
+            router.push(`/flight/checkout?factor=${local_id}` as Route);
+          }
+        }
+      } else {
+        if (Array.isArray(data.Classes)) {
+          setSelectedReturnFlight({
+            ...data,
+            Classes: data.Classes[classIndex],
+          });
+          const queryParams = createSearchparams(selectedWentFlight, data);
+          const local_id = uuidv4().substr(0, 6);
+          localStorage.setItem(local_id, JSON.stringify(queryParams));
+          router.push(`/flight/checkout?factor=${local_id}` as Route);
+        }
+      }
+    }
+  };
 
   // handle change show details
   const handleChangeShowDetails = () => {
@@ -105,38 +220,111 @@ const TicketCard = () => {
             <div className="text-text-main text-sm font-semibold">کودک</div>
             <div className="text-text-main text-sm font-semibold">نوزاد</div>
             <div className="text-text-main text-sm font-semibold">بارمجاز</div>
-            <div className="text-gray-400 text-xs">20kg</div>
-            <div className="text-gray-400 text-xs">20kg</div>
-            <div className="text-gray-400 text-xs">20kg</div>
+            <div className="text-gray-400 text-xs">
+              {data.Classes[0].Baggage.Adult.Trunk.TotalWeight &&
+              data.Classes[0].Baggage.Adult.Trunk.Number ? (
+                <Box className="flex gap-1">
+                  <span>kg</span>
+                  <span className="text-xs">
+                    {`${data.Classes[0].Baggage.Adult.Trunk.TotalWeight}`}{" "}
+                  </span>
+                  <span>x</span>
+                  <span>
+                    {" "}
+                    {`${data.Classes[0].Baggage.Adult.Trunk.Number}`}
+                  </span>{" "}
+                </Box>
+              ) : (
+                <span className="text-xs">نامشخص</span>
+              )}
+            </div>
+            <div className="text-gray-400 text-xs">
+              {data.Classes[0].Baggage.Child.Trunk.TotalWeight &&
+              data.Classes[0].Baggage.Child.Trunk.Number ? (
+                <Box className="flex gap-1">
+                  <span>kg</span>
+                  <span className="text-xs">
+                    {`${data.Classes[0].Baggage.Child.Trunk.TotalWeight}`}{" "}
+                  </span>
+                  <span>x</span>
+                  <span>
+                    {" "}
+                    {`${data.Classes[0].Baggage.Child.Trunk.Number}`}
+                  </span>{" "}
+                </Box>
+              ) : (
+                <span className="text-xs">نامشخص</span>
+              )}
+            </div>
+            <div className="text-gray-400 text-xs">
+              {" "}
+              {data.Classes[0].Baggage.Infant.Trunk.TotalWeight &&
+              data.Classes[0].Baggage.Infant.Trunk.Number ? (
+                <Box className="flex gap-1">
+                  <span>kg</span>
+                  <span className="text-xs">
+                    {`${data.Classes[0].Baggage.Infant.Trunk.TotalWeight}`}{" "}
+                  </span>
+                  <span>x</span>
+                  <span>
+                    {" "}
+                    {`${data.Classes[0].Baggage.Infant.Trunk.Number}`}
+                  </span>{" "}
+                </Box>
+              ) : (
+                <span className="text-xs">نامشخص</span>
+              )}
+            </div>
             <div className="text-text-main text-sm font-semibold">قیمت</div>
-            <div className="text-gray-400 text-xs">20kg</div>
-            <div className="text-gray-400 text-xs">20kg</div>
-            <div className="text-gray-400 text-xs">20kg</div>
+            <div className="text-gray-400 text-xs">
+              {" "}
+              {` ${formatInputWithCommas(
+                data.Classes[0].Financial.Adult.Payable / 10
+              )}`}
+            </div>
+            <div className="text-gray-400 text-xs">
+              {" "}
+              {` ${formatInputWithCommas(
+                data.Classes[0].Financial.Child.Payable / 10
+              )}`}
+            </div>
+            <div className="text-gray-400 text-xs">
+              {" "}
+              {` ${formatInputWithCommas(
+                data.Classes[0].Financial.Infant.Payable / 10
+              )}`}
+            </div>
           </div>
           <div className="p-2 col-span-1 grid grid-cols-1 gap-3">
             <div className="flex items-center justify-between">
               <span className="text-text-main text-sm font-semibold">
                 شماره پرواز
               </span>
-              <span className="text-gray-400 text-sm">5624</span>
+              <span className="text-gray-400 text-sm">{data.FlightNumber}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-text-main text-sm font-semibold">
-                شماره پرواز
+                کلاس کابین{" "}
               </span>
-              <span className="text-gray-400 text-sm">5624</span>
+              <span className="text-gray-400 text-sm">
+                {data.Classes[0].CabinType.title.fa}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-text-main text-sm font-semibold">
-                شماره پرواز
+                نوع پرواز{" "}
               </span>
-              <span className="text-gray-400 text-sm">5624</span>
+              <span className="text-gray-400 text-sm">
+                {data.FlightType == "Charter" ? "چارتری" : "سیستمی"}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-text-main text-sm font-semibold">
-                شماره پرواز
+                مدل هواپیما{" "}
               </span>
-              <span className="text-gray-400 text-sm">5624</span>
+              <span className="text-gray-400 text-sm">
+                {data.Aircraft.iata}
+              </span>
             </div>
           </div>
         </div>
@@ -217,11 +405,11 @@ const TicketCard = () => {
       <div className="grid grid-cols-12 gap-5">
         <div className="col-span-4 grid grid-cols-1 gap-1">
           <span className="text-text-main text-sm truncate font-semibold">
-            اصفهان(فرودگاه بین المللی شهید بهشتی)
+            فرودگاه {data.Origin.Iata.title_fa} {`(${data.Origin.Iata.iata})`}
           </span>
           <div className="grid grid-cols-1">
             <span className="text-gray-400 text-xs font-semibold">
-              23:30 شنبه 22 دی
+              {convertToPersianDate(data.DepartureDateTime)}
             </span>
             <div className="flex items-center justify-start gap-2">
               {/* <Image
@@ -231,16 +419,51 @@ const TicketCard = () => {
                   height={350}
                 /> */}
               <div className="min-h-20 border-2 border-main border-dashed"></div>
-              <span className="text-xs text-gray-400 border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
-                <AccessAlarmIcon className="text-sm" />۱ ساعت و ۳۰ دقیقه
-              </span>
+              {data.ArrivalDateTime && (
+                <span className="text-xs text-gray-400 border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
+                  <AccessAlarmIcon className="text-sm" />
+                  {
+                    calculateTimeDistance(
+                      data.DepartureDateTime,
+                      data.ArrivalDateTime
+                    ).hours
+                  }{" "}
+                  ساعت و{" "}
+                  {
+                    calculateTimeDistance(
+                      data.DepartureDateTime,
+                      data.ArrivalDateTime
+                    ).minutes
+                  }{" "}
+                  دقیقه
+                </span>
+                // <span className="text-xs text-neutral-500">
+                //   زمان تقریبی سفر{" "}
+                //   {
+                //     calculateTimeDistance(
+                //       data.DepartureDateTime,
+                //       data.ArrivalDateTime
+                //     ).hours
+                //   }{" "}
+                //   ساعت و{" "}
+                //   {
+                //     calculateTimeDistance(
+                //       data.DepartureDateTime,
+                //       data.ArrivalDateTime
+                //     ).minutes
+                //   }{" "}
+                //   دقیقه
+                // </span>
+              )}
             </div>
             <span className="text-gray-400 text-xs font-semibold">
-              00:00 شنبه 22 دی
+              {data.ArrivalDateTime &&
+                convertToPersianDate(data.ArrivalDateTime)}{" "}
             </span>
           </div>
           <span className="text-text-main text-sm truncate font-semibold">
-            اصفهان(فرودگاه بین المللی شهید بهشتی)
+            فرودگاه {data.Destination.Iata.title_fa}{" "}
+            {`(${data.Destination.Iata.iata})`}
           </span>
         </div>
         <div className="col-span-8 bg-main rounded-xl flex flex-col items-start justify-start gap-0">
@@ -274,17 +497,32 @@ const TicketCard = () => {
       >
         <div className="col-span-3 grid grid-cols-12 gap-0">
           <div className="col-span-2 flex items-center justify-center">
-            <div className="p-2 rounded-xl flex flex-col items-center justify-center gap-0 border border-primary-main">
-              <span className="text-sm">logo</span>
-              <span className="text-sm">وارش</span>
+            <div className="p-1 flex flex-col items-center justify-center gap-1">
+              <span className="flex-shrink-0">
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${data.Airline.logo}`}
+                  width={38}
+                  height={40}
+                  className="w-10"
+                  alt="air-logo"
+                  sizes="40px"
+                />
+              </span>
+              <span className="text-xs truncate font-bold">
+                {data.Airline.title_fa}
+              </span>
             </div>
           </div>
           <div className="col-span-10 flex flex-col items-start justify-between">
             <div className="flex items-center justify-start gap-2 min-h-12 flex-1 flex-shrink-0 w-full">
               <span className="text-base text-text-main font-semibold">
-                اصفهان
+                {data.Origin.Iata.title_fa} {`(${data.Origin.Iata.iata})`}{" "}
               </span>
-              <span className="text-lg text-primary-main font-bold">12:00</span>
+              <span className="text-lg text-primary-main font-bold">
+                {data.DepartureDateTime.split(" ")[1].split(":")[0] +
+                  ":" +
+                  data.DepartureDateTime.split(" ")[1].split(":")[1]}{" "}
+              </span>
               <Image
                 src={leftArrow}
                 alt="left-arrow"
@@ -293,10 +531,14 @@ const TicketCard = () => {
                 className="object-cover"
               />{" "}
               <span className="text-base text-text-main font-semibold">
-                23:00
+                {data.ArrivalDateTime &&
+                  data.ArrivalDateTime.split(" ")[1].split(":")[0] +
+                    ":" +
+                    data.ArrivalDateTime.split(" ")[1].split(":")[1]}{" "}
               </span>{" "}
               <span className="text-base text-text-main font-semibold">
-                بوشهر
+                {data.Destination.Iata.title_fa}{" "}
+                {`(${data.Destination.Iata.iata})`}
               </span>
             </div>
             <div className="flex items-center justify-start gap-2 w-full">
@@ -312,24 +554,30 @@ const TicketCard = () => {
                 )}
               </span>
               <span className="p-[2px] px-2 border border-primary-main text-primary-main text-xs rounded-full">
-                اکونومی
+                {data.Classes[0].CabinType.title.fa}
               </span>{" "}
               <span className="p-[2px] px-2 border border-primary-main text-primary-main text-xs rounded-full">
-                سیستمی
+                {data.FlightType == "Charter" ? "چارتری" : "سیستمی"}
               </span>
             </div>
           </div>
         </div>
         <div className="p-2 col-span-1 border-dashed border-r-2 border-paper flex flex-col items-center justify-center gap-2">
           <Button
+            onClick={() => {
+              handleChooseTicket(data, 0);
+            }}
             variant="contained"
             size="small"
             className="rounded-lg min-w-28"
           >
-            1200
+            {Array.isArray(data.Classes) &&
+              formatInputWithCommas(
+                data.Classes[0].Financial.Adult.Payable / 10
+              )}
           </Button>
           <span className="text-xs font-semibold text-gray-400">
-            3 صندلی باقی مانده
+            {data.Classes[0].AvailableSeat} صندلی باقی مانده
           </span>
         </div>
 
