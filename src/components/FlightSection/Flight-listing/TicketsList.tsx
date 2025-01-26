@@ -17,7 +17,7 @@ import {
   formatInputWithCommas,
 } from "@/global-files/function";
 import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Route } from "next";
 
 const TicketsList = () => {
@@ -146,6 +146,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
     travelRoute,
   } = useGlobalContext().flightContext.searchContext;
   const router = useRouter();
+  const searchParams = useSearchParams();
   // handle choose ticket
   const createSearchparams = (
     wentTicket: FlightTicketDataType,
@@ -154,6 +155,8 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
     return {
       wentTicket: wentTicket,
       returnTicket: returnTicket,
+      departureDate: searchParams.get("departure_date"),
+      returningDate: searchParams.get("returning_date"),
     };
   };
   const handleChooseTicket = (
@@ -191,7 +194,10 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             ...data,
             Classes: data.Classes[classIndex],
           });
-          const queryParams = createSearchparams(selectedWentFlight, data);
+          const queryParams = createSearchparams(selectedWentFlight, {
+            ...data,
+            Classes: data.Classes[classIndex],
+          });
           const local_id = uuidv4().substr(0, 6);
           localStorage.setItem(local_id, JSON.stringify(queryParams));
           router.push(`/flight/checkout?factor=${local_id}` as Route);

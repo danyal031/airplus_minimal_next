@@ -21,6 +21,7 @@ import {
   AlertDetailsDataType,
   ConfigDataType,
   defaultAlertDetails,
+  UserInformationDataType,
 } from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
 import { LoginDialog } from "@/components/Login/LoginDialog";
@@ -89,6 +90,10 @@ interface ContextProps {
       setSelectedReturnFlight: Dispatch<
         SetStateAction<FlightTicketDataType | null>
       >;
+      flightPassengers: UserInformationDataType[] | [];
+      setFlightPassengers: Dispatch<
+        SetStateAction<UserInformationDataType[] | []>
+      >;
     };
   };
 }
@@ -143,6 +148,8 @@ const GlobalContext = createContext<ContextProps>({
       setSelectedWentFlight: () => {},
       selectedReturnFlight: null,
       setSelectedReturnFlight: () => {},
+      flightPassengers: [],
+      setFlightPassengers: () => {},
     },
   },
 });
@@ -167,6 +174,9 @@ export const GlobalContextProvider = ({
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
   // search flight
+  const [flightPassengers, setFlightPassengers] = useState<
+    UserInformationDataType[] | []
+  >([]);
   const [selectedWentFlight, setSelectedWentFlight] =
     useState<FlightTicketDataType | null>(null);
   const [selectedReturnFlight, setSelectedReturnFlight] =
@@ -262,6 +272,8 @@ export const GlobalContextProvider = ({
             setSelectedWentFlight,
             selectedReturnFlight,
             setSelectedReturnFlight,
+            flightPassengers,
+            setFlightPassengers,
           },
         },
       }}

@@ -294,7 +294,7 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
     <div
       className={`${
         showSummarySearch ? "bg-paper" : "bg-primary-main"
-      } text-white p-2 pt-px rounded-b-xl grid grid-cols-1 gap-0`}
+      } text-paper p-2 pt-px rounded-b-xl grid grid-cols-1 gap-0`}
     >
       <div className="flex items-center justify-center relative">
         {renderTab()}

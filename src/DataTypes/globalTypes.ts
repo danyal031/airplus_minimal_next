@@ -1,3 +1,30 @@
+import { v4 as uuidv4 } from "uuid";
+export const vReg: any = {
+  date_yyyy_mm_dd: /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/,
+  mobile: /^(\+98|0)?9\d{9}$/,
+  phone: /^0\d{2}-\d{8}$/,
+  postal_code: /^\d{10}$/,
+};
+
+export const vMask = {
+  date_yyyy_mm_dd: {
+    mask: "yyyy-mm-dd",
+    replacement: { y: /\d/, m: /\d/, d: /\d/ },
+  },
+  phone: {
+    mask: "znn-nnnnnnnn",
+    replacement: { z: /0/, n: /\d/ },
+  },
+};
+// defaultCitizenship data type
+export const defaultCitizenship: any = {
+  id: 118,
+  iso: "IR",
+  title: {
+    fa: "ایرانی",
+    en: "Iranian",
+  },
+};
 export interface AlertDetailsDataType {
   alertMessage: string;
   alertType?: "success" | "info" | "error" | "warning";
@@ -116,3 +143,83 @@ export interface ConfigDataType {
 }
 
 // ? end config data types
+
+// start user information data type
+export type UserInformationDataType = {
+  id: string | number | null;
+  passenger_id?: string | number;
+  image: string | null;
+  sex: "male" | "female" | "not-chosen";
+  citizenship: any;
+  name_fa?: string;
+  lastname_fa?: string;
+  name_en?: string;
+  lastname_en?: string;
+  national_code?: string;
+  pass_code?: string;
+  pass_ex?: string;
+  passport_image?: string | null;
+  birthday?: string;
+  email?: string;
+  education?: string;
+  marital_status?: string;
+  mobile?: string;
+  phone?: string;
+  country?: any;
+  province?: any;
+  city?: any;
+  postal_code?: string;
+  address?: string;
+  birthCity?: string;
+};
+// end user information data type
+
+export const defaultPassengerInformation: UserInformationDataType = {
+  id: uuidv4(),
+  image: null,
+  sex: "not-chosen",
+  citizenship: defaultCitizenship,
+  name_fa: "",
+  lastname_fa: "",
+  name_en: "",
+  lastname_en: "",
+  national_code: "",
+  pass_code: "",
+  pass_ex: "",
+  passport_image: null,
+  birthday: "",
+  email: "",
+  education: "0",
+  marital_status: "0",
+  mobile: "",
+  phone: "",
+  country: {
+    id: 118,
+    title: {
+      fa: "ایران",
+      en: "Iran",
+    },
+    details: {
+      iso: "IR",
+    },
+  },
+  province: null,
+  city: null,
+  postal_code: "",
+  address: "",
+  birthCity: "",
+};
+
+export const defaultChildrenInformation: UserInformationDataType = {
+  id: "",
+  image: null,
+  sex: "not-chosen",
+  citizenship: defaultCitizenship,
+  name_fa: "",
+  lastname_fa: "",
+  name_en: "",
+  lastname_en: "",
+  national_code: "",
+  birthday: "",
+  birthCity: "",
+};
