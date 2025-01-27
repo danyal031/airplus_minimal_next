@@ -24,14 +24,6 @@ const PopularRoutes = () => {
       ticketsRef.current.scrollBy({ left: 200, behavior: "smooth" });
     }
   };
-  // const swiperRef = useRef<any>(null);
-  // const handlePrev = () => {
-  //   swiperRef.current.swiper.slidePrev();
-  // };
-
-  // const handleNext = () => {
-  //   swiperRef.current.swiper.slideNext();
-  // };
 
   const handleChangeTab = (newValue: string) => {
     setTabValue(newValue);
@@ -180,56 +172,6 @@ const PopularRoutes = () => {
             />
           </IconButton>
         </div>
-        {/* <div className="relative">
-          <Swiper
-            modules={[Navigation]}
-            spaceBetween={1}
-            slidesPerView={4}
-            navigation={false}
-            ref={swiperRef}
-            className="pr-4"
-          >
-            {tickets.map((ticket) => (
-              <SwiperSlide key={ticket.id}>
-                <div
-                  style={{ aspectRatio: 2.2 }}
-                  className="circle-cut flex flex-col justify-between bg-paper h-28 shadow-md p-4"
-                >
-                  <div className="flex justify-between items-center text-sm font-bold text-text-main">
-                    <span>{ticket.origin}</span>
-                    <div className="flex items-center justify-center w-full">
-                      <div className="w-full px-2">
-                        <Divider variant="fullWidth" className="w-full">
-                          <FlightIcon className="text-primary-main -rotate-90" />
-                        </Divider>
-                      </div>
-                    </div>
-                    <span>{ticket.destination}</span>
-                  </div>
-                  <div className="border-dashed border-t border-divider my-2 mx-4"></div>
-                  <div className="flex justify-between items-center text-sm font-semibold text-text-main">
-                    <span>کمترین قیمت:</span>
-                    <span>{ticket.price.toLocaleString()} تومان</span>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          <div className="absolute top-1/2 -left-3 transform -translate-y-1/2 z-[2] bg-primary-main rounded-full flex items-center justify-center">
-            <ChevronLeftOutlinedIcon
-              fontSize="medium"
-              className="hover:cursor-pointer text-paper"
-              onClick={handleNext}
-            />
-          </div>
-          <div className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-[2] bg-primary-main rounded-full flex items-center justify-center">
-            <KeyboardArrowRightOutlinedIcon
-              fontSize="medium"
-              className="hover:cursor-pointer text-paper"
-              onClick={handlePrev}
-            />
-          </div>
-        </div> */}
       </>
     );
   };

@@ -9,7 +9,7 @@ const HomeComponents = async () => {
   const airports: AirportDataType[] = await getAirportsInServer();
 
   return (
-    <div className="container grid grid-cols-1 gap-14">
+    <div className="md:container grid grid-cols-1 gap-14">
       <SearchBox airports={airports} />
       <Services />
       <TabDescriptionsComponent />

@@ -23,7 +23,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/navigation";
 import { convertPersianToEnglishNumbers } from "@/global-files/function";
 
-const FlightSearchFormOnDesktop = () => {
+const FlightSearchForm = () => {
   // initial states
   const {
     fromDate,
@@ -96,27 +96,70 @@ const FlightSearchFormOnDesktop = () => {
       </>
     );
   };
-  return (
-    <div className="bg-paper w-full rounded-xl p-5">
-      <div className="grid grid-cols-12 gap-5">
-        <div className="col-span-6">
-          <RoundWayInput />
+
+  // for render flight search form in desktop
+  const renderSearchFormOnDesktop = () => {
+    return (
+      <>
+        <div className="bg-paper w-full rounded-xl p-5 hidden md:block">
+          <div className="grid grid-cols-12 gap-5">
+            <div className="col-span-6">
+              <RoundWayInput />
+            </div>
+            <div className="col-span-4">{renderDatePicker()}</div>
+            <div className="col-span-2">{renderConfirmButton()}</div>
+          </div>
         </div>
-        <div className="col-span-4">{renderDatePicker()}</div>
+      </>
+    );
+  };
 
-        <div className="col-span-2">{renderConfirmButton()}</div>
+  const renderDatePickerOnMobile = () => {
+    return (
+      <>
+        <div className="grid grid-cols-2 gap-2">
+          <TextField size="small" label="تاریخ رفت" />
+          <TextField size="small" label="تاریخ برگشت" />
+        </div>
+      </>
+    );
+  };
 
-        {/* <div className="flex-grow">
-          <RoundWayInput />
-        </div> */}
-        {/* <div className="min-w-[430px] max-w-[430px]">{renderDatePicker()}</div> */}
-        {/* <div className="min-w-40 h-full">{renderConfirmButton()}</div> */}
-      </div>
-    </div>
+  const renderConfirmButtonOnMobile = () => {
+    return (
+      <>
+        <Button variant="contained" size="medium" className="rounded-lg">
+          جستجو
+        </Button>
+      </>
+    );
+  };
+
+  const renderSearchFormOnMobile = () => {
+    return (
+      <>
+        <div className="md:hidden rounded-lg p-3 bg-paper">
+          <div className="grid grid-cols-1 gap-2">
+            <div>
+              <RoundWayInput />
+            </div>
+            {renderDatePickerOnMobile()}
+            {renderConfirmButtonOnMobile()}
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <>
+      {renderSearchFormOnDesktop()}
+      {renderSearchFormOnMobile()}
+    </>
   );
 };
 
-export default FlightSearchFormOnDesktop;
+export default FlightSearchForm;
 
 const RoundWayInput = () => {
   // initial states
@@ -182,98 +225,196 @@ const RoundWayInput = () => {
   //     return isValid;
   //   },
   // }));
+
+  // handle render Round Way input on desktop
+  const renderRoundWayInputOnDesktop = () => {
+    return (
+      <>
+        <div className="hidden md:flex item-center justify-center gap-3 relative">
+          <RoundWayPopover
+            open={openRoundWayPopover}
+            setOpen={setOpenRoundWayPopover}
+            value={popOverState.value}
+            setValue={popOverState.setValue}
+            anchorEl={anchorEl}
+            airportsList={airportsList}
+            type={popOverState.type}
+          />
+          <Controller
+            control={control}
+            name="originValidation"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"شهر مبدا"}
+                value={origin?.title_fa}
+                size="small"
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: (
+                    <span>
+                      {/* {tab}{" "} */}
+                      <FlightTakeoffIcon
+                        sx={{ color: "#c2c2c2", transform: "scaleX(-1)" }}
+                      />
+                    </span>
+                  ),
+                }}
+                onClick={(e: any) => {
+                  setAnchorEl(e.currentTarget);
+                  handleOpenRoundWayPopover(e);
+                  setPopOverState({
+                    value: origin,
+                    setValue: setOrigin,
+                    type: "origin",
+                  });
+                }}
+                onChange={(e) => field.onChange(e.target.value)}
+                error={!!errors.originValidation}
+              />
+            )}
+          />
+          <div className="flex justify-center items-center absolute top-0 bottom-0 m-auto z-10">
+            <IconButton
+              size="small"
+              color="primary"
+              className="bg-main border border-primary-main hover:cursor-pointer"
+              onClick={handleConvertRoutes}
+            >
+              <LoopIcon fontSize="small" />
+            </IconButton>
+          </div>
+          <Controller
+            control={control}
+            name="destinationValidation"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"شهر مقصد"}
+                value={destination?.title_fa}
+                size="small"
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: (
+                    <span>
+                      {/* {tab}{" "} */}
+                      <FlightLandIcon
+                        sx={{ color: "#c2c2c2", transform: "scaleX(-1)" }}
+                      />
+                    </span>
+                  ),
+                }}
+                onClick={(e: any) => {
+                  setAnchorEl(e.currentTarget);
+                  handleOpenRoundWayPopover(e);
+                  setPopOverState({
+                    value: destination,
+                    setValue: setDestination,
+                    type: "destination",
+                  });
+                }}
+                onChange={(e) => field.onChange(e.target.value)}
+                error={!!errors.destinationValidation}
+              />
+            )}
+          />
+        </div>
+      </>
+    );
+  };
+
+  // handle render round way input on desktop
+  const renderRoundWayInputOnMobile = () => {
+    return (
+      <>
+        <div className="md:hidden grid grid-cols-1 gap-2 relative">
+          <Controller
+            control={control}
+            name="originValidation"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"شهر مبدا"}
+                value={origin?.title_fa}
+                size="small"
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: (
+                    <span>
+                      {/* {tab}{" "} */}
+                      <FlightTakeoffIcon
+                        sx={{ color: "#c2c2c2", transform: "scaleX(-1)" }}
+                      />
+                    </span>
+                  ),
+                }}
+                onClick={(e: any) => {
+                  setAnchorEl(e.currentTarget);
+                  handleOpenRoundWayPopover(e);
+                  setPopOverState({
+                    value: origin,
+                    setValue: setOrigin,
+                    type: "origin",
+                  });
+                }}
+                onChange={(e) => field.onChange(e.target.value)}
+                error={!!errors.originValidation}
+              />
+            )}
+          />{" "}
+          <div className="flex justify-center items-center absolute top-0 bottom-0  left-0 ml-4  m-auto z-10">
+            <IconButton
+              size="small"
+              color="primary"
+              className="bg-main border border-primary-main hover:cursor-pointer"
+              onClick={handleConvertRoutes}
+            >
+              <LoopIcon fontSize="small" />
+            </IconButton>
+          </div>
+          <Controller
+            control={control}
+            name="destinationValidation"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={"شهر مقصد"}
+                value={destination?.title_fa}
+                size="small"
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: (
+                    <span>
+                      {/* {tab}{" "} */}
+                      <FlightLandIcon
+                        sx={{ color: "#c2c2c2", transform: "scaleX(-1)" }}
+                      />
+                    </span>
+                  ),
+                }}
+                onClick={(e: any) => {
+                  setAnchorEl(e.currentTarget);
+                  handleOpenRoundWayPopover(e);
+                  setPopOverState({
+                    value: destination,
+                    setValue: setDestination,
+                    type: "destination",
+                  });
+                }}
+                onChange={(e) => field.onChange(e.target.value)}
+                error={!!errors.destinationValidation}
+              />
+            )}
+          />
+        </div>
+      </>
+    );
+  };
+
   return (
     <>
-      {" "}
-      <div className="flex item-center justify-center gap-3 relative">
-        <RoundWayPopover
-          open={openRoundWayPopover}
-          setOpen={setOpenRoundWayPopover}
-          value={popOverState.value}
-          setValue={popOverState.setValue}
-          anchorEl={anchorEl}
-          airportsList={airportsList}
-          type={popOverState.type}
-        />
-        <Controller
-          control={control}
-          name="originValidation"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label={"شهر مبدا"}
-              value={origin?.title_fa}
-              size="small"
-              InputProps={{
-                readOnly: true,
-                startAdornment: (
-                  <span>
-                    {/* {tab}{" "} */}
-                    <FlightTakeoffIcon
-                      sx={{ color: "#c2c2c2", transform: "scaleX(-1)" }}
-                    />
-                  </span>
-                ),
-              }}
-              onClick={(e: any) => {
-                setAnchorEl(e.currentTarget);
-                handleOpenRoundWayPopover(e);
-                setPopOverState({
-                  value: origin,
-                  setValue: setOrigin,
-                  type: "origin",
-                });
-              }}
-              onChange={(e) => field.onChange(e.target.value)}
-              error={!!errors.originValidation}
-            />
-          )}
-        />
-        <div className="flex justify-center items-center absolute top-0 bottom-0 m-auto z-10">
-          <IconButton
-            size="small"
-            color="primary"
-            className="bg-main border border-primary-main hover:cursor-pointer"
-            onClick={handleConvertRoutes}
-          >
-            <LoopIcon fontSize="small" />
-          </IconButton>
-        </div>
-        <Controller
-          control={control}
-          name="destinationValidation"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label={"شهر مقصد"}
-              value={destination?.title_fa}
-              size="small"
-              InputProps={{
-                readOnly: true,
-                startAdornment: (
-                  <span>
-                    {/* {tab}{" "} */}
-                    <FlightLandIcon
-                      sx={{ color: "#c2c2c2", transform: "scaleX(-1)" }}
-                    />
-                  </span>
-                ),
-              }}
-              onClick={(e: any) => {
-                setAnchorEl(e.currentTarget);
-                handleOpenRoundWayPopover(e);
-                setPopOverState({
-                  value: destination,
-                  setValue: setDestination,
-                  type: "destination",
-                });
-              }}
-              onChange={(e) => field.onChange(e.target.value)}
-              error={!!errors.destinationValidation}
-            />
-          )}
-        />
-      </div>
+      {renderRoundWayInputOnDesktop()}
+      {renderRoundWayInputOnMobile()}
     </>
   );
 };

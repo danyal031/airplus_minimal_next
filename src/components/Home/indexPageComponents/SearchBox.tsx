@@ -12,7 +12,7 @@ import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import VillaIcon from "@mui/icons-material/Villa";
-import FlightSearchFormOnDesktop from "@/components/FlightSection/FlightSearchForm/FlightSearchFormOnDesktop";
+import FlightSearchForm from "@/components/FlightSection/FlightSearchForm/FlightSearchForm";
 import ResidenceSearchFormOnDesktop from "@/components/ResidenceSection/ResidenceSearchForm/ResidenceSearchFormOnDesktop";
 import { useGlobalContext } from "@/context/store";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
@@ -21,15 +21,30 @@ interface SearchBoxProps {
 }
 const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
   // initial states
-  const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
+
   const { setAirports } = useGlobalContext().flightContext.searchContext;
-  const handleChangeTab = (newValue: string) => {
-    setTabValueSearchBox(newValue);
-  };
+
   useEffect(() => {
     console.log("airports list: ", airports);
     setAirports(airports);
   }, [airports]);
+
+  return (
+    <>
+      <SearchBoxOnDesktop />
+      <SearchBoxOnMobile />
+    </>
+  );
+};
+
+export default SearchBox;
+
+const SearchBoxOnDesktop = () => {
+  const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
+  const handleChangeTab = (newValue: string) => {
+    setTabValueSearchBox(newValue);
+  };
+  // redner comming soon
   const renderComingSoon = () => {
     return (
       <div className="w-full relative rounded-xl bg-paper p-6 min-h-16 flex gap-5 items-center justify-center">
@@ -42,6 +57,7 @@ const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
       </div>
     );
   };
+  // handle get Bg Image
   const getBgImage = () => {
     switch (tabValueSearchBox) {
       case "1":
@@ -63,16 +79,8 @@ const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
       //     return "hotel-pattern.png";
     }
   };
-  const renderForm = () => {
-    switch (tabValueSearchBox) {
-      case "1":
-        return <FlightSearchFormOnDesktop />;
-      case "2":
-        return <ResidenceSearchFormOnDesktop />;
-      default:
-        return renderComingSoon();
-    }
-  };
+
+  // render tab
   const renderTab = () => {
     const tabs = [
       { id: "1", label: "پرواز" },
@@ -117,6 +125,19 @@ const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
     );
   };
 
+  // render form
+  const renderForm = () => {
+    switch (tabValueSearchBox) {
+      case "1":
+        return <FlightSearchForm />;
+      case "2":
+        return <ResidenceSearchFormOnDesktop />;
+      default:
+        return renderComingSoon();
+    }
+  };
+
+  // handle render render Reservations Banner
   const renderReservationsBanner = () => {
     return (
       <>
@@ -135,8 +156,9 @@ const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
       </>
     );
   };
+
   return (
-    <div className="flex flex-col items-center justify-start gap-0">
+    <div className="hidden md:flex flex-col items-center justify-start gap-0">
       {renderReservationsBanner()}
       {renderTab()}
       {renderForm()}
@@ -144,4 +166,96 @@ const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
   );
 };
 
-export default SearchBox;
+const SearchBoxOnMobile = () => {
+  const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
+
+  const handleChangeTab = (newValue: string) => {
+    setTabValueSearchBox(newValue);
+  };
+  const renderTab = () => {
+    const tabs = [
+      { id: "1", label: "پرواز" },
+      { id: "2", label: "هتل و اقامتگاه" },
+      { id: "3", label: "اتوبوس" },
+      { id: "4", label: "تور" },
+      { id: "5", label: "قطار" },
+    ];
+    return (
+      <>
+        <div
+          // style={{
+          //   scrollbarWidth: "none",
+          // }}
+          className={`flex items-center justify-center gap-0 bg-primary-main w-full p-0 ${
+            tabValueSearchBox === "1" ? "" : ""
+          } ${
+            tabValueSearchBox === "5"
+              ? "border-l-paper"
+              : "border-l-primary-main"
+          }`}
+        >
+          {tabs.map((tab, index) => {
+            // const isEven = index % 2 === 0;
+            const isActive = tabValueSearchBox === tab.id;
+            return (
+              <span
+                key={tab.id}
+                onClick={() => handleChangeTab(tab.id)}
+                className={`text-paper text-xs rounded-tab-down-sm hover:cursor-pointer -ml-4 px-2 truncate flex-shrink-0 ${
+                  isActive ? "" : ""
+                } col-span-2 flex items-center justify-center font-semibold h-10 ${
+                  tabValueSearchBox === "1"
+                    ? ""
+                    : tabValueSearchBox === "5"
+                    ? ""
+                    : ""
+                }  ${
+                  tabValueSearchBox === tab.id
+                    ? "bg-paper text-primary-main"
+                    : ""
+                }`}
+              >
+                {tab.label}
+              </span>
+            );
+          })}
+        </div>
+      </>
+    );
+  };
+
+  // redner comming soon
+  const renderComingSoon = () => {
+    return (
+      <div className="w-full relative rounded-xl bg-paper p-6 min-h-16 flex gap-5 items-center justify-center">
+        <div className="w-28 flex justify-center items-center">
+          <Lottie animationData={comingSoonLottie} loop={true} />
+        </div>
+        <span className="font-semibold text-lg">
+          بازدید کننده عزیز، این بخش هنوز در حال توسعه است{" "}
+        </span>
+      </div>
+    );
+  };
+  // render form
+  const renderForm = () => {
+    switch (tabValueSearchBox) {
+      case "1":
+        return <FlightSearchForm />;
+      // case "2":
+      //   return <ResidenceSearchFormOnDesktop />;
+      default:
+        return renderComingSoon();
+    }
+  };
+  return (
+    <>
+      <div className="bg-primary-main md:hidden rounded-xl flex flex-col items-center justify-start gap-0 p-2">
+        <div className="rounded-2xl w-full flex flex-col items-center justify-start gap-0">
+          {renderTab()}
+          {renderForm()}
+        </div>
+      </div>
+    </>
+  );
+};

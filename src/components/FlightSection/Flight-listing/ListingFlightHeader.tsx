@@ -15,7 +15,7 @@ import {
 import React, { FC, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import FlightSearchFormOnDesktop from "../FlightSearchForm/FlightSearchFormOnDesktop";
+import FlightSearchForm from "../FlightSearchForm/FlightSearchForm";
 import ResidenceSearchFormOnDesktop from "@/components/ResidenceSection/ResidenceSearchForm/ResidenceSearchFormOnDesktop";
 import FlightSummarySearchSkelton from "@/components/Skelton-Components/FlightSection/FlightHeaderSearchForm/FlightSummarySearchSkelton";
 interface ListingFlightHeaderProps {
@@ -257,11 +257,11 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
   const renderForm = () => {
     switch (tabValue) {
       case "1":
-        return <FlightSearchFormOnDesktop />;
+        return <FlightSearchForm />;
       case "2":
         return <ResidenceSearchFormOnDesktop />;
       default:
-        return <FlightSearchFormOnDesktop />;
+        return <FlightSearchForm />;
     }
   };
 
