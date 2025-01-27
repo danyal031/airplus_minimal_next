@@ -309,7 +309,32 @@ const PassengerInformation = forwardRef<
                 />
               )}
             />
-            <TextField size="small" className="col-span-3" label="جنسیت" />
+            <FormControl className="col-span-3">
+              <InputLabel>جنسیت</InputLabel>
+              <Controller
+                control={control}
+                name="sexValidation"
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={item.sex}
+                    size="small"
+                    label="جنسیت"
+                    // className="col-span-3"
+                    onChange={(e: SelectChangeEvent) => {
+                      field.onChange(e);
+                      handleOnChange(e, item.id, "sex", roomId);
+                    }}
+                    error={!!errors.sexValidation}
+                  >
+                    <MenuItem value="not-chosen">انتخاب نشده</MenuItem>
+                    <MenuItem value="male">مرد</MenuItem>
+                    <MenuItem value="female">زن</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
+            {/* <TextField size="small" className="col-span-3" label="جنسیت" /> */}
             <Controller
               control={control}
               name="nationalCodeValidation"
@@ -498,7 +523,32 @@ const PassengerInformation = forwardRef<
                 />
               )}
             />
-            <TextField size="small" className="col-span-2" label="جنسیت" />
+            <FormControl className="col-span-2">
+              <InputLabel>جنسیت</InputLabel>
+              <Controller
+                control={control}
+                name="sexValidation"
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={item.sex}
+                    size="small"
+                    label="جنسیت"
+                    // className="col-span-2"
+                    onChange={(e: SelectChangeEvent) => {
+                      field.onChange(e);
+                      handleOnChange(e, item.id, "sex", roomId);
+                    }}
+                    error={!!errors.sexValidation}
+                  >
+                    <MenuItem value="not-chosen">انتخاب نشده</MenuItem>
+                    <MenuItem value="male">مرد</MenuItem>
+                    <MenuItem value="female">زن</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
+            {/* <TextField size="small" className="col-span-2" label="جنسیت" /> */}
             <Controller
               control={control}
               name="passportCodeValidation"

@@ -2,15 +2,18 @@
 import React, { Suspense } from "react";
 import SelectedFlightTicketsCards from "./SelectedFlightTicketsCards";
 import CheckoutPassengerContainer from "./CheckoutPassengerContainer";
+import { Button } from "@mui/material";
+import { useGlobalContext } from "@/context/store";
+import {
+  calculateAgeCategory,
+  formatInputWithCommas,
+} from "@/global-files/function";
+import { v4 as uuidv4 } from "uuid";
+import { handleStoreFlightJson, lockFlight } from "@/global-files/axioses";
+import { useShowAlert } from "@/hooks/useShowAlert";
+import { useRouter } from "next/navigation";
 
 const CheckoutContainerContent = () => {
-  const renderPurchaseConfirmation = () => {
-    return (
-      <>
-        <div className="p-2"></div>
-      </>
-    );
-  };
   return (
     <div className="grid grid-cols-1 gap-5">
       <Suspense>

@@ -94,6 +94,8 @@ interface ContextProps {
       setFlightPassengers: Dispatch<
         SetStateAction<UserInformationDataType[] | []>
       >;
+      flightPassengersTickets: any[];
+      setFlightPassengersTickets: Dispatch<SetStateAction<any[]>>;
     };
   };
 }
@@ -150,6 +152,8 @@ const GlobalContext = createContext<ContextProps>({
       setSelectedReturnFlight: () => {},
       flightPassengers: [],
       setFlightPassengers: () => {},
+      flightPassengersTickets: [],
+      setFlightPassengersTickets: () => {},
     },
   },
 });
@@ -174,6 +178,9 @@ export const GlobalContextProvider = ({
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
   // search flight
+  const [flightPassengersTickets, setFlightPassengersTickets] = useState<any[]>(
+    []
+  );
   const [flightPassengers, setFlightPassengers] = useState<
     UserInformationDataType[] | []
   >([]);
@@ -274,6 +281,8 @@ export const GlobalContextProvider = ({
             setSelectedReturnFlight,
             flightPassengers,
             setFlightPassengers,
+            flightPassengersTickets,
+            setFlightPassengersTickets,
           },
         },
       }}

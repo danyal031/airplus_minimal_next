@@ -2,6 +2,8 @@
 import { useGlobalContext } from "@/context/store";
 import { FlightTicketDataType } from "@/DataTypes/flight/flightTicket";
 import {
+  applyMask,
+  calculateAgeCategory,
   convertPersianToEnglishNumbers,
   convertToPersianDate,
   formatInputWithCommas,
@@ -24,6 +26,7 @@ const SelectedFlightTicketsCards = () => {
     toDate,
     setFromDate,
     setToDate,
+    flightPassengers,
   } = useGlobalContext().flightContext.searchContext;
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -74,11 +77,45 @@ const SelectedFlightTicketsCards = () => {
 
   //   render went ticket
   const renderWentTicket = () => {
+    const adultsWentTicketsPrice =
+      selectedWentFlight && !Array.isArray(selectedWentFlight.Classes)
+        ? (flightPassengers.filter(
+            (element) =>
+              calculateAgeCategory(
+                applyMask("date", element.birthday?.toString() as string)
+              ) === "ADU"
+          ).length *
+            (selectedWentFlight.Classes.Financial.Adult.Payable ?? 0)) /
+          10
+        : 0;
+    const childWentTicketsPrice =
+      selectedWentFlight && !Array.isArray(selectedWentFlight.Classes)
+        ? (flightPassengers.filter(
+            (element) =>
+              calculateAgeCategory(
+                applyMask("date", element.birthday?.toString() as string)
+              ) === "CHI"
+          ).length *
+            (selectedWentFlight.Classes.Financial.Child.Payable ?? 0)) /
+          10
+        : 0;
+    const infantWentTicketsPrice =
+      selectedWentFlight && !Array.isArray(selectedWentFlight.Classes)
+        ? (flightPassengers.filter(
+            (element) =>
+              calculateAgeCategory(
+                applyMask("date", element.birthday?.toString() as string)
+              ) === "INF"
+          ).length *
+            (selectedWentFlight.Classes.Financial.Infant.Payable ?? 0)) /
+          10
+        : 0;
+
     return (
       <>
-        {selectedWentFlight && (
+        {selectedWentFlight && !Array.isArray(selectedWentFlight.Classes) && (
           <motion.div
-            className="h-36 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-4"
+            className="h-40 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-4"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
@@ -136,7 +173,7 @@ const SelectedFlightTicketsCards = () => {
                 </div>{" "}
               </div>
             </div>
-            <div className="col-span-1 p-2 flex flex-col items-center justify-center gap-3">
+            <div className="col-span-1 p-2 grid grid-cols-1 gap-2">
               <div className="flex items-center justify-center">
                 <Button
                   onClick={handleChangeTicket}
@@ -148,13 +185,98 @@ const SelectedFlightTicketsCards = () => {
                   تغییر بلیت
                 </Button>
               </div>
-              <div className="flex items-center justify-center">
-                <span className="text-text-main font-semibold text-sm">
-                  {!Array.isArray(selectedWentFlight.Classes) &&
-                    formatInputWithCommas(
-                      selectedWentFlight.Classes.Financial.Adult.Payable / 10
+              <div className="grid grid-cols-1 gap-1">
+                {flightPassengers.find(
+                  (item) =>
+                    calculateAgeCategory(
+                      applyMask("date", item.birthday?.toString() as string)
+                    ) === "ADU"
+                ) && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400 font-semibold">
+                      بزرگسال(
+                      {
+                        flightPassengers.filter(
+                          (element) =>
+                            calculateAgeCategory(
+                              applyMask(
+                                "date",
+                                element.birthday?.toString() as string
+                              )
+                            ) === "ADU"
+                        ).length
+                      }
+                      )
+                    </span>
+                    <span className="text-xs text-gray-400 font-semibold">
+                      {formatInputWithCommas(adultsWentTicketsPrice)}
+                    </span>
+                  </div>
+                )}
+                {flightPassengers.find(
+                  (item) =>
+                    calculateAgeCategory(
+                      applyMask("date", item.birthday?.toString() as string)
+                    ) === "CHI"
+                ) && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400 font-semibold">
+                      کودک(
+                      {
+                        flightPassengers.filter(
+                          (element) =>
+                            calculateAgeCategory(
+                              applyMask(
+                                "date",
+                                element.birthday?.toString() as string
+                              )
+                            ) === "CHI"
+                        ).length
+                      }
+                      )
+                    </span>
+                    <span className="text-xs text-gray-400 font-semibold">
+                      {formatInputWithCommas(childWentTicketsPrice)}
+                    </span>
+                  </div>
+                )}
+                {flightPassengers.find(
+                  (item) =>
+                    calculateAgeCategory(
+                      applyMask("date", item.birthday?.toString() as string)
+                    ) === "INF"
+                ) && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400 font-semibold">
+                      نوزاد(
+                      {
+                        flightPassengers.filter(
+                          (element) =>
+                            calculateAgeCategory(
+                              applyMask(
+                                "date",
+                                element.birthday?.toString() as string
+                              )
+                            ) === "INF"
+                        ).length
+                      }
+                      )
+                    </span>
+                    <span className="text-xs text-gray-400 font-semibold">
+                      {formatInputWithCommas(infantWentTicketsPrice)}
+                    </span>
+                  </div>
+                )}
+                <div className="text-primary-main font-semibold text-xs flex items-center justify-between">
+                  <span className="">مجموع</span>
+                  <span className="">
+                    {formatInputWithCommas(
+                      adultsWentTicketsPrice +
+                        childWentTicketsPrice +
+                        infantWentTicketsPrice
                     )}
-                </span>
+                  </span>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -164,91 +286,213 @@ const SelectedFlightTicketsCards = () => {
   };
   //   render return ticket
   const renderReturnTicket = () => {
+    const adultsReturnTicketsPrice =
+      selectedReturnFlight && !Array.isArray(selectedReturnFlight.Classes)
+        ? (flightPassengers.filter(
+            (element) =>
+              calculateAgeCategory(
+                applyMask("date", element.birthday?.toString() as string)
+              ) === "ADU"
+          ).length *
+            (selectedReturnFlight.Classes.Financial.Adult.Payable ?? 0)) /
+          10
+        : 0;
+    const childReturnTicketsPrice =
+      selectedReturnFlight && !Array.isArray(selectedReturnFlight.Classes)
+        ? (flightPassengers.filter(
+            (element) =>
+              calculateAgeCategory(
+                applyMask("date", element.birthday?.toString() as string)
+              ) === "CHI"
+          ).length *
+            (selectedReturnFlight.Classes.Financial.Child.Payable ?? 0)) /
+          10
+        : 0;
+    const infantReturnTicketsPrice =
+      selectedReturnFlight && !Array.isArray(selectedReturnFlight.Classes)
+        ? (flightPassengers.filter(
+            (element) =>
+              calculateAgeCategory(
+                applyMask("date", element.birthday?.toString() as string)
+              ) === "INF"
+          ).length *
+            (selectedReturnFlight.Classes.Financial.Infant.Payable ?? 0)) /
+          10
+        : 0;
+
     return (
       <>
-        {selectedReturnFlight && (
-          <motion.div
-            className="h-36 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-4"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="col-span-3 border-l border-dashed border-divider px-2 flex flex-col items-center justify-start gap-3">
-              <div className="flex items-center justify-center gap-0">
-                <span className="rounded-tab-up-sm h-9 flex items-center justify-center text-paper truncate bg-primary-main">
-                  بلیت برگشت
-                </span>
-                <span className="text-xs text-text-main font-semibold">
-                  {convertToPersianDate(selectedReturnFlight.DepartureDateTime)}
-                </span>{" "}
-              </div>
-              <div className="flex items-center justify-start gap-2">
-                <div className="p-1 flex flex-col items-center justify-center gap-1">
-                  <span className="flex-shrink-0">
-                    <Image
-                      src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${selectedReturnFlight.Airline.logo}`}
-                      width={38}
-                      height={40}
-                      className="w-10"
-                      alt="air-logo"
-                      sizes="40px"
-                    />
+        {selectedReturnFlight &&
+          !Array.isArray(selectedReturnFlight.Classes) && (
+            <motion.div
+              className="h-40 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-4"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="col-span-3 border-l border-dashed border-divider px-2 flex flex-col items-center justify-start gap-3">
+                <div className="flex items-center justify-center gap-0">
+                  <span className="rounded-tab-up-sm h-9 flex items-center justify-center text-paper truncate bg-primary-main">
+                    بلیت برگشت
                   </span>
-                  <span className="text-xs truncate font-bold">
-                    {selectedReturnFlight.Airline.title_fa}
-                  </span>
-                </div>
-                <span className="text-base text-primary-main font-bold">
-                  {selectedReturnFlight.DepartureDateTime.split(" ")[1].split(
-                    ":"
-                  )[0] +
-                    ":" +
-                    selectedReturnFlight.DepartureDateTime.split(" ")[1].split(
-                      ":"
-                    )[1]}{" "}
-                </span>{" "}
-                <div className="flex items-center justify-start gap-2 min-h-12 flex-1 flex-shrink-0 w-full">
-                  <span className="text-xs text-text-main font-semibold truncate">
-                    {selectedReturnFlight.Origin.Iata.title_fa}{" "}
-                    {`(${selectedReturnFlight.Origin.Iata.iata})`}{" "}
-                  </span>
-                  <Image
-                    src={leftArrow}
-                    alt="left-arrow"
-                    width={40}
-                    height={10}
-                    className="object-cover"
-                  />{" "}
-                  <span className="text-xs text-text-main font-semibold truncate">
-                    {selectedReturnFlight.Destination.Iata.title_fa}{" "}
-                    {`(${selectedReturnFlight.Destination.Iata.iata})`}
-                  </span>
-                </div>{" "}
-              </div>
-            </div>
-            <div className="col-span-1 p-2 flex flex-col items-center justify-center gap-3">
-              <div className="flex items-center justify-center">
-                <Button
-                  onClick={handleChangeTicket}
-                  className="rounded-lg"
-                  variant="outlined"
-                  size="small"
-                  color="primary"
-                >
-                  تغییر بلیت
-                </Button>
-              </div>
-              <div className="flex items-center justify-center">
-                <span className="text-text-main font-semibold text-sm">
-                  {!Array.isArray(selectedReturnFlight.Classes) &&
-                    formatInputWithCommas(
-                      selectedReturnFlight.Classes.Financial.Adult.Payable / 10
+                  <span className="text-xs text-text-main font-semibold">
+                    {convertToPersianDate(
+                      selectedReturnFlight.DepartureDateTime
                     )}
-                </span>
+                  </span>{" "}
+                </div>
+                <div className="flex items-center justify-start gap-2">
+                  <div className="p-1 flex flex-col items-center justify-center gap-1">
+                    <span className="flex-shrink-0">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${selectedReturnFlight.Airline.logo}`}
+                        width={38}
+                        height={40}
+                        className="w-10"
+                        alt="air-logo"
+                        sizes="40px"
+                      />
+                    </span>
+                    <span className="text-xs truncate font-bold">
+                      {selectedReturnFlight.Airline.title_fa}
+                    </span>
+                  </div>
+                  <span className="text-base text-primary-main font-bold">
+                    {selectedReturnFlight.DepartureDateTime.split(" ")[1].split(
+                      ":"
+                    )[0] +
+                      ":" +
+                      selectedReturnFlight.DepartureDateTime.split(
+                        " "
+                      )[1].split(":")[1]}{" "}
+                  </span>{" "}
+                  <div className="flex items-center justify-start gap-2 min-h-12 flex-1 flex-shrink-0 w-full">
+                    <span className="text-xs text-text-main font-semibold truncate">
+                      {selectedReturnFlight.Origin.Iata.title_fa}{" "}
+                      {`(${selectedReturnFlight.Origin.Iata.iata})`}{" "}
+                    </span>
+                    <Image
+                      src={leftArrow}
+                      alt="left-arrow"
+                      width={40}
+                      height={10}
+                      className="object-cover"
+                    />{" "}
+                    <span className="text-xs text-text-main font-semibold truncate">
+                      {selectedReturnFlight.Destination.Iata.title_fa}{" "}
+                      {`(${selectedReturnFlight.Destination.Iata.iata})`}
+                    </span>
+                  </div>{" "}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
+              <div className="col-span-1 p-2 grid grid-cols-1 gap-2">
+                <div className="flex items-center justify-center">
+                  <Button
+                    onClick={handleChangeTicket}
+                    className="rounded-lg"
+                    variant="outlined"
+                    size="small"
+                    color="primary"
+                  >
+                    تغییر بلیت
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 gap-1">
+                  {flightPassengers.find(
+                    (item) =>
+                      calculateAgeCategory(
+                        applyMask("date", item.birthday?.toString() as string)
+                      ) === "ADU"
+                  ) && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-400 font-semibold">
+                        بزرگسال(
+                        {
+                          flightPassengers.filter(
+                            (element) =>
+                              calculateAgeCategory(
+                                applyMask(
+                                  "date",
+                                  element.birthday?.toString() as string
+                                )
+                              ) === "ADU"
+                          ).length
+                        }
+                        )
+                      </span>
+                      <span className="text-xs text-gray-400 font-semibold">
+                        {formatInputWithCommas(adultsReturnTicketsPrice)}
+                      </span>
+                    </div>
+                  )}
+                  {flightPassengers.find(
+                    (item) =>
+                      calculateAgeCategory(
+                        applyMask("date", item.birthday?.toString() as string)
+                      ) === "CHI"
+                  ) && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-400 font-semibold">
+                        کودک(
+                        {
+                          flightPassengers.filter(
+                            (element) =>
+                              calculateAgeCategory(
+                                applyMask(
+                                  "date",
+                                  element.birthday?.toString() as string
+                                )
+                              ) === "CHI"
+                          ).length
+                        }
+                        )
+                      </span>
+                      <span className="text-xs text-gray-400 font-semibold">
+                        {formatInputWithCommas(childReturnTicketsPrice)}
+                      </span>
+                    </div>
+                  )}
+                  {flightPassengers.find(
+                    (item) =>
+                      calculateAgeCategory(
+                        applyMask("date", item.birthday?.toString() as string)
+                      ) === "INF"
+                  ) && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-400 font-semibold">
+                        نوزاد(
+                        {
+                          flightPassengers.filter(
+                            (element) =>
+                              calculateAgeCategory(
+                                applyMask(
+                                  "date",
+                                  element.birthday?.toString() as string
+                                )
+                              ) === "INF"
+                          ).length
+                        }
+                        )
+                      </span>
+                      <span className="text-xs text-gray-400 font-semibold">
+                        {formatInputWithCommas(infantReturnTicketsPrice)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="text-primary-main font-semibold text-xs flex items-center justify-between">
+                    <span className="">مجموع</span>
+                    <span className="">
+                      {formatInputWithCommas(
+                        adultsReturnTicketsPrice +
+                          childReturnTicketsPrice +
+                          infantReturnTicketsPrice
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
       </>
     );
   };
