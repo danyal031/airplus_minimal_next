@@ -19,8 +19,8 @@ const TabDescriptionsComponent = () => {
         return (
           <>
             <PopularRoutes />
-            {/* <FrequentlyQuestions />
-            <FlightDescription /> */}
+            <FrequentlyQuestions />
+            {/* <FlightDescription /> */}
           </>
         );
       case "2":
