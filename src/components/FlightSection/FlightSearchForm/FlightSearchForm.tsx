@@ -1,7 +1,9 @@
 "use client";
 import {
   Autocomplete,
+  Box,
   Button,
+  Drawer,
   IconButton,
   Popover,
   TextField,
@@ -22,6 +24,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/navigation";
 import { convertPersianToEnglishNumbers } from "@/global-files/function";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const FlightSearchForm = () => {
   // initial states
@@ -138,7 +141,7 @@ const FlightSearchForm = () => {
   const renderSearchFormOnMobile = () => {
     return (
       <>
-        <div className="md:hidden rounded-lg p-3 bg-paper">
+        <div className="md:hidden rounded-b-lg p-3 bg-paper">
           <div className="grid grid-cols-1 gap-2">
             <div>
               <RoundWayInput />
@@ -166,6 +169,12 @@ const RoundWayInput = () => {
   const { origin, setOrigin, destination, setDestination, airports } =
     useGlobalContext().flightContext.searchContext;
   const [popOverState, setPopOverState] = useState<any>({
+    value: null,
+    setValue: () => {},
+    type: "",
+  });
+  const [openMobileDrawer, setOpenMobileDrawer] = useState(false);
+  const [drawerState, setDrawerState] = useState<any>({
     value: null,
     setValue: () => {},
     type: "",
@@ -349,13 +358,12 @@ const RoundWayInput = () => {
                   ),
                 }}
                 onClick={(e: any) => {
-                  setAnchorEl(e.currentTarget);
-                  handleOpenRoundWayPopover(e);
-                  setPopOverState({
+                  setDrawerState({
                     value: origin,
                     setValue: setOrigin,
                     type: "origin",
                   });
+                  setOpenMobileDrawer(true);
                 }}
                 onChange={(e) => field.onChange(e.target.value)}
                 error={!!errors.originValidation}
@@ -393,18 +401,25 @@ const RoundWayInput = () => {
                   ),
                 }}
                 onClick={(e: any) => {
-                  setAnchorEl(e.currentTarget);
-                  handleOpenRoundWayPopover(e);
-                  setPopOverState({
+                  setDrawerState({
                     value: destination,
                     setValue: setDestination,
                     type: "destination",
                   });
+                  setOpenMobileDrawer(true);
                 }}
                 onChange={(e) => field.onChange(e.target.value)}
                 error={!!errors.destinationValidation}
               />
             )}
+          />
+          <DrawerMobile
+            open={openMobileDrawer}
+            setOpen={setOpenMobileDrawer}
+            value={drawerState.value}
+            setValue={drawerState.setValue}
+            type={drawerState.type}
+            data={airportsList}
           />
         </div>
       </>
@@ -649,6 +664,163 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
       >
         {popoverContent}
       </Popover>
+    </>
+  );
+};
+
+// for mobile ui
+interface DrawerMobileProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  value: any;
+  setValue: (value: any) => void;
+  type: string;
+  data: AirportDataType[];
+}
+const DrawerMobile: FC<DrawerMobileProps> = ({
+  open,
+  setOpen,
+  setValue,
+  value,
+  data,
+  type,
+}) => {
+  // initial states
+  const [filteredData, setFilteredData] = React.useState([]);
+  const theme = useTheme();
+  // for toggle drawer
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+
+  const handleChangeInput = (query: any) => {
+    if (query)
+      setFilteredData(
+        data.filter((item: any) => item.title_fa.includes(query)) as any
+      );
+    else setFilteredData([]);
+  };
+
+  const handleClickSelectItem = (item: any) => {
+    setValue(item);
+    setOpen(false);
+  };
+
+  const DrawerList = (
+    <div className="grid grid-cols-1 gap-4">
+      <Box className="flex justify-between items-center p-3 bg-main text-text-main">
+        <span className="font-bold text-sm">
+          انتخاب شهر یا فرودگاه {type === "origin" ? "مبدا" : "مقصد"}
+        </span>
+        <IconButton onClick={toggleDrawer(false)}>
+          <ClearIcon fontSize="small" />
+        </IconButton>
+      </Box>
+      <div className="flex flex-col items-center justify-center gap-0 py-2 px-3">
+        <TextField
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                border: `2px solid ${theme.palette.primary.main}`,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.primary.main,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+          }}
+          className="w-full"
+          size="small"
+          label={type === "origin" ? "شهر مبدا" : "شهر مقصد"}
+          onChange={(e) => handleChangeInput(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <span>
+                {type === "origin" ? (
+                  <FlightTakeoffIcon
+                    color="primary"
+                    sx={{ transform: "scaleX(-1)" }}
+                  />
+                ) : (
+                  <FlightLandIcon
+                    color="primary"
+                    sx={{ transform: "scaleX(-1)" }}
+                  />
+                )}
+              </span>
+            ),
+            endAdornment: (
+              <span>
+                <SearchIcon fontSize="small" color="primary" />
+              </span>
+            ),
+          }}
+        />
+      </div>
+      {filteredData.length > 0 && (
+        <div className="grid grid-cols-1 gap-2">
+          <div className="bg-main flex items-center justify-start p-1 px-2">
+            <span className="font-semibold text-xs text-gray-400">نتایج </span>
+          </div>
+          <div className="flex flex-col items-start justify-start gap-2">
+            {filteredData.map((item: AirportDataType) => (
+              <div
+                className="w-full flex items-center justify-start gap-1 py-1 px-2 text-gray-500 hover:text-primary-main cursor-pointer"
+                onClick={() => {
+                  handleClickSelectItem(item);
+                }}
+              >
+                {/* <HistoryIcon className="text-sm" /> */}
+                <LocationOnIcon className="text-sm" />
+                <span className="text-xs font-bold truncate">
+                  {item.title_fa} - {item.iata}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}{" "}
+      <div className="grid grid-cols-1 gap-2">
+        <div className="bg-main flex items-center justify-start p-1 px-2">
+          <span className="font-semibold text-xs text-gray-400">
+            شهرهای پرتردد{" "}
+          </span>
+        </div>
+        <div className="flex flex-col items-start justify-start gap-2">
+          {data.slice(0, 10).map((item: AirportDataType) => (
+            <div
+              onClick={() => {
+                handleClickSelectItem(item);
+              }}
+              className="text-gray-500 hover:text-primary-main cursor-pointer w-full flex items-center justify-start gap-1 py-1 px-2"
+            >
+              <LocationOnIcon className="text-sm" />
+              <span className="text-xs font-bold truncate">
+                {item.title_fa} - {item.iata}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+  return (
+    <>
+      {" "}
+      <div className="w-full">
+        <Drawer
+          anchor={"right"}
+          PaperProps={{
+            sx: { width: "100%" },
+          }}
+          open={open}
+          onClose={toggleDrawer(false)}
+        >
+          {DrawerList}
+        </Drawer>
+      </div>
     </>
   );
 };

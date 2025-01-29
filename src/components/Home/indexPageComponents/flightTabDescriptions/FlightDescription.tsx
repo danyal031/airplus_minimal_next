@@ -300,7 +300,7 @@ const FlightDescriptionOnMobile = () => {
   };
   return (
     <>
-      <div className="md:hidden grid grid-cols-1 gap-5 px-2">
+      <div className="md:hidden grid grid-cols-1 gap-5">
         {renderAboutFlightTickets()}
         {renderPurchaseBenefits()}
       </div>

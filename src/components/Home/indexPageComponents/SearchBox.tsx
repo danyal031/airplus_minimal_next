@@ -175,7 +175,7 @@ const SearchBoxOnMobile = () => {
   const renderTab = () => {
     const tabs = [
       { id: "1", label: "پرواز" },
-      { id: "2", label: "هتل و اقامتگاه" },
+      { id: "2", label: "اقامتگاه" },
       { id: "3", label: "اتوبوس" },
       { id: "4", label: "تور" },
       { id: "5", label: "قطار" },
@@ -183,10 +183,7 @@ const SearchBoxOnMobile = () => {
     return (
       <>
         <div
-          // style={{
-          //   scrollbarWidth: "none",
-          // }}
-          className={`flex items-center justify-center gap-0 bg-primary-main w-full p-0 ${
+          className={`grid grid-cols-5 gap-0 bg-primary-main w-full p-0 ${
             tabValueSearchBox === "1" ? "" : ""
           } ${
             tabValueSearchBox === "5"
@@ -201,13 +198,13 @@ const SearchBoxOnMobile = () => {
               <span
                 key={tab.id}
                 onClick={() => handleChangeTab(tab.id)}
-                className={`text-paper text-xs rounded-tab-down-sm hover:cursor-pointer -ml-4 px-2 truncate flex-shrink-0 ${
+                className={`text-paper text-xs rounded-tab-down-sm hover:cursor-pointer px-5 truncate flex-shrink-0 ${
                   isActive ? "" : ""
-                } col-span-2 flex items-center justify-center font-semibold h-10 ${
+                } flex items-center justify-center font-semibold h-10 ${
                   tabValueSearchBox === "1"
-                    ? ""
+                    ? "border-r-0 rounded-r-none"
                     : tabValueSearchBox === "5"
-                    ? ""
+                    ? "border-l-0 rounded-l-none"
                     : ""
                 }  ${
                   tabValueSearchBox === tab.id
@@ -227,7 +224,7 @@ const SearchBoxOnMobile = () => {
   // redner comming soon
   const renderComingSoon = () => {
     return (
-      <div className="w-full relative rounded-xl bg-paper p-6 min-h-16 flex gap-5 items-center justify-center">
+      <div className="w-full relative rounded-b-xl bg-paper p-6 min-h-16 flex gap-5 items-center justify-center">
         <div className="w-28 flex justify-center items-center">
           <Lottie animationData={comingSoonLottie} loop={true} />
         </div>
@@ -250,11 +247,9 @@ const SearchBoxOnMobile = () => {
   };
   return (
     <>
-      <div className="bg-primary-main md:hidden rounded-xl flex flex-col items-center justify-start gap-0 p-2">
-        <div className="rounded-2xl w-full flex flex-col items-center justify-start gap-0">
-          {renderTab()}
-          {renderForm()}
-        </div>
+      <div className="md:hidden rounded-xl flex flex-col items-center justify-start gap-0 overflow-hidden">
+        {renderTab()}
+        {renderForm()}
       </div>
     </>
   );

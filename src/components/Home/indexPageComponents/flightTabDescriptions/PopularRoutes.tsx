@@ -391,7 +391,7 @@ const PopularRoutesOnMobile = () => {
   };
   return (
     <>
-      <div className="md:hidden grid grid-cols-1 gap-4 px-2">
+      <div className="md:hidden grid grid-cols-1 gap-4">
         <div className="flex flex-col items-center justify-center gap-1 w-full">
           <span className="text-text-main text-lg font-bold">
             مسیرهای پرطرفدار

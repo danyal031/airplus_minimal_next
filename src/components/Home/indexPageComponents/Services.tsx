@@ -8,9 +8,7 @@ const Services = () => {
   return (
     <>
       <ServicesOnDesktop />
-      <div className="px-2">
-        <ServicesOnMobile />
-      </div>
+      <ServicesOnMobile />
     </>
   );
 };

@@ -433,7 +433,7 @@ const FrequentlyQuestionsOnMobile = () => {
 
   return (
     <>
-      <div className="md:hidden grid grid-cols-1 gap-0 px-2">
+      <div className="md:hidden grid grid-cols-1 gap-0">
         {renderAboutTicketsSection()}
         {renderQuestions()}
       </div>
