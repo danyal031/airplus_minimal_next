@@ -117,21 +117,28 @@ const FlightSearchForm = () => {
     );
   };
 
-  const renderDatePickerOnMobile = () => {
-    return (
-      <>
-        <div className="grid grid-cols-2 gap-2">
-          <TextField size="small" label="تاریخ رفت" />
-          <TextField size="small" label="تاریخ برگشت" />
-        </div>
-      </>
-    );
-  };
+  // const renderDatePickerOnMobile = () => {
+  //   return (
+  //     <>
+  //       <div className="grid grid-cols-2 gap-2">
+  //         <TextField size="small" label="تاریخ رفت" />
+  //         <TextField size="small" label="تاریخ برگشت" />
+  //       </div>
+  //     </>
+  //   );
+  // };
 
   const renderConfirmButtonOnMobile = () => {
     return (
       <>
-        <Button variant="contained" size="medium" className="rounded-lg">
+        <Button
+          onClick={() => {
+            handleClickSubmit();
+          }}
+          variant="contained"
+          size="medium"
+          className="rounded-lg"
+        >
           جستجو
         </Button>
       </>
@@ -146,7 +153,7 @@ const FlightSearchForm = () => {
             <div>
               <RoundWayInput />
             </div>
-            {renderDatePickerOnMobile()}
+            {renderDatePicker()}
             {renderConfirmButtonOnMobile()}
           </div>
         </div>
@@ -413,15 +420,15 @@ const RoundWayInput = () => {
               />
             )}
           />
-          <DrawerMobile
-            open={openMobileDrawer}
-            setOpen={setOpenMobileDrawer}
-            value={drawerState.value}
-            setValue={drawerState.setValue}
-            type={drawerState.type}
-            data={airportsList}
-          />
-        </div>
+        </div>{" "}
+        <DrawerMobile
+          open={openMobileDrawer}
+          setOpen={setOpenMobileDrawer}
+          value={drawerState.value}
+          setValue={drawerState.setValue}
+          type={drawerState.type}
+          data={airportsList}
+        />
       </>
     );
   };

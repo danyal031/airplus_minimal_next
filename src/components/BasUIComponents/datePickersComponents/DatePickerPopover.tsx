@@ -33,7 +33,7 @@ import { useGlobalContext } from "@/context/store";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 interface DatePickerPopoverDataType {
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -183,7 +183,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
         <div className="w-full flex justify-center items-center">
           <div
             key={dayId}
-            className={`aspect-square w-8 flex flex-col items-center justify-center rounded-xl border cursor-pointer transition-all duration-300 
+            className={`aspect-square w-10 md:w-8 flex flex-col items-center justify-center rounded-lg md:rounded-xl border cursor-pointer transition-all duration-300 
               ${dayId < currentDate && "cursor-auto"} 
               ${
                 dayId == currentDate &&
@@ -559,214 +559,236 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
       open={open}
       onClose={toggleDrawer(false)}
     >
-      <Box className="w-full" role="presentation">
-        <Box className="flex justify-between items-center py-5 px-5">
-          <span className="font-bold text-sm">انتخاب تاریخ</span>
-          <IconButton onClick={toggleDrawer(false)}>
-            <ClearIcon fontSize="small" />
-          </IconButton>
-        </Box>
-        <Divider />
-
-        <Box className="flex flex-col items-center justify-center py-5 px-5">
-          <div className="w-full grid grid-cols-1 gap-2 mb-8">
-            <div
-              className={
-                enableInputClass +
-                "flex justify-between items-center gap-2 p-2 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300"
-              }
-              style={{ boxShadow: "0 4px 15px rgba(173, 216, 230, 0.3)" }}
-            >
-              <span className="text-sm font-medium text-gray-700">
-                {forcedReturn &&
-                  (firstSelectedDay ? (
-                    <span className="text-sm font-medium text-gray-700">
-                      {applyMask("date", firstSelectedDay)}
-                    </span>
-                  ) : (
-                    <span className="text-sm font-medium text-gray-700">
-                      تاریخ ورود
-                    </span>
-                  ))}
-                {!forcedReturn &&
-                  (firstSelectedDay ? (
-                    <span className="text-sm font-medium text-gray-700">
-                      {applyMask("date", firstSelectedDay)}
-                    </span>
-                  ) : (
-                    <span className="text-sm font-medium text-gray-700">
-                      تاریخ رفت
-                    </span>
-                  ))}
+      <Box className="w-full relative h-full" role="presentation">
+        <Box className="bg-paper p-3 sticky top-0 grid grid-cols-1 gap-5 border-b border-main">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center justify-center">
+              <IconButton onClick={toggleDrawer(false)}>
+                <ArrowForwardIcon fontSize="small" />
+              </IconButton>
+              <span className="font-bold text-sm">انتخاب تاریخ</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-primary-main font-semibold text-sm bg-main p-2 rounded-xl flex items-center justify-center gap-1">
+                <CalendarMonthIcon fontSize="small" color="primary" />
+                تقویم میلادی
               </span>
+              <span className="text-primary-main font-semibold text-sm bg-main px-3 p-2 rounded-xl">
+                امروز
+              </span>{" "}
             </div>
-            <div
-              className={
-                (dropOffLocationType == "roundTrip"
-                  ? enableInputClass
-                  : disableInputClass) +
-                "flex justify-between items-center gap-2 p-2 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300"
-              }
-              onClick={() => {
-                setDropOffLocationType((preValue) => {
-                  if (preValue == "roundTrip") return "oneWay";
-                  return "roundTrip";
-                });
-                setSecondSelectedDay(null);
-                setToDate(null);
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <TextField
+              label={forcedReturn ? "تاریخ ورود" : "تاریخ رفت"}
+              size="small"
+              dir={fromDate ? "ltr" : "rtl"}
+              className="w-full"
+              id="outlined-basic"
+              variant="outlined"
+              value={fromDate ? fromDate : ""}
+              // onClick={(e: any) => {
+              // setOpenDatePickerPopover(true);
+              // setAnchorEl(e.currentTarget);
+              // }}
+              InputProps={{
+                readOnly: true,
               }}
-              style={{ boxShadow: "0 4px 15px rgba(144, 238, 144, 0.3)" }}
-            >
-              {/* {secondSelectedDay ? (
-                <span className="text-sm font-medium text-gray-700">
-                  {applyMask("date", secondSelectedDay)}
-                </span>
-              ) : dropOffLocationType == "roundTrip" ? (
-                <span className="text-sm font-medium text-gray-700">
-                  تاریخ برگشت
-                </span>
-              ) : (
-                <span className="text-sm font-medium text-gray-300">
-                  تاریخ برگشت (کلیک کنید)
-                </span>
-              )} */}
-
-              {forcedReturn &&
-                (secondSelectedDay ? (
-                  <span className="text-sm font-medium text-gray-700">
-                    {applyMask("date", secondSelectedDay)}
-                  </span>
-                ) : (
-                  <span className="text-sm font-medium text-gray-700">
-                    تاریخ خروج
-                  </span>
-                ))}
-              {!forcedReturn &&
-                (secondSelectedDay ? (
-                  <span className="text-sm font-medium text-gray-700">
-                    {applyMask("date", secondSelectedDay)}
-                  </span>
-                ) : dropOffLocationType == "roundTrip" ? (
-                  <span className="text-sm font-medium text-gray-700">
-                    تاریخ برگشت
-                  </span>
-                ) : (
-                  <span className="text-sm font-medium text-gray-300">
-                    تاریخ برگشت (کلیک کنید)
-                  </span>
-                ))}
-              {!forcedReturn &&
-                (dropOffLocationType == "roundTrip" ? (
-                  <HighlightOffIcon className="text-lg text-red-500" />
-                ) : (
-                  <AddCircleOutlineIcon className="text-lg text-green-500" />
-                ))}
-            </div>
+            />{" "}
+            <TextField
+              label={forcedReturn ? "تاریخ خروج" : "تاریخ برگشت"}
+              size="small"
+              dir={toDate ? "ltr" : "rtl"}
+              className="w-full"
+              id="outlined-basic"
+              variant="outlined"
+              value={toDate ? toDate : ""}
+              // onClick={(e: any) => {
+              //   if (forcedReturn) {
+              //     setOpenDatePickerPopover(true);
+              //     setAnchorEl(e.currentTarget);
+              //   } else {
+              //     if (dropOffLocationType === "oneWay") {
+              //       setDropOffLocationType("roundTrip");
+              //       setOpenDatePickerPopover(true);
+              //       setAnchorEl(e.currentTarget);
+              //     } else {
+              //       setOpenDatePickerPopover(true);
+              //       setAnchorEl(e.currentTarget);
+              //     }
+              //   }
+              // }}
+              InputProps={{
+                readOnly: true,
+                sx: {
+                  backgroundColor: !forcedReturn
+                    ? dropOffLocationType === "roundTrip"
+                      ? "white"
+                      : "#e0e0e0"
+                    : "white",
+                },
+                ...(toDate && !forcedReturn
+                  ? {
+                      startAdornment: (
+                        <InputAdornment position="start" sx={{ ml: "-0.6rem" }}>
+                          <IconButton
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setDropOffLocationType("oneWay");
+                              setSecondSelectedDay(null);
+                            }}
+                          >
+                            <ClearIcon
+                              fontSize="small"
+                              className="text-gray-500"
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }
+                  : !forcedReturn
+                  ? {
+                      endAdornment: (
+                        <InputAdornment position="end" sx={{ mr: "-0.6rem" }}>
+                          {dropOffLocationType === "roundTrip" ? (
+                            <IconButton
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setDropOffLocationType("oneWay");
+                                setToDate(null);
+                              }}
+                            >
+                              <ClearIcon
+                                fontSize="small"
+                                className="text-gray-500"
+                              />
+                            </IconButton>
+                          ) : (
+                            <IconButton
+                              onClick={() => {
+                                // setOpenDatePickerPopover(true);
+                                setDropOffLocationType("roundTrip");
+                                setSecondSelectedDay(null);
+                              }}
+                            >
+                              <AddIcon
+                                fontSize="small"
+                                className="text-gray-500"
+                              />
+                            </IconButton>
+                          )}
+                        </InputAdornment>
+                      ),
+                    }
+                  : {}),
+              }}
+            />
           </div>
-          <div className="flex justify-between items-center w-full  mb-8">
-            <button
-              onClick={() => changeMonth("prev")}
-              className="px-4 py-2 bg-gray-200 rounded-lg shadow-md hover:bg-gray-300 transition-all duration-300"
-            >
-              قبلی
-            </button>
-
-            <button
-              onClick={() => changeMonth("next")}
-              className="px-4 py-2 bg-gray-200 rounded-lg shadow-md hover:bg-gray-300 transition-all duration-300"
-            >
-              بعدی
-            </button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-8">
-            {/* first month */}
-            <div className="w-full">
-              <div className="flex justify-center items-center mb-4 text-xl font-bold">
-                {monthNames[currentMonths[0].month - 1]} {currentMonths[0].year}
-              </div>
-              <div className="grid grid-cols-7 gap-2 text-center text-gray-700 font-semibold">
-                <div className="flex justify-center items-center">ش</div>
-                <div className="flex justify-center items-center">ی</div>
-                <div className="flex justify-center items-center">د</div>
-                <div className="flex justify-center items-center">س</div>
-                <div className="flex justify-center items-center">چ</div>
-                <div className="flex justify-center items-center">پ</div>
-                <div className="flex justify-center items-center">ج</div>
-              </div>
-              <div className="grid grid-cols-7 gap-2 mt-4">
-                {renderDays(
-                  currentMonths[0].year,
-                  currentMonths[0].month,
-                  currentMonths[0].daysInMonth,
-                  currentMonths[0].startDay
-                )}
-              </div>
-            </div>
-
-            {/* second month */}
-            <div className="w-full">
-              <div className="flex justify-center items-center mb-4 text-xl font-bold">
-                {monthNames[currentMonths[1].month - 1]} {currentMonths[1].year}
-              </div>
-              <div className="grid grid-cols-7 gap-2 text-center text-gray-700 font-semibold">
-                <div className="flex justify-center items-center">ش</div>
-                <div className="flex justify-center items-center">ی</div>
-                <div className="flex justify-center items-center">د</div>
-                <div className="flex justify-center items-center">س</div>
-                <div className="flex justify-center items-center">چ</div>
-                <div className="flex justify-center items-center">پ</div>
-                <div className="flex justify-center items-center">ج</div>
-              </div>
-              <div className="grid grid-cols-7 gap-2 mt-4">
-                {renderDays(
-                  currentMonths[1].year,
-                  currentMonths[1].month,
-                  currentMonths[1].daysInMonth,
-                  currentMonths[1].startDay
-                )}
-              </div>
-            </div>
-          </div>
+        </Box>
+        <div className="grid grid-cols-12 gap-0">
           <div
-            className="w-full grid md:grid-cols-4 grid-cols-2 gap-2"
-            dir="ltr"
+            style={{ scrollbarWidth: "none" }}
+            className="col-span-3 border-l border-main grid grid-cols-1 gap-5 py-4 overflow-y-auto max-h-[470px]"
           >
-            <div>
-              <Button
-                disabled={
-                  !forcedReturn
-                    ? dropOffLocationType == "roundTrip"
-                      ? secondSelectedDay
-                        ? false
-                        : true
-                      : firstSelectedDay
-                      ? false
-                      : true
-                    : secondSelectedDay
+            {monthNames.map((item, index) => (
+              <span
+                onClick={() => {
+                  const selectedDate = fullCurrentDate.clone().month(index);
+                  setCurrentMonths([
+                    getMonth(selectedDate),
+                    getMonth(selectedDate.clone().add(1, "months")),
+                  ]);
+                }}
+                key={item}
+                className={`text-text-main text-sm flex items-center justify-center cursor-pointer ${
+                  currentMonths[0].month - 1 === index
+                    ? "font-bold"
+                    : "font-light"
+                }`}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+          <div className="col-span-9 pt-4">
+            <div className="text-sm grid grid-cols-7 gap-1 text-center text-text-main font-bold">
+              <div className="flex justify-center items-center">ش</div>
+              <div className="flex justify-center items-center">ی</div>
+              <div className="flex justify-center items-center">د</div>
+              <div className="flex justify-center items-center">س</div>
+              <div className="flex justify-center items-center">چ</div>
+              <div className="flex justify-center items-center">پ</div>
+              <div className="flex justify-center items-center">ج</div>
+            </div>{" "}
+            {/* first month */}
+            <div className="grid grid-cols-1 gap-3">
+              <div className="p-3 grid grid-cols-1 gap-2">
+                <span className="text-primary-main text-sm font-bold">
+                  {monthNames[currentMonths[0].month - 1]}{" "}
+                  {currentMonths[0].year}
+                </span>
+                <div className="grid grid-cols-7 gap-3">
+                  {renderDays(
+                    currentMonths[0].year,
+                    currentMonths[0].month,
+                    currentMonths[0].daysInMonth,
+                    currentMonths[0].startDay
+                  )}
+                </div>
+              </div>
+              {/* divider */}
+              <div className="border-b border-main"></div>
+              {/* second month */}
+              <div className="p-3 grid grid-cols-1 gap-2">
+                <span className="text-primary-main text-sm font-bold">
+                  {monthNames[currentMonths[1].month - 1]}{" "}
+                  {currentMonths[1].year}
+                </span>
+                <div className="grid grid-cols-7 gap-3">
+                  {renderDays(
+                    currentMonths[1].year,
+                    currentMonths[1].month,
+                    currentMonths[1].daysInMonth,
+                    currentMonths[1].startDay
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 w-full p-2 h-14 grid grid-cols-2 gap-2">
+          <Button
+            onClick={clearSelectedDates}
+            variant="contained"
+            className="rounded-lg text-primary-main"
+            color="inherit"
+            size="small"
+          >
+            پاک کردن
+          </Button>
+          <Button
+            disabled={
+              !forcedReturn
+                ? dropOffLocationType == "roundTrip"
+                  ? secondSelectedDay
                     ? false
                     : true
-                }
-                className="w-full px-5 "
-                type="submit"
-                variant="contained"
-                color="primary"
-                onClick={handleConfirm}
-              >
-                تایید
-              </Button>
-            </div>
-            <div>
-              <Button
-                className="w-full px-5 "
-                variant="contained"
-                color="secondary"
-                onClick={handleClose}
-              >
-                انصراف
-              </Button>
-            </div>
-          </div>
-        </Box>
+                  : firstSelectedDay
+                  ? false
+                  : true
+                : secondSelectedDay
+                ? false
+                : true
+            }
+            onClick={handleConfirm}
+            variant="contained"
+            color="primary"
+            size="small"
+            className="rounded-lg"
+          >
+            تایید
+          </Button>
+        </div>
       </Box>
     </Drawer>
   );

@@ -59,7 +59,7 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
   return (
     <>
       <div
-        className="flex items-center justify-center gap-2 px-2"
+        className="flex items-center justify-center gap-2 md:px-2"
         onClick={(e: any) => {
           setAnchorEl(e.currentTarget);
         }}
