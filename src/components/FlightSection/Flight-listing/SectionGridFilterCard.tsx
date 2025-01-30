@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { Suspense } from "react";
 import FlightFilterBox from "./FlightFilterBox";
 import FlightsList from "./FlightsList";
 
@@ -8,8 +9,10 @@ const SectionGridFilterCard = () => {
       <div className="col-span-3">
         <FlightFilterBox />
       </div>
-      <div className="col-span-9">
-        <FlightsList />
+      <div className="col-span-12 md:col-span-9">
+        <Suspense>
+          <FlightsList />
+        </Suspense>
       </div>
     </div>
   );

@@ -1,20 +1,34 @@
 "use client";
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { alpha, Checkbox, IconButton, useTheme } from "@mui/material";
+import {
+  alpha,
+  Button,
+  Checkbox,
+  Drawer,
+  IconButton,
+  useTheme,
+} from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { styled } from "@mui/material/styles";
+import { useGlobalContext } from "@/context/store";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const FlightFilterBox = () => {
   // initial states
-  const [openSummeryFilterData, setOpenSummeryFilterData] =
-    useState<boolean>(false);
+  const { openFlightFilterDrawer, setOpenFlightFilterDrawer } =
+    useGlobalContext().flightContext.searchContext;
   const [openTimeToMove, setOpenTimeToMove] = useState<boolean>(false);
   const [openTicketType, setOpenTicketType] = useState<boolean>(false);
   const [openAirlines, setOpenAirlines] = useState<boolean>(false);
   const [openFlightClass, setOpenFlightClass] = useState<boolean>(false);
   const theme = useTheme();
+
+  // for toggle drawer
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpenFlightFilterDrawer(newOpen);
+  };
 
   // handle onchange filter box sections
   const handleChangeFilterBoxSections = (section: string) => {
@@ -80,7 +94,7 @@ const FlightFilterBox = () => {
     ];
     return (
       <>
-        <div className="bg-paper p-2 rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+        <div className="bg-paper p-2 rounded-t-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
           <div
             className="flex items-center justify-between cursor-pointer"
             onClick={() => handleChangeFilterBoxSections("timeToMove")}
@@ -120,7 +134,7 @@ const FlightFilterBox = () => {
     return (
       <>
         {" "}
-        <div className="bg-paper p-2 rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+        <div className="bg-paper p-2 md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
           {" "}
           <div
             className="flex items-center justify-between cursor-pointer"
@@ -208,7 +222,7 @@ const FlightFilterBox = () => {
     const airlines = [1, 2, 3, 4, 5];
     return (
       <>
-        <div className="bg-paper p-2 rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+        <div className="bg-paper p-2 md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
           <div
             className="flex items-center justify-between cursor-pointer"
             onClick={() => handleChangeFilterBoxSections("airlines")}
@@ -259,7 +273,7 @@ const FlightFilterBox = () => {
     return (
       <>
         {" "}
-        <div className="bg-paper p-2 rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+        <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
           {" "}
           <div
             className="flex items-center justify-between cursor-pointer"
@@ -293,15 +307,83 @@ const FlightFilterBox = () => {
       </>
     );
   };
-
+  // for render on desktop
+  const renderFilterContainerOnDesktop = () => {
+    return (
+      <>
+        <div className="hidden md:flex flex-col items-center justify-start gap-2">
+          {renderSummeryFilterData()}
+          {renderTimeToMove()}
+          {renderTicketType()}
+          {renderAirlines()}
+          {renderFlightClass()}
+        </div>
+      </>
+    );
+  };
+  const renderFilterContainerOnMobile = () => {
+    const drawerContent = (
+      <>
+        <div className="text-paper sticky top-0 py-3 px-4 flex items-center justify-between bg-primary-main">
+          <span className="font-semibold cursor-pointer">فیلتر ها</span>
+          <IconButton size="small" onClick={toggleDrawer(false)}>
+            <ClearIcon className="text-paper" fontSize="small" />
+          </IconButton>
+        </div>
+        <div className="p-4 flex flex-col items-center justify-start gap-1">
+          <span className="text-text-main font-semibold text-sm self-start mb-1">
+            تعداد نتایج: 53
+          </span>
+          {renderTimeToMove()}
+          {renderTicketType()}
+          {renderAirlines()}
+          {renderFlightClass()}
+        </div>
+        <div className="absolute bottom-0 w-full p-2 h-14 grid grid-cols-2 gap-2">
+          <Button
+            variant="contained"
+            className="rounded-lg text-primary-main"
+            color="inherit"
+            size="small"
+          >
+            پاک کردن
+          </Button>{" "}
+          <Button
+            onClick={toggleDrawer(false)}
+            variant="contained"
+            color="primary"
+            size="small"
+            className="rounded-lg"
+          >
+            تایید
+          </Button>
+        </div>
+      </>
+    );
+    return (
+      <>
+        <Drawer
+          anchor={"right"}
+          PaperProps={{
+            sx: {
+              width: "100%",
+              backgroundColor: "#EFEFEF",
+              position: "relative",
+            },
+          }}
+          open={openFlightFilterDrawer}
+          onClose={toggleDrawer(false)}
+        >
+          {drawerContent}
+        </Drawer>{" "}
+      </>
+    );
+  };
   return (
-    <div className="flex flex-col items-center justify-start gap-2">
-      {renderSummeryFilterData()}
-      {renderTimeToMove()}
-      {renderTicketType()}
-      {renderAirlines()}
-      {renderFlightClass()}
-    </div>
+    <>
+      {renderFilterContainerOnDesktop()}
+      {renderFilterContainerOnMobile()}
+    </>
   );
 };
 

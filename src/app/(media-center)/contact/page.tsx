@@ -1,7 +1,17 @@
+"use client";
+import { ConfigDataType } from "@/DataTypes/globalTypes";
 import { Paper, TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const page = () => {
+  // initial states
+  const [config, setConfig] = useState<null | null | ConfigDataType>(null);
+
+  // handle initial value
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
+
   // handle render Ways of communication
   const renderWaysCommunication = () => {
     return (
@@ -26,7 +36,12 @@ const page = () => {
                   ایمیل پشتیبانی
                 </span>
                 <span className="text-text-main font-semibold opacity-40 text-sm">
-                  sUpport@helpix.app
+                  <a
+                    href={`mailto:${config?.communicational.email}`}
+                    className="text-xs font-semibold"
+                  >
+                    {config?.communicational.email}
+                  </a>{" "}
                 </span>
               </div>{" "}
               <div className="flex flex-col items-start justify-center gap-1">
@@ -34,7 +49,14 @@ const page = () => {
                   تلفن پشتیبانی
                 </span>
                 <span className="text-text-main font-semibold opacity-40 text-sm">
-                  ۰۳۱-۳۳۳۳۱۱۳{" "}
+                  <a
+                    href={`tel:${config?.communicational.phone}`}
+                    className="text-xs font-semibold"
+                  >
+                    {config?.communicational.phone.slice(0, 3) +
+                      "-" +
+                      config?.communicational.phone.slice(3)}
+                  </a>{" "}
                 </span>
               </div>{" "}
               <div className="flex flex-col items-start justify-center gap-1">
@@ -42,8 +64,7 @@ const page = () => {
                   آدرس
                 </span>
                 <span className="text-text-main font-semibold opacity-40 text-sm">
-                  ایران، اصفهان، بلوار کشاورز، ابتدای کنارگذر شهید میثمی، تعاونی
-                  مصرف کارکنان ذوب آهن اصفهان، آژانس مهروماه آسمان{" "}
+                  {config?.communicational.address.fa}
                 </span>
               </div>
             </div>

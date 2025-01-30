@@ -6,7 +6,7 @@ import {
   convertPersianToEnglishNumbers,
   formatDateWithSlash,
 } from "@/global-files/function";
-import { Button, useTheme } from "@mui/material";
+import { Button, Drawer, useTheme } from "@mui/material";
 import {
   ReadonlyURLSearchParams,
   useRouter,
@@ -49,7 +49,13 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
   const [tabValue, setTabValue] = useState<string>("1");
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [openSearchDrawer, setOpenSearchDrawer] = useState<boolean>(false);
   const theme = useTheme();
+
+  // handle toggle open search drawer
+  const toggleSearchDrawer = (newOpen: boolean) => () => {
+    setOpenSearchDrawer(newOpen);
+  };
 
   // handle airports value
   useEffect(() => {
@@ -290,49 +296,174 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
     );
   };
 
-  return (
-    <div
-      className={`${
-        showSummarySearch ? "bg-paper" : "bg-primary-main"
-      } text-paper p-2 pt-px rounded-b-xl grid grid-cols-1 gap-0`}
-    >
-      <div className="flex items-center justify-center relative">
-        {renderTab()}
-        <Button
-          onClick={() => {
-            setShowSummarySearch(!showSummarySearch);
-          }}
-          endIcon={
-            showSummarySearch ? (
-              <SearchIcon fontSize="small" />
-            ) : (
-              <CloseIcon fontSize="small" />
-            )
-          }
-          size="small"
-          variant="contained"
+  // for render on desktop
+  const renderOnDesktop = () => {
+    return (
+      <>
+        <div
           className={`${
-            showSummarySearch
-              ? "bg-primary-main text-paper"
-              : "text-primary-main bg-paper"
-          } rounded-lg absolute left-0`}
+            showSummarySearch ? "bg-paper" : "bg-primary-main"
+          } text-paper p-2 pt-px rounded-b-xl hidden md:grid grid-cols-1 gap-0`}
         >
-          {showSummarySearch ? "جستجو" : "بستن"}
-        </Button>
-      </div>
-      {/* {showSummarySearch ? renderSummerySearch() : renderForm()}{" "} */}
-      {showSummarySearch ? (
-        origin && destination ? (
-          renderSummerySearch()
-        ) : (
-          <div className="flex items-center justify-center text-black">
-            loading...
+          <div className="flex items-center justify-center relative">
+            {renderTab()}
+            <Button
+              onClick={() => {
+                setShowSummarySearch(!showSummarySearch);
+              }}
+              endIcon={
+                showSummarySearch ? (
+                  <SearchIcon fontSize="small" />
+                ) : (
+                  <CloseIcon fontSize="small" />
+                )
+              }
+              size="small"
+              variant="contained"
+              className={`${
+                showSummarySearch
+                  ? "bg-primary-main text-paper"
+                  : "text-primary-main bg-paper"
+              } rounded-lg absolute left-0`}
+            >
+              {showSummarySearch ? "جستجو" : "بستن"}
+            </Button>
           </div>
-        )
-      ) : (
-        renderForm()
-      )}
-    </div>
+          {/* {showSummarySearch ? renderSummerySearch() : renderForm()}{" "} */}
+          {showSummarySearch ? (
+            origin && destination ? (
+              renderSummerySearch()
+            ) : (
+              <div className="flex items-center justify-center text-black">
+                loading...
+              </div>
+            )
+          ) : (
+            renderForm()
+          )}
+        </div>
+      </>
+    );
+  };
+
+  // for mobile
+  const renderTabOnMobile = () => {
+    const tabs = [
+      { id: "1", label: "پرواز" },
+      { id: "2", label: "اقامتگاه" },
+      { id: "3", label: "اتوبوس" },
+      { id: "4", label: "تور" },
+      { id: "5", label: "قطار" },
+    ];
+    return (
+      <>
+        {" "}
+        <div
+          className={`grid grid-cols-5 gap-0 bg-paper w-full p-0 ${
+            tabValue === "1" ? "" : ""
+          } ${tabValue === "5" ? "border-l-paper" : "border-l-primary-main"}`}
+        >
+          {tabs.map((tab, index) => {
+            // const isEven = index % 2 === 0;
+            const isActive = tabValue === tab.id;
+            return (
+              <span
+                key={tab.id}
+                onClick={() => handleChangeTab(tab.id)}
+                className={`text-paper text-xs rounded-tab-down-sm hover:cursor-pointer px-5 truncate flex-shrink-0 ${
+                  isActive ? "" : ""
+                } flex items-center justify-center font-semibold h-10 ${
+                  tabValue === "1"
+                    ? "border-r-0 rounded-r-none"
+                    : tabValue === "5"
+                    ? "border-l-0 rounded-l-none"
+                    : ""
+                }  ${
+                  tabValue === tab.id
+                    ? "bg-primary-main text-paper"
+                    : "text-primary-main"
+                }`}
+              >
+                {tab.label}
+              </span>
+            );
+          })}
+        </div>
+      </>
+    );
+  };
+
+  const renderSummerySearchOnMobile = () => {
+    const drawerContent = <>{renderForm()}</>;
+    return (
+      <>
+        <div className="bg-primary-main p-2 flex items-center justify-between">
+          <div className="flex flex-col items-start justify-center gap-1">
+            <span className="font-semibold text-paper text-xs">
+              <span>بلیط هواپیما</span>
+              <span> {origin?.title_fa} </span>
+              <span> به </span>
+              <span> {destination?.title_fa} </span>
+            </span>{" "}
+            <div className="flex items-center justify-center gap-3 text-xs">
+              <span className={`text-paper font-light opacity-50`}>
+                رفت: {searchParams.get("departure_date")}
+              </span>{" "}
+              <span className={`text-paper font-light opacity-50`}>
+                برگشت: {searchParams.get("returning_date")}
+              </span>
+            </div>
+          </div>
+          <Button
+            onClick={toggleSearchDrawer(true)}
+            endIcon={<SearchIcon fontSize="small" />}
+            size="small"
+            variant="contained"
+            className={`bg-paper text-primary-main rounded-lg`}
+          >
+            جستجو
+          </Button>
+        </div>
+        <Drawer
+          anchor={"bottom"}
+          PaperProps={{
+            sx: {
+              padding: 2,
+            },
+          }}
+          open={openSearchDrawer}
+          onClose={toggleSearchDrawer(false)}
+        >
+          {drawerContent}
+        </Drawer>{" "}
+      </>
+    );
+  };
+  // for render on mobile
+  const renderOnMobile = () => {
+    return (
+      <>
+        <div
+          className={`text-paper overflow-hidden rounded-xl md:hidden grid grid-cols-1 gap-0`}
+        >
+          {renderTabOnMobile()}
+          {origin && destination ? (
+            renderSummerySearchOnMobile()
+          ) : (
+            <div className="flex items-center justify-center text-black">
+              loading...
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <>
+      {renderOnDesktop()}
+      {renderOnMobile()}
+    </>
   );
 };
 

@@ -96,6 +96,8 @@ interface ContextProps {
       >;
       flightPassengersTickets: any[];
       setFlightPassengersTickets: Dispatch<SetStateAction<any[]>>;
+      openFlightFilterDrawer: boolean;
+      setOpenFlightFilterDrawer: Dispatch<SetStateAction<boolean>>;
     };
   };
 }
@@ -154,6 +156,8 @@ const GlobalContext = createContext<ContextProps>({
       setFlightPassengers: () => {},
       flightPassengersTickets: [],
       setFlightPassengersTickets: () => {},
+      openFlightFilterDrawer: false,
+      setOpenFlightFilterDrawer: () => {},
     },
   },
 });
@@ -178,6 +182,8 @@ export const GlobalContextProvider = ({
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
   // search flight
+  const [openFlightFilterDrawer, setOpenFlightFilterDrawer] =
+    useState<boolean>(false);
   const [flightPassengersTickets, setFlightPassengersTickets] = useState<any[]>(
     []
   );
@@ -283,6 +289,8 @@ export const GlobalContextProvider = ({
             setFlightPassengers,
             flightPassengersTickets,
             setFlightPassengersTickets,
+            openFlightFilterDrawer,
+            setOpenFlightFilterDrawer,
           },
         },
       }}

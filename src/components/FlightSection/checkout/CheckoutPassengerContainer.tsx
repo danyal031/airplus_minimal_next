@@ -342,20 +342,21 @@ const CheckoutPassengerContainer = () => {
           .then((res: any) => {
             console.log(res.status);
             if (res.status) {
-              handleStoreFlightJson(jsonData)
-                .then((res: any) => {
-                  setShowProgress(false);
-                  if (res.status) {
-                    jsonData["type"] = "flight";
-                    localStorage.setItem(id, JSON.stringify(jsonData));
-                    router.replace(res.return);
-                  } else {
-                    handleAlertDetails(res.message, "error");
-                  }
-                })
-                .catch((err) => {
-                  setShowProgress(false);
-                });
+              // handleStoreFlightJson(jsonData)
+              //   .then((res: any) => {
+              //     setShowProgress(false);
+              //     if (res.status) {
+              //       jsonData["type"] = "flight";
+              //       localStorage.setItem(id, JSON.stringify(jsonData));
+              //       router.replace(res.return);
+              //     } else {
+              //       handleAlertDetails(res.message, "error");
+              //     }
+              //   })
+              //   .catch((err) => {
+              //     setShowProgress(false);
+              //   });
+              console.log(true);
             } else {
               handleAlertDetails(res.message, "error");
               console.log(111, res);
