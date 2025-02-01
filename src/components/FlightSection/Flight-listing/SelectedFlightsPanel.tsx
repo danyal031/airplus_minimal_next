@@ -156,7 +156,7 @@ const SelectedFlightsPanel = () => {
                   )[1]}{" "}
               </span>{" "}
               <div className="flex items-center justify-start gap-2 min-h-12 flex-1 flex-shrink-0 w-full">
-                <span className="text-xs text-text-main font-semibold truncate">
+                <span className="text-xs md:text-sm text-text-main font-semibold truncate">
                   {selectedReturnFlight.Origin.Iata.title_fa}
                 </span>
                 <Image
