@@ -337,6 +337,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
     if (travelRoute === "oneWay") {
       if (Array.isArray(data.Classes)) {
         setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
+        toggleOpenDetailsDrawer(false);
         const queryParams = createSearchparams(
           { ...data, Classes: data.Classes[classIndex] },
           false
@@ -348,6 +349,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
     } else {
       if (!selectedWentFlight) {
         if (Array.isArray(data.Classes)) {
+          toggleOpenDetailsDrawer(false);
           setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
           if (selectedReturnFlight) {
             const queryParams = createSearchparams(
@@ -361,6 +363,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
         }
       } else {
         if (Array.isArray(data.Classes)) {
+          toggleOpenDetailsDrawer(false);
           setSelectedReturnFlight({
             ...data,
             Classes: data.Classes[classIndex],
@@ -1092,6 +1095,9 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                 بازگشت
               </Button>
               <Button
+                onClick={() => {
+                  handleChooseTicket(data, 0);
+                }}
                 className="rounded-lg"
                 variant="contained"
                 size="medium"

@@ -496,10 +496,175 @@ const SelectedFlightTicketsCards = () => {
       </>
     );
   };
+
+  // for mobile
+  const renderReturnTicketOnMobile = () => {
+    return (
+      <>
+        {selectedReturnFlight &&
+          !Array.isArray(selectedReturnFlight.Classes) && (
+            <motion.div
+              className="h-24 border-2 overflow-hidden border-primary-main rounded-xl bg-paper grid grid-cols-4"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              {" "}
+              <div className="col-span-3 px-2 flex flex-col items-center justify-start gap-1">
+                <div className="flex items-center justify-center gap-0">
+                  <span className="rounded-tab-up-sm text-xs px-3 h-8 flex items-center justify-center text-paper truncate bg-primary-main">
+                    بلیت برگشت
+                  </span>
+                  <span className="text-xs text-text-main font-semibold">
+                    {convertToPersianDate(
+                      selectedReturnFlight.DepartureDateTime
+                    )}
+                  </span>{" "}
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  <span className="flex-shrink-0 flex items-center justify-center">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${selectedReturnFlight.Airline.logo}`}
+                      width={38}
+                      height={38}
+                      className="w-8"
+                      alt="air-logo"
+                      // sizes="30px"
+                    />
+                  </span>
+                  {/* <span className="text-xs truncate font-bold">
+                      {selectedReturnFlight.Airline.title_fa}
+                    </span> */}
+                  <div className="col-span-3 flex items-center justify-start gap-2">
+                    <span className="text-base text-primary-main font-bold">
+                      {selectedReturnFlight.DepartureDateTime.split(
+                        " "
+                      )[1].split(":")[0] +
+                        ":" +
+                        selectedReturnFlight.DepartureDateTime.split(
+                          " "
+                        )[1].split(":")[1]}{" "}
+                    </span>{" "}
+                    <div className="flex items-center justify-start gap-2 min-h-12 flex-1 flex-shrink-0 w-full">
+                      <span className="text-xs text-text-main font-semibold truncate">
+                        {selectedReturnFlight.Origin.Iata.title_fa}
+                      </span>
+                      <Image
+                        src={leftArrow}
+                        alt="left-arrow"
+                        width={40}
+                        height={10}
+                        className="object-cover"
+                      />
+                      <span className="text-xs text-text-main font-semibold truncate">
+                        {selectedReturnFlight.Destination.Iata.title_fa}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>{" "}
+              <div className="p-4 flex items-start justify-center">
+                <Button
+                  onClick={handleChangeTicket}
+                  className="rounded-lg truncate"
+                  variant="outlined"
+                  size="small"
+                  color="primary"
+                >
+                  تغییر بلیت
+                </Button>
+              </div>
+            </motion.div>
+          )}
+      </>
+    );
+  };
+
+  const renderWentTicketOnMobile = () => {
+    return (
+      <>
+        {selectedWentFlight && !Array.isArray(selectedWentFlight.Classes) && (
+          <motion.div
+            className="h-24 border-2 overflow-hidden border-primary-main rounded-xl bg-paper grid grid-cols-4"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            {" "}
+            <div className="col-span-3 px-2 flex flex-col items-center justify-start gap-1">
+              <div className="flex items-center justify-center gap-0">
+                <span className="rounded-tab-up-sm h-8 px-3 flex items-center justify-center text-paper truncate bg-primary-main text-xs">
+                  بلیت رفت
+                </span>
+                <span className="text-xs text-text-main font-semibold">
+                  {convertToPersianDate(selectedWentFlight.DepartureDateTime)}
+                </span>{" "}
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <span className="flex-shrink-0 flex items-center justify-center">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${selectedWentFlight.Airline.logo}`}
+                    width={38}
+                    height={38}
+                    className="w-8"
+                    alt="air-logo"
+                    // sizes="30px"
+                  />
+                </span>
+                {/* <span className="text-[10px] truncate font-bold">
+                    {selectedWentFlight.Airline.title_fa}
+                  </span> */}
+                <div className="col-span-3 flex items-center justify-start gap-2">
+                  <span className="text-base text-primary-main font-bold">
+                    {selectedWentFlight.DepartureDateTime.split(" ")[1].split(
+                      ":"
+                    )[0] +
+                      ":" +
+                      selectedWentFlight.DepartureDateTime.split(" ")[1].split(
+                        ":"
+                      )[1]}{" "}
+                  </span>{" "}
+                  <div className="flex items-center justify-start gap-2 min-h-12 flex-1 flex-shrink-0 w-full">
+                    <span className="text-xs text-text-main font-semibold truncate">
+                      {selectedWentFlight.Origin.Iata.title_fa}
+                    </span>
+                    <Image
+                      src={leftArrow}
+                      alt="left-arrow"
+                      width={40}
+                      height={10}
+                      className="object-cover"
+                    />{" "}
+                    <span className="text-xs text-text-main font-semibold truncate">
+                      {selectedWentFlight.Destination.Iata.title_fa}
+                    </span>
+                  </div>{" "}
+                </div>
+              </div>
+            </div>
+            <div className="p-4 flex items-start justify-center">
+              <Button
+                onClick={handleChangeTicket}
+                className="rounded-lg truncate"
+                variant="outlined"
+                size="small"
+                color="primary"
+              >
+                تغییر بلیت
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </>
+    );
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-3">
-      {renderWentTicket()}
-      {renderReturnTicket()}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 px-4 md:px-0">
+      <div className="md:block hidden">{renderWentTicket()}</div>
+      <div className="md:block hidden">{renderReturnTicket()}</div>
+      <div className="md:hidden">{renderWentTicketOnMobile()}</div>
+      <div className="md:hidden">{renderReturnTicketOnMobile()}</div>
     </div>
   );
 };

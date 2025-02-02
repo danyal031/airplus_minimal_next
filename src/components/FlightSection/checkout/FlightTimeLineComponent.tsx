@@ -93,7 +93,7 @@ const FlightTimeLineComponent = () => {
 
   const steps = ["انتخاب پرواز", "اطلاعات مسافران", "پرداخت", "صدور و پیگیری"];
   return (
-    <div className="bg-primary-main p-2 px-5 rounded-b-xl">
+    <div className="bg-primary-main p-2 px-2 md:px-5 rounded-b-xl">
       <Stepper
         activeStep={1}
         alternativeLabel
@@ -106,7 +106,7 @@ const FlightTimeLineComponent = () => {
           } = {};
           labelProps.optional = (
             <Typography
-              className="mt-2 text-sm"
+              className="mt-2 text-xs md:text-sm truncate"
               color={theme.palette.background.paper}
             >
               {label}
