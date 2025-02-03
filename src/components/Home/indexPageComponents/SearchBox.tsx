@@ -13,9 +13,9 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import VillaIcon from "@mui/icons-material/Villa";
 import FlightSearchForm from "@/components/FlightSection/FlightSearchForm/FlightSearchForm";
-import ResidenceSearchFormOnDesktop from "@/components/ResidenceSection/ResidenceSearchForm/ResidenceSearchFormOnDesktop";
 import { useGlobalContext } from "@/context/store";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
+import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 interface SearchBoxProps {
   airports: AirportDataType[] | [];
 }
@@ -131,7 +131,7 @@ const SearchBoxOnDesktop = () => {
       case "1":
         return <FlightSearchForm />;
       case "2":
-        return <ResidenceSearchFormOnDesktop />;
+        return <AccommodationSearchForm />;
       default:
         return renderComingSoon();
     }

@@ -16,8 +16,8 @@ import React, { FC, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import FlightSearchForm from "../FlightSearchForm/FlightSearchForm";
-import ResidenceSearchFormOnDesktop from "@/components/ResidenceSection/ResidenceSearchForm/ResidenceSearchFormOnDesktop";
 import FlightSummarySearchSkelton from "@/components/Skelton-Components/FlightSection/FlightHeaderSearchForm/FlightSummarySearchSkelton";
+import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 interface ListingFlightHeaderProps {
   airports?: AirportDataType[] | [];
 }
@@ -265,7 +265,7 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
       case "1":
         return <FlightSearchForm />;
       case "2":
-        return <ResidenceSearchFormOnDesktop />;
+        return <AccommodationSearchForm />;
       default:
         return <FlightSearchForm />;
     }

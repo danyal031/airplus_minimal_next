@@ -322,14 +322,14 @@ export const handleStoreFlightJson = (data: any) => {
   });
 };
 
-// handle residences requests
+// handle accommodation requests
 
-export const recommendedResidences = (data: string) => {
+export const recommendedAccommodations = (data: string) => {
   return new Promise((resolve, reject) => {
     axios
       .get(
         (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env.NEXT_PUBLIC_RESIDENCES_ENDPOINT,
+          process.env.NEXT_PUBLIC_ACCOMMODATIONS_ENDPOINT,
         {
           params: {
             search: data,

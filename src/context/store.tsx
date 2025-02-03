@@ -31,6 +31,12 @@ import {
   FlightTicketDataType,
   TypeDropOffLocationType,
 } from "@/DataTypes/flight/flightTicket";
+import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
+import {
+  PassengersCapacityDataType,
+  PassengersCapacityDefaultValue,
+} from "@/DataTypes/accommodation/accommodationPassengersCapaciy";
+import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
 
 // Define combined context type
 interface ContextProps {
@@ -100,6 +106,34 @@ interface ContextProps {
       setOpenFlightFilterDrawer: Dispatch<SetStateAction<boolean>>;
     };
   };
+  accommodationContext: {
+    accommodationSearch: {
+      accommodationFromDate: string | null;
+      setAccommodationFromDate: Dispatch<SetStateAction<string | null>>;
+      accommodationToDate: string | null;
+      setAccommodationToDate: Dispatch<SetStateAction<string | null>>;
+      accommodationDestination: AccommodationDataType | null;
+      setAccommodationDestination: Dispatch<
+        SetStateAction<AccommodationDataType | null>
+      >;
+      accommodations: AccommodationDataType[] | [];
+      setAccommodations: Dispatch<SetStateAction<AccommodationDataType[] | []>>;
+      accommodationPassengersCapacity: PassengersCapacityDataType;
+      setAccommodationPassengersCapacity: Dispatch<
+        SetStateAction<PassengersCapacityDataType>
+      >;
+      accommodationsList: AccommodationsListDataType[] | [];
+      setAccommodationsList: Dispatch<
+        SetStateAction<AccommodationsListDataType[] | []>
+      >;
+      filteredSearchAccommodationsListResponseData:
+        | AccommodationsListDataType[]
+        | [];
+      setFilteredSearchAccommodationsListResponseData: Dispatch<
+        SetStateAction<AccommodationsListDataType[] | []>
+      >;
+    };
+  };
 }
 
 // Create combined context
@@ -160,6 +194,24 @@ const GlobalContext = createContext<ContextProps>({
       setOpenFlightFilterDrawer: () => {},
     },
   },
+  accommodationContext: {
+    accommodationSearch: {
+      accommodationFromDate: null,
+      setAccommodationFromDate: () => {},
+      accommodationToDate: null,
+      setAccommodationToDate: () => {},
+      accommodationDestination: null,
+      setAccommodationDestination: () => {},
+      accommodations: [],
+      setAccommodations: () => {},
+      accommodationPassengersCapacity: PassengersCapacityDefaultValue,
+      setAccommodationPassengersCapacity: () => {},
+      accommodationsList: [],
+      setAccommodationsList: () => {},
+      filteredSearchAccommodationsListResponseData: [],
+      setFilteredSearchAccommodationsListResponseData: () => {},
+    },
+  },
 });
 
 interface GlobalContextProviderProps {
@@ -216,6 +268,27 @@ export const GlobalContextProvider = ({
   const [destination, setDestination] = useState<AirportDataType | undefined>(
     undefined
   );
+  // search Accommodation
+  const [accommodationFromDate, setAccommodationFromDate] = useState<
+    string | null
+  >(null);
+  const [accommodationToDate, setAccommodationToDate] = useState<string | null>(
+    null
+  );
+  const [accommodationDestination, setAccommodationDestination] =
+    useState<AccommodationDataType | null>(null);
+  const [accommodations, setAccommodations] = useState<
+    AccommodationDataType[] | []
+  >([]);
+  const [accommodationPassengersCapacity, setAccommodationPassengersCapacity] =
+    useState<PassengersCapacityDataType>(PassengersCapacityDefaultValue);
+  const [accommodationsList, setAccommodationsList] = useState<
+    AccommodationsListDataType[] | []
+  >([]);
+  const [
+    filteredSearchAccommodationsListResponseData,
+    setFilteredSearchAccommodationsListResponseData,
+  ] = useState<AccommodationsListDataType[] | []>([]);
   //
   const theme = useMemo(() => getTheme("light"), []);
   // handle user data
@@ -291,6 +364,24 @@ export const GlobalContextProvider = ({
             setFlightPassengersTickets,
             openFlightFilterDrawer,
             setOpenFlightFilterDrawer,
+          },
+        },
+        accommodationContext: {
+          accommodationSearch: {
+            accommodationDestination,
+            accommodationFromDate,
+            accommodationToDate,
+            setAccommodationDestination,
+            setAccommodationFromDate,
+            setAccommodationToDate,
+            accommodations,
+            setAccommodations,
+            accommodationPassengersCapacity,
+            setAccommodationPassengersCapacity,
+            accommodationsList,
+            setAccommodationsList,
+            filteredSearchAccommodationsListResponseData,
+            setFilteredSearchAccommodationsListResponseData,
           },
         },
       }}
