@@ -508,6 +508,10 @@ const CheckoutPassengerContainer = () => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("flightPassengers", flightPassengers);
+  }, [flightPassengers]);
+
   // handle onchange user information
   const handleChangeUserInfo = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -520,7 +524,7 @@ const CheckoutPassengerContainer = () => {
       }
       return pass;
     });
-    setFlightPassengers(updatedUserInfo);
+    // setFlightPassengers(updatedUserInfo);
   };
 
   // handle add flight Passengers Tickets

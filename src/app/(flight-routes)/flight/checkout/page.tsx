@@ -31,8 +31,16 @@ const page = () => {
 
   return (
     <>
-      {renderOnDesktop()}
-      {renderOnMobile()}
+      {/* {renderOnDesktop()}
+      {renderOnMobile()} */}
+      <div className="md:container">
+        <div className="fixed w-full left-1/2 -translate-x-1/2 md:container max-md:px-4 z-10">
+          <FlightTimeLineComponent />
+        </div>
+        <div className="relative w-full py-24">
+          <CheckoutContainerContent />{" "}
+        </div>
+      </div>
     </>
   );
 };
