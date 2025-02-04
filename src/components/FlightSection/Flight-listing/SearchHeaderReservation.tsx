@@ -18,12 +18,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import FlightSearchForm from "../FlightSearchForm/FlightSearchForm";
 import FlightSummarySearchSkelton from "@/components/Skelton-Components/FlightSection/FlightHeaderSearchForm/FlightSummarySearchSkelton";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
-interface ListingFlightHeaderProps {
-  airports?: AirportDataType[] | [];
-}
-const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
-  airports = [],
-}) => {
+
+const SearchHeaderReservation = () => {
   // initial states
   const {
     setAirports,
@@ -40,7 +36,7 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
     changeStatusRequest,
     fromDate,
     toDate,
-    // airports,
+    airports,
     setTravelRoute,
     setDropOffLocationType,
     filteredSearchFlightResponseData,
@@ -50,7 +46,6 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [openSearchDrawer, setOpenSearchDrawer] = useState<boolean>(false);
-  const theme = useTheme();
 
   // handle toggle open search drawer
   const toggleSearchDrawer = (newOpen: boolean) => () => {
@@ -58,9 +53,9 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
   };
 
   // handle airports value
-  useEffect(() => {
-    setAirports(airports);
-  }, []);
+  // useEffect(() => {
+  //   setAirports(airports);
+  // }, []);
 
   const searchParamsValidation = (searchParams: ReadonlyURLSearchParams) => {
     console.log("airport listing: ", airports);
@@ -467,4 +462,4 @@ const ListingFlightHeader: FC<ListingFlightHeaderProps> = ({
   );
 };
 
-export default ListingFlightHeader;
+export default SearchHeaderReservation;

@@ -349,7 +349,7 @@ export const recommendedAccommodations = (data: string) => {
   });
 };
 
-export const getResidencesList = (
+export const getAccommodationsList = (
   value: number | string,
   checkin_date: string,
   checkout_date: string,
@@ -364,7 +364,7 @@ export const getResidencesList = (
     axios
       .get(
         ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env.NEXT_PUBLIC_RESIDENCES_LIST_ENDPOINT) as string,
+          process.env.NEXT_PUBLIC_ACCOMMODATIONS_LIST_ENDPOINT) as string,
         {
           params: {
             value: value,
@@ -379,7 +379,7 @@ export const getResidencesList = (
       )
       .then((response) => {
         // Handle successful response here
-        console.log("residence_list response: ", response.data);
+        console.log("accommodation_list response: ", response.data);
         resolve(response.data);
       })
       .catch((error) => {
@@ -399,7 +399,8 @@ export const getMinPrice = (
     axios
       .get(
         ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env.NEXT_PUBLIC_GET_MIN_PRICE_RESIDENCE_ENDPOINT) as string,
+          process.env
+            .NEXT_PUBLIC_GET_MIN_PRICE_ACCOMMODATION_ENDPOINT) as string,
         {
           params: {
             checkin_date: convertToGregorian(checkin_date),

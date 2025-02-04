@@ -40,7 +40,7 @@ const AccommodationSearchForm = () => {
     accommodationPassengersCapacity,
     setAccommodationPassengersCapacity,
     setAccommodationsList,
-    setFilteredSearchAccommodationsListResponseData,
+    setFilteredSearchAccommodationsList,
   } = useGlobalContext().accommodationContext.accommodationSearch;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,7 +51,7 @@ const AccommodationSearchForm = () => {
   // handle move to search accommodation page
   const handleClickSubmit = () => {
     setAccommodationsList([]);
-    setFilteredSearchAccommodationsListResponseData([]);
+    setFilteredSearchAccommodationsList([]);
     if (accommodationDestination?.category.title === "شهر") {
       router.push(
         `/listing/accommodations?destination=${accommodationDestination.title.fa}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`

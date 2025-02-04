@@ -36,7 +36,10 @@ import {
   PassengersCapacityDataType,
   PassengersCapacityDefaultValue,
 } from "@/DataTypes/accommodation/accommodationPassengersCapaciy";
-import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
+import {
+  AccommodationShoppingCartDataType,
+  AccommodationsListDataType,
+} from "@/DataTypes/accommodation/accommodationsListTypes";
 
 // Define combined context type
 interface ContextProps {
@@ -126,11 +129,15 @@ interface ContextProps {
       setAccommodationsList: Dispatch<
         SetStateAction<AccommodationsListDataType[] | []>
       >;
-      filteredSearchAccommodationsListResponseData:
-        | AccommodationsListDataType[]
-        | [];
-      setFilteredSearchAccommodationsListResponseData: Dispatch<
+      filteredSearchAccommodationsList: AccommodationsListDataType[] | [];
+      setFilteredSearchAccommodationsList: Dispatch<
         SetStateAction<AccommodationsListDataType[] | []>
+      >;
+      accommodationsLoading: boolean;
+      setAccommodationsLoading: Dispatch<SetStateAction<boolean>>;
+      selectedAccommodation: AccommodationShoppingCartDataType | null;
+      setSelectedAccommodation: Dispatch<
+        SetStateAction<AccommodationShoppingCartDataType | null>
       >;
     };
   };
@@ -208,8 +215,12 @@ const GlobalContext = createContext<ContextProps>({
       setAccommodationPassengersCapacity: () => {},
       accommodationsList: [],
       setAccommodationsList: () => {},
-      filteredSearchAccommodationsListResponseData: [],
-      setFilteredSearchAccommodationsListResponseData: () => {},
+      filteredSearchAccommodationsList: [],
+      setFilteredSearchAccommodationsList: () => {},
+      accommodationsLoading: false,
+      setAccommodationsLoading: () => {},
+      selectedAccommodation: null,
+      setSelectedAccommodation: () => {},
     },
   },
 });
@@ -286,9 +297,13 @@ export const GlobalContextProvider = ({
     AccommodationsListDataType[] | []
   >([]);
   const [
-    filteredSearchAccommodationsListResponseData,
-    setFilteredSearchAccommodationsListResponseData,
+    filteredSearchAccommodationsList,
+    setFilteredSearchAccommodationsList,
   ] = useState<AccommodationsListDataType[] | []>([]);
+  const [accommodationsLoading, setAccommodationsLoading] =
+    useState<boolean>(false);
+  const [selectedAccommodation, setSelectedAccommodation] =
+    useState<AccommodationShoppingCartDataType | null>(null);
   //
   const theme = useMemo(() => getTheme("light"), []);
   // handle user data
@@ -380,8 +395,12 @@ export const GlobalContextProvider = ({
             setAccommodationPassengersCapacity,
             accommodationsList,
             setAccommodationsList,
-            filteredSearchAccommodationsListResponseData,
-            setFilteredSearchAccommodationsListResponseData,
+            filteredSearchAccommodationsList,
+            setFilteredSearchAccommodationsList,
+            accommodationsLoading,
+            setAccommodationsLoading,
+            selectedAccommodation,
+            setSelectedAccommodation,
           },
         },
       }}

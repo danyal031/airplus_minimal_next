@@ -1,7 +1,12 @@
+import AccommodationPageContainer from "@/components/AccommodationSection/accommodation/listing/AccommodationPageContainer";
 import React from "react";
 
 const page = () => {
-  return <div>page</div>;
+  return (
+    <>
+      <AccommodationPageContainer />
+    </>
+  );
 };
 
 export default page;
