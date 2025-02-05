@@ -10,6 +10,8 @@ import {
 } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import AccommodationFilterBox from "./AccommodationFilterBox";
+import AccommodationsList from "./AccommodationsList";
 
 const AccommodationListContainer = () => {
   // initial states
@@ -158,14 +160,14 @@ const AccommodationListContainer = () => {
   };
   return (
     <>
-      <div className="hidden md:block container">
-        {/* <div className="fixed w-full left-1/2 -translate-x-1/2 container z-10">
-          <SearchHeaderReservationContainer />{" "}
-        </div> */}
-        {/* <div className="relative w-full py-24 pt-36">
-          <SectionGridFilterCard />{" "}
-        </div> */}
-      </div>{" "}
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-3">
+          <AccommodationFilterBox />
+        </div>
+        <div className="col-span-12 md:col-span-9">
+          <AccommodationsList />
+        </div>
+      </div>
     </>
   );
 };

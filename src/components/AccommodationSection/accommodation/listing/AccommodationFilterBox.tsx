@@ -1,0 +1,419 @@
+"use client";
+import {
+  Checkbox,
+  IconButton,
+  Rating,
+  Slider,
+  TextField,
+  useTheme,
+} from "@mui/material";
+import React, { useState } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import CloseIcon from "@mui/icons-material/Close";
+import { styled } from "@mui/material/styles";
+import LightModeIcon from "@mui/icons-material/LightMode";
+
+const AccommodationFilterBox = () => {
+  // initial states
+  const [openName, setOpenName] = useState<boolean>(false);
+  const [openStars, setOpenStars] = useState<boolean>(false);
+  const [openRangePrice, setOpenRangePrice] = useState<boolean>(false);
+  const [openFacilities, setOpenFacilities] = useState<boolean>(false);
+  const [openType, setOpenType] = useState<boolean>(false);
+  const theme = useTheme();
+  // handle change filter box section
+  const handleChangeFilterBoxSections = (section: string) => {
+    switch (section) {
+      case "name":
+        return setOpenName(!openName);
+      case "stars":
+        return setOpenStars(!openStars);
+      case "rangePrice":
+        return setOpenRangePrice(!openRangePrice);
+      case "facilities":
+        return setOpenFacilities(!openFacilities);
+      case "type":
+        return setOpenType(!openType);
+    }
+  };
+
+  //   for summery filter
+  const renderSummeryFilterData = () => {
+    return (
+      <>
+        <div className="bg-paper p-2 rounded-xl flex items-center justify-between w-full text-sm">
+          <span className="text-text-main font-semibold cursor-pointer">
+            تعداد نتایج
+          </span>
+          <span className="text-primary-main font-semibold">حذف فیلتر</span>
+        </div>
+      </>
+    );
+  };
+
+  //   for name filter
+  const renderName = () => {
+    return (
+      <>
+        {" "}
+        <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+          {" "}
+          <div
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => handleChangeFilterBoxSections("name")}
+          >
+            <span className="text-text-main font-semibold cursor-pointer">
+              نام هتل
+            </span>
+            <IconButton size="small">
+              {openName ? (
+                <CloseIcon className="text-sm" />
+              ) : (
+                <KeyboardArrowDownIcon className="text-sm" />
+              )}
+            </IconButton>{" "}
+          </div>
+          {openName && (
+            <div className="grid grid-cols-1">
+              <TextField size="small" label="جستجوی نام هتل" />
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  //   for stars filter
+  const renderStars = () => {
+    const BpIcon = styled("span")(({ theme }) => ({
+      borderRadius: 6,
+      width: 18,
+      height: 18,
+      boxShadow:
+        "inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)",
+      backgroundColor: "#f5f8fa",
+      backgroundImage:
+        "linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))",
+      ".Mui-focusVisible &": {
+        outline: "2px auto rgba(19,124,189,.6)",
+        outlineOffset: 2,
+      },
+      "input:hover ~ &": {
+        backgroundColor: "#ebf1f5",
+        ...theme.applyStyles("dark", {
+          backgroundColor: "#30404d",
+        }),
+      },
+      "input:disabled ~ &": {
+        boxShadow: "none",
+        background: "rgba(206,217,224,.5)",
+        ...theme.applyStyles("dark", {
+          background: "rgba(57,75,89,.5)",
+        }),
+      },
+      ...theme.applyStyles("dark", {
+        boxShadow: "0 0 0 1px rgb(16 22 26 / 40%)",
+        backgroundColor: "#394b59",
+        backgroundImage:
+          "linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))",
+      }),
+    }));
+    const BpCheckedIcon = styled(BpIcon)({
+      backgroundColor: theme.palette.primary.main,
+      backgroundImage:
+        "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
+      "&::before": {
+        display: "block",
+        width: 18,
+        height: 18,
+        backgroundImage:
+          "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath" +
+          " fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 " +
+          "1.003 0 00-1.42 1.42l3 3c.18.18.43.29.71.29s.53-.11.71-.29l5-5A1.003 1.003 0 0012 5z' fill='%23fff'/%3E%3C/svg%3E\")",
+        content: '""',
+      },
+      "input:hover ~ &": {
+        backgroundColor: theme.palette.primary.main,
+      },
+    });
+    return (
+      <>
+        {" "}
+        <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+          {" "}
+          <div
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => handleChangeFilterBoxSections("stars")}
+          >
+            <span className="text-text-main font-semibold cursor-pointer">
+              ستاره هتل
+            </span>
+            <IconButton size="small">
+              {openStars ? (
+                <CloseIcon className="text-sm" />
+              ) : (
+                <KeyboardArrowDownIcon className="text-sm" />
+              )}
+            </IconButton>{" "}
+          </div>
+          {openStars && (
+            <div className="grid grid-cols-1 gap-1">
+              <div className="flex items-center justify-start gap-2">
+                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                <Rating size="small" defaultValue={5} readOnly />
+              </div>{" "}
+              <div className="flex items-center justify-start gap-2">
+                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                <Rating size="small" defaultValue={4} readOnly />
+              </div>{" "}
+              <div className="flex items-center justify-start gap-2">
+                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                <Rating size="small" defaultValue={3} readOnly />
+              </div>{" "}
+              <div className="flex items-center justify-start gap-2">
+                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                <Rating size="small" defaultValue={2} readOnly />
+              </div>{" "}
+              <div className="flex items-center justify-start gap-2">
+                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                <Rating size="small" defaultValue={1} readOnly />
+              </div>{" "}
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  //   for range price
+  const renderRangePrice = () => {
+    return (
+      <>
+        {" "}
+        <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+          {" "}
+          <div
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => handleChangeFilterBoxSections("rangePrice")}
+          >
+            <span className="text-text-main font-semibold cursor-pointer">
+              بازه قیمتی
+            </span>
+            <IconButton size="small">
+              {openRangePrice ? (
+                <CloseIcon className="text-sm" />
+              ) : (
+                <KeyboardArrowDownIcon className="text-sm" />
+              )}
+            </IconButton>{" "}
+          </div>
+          {openRangePrice && (
+            <div className="grid grid-cols-1 gap-1">
+              <Slider
+                size="medium"
+                // value={[20, 37]}
+                // onChange={handleChange1}
+                disableSwap
+                min={0}
+                max={100}
+              />
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  //   for facilities
+  const renderFacilities = () => {
+    const BpIcon = styled("span")(({ theme }) => ({
+      borderRadius: 6,
+      width: 18,
+      height: 18,
+      boxShadow:
+        "inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)",
+      backgroundColor: "#f5f8fa",
+      backgroundImage:
+        "linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))",
+      ".Mui-focusVisible &": {
+        outline: "2px auto rgba(19,124,189,.6)",
+        outlineOffset: 2,
+      },
+      "input:hover ~ &": {
+        backgroundColor: "#ebf1f5",
+        ...theme.applyStyles("dark", {
+          backgroundColor: "#30404d",
+        }),
+      },
+      "input:disabled ~ &": {
+        boxShadow: "none",
+        background: "rgba(206,217,224,.5)",
+        ...theme.applyStyles("dark", {
+          background: "rgba(57,75,89,.5)",
+        }),
+      },
+      ...theme.applyStyles("dark", {
+        boxShadow: "0 0 0 1px rgb(16 22 26 / 40%)",
+        backgroundColor: "#394b59",
+        backgroundImage:
+          "linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))",
+      }),
+    }));
+    const BpCheckedIcon = styled(BpIcon)({
+      backgroundColor: theme.palette.primary.main,
+      backgroundImage:
+        "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
+      "&::before": {
+        display: "block",
+        width: 18,
+        height: 18,
+        backgroundImage:
+          "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath" +
+          " fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 " +
+          "1.003 0 00-1.42 1.42l3 3c.18.18.43.29.71.29s.53-.11.71-.29l5-5A1.003 1.003 0 0012 5z' fill='%23fff'/%3E%3C/svg%3E\")",
+        content: '""',
+      },
+      "input:hover ~ &": {
+        backgroundColor: theme.palette.primary.main,
+      },
+    });
+    const data = [
+      "پارکنیگ",
+      "پارکنیگ",
+      "پارکنیگ",
+      "پارکنیگ",
+      "پارکنیگ",
+      "پارکنیگ",
+    ];
+    return (
+      <>
+        {" "}
+        <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+          {" "}
+          <div
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => handleChangeFilterBoxSections("facilities")}
+          >
+            <span className="text-text-main font-semibold cursor-pointer">
+              امکانات
+            </span>
+            <IconButton size="small">
+              {openFacilities ? (
+                <CloseIcon className="text-sm" />
+              ) : (
+                <KeyboardArrowDownIcon className="text-sm" />
+              )}
+            </IconButton>{" "}
+          </div>
+          {openFacilities && (
+            <div className="grid grid-cols-1 gap-1">
+              {data.map((item: string) => (
+                <div className="flex items-center justify-start gap-2">
+                  <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                  <span className="text-text-main text-sm font-semibold">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>{" "}
+      </>
+    );
+  };
+
+  // for type of accommodation
+  const renderType = () => {
+    const accommodationType = [
+      {
+        id: 1,
+        label: "بامداد",
+        icon: <LightModeIcon fontSize="small" />,
+        range: "0-6",
+      },
+      {
+        id: 2,
+        label: "صبح",
+        icon: <LightModeIcon fontSize="small" />,
+        range: "6-12",
+      },
+      {
+        id: 3,
+        label: "ظهر",
+        icon: <LightModeIcon fontSize="small" />,
+        range: "12-18",
+      },
+      {
+        id: 4,
+        label: "شب",
+        icon: <LightModeIcon fontSize="small" />,
+        range: "18-24",
+      },
+    ];
+    return (
+      <>
+        <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+          {" "}
+          <div
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => handleChangeFilterBoxSections("type")}
+          >
+            <span className="text-text-main font-semibold cursor-pointer">
+              نوع اقامتگاه
+            </span>
+            <IconButton size="small">
+              {openType ? (
+                <CloseIcon className="text-sm" />
+              ) : (
+                <KeyboardArrowDownIcon className="text-sm" />
+              )}
+            </IconButton>{" "}
+          </div>
+          {openType && (
+            <div className="grid grid-cols-4 gap-2">
+              {accommodationType.map((item) => (
+                <div
+                  key={item.id}
+                  className={`bg-main text-gray-400 p-1 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-px`}
+                >
+                  {item.icon}
+                  <span className="font-semibold text-xs">{item.label}</span>
+                  <span className="font-semibold text-xs">{item.range}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>{" "}
+      </>
+    );
+  };
+  // for render on desktop
+  const renderFilterContainerOnDesktop = () => {
+    return (
+      <>
+        <div className="hidden md:flex flex-col items-center justify-start gap-2">
+          {renderSummeryFilterData()}
+          {renderName()}
+          {renderStars()}
+          {renderRangePrice()}
+          {renderFacilities()}
+          {renderType()}
+        </div>
+      </>
+    );
+  };
+
+  const renderFilterContainerOnMobile = () => {
+    return <></>;
+  };
+
+  return (
+    <>
+      {renderFilterContainerOnDesktop()}
+      {renderFilterContainerOnMobile()}
+    </>
+  );
+};
+
+export default AccommodationFilterBox;

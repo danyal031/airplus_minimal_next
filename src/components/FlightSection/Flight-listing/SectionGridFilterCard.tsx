@@ -1,42 +1,53 @@
 "use client";
-import React, { Suspense, useEffect } from "react";
+import React, { FC, Suspense, useEffect } from "react";
 import FlightFilterBox from "./FlightFilterBox";
 import FlightsList from "./FlightsList";
+import { AirportDataType } from "@/DataTypes/flight/flightTicket";
+import { useGlobalContext } from "@/context/store";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
 } from "next/navigation";
+import { getOnlineFlightSearch } from "@/global-files/axioses";
 import {
   convertPersianToEnglishNumbers,
   formatDateWithSlash,
 } from "@/global-files/function";
-import { useGlobalContext } from "@/context/store";
-import { getOnlineFlightSearch } from "@/global-files/axioses";
-
-const SectionGridFilterCard = () => {
+interface SectionGridFilterCardProps {
+  airports: AirportDataType[] | [];
+}
+const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
+  airports,
+}) => {
   // initial states
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const {
-    airports,
+    setAirports,
     isInitialSearchDone,
+    setFilteredSearchFlightResponseData,
     setOrigin,
     setDestination,
-    setSearchFlightResponseData,
-    setFilteredSearchFlightResponseData,
     setTravelRoute,
     setTicketLoading,
+    setSearchFlightResponseData,
+    setChangeStatusRequest,
     setIsInitialSearchDone,
+    changeStatusRequest,
+    origin,
     destination,
     fromDate,
     toDate,
-    origin,
-    setChangeStatusRequest,
-    filteredSearchFlightResponseData,
-    changeStatusRequest,
+    // airports,
   } = useGlobalContext().flightContext.searchContext;
-  const searchParamsValidation = (searchParams: ReadonlyURLSearchParams) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // handle initial value
+  useEffect(() => {
+    setAirports(airports);
+  }, []);
+
+  const paramsValidation = (searchParams: ReadonlyURLSearchParams) => {
     console.log("airport listing: ", airports);
     let dateRegex: RegExp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/i;
     let departureCheck = dateRegex.test(
@@ -63,60 +74,59 @@ const SectionGridFilterCard = () => {
       destinationCheck,
     });
     return departureCheck && returnCheck && originCheck && destinationCheck;
-    // return true;
   };
 
-  //   handle search
+  // handle search
+  const handleSearch = () => {
+    setFilteredSearchFlightResponseData(null);
+    setOrigin(airports.find((a) => a.iata === searchParams.get("origin")));
+    setDestination(
+      airports.find((a) => a.iata === searchParams.get("destination"))
+    );
+    if (
+      searchParams.get("returning_date") !== "false" &&
+      searchParams.get("returning_date")
+    ) {
+      setTravelRoute("roundTrip");
+    } else {
+      setTravelRoute("oneWay");
+    }
+    setTicketLoading(true);
+    getOnlineFlightSearch({
+      origin: searchParams.get("origin"),
+      destination: searchParams.get("destination"),
+      departure_date:
+        searchParams.get("departure_date") !== "false"
+          ? formatDateWithSlash(searchParams.get("departure_date") as string)
+          : false,
+      returning_date:
+        searchParams.get("returning_date") !== "false"
+          ? formatDateWithSlash(searchParams.get("returning_date") as string)
+          : false,
+    })
+      .then((response: any) => {
+        setSearchFlightResponseData(response.data);
+        setFilteredSearchFlightResponseData(response.data);
+        setIsInitialSearchDone(true);
+        setChangeStatusRequest(false);
+        setTicketLoading(false);
+      })
+      .catch(() => {
+        setChangeStatusRequest(false);
+      });
+  };
   useEffect(() => {
     if (!isInitialSearchDone) {
-      if (searchParamsValidation(searchParams)) {
-        setFilteredSearchFlightResponseData(null);
-        setOrigin(airports.find((a) => a.iata === searchParams.get("origin")));
-        setDestination(
-          airports.find((a) => a.iata === searchParams.get("destination"))
-        );
-        if (
-          searchParams.get("returning_date") !== "false" &&
-          searchParams.get("returning_date")
-        ) {
-          setTravelRoute("roundTrip");
-        } else {
-          setTravelRoute("oneWay");
-        }
-        setTicketLoading(true);
-        getOnlineFlightSearch({
-          origin: searchParams.get("origin"),
-          destination: searchParams.get("destination"),
-          departure_date:
-            searchParams.get("departure_date") !== "false"
-              ? formatDateWithSlash(
-                  searchParams.get("departure_date") as string
-                )
-              : false,
-          returning_date:
-            searchParams.get("returning_date") !== "false"
-              ? formatDateWithSlash(
-                  searchParams.get("returning_date") as string
-                )
-              : false,
-        })
-          .then((response: any) => {
-            setSearchFlightResponseData(response.data);
-            setFilteredSearchFlightResponseData(response.data);
-            setIsInitialSearchDone(true);
-            setChangeStatusRequest(false);
-            setTicketLoading(false);
-          })
-          .catch(() => {
-            setChangeStatusRequest(false);
-          });
+      if (paramsValidation(searchParams)) {
+        handleSearch();
       } else {
         router.push("/");
       }
     }
   }, [searchParams]);
 
-  useEffect(() => {
+  // handle search  by status request
+  const handleSearchByStatusRequest = () => {
     const originMatch = searchParams.get("origin") === origin?.iata;
     const destinationMatch =
       searchParams.get("destination") === destination?.iata;
@@ -129,62 +139,49 @@ const SectionGridFilterCard = () => {
       originMatch &&
       destinationMatch &&
       departureDateMatch &&
-      returningDateMatch &&
-      searchParamsValidation(searchParams)
+      returningDateMatch
     ) {
-      if (searchParamsValidation(searchParams)) {
-        setFilteredSearchFlightResponseData(null);
-        setOrigin(airports.find((a) => a.iata === searchParams.get("origin")));
-        setDestination(
-          airports.find((a) => a.iata === searchParams.get("destination"))
-        );
+      setFilteredSearchFlightResponseData(null);
+      setOrigin(airports.find((a) => a.iata === searchParams.get("origin")));
+      setDestination(
+        airports.find((a) => a.iata === searchParams.get("destination"))
+      );
 
-        if (
-          searchParams.get("returning_date") !== "false" &&
-          searchParams.get("returning_date")
-        ) {
-          setTravelRoute("roundTrip");
-        } else {
-          setTravelRoute("oneWay");
-        }
-        getOnlineFlightSearch({
-          origin: searchParams.get("origin"),
-          destination: searchParams.get("destination"),
-          departure_date:
-            searchParams.get("departure_date") !== "false"
-              ? formatDateWithSlash(
-                  searchParams.get("departure_date") as string
-                )
-              : false,
-          returning_date:
-            searchParams.get("returning_date") !== "false"
-              ? formatDateWithSlash(
-                  searchParams.get("returning_date") as string
-                )
-              : false,
-        })
-          .then((response: any) => {
-            setSearchFlightResponseData(response.data);
-            setFilteredSearchFlightResponseData(response.data);
-            setIsInitialSearchDone(true);
-            setChangeStatusRequest(false);
-            setTicketLoading(false);
-          })
-          .catch(() => {
-            setChangeStatusRequest(false);
-          });
+      if (
+        searchParams.get("returning_date") !== "false" &&
+        searchParams.get("returning_date")
+      ) {
+        setTravelRoute("roundTrip");
       } else {
-        router.push("/");
+        setTravelRoute("oneWay");
       }
+      getOnlineFlightSearch({
+        origin: searchParams.get("origin"),
+        destination: searchParams.get("destination"),
+        departure_date:
+          searchParams.get("departure_date") !== "false"
+            ? formatDateWithSlash(searchParams.get("departure_date") as string)
+            : false,
+        returning_date:
+          searchParams.get("returning_date") !== "false"
+            ? formatDateWithSlash(searchParams.get("returning_date") as string)
+            : false,
+      })
+        .then((response: any) => {
+          setSearchFlightResponseData(response.data);
+          setFilteredSearchFlightResponseData(response.data);
+          setIsInitialSearchDone(true);
+          setChangeStatusRequest(false);
+          setTicketLoading(false);
+        })
+        .catch(() => {
+          setChangeStatusRequest(false);
+        });
     }
-  }, [changeStatusRequest]);
-
+  };
   useEffect(() => {
-    console.log(
-      "filteredSearchFlightResponseData",
-      filteredSearchFlightResponseData
-    );
-  }, [filteredSearchFlightResponseData]);
+    handleSearchByStatusRequest();
+  }, [changeStatusRequest]);
 
   return (
     <div className="grid grid-cols-12 gap-4">
