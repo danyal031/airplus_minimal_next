@@ -13,7 +13,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 import LightModeIcon from "@mui/icons-material/LightMode";
-
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import VillaIcon from "@mui/icons-material/Villa";
+import HomeIcon from "@mui/icons-material/Home";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 const AccommodationFilterBox = () => {
   // initial states
   const [openName, setOpenName] = useState<boolean>(false);
@@ -159,25 +162,60 @@ const AccommodationFilterBox = () => {
           </div>
           {openStars && (
             <div className="grid grid-cols-1 gap-1">
-              <div className="flex items-center justify-start gap-2">
-                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
-                <Rating size="small" defaultValue={5} readOnly />
+              <div className="grid grid-cols-8 gap-1">
+                <div className="flex items-center justify-center">
+                  <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                </div>
+                <div className="col-span-2 flex items-center justify-center">
+                  <span className="text-sm text-text-main">پنج ستاره</span>
+                </div>
+                <div className="col-span-5 flex items-center justify-start">
+                  <Rating dir="ltr" size="small" defaultValue={5} readOnly />
+                </div>
               </div>{" "}
-              <div className="flex items-center justify-start gap-2">
-                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
-                <Rating size="small" defaultValue={4} readOnly />
+              <div className="grid grid-cols-8 gap-1">
+                <div className="flex items-center justify-center">
+                  <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                </div>
+                <div className="col-span-2 flex items-center justify-center">
+                  <span className="text-sm text-text-main">چهار ستاره</span>
+                </div>
+                <div className="col-span-5 flex items-center justify-start">
+                  <Rating dir="ltr" size="small" defaultValue={4} readOnly />
+                </div>
               </div>{" "}
-              <div className="flex items-center justify-start gap-2">
-                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
-                <Rating size="small" defaultValue={3} readOnly />
+              <div className="grid grid-cols-8 gap-1">
+                <div className="flex items-center justify-center">
+                  <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                </div>
+                <div className="col-span-2 flex items-center justify-center">
+                  <span className="text-sm text-text-main">سه ستاره</span>
+                </div>
+                <div className="col-span-5 flex items-center justify-start">
+                  <Rating dir="ltr" size="small" defaultValue={3} readOnly />
+                </div>
               </div>{" "}
-              <div className="flex items-center justify-start gap-2">
-                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
-                <Rating size="small" defaultValue={2} readOnly />
+              <div className="grid grid-cols-8 gap-1">
+                <div className="flex items-center justify-center">
+                  <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                </div>
+                <div className="col-span-2 flex items-center justify-center">
+                  <span className="text-sm text-text-main">دو ستاره</span>
+                </div>
+                <div className="col-span-5 flex items-center justify-start">
+                  <Rating dir="ltr" size="small" defaultValue={2} readOnly />
+                </div>
               </div>{" "}
-              <div className="flex items-center justify-start gap-2">
-                <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
-                <Rating size="small" defaultValue={1} readOnly />
+              <div className="grid grid-cols-8 gap-1">
+                <div className="flex items-center justify-center">
+                  <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
+                </div>
+                <div className="col-span-2 flex items-center justify-center">
+                  <span className="text-sm text-text-main">یک ستاره</span>
+                </div>
+                <div className="col-span-5 flex items-center justify-start">
+                  <Rating dir="ltr" size="small" defaultValue={1} readOnly />
+                </div>
               </div>{" "}
             </div>
           )}
@@ -328,32 +366,28 @@ const AccommodationFilterBox = () => {
     const accommodationType = [
       {
         id: 1,
-        label: "بامداد",
-        icon: <LightModeIcon fontSize="small" />,
-        range: "0-6",
+        label: "هتل",
+        icon: <ApartmentIcon fontSize="large" />,
       },
       {
         id: 2,
-        label: "صبح",
-        icon: <LightModeIcon fontSize="small" />,
-        range: "6-12",
+        label: "سوییت",
+        icon: <VillaIcon fontSize="large" />,
       },
       {
         id: 3,
-        label: "ظهر",
-        icon: <LightModeIcon fontSize="small" />,
-        range: "12-18",
+        label: "بوم گردی",
+        icon: <HomeIcon fontSize="large" />,
       },
       {
         id: 4,
-        label: "شب",
-        icon: <LightModeIcon fontSize="small" />,
-        range: "18-24",
+        label: "آپارتمان",
+        icon: <MeetingRoomIcon fontSize="large" />,
       },
     ];
     return (
       <>
-        <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
+        <div className="bg-paper p-2 rounded-b-xl md:rounded-lg w-full text-sm grid grid-cols-1 gap-3">
           {" "}
           <div
             className="flex items-center justify-between cursor-pointer"
@@ -375,16 +409,15 @@ const AccommodationFilterBox = () => {
               {accommodationType.map((item) => (
                 <div
                   key={item.id}
-                  className={`bg-main text-gray-400 p-1 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-px`}
+                  className={`h-16 bg-main text-text-main p-1 rounded-xl cursor-pointer flex flex-col items-center justify-center gap-px`}
                 >
-                  {item.icon}
                   <span className="font-semibold text-xs">{item.label}</span>
-                  <span className="font-semibold text-xs">{item.range}</span>
+                  {item.icon}
                 </div>
               ))}
             </div>
           )}
-        </div>{" "}
+        </div>
       </>
     );
   };

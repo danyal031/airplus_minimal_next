@@ -86,7 +86,6 @@ const TicketsList = () => {
   const renderOnDesktop = () => {
     return (
       <>
-        {" "}
         <div className="hidden md:grid grid-cols-1 gap-2">
           <div className="flex items-center justify-start">
             <span className="text-text-main text-base font-semibold">

@@ -139,6 +139,8 @@ interface ContextProps {
       setSelectedAccommodation: Dispatch<
         SetStateAction<AccommodationShoppingCartDataType | null>
       >;
+      typeOfAccommodation: string;
+      setTypeOfAccommodation: Dispatch<SetStateAction<string>>;
     };
   };
 }
@@ -221,6 +223,8 @@ const GlobalContext = createContext<ContextProps>({
       setAccommodationsLoading: () => {},
       selectedAccommodation: null,
       setSelectedAccommodation: () => {},
+      typeOfAccommodation: "grid",
+      setTypeOfAccommodation: () => {},
     },
   },
 });
@@ -304,6 +308,7 @@ export const GlobalContextProvider = ({
     useState<boolean>(false);
   const [selectedAccommodation, setSelectedAccommodation] =
     useState<AccommodationShoppingCartDataType | null>(null);
+  const [typeOfAccommodation, setTypeOfAccommodation] = useState("grid");
   //
   const theme = useMemo(() => getTheme("light"), []);
   // handle user data
@@ -401,6 +406,8 @@ export const GlobalContextProvider = ({
             setAccommodationsLoading,
             selectedAccommodation,
             setSelectedAccommodation,
+            typeOfAccommodation,
+            setTypeOfAccommodation,
           },
         },
       }}

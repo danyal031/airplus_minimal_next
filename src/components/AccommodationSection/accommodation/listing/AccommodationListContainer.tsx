@@ -150,14 +150,6 @@ const AccommodationListContainer = () => {
     }
   }, [searchParams]);
 
-  // for desktop
-  const renderOnDesktop = () => {
-    return <></>;
-  };
-  // for mobile
-  const renderOnMobile = () => {
-    return <></>;
-  };
   return (
     <>
       <div className="grid grid-cols-12 gap-4">
@@ -165,7 +157,11 @@ const AccommodationListContainer = () => {
           <AccommodationFilterBox />
         </div>
         <div className="col-span-12 md:col-span-9">
-          <AccommodationsList />
+          <AccommodationsList
+            fetchMore={fetchMore}
+            page={page}
+            fetchAccommodations={fetchAccommodations}
+          />
         </div>
       </div>
     </>
