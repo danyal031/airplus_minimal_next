@@ -422,7 +422,7 @@ export const getMinPrice = (
   });
 };
 
-export const getRoomTypesResidence = (
+export const getRoomTypesAccommodation = (
   hotelId: number,
   checkin_date: string,
   checkout_date: string

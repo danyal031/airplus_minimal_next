@@ -2,15 +2,16 @@
 import { useGlobalContext } from "@/context/store";
 import React, { FC, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { Checkbox } from "@mui/material";
+import { Checkbox, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppsIcon from "@mui/icons-material/Apps";
 import { motion } from "framer-motion";
 import ListingAccommodationsProgress from "@/components/Skelton-Components/AccommodationSection/listing/ListingAccommodationsProgress";
 import AccommodationCard from "./AccommodationCard";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FixedSizeList as List, ListChildComponentProps } from "react-window";
-import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
+
+// import { FixedSizeList as List, ListChildComponentProps } from "react-window";
+// import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
 
 // import InfiniteLoader from "react-window-infinite-loader";
 // import { FixedSizeGrid as Grid } from "react-window";
@@ -116,7 +117,11 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
           next={() => fetchAccommodations(page)}
           hasMore={fetchMore}
           loader={
-            <div className="col-span-3">
+            <div
+              className={`${
+                typeOfAccommodation === "grid" ? "col-span-3" : "col-span-1"
+              }`}
+            >
               <ListingAccommodationsProgress />
             </div>
           }
@@ -192,22 +197,30 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
                   <span className="text-text-main text-xs font-semibold">
                     نوع نمایش
                   </span>
-                  <Checkbox
-                    checked={typeOfAccommodation === "list" ? true : false}
-                    onChange={() => {
+                  <IconButton
+                    size="small"
+                    onClick={() => {
                       handleTypesOfShowList("list");
                     }}
-                    icon={<MenuIcon fontSize="small" />}
-                    checkedIcon={<MenuIcon fontSize="small" color="primary" />}
-                  />
-                  <Checkbox
-                    onChange={() => {
+                  >
+                    {typeOfAccommodation === "list" ? (
+                      <MenuIcon fontSize="small" color="primary" />
+                    ) : (
+                      <MenuIcon fontSize="small" />
+                    )}
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={() => {
                       handleTypesOfShowList("grid");
                     }}
-                    checked={typeOfAccommodation === "grid" ? true : false}
-                    icon={<AppsIcon fontSize="small" />}
-                    checkedIcon={<AppsIcon fontSize="small" color="primary" />}
-                  />
+                  >
+                    {typeOfAccommodation === "grid" ? (
+                      <AppsIcon fontSize="small" color="primary" />
+                    ) : (
+                      <AppsIcon fontSize="small" />
+                    )}
+                  </IconButton>
                 </div>
               </div>
               <div className="col-span-10">

@@ -223,7 +223,7 @@ const GlobalContext = createContext<ContextProps>({
       setAccommodationsLoading: () => {},
       selectedAccommodation: null,
       setSelectedAccommodation: () => {},
-      typeOfAccommodation: "grid",
+      typeOfAccommodation: "list",
       setTypeOfAccommodation: () => {},
     },
   },
@@ -308,7 +308,7 @@ export const GlobalContextProvider = ({
     useState<boolean>(false);
   const [selectedAccommodation, setSelectedAccommodation] =
     useState<AccommodationShoppingCartDataType | null>(null);
-  const [typeOfAccommodation, setTypeOfAccommodation] = useState("grid");
+  const [typeOfAccommodation, setTypeOfAccommodation] = useState("list");
   //
   const theme = useMemo(() => getTheme("light"), []);
   // handle user data
