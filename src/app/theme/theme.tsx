@@ -1,18 +1,42 @@
 "use client";
-import { createTheme, Theme } from "@mui/material/styles";
+import { createTheme, PaletteOptions, Theme } from "@mui/material/styles";
 import createCache from "@emotion/cache";
 import rtlPlugin from "stylis-plugin-rtl";
 import { prefixer } from "stylis";
 import { iransansFonts } from "./localFont";
-const lightTheme = require("@/global-files/themeColors");
+// const minimal-light-1 = require("@/global-files/themeColors/light2");
+// const light4 = require("@/global-files/themeColors/light4");
+const getCssVariable = (variable: string, fallback: string = "#000") =>
+  getComputedStyle(document.documentElement)
+    .getPropertyValue(variable)
+    .trim() || fallback;
+export const getTheme = (
+  mode: "light" | "dark"
+  // themeKey: keyof typeof themes
+) => {
+  // const themes = { light2, light4 };
 
-export const getTheme = (mode: "light" | "dark") => {
   return createTheme({
     direction: "rtl",
     palette: {
       mode: mode,
       ...(mode === "light"
-        ? lightTheme
+        ? //  themes[themeKey]
+          ({
+            // light theme
+            primary: {
+              main: getCssVariable("--primary-main"),
+            },
+            background: {
+              main: getCssVariable("--background-main"),
+              paper: getCssVariable("--background-paper"),
+            },
+            text: {
+              main: getCssVariable("--text-main"),
+              subText: getCssVariable("--text-subText"),
+            },
+            divider: getCssVariable("--divider"),
+          } as PaletteOptions)
         : {
             // dark theme
             primary: {
@@ -49,10 +73,10 @@ export const getTheme = (mode: "light" | "dark") => {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: lightTheme.background.main,
+            backgroundColor: getCssVariable("--background-main"),
             boxShadow: "none",
-            borderBottom: `1px solid ${lightTheme.divider}`,
-            color: lightTheme.text.main,
+            borderBottom: `1px solid ${getCssVariable("--divider")}`,
+            color: getCssVariable("--text-main"),
             padding: "5px 20px",
           },
         },
@@ -70,8 +94,8 @@ export const getTheme = (mode: "light" | "dark") => {
         },
         styleOverrides: {
           root: {
-            backgroundColor: lightTheme.background.main,
-            color: lightTheme.text.main,
+            backgroundColor: getCssVariable("--background-main"),
+            color: getCssVariable("--text-main"),
             borderRadius: "1rem",
             "& .MuiOutlinedInput-root": {
               borderRadius: "1rem",
@@ -83,7 +107,7 @@ export const getTheme = (mode: "light" | "dark") => {
         styleOverrides: {
           inputRoot: {
             borderRadius: "1rem",
-            backgroundColor: lightTheme.background.paper,
+            backgroundColor: getCssVariable("--background-paper"),
           },
           // input: {
           //   height: "0.7rem",
@@ -110,15 +134,15 @@ export const getTheme = (mode: "light" | "dark") => {
         styleOverrides: {
           root: {
             borderRadius: "1rem",
-            backgroundColor: lightTheme.background.paper,
+            backgroundColor: getCssVariable("--background-paper"),
           },
         },
       },
       MuiBottomNavigation: {
         styleOverrides: {
           root: {
-            backgroundColor: lightTheme.background.main,
-            borderTop: `1px solid ${lightTheme.divider}`,
+            backgroundColor: getCssVariable("--background-main"),
+            borderTop: `1px solid ${getCssVariable("--divider")}`,
             minHeight: "250px",
           },
         },

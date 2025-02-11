@@ -1,6 +1,7 @@
 "use client";
 import { useGlobalContext } from "@/context/store";
 import {
+  AccommodationShoppingCartDataType,
   AccommodationsListDataType,
   RoomsDetailsDataType,
 } from "@/DataTypes/accommodation/accommodationsListTypes";
@@ -21,10 +22,15 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import dynamic from "next/dynamic";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getRoomTypesAccommodation } from "@/global-files/axioses";
 import { v4 as uuidv4 } from "uuid";
 import RoomTypesAccommodationCartProgress from "@/components/Skelton-Components/AccommodationSection/roomTypes/RoomTypesAccommodationCartProgress";
+import {
+  convertToGregorian,
+  formatInputWithCommas,
+} from "@/global-files/function";
+import { Route } from "next";
 
 interface AccommodationCardProps {
   data: AccommodationsListDataType;
@@ -40,8 +46,15 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
 
   const swiperRef = useRef<any>(null);
   const searchParams = useSearchParams();
-  const { typeOfAccommodation, accommodationFromDate, accommodationToDate } =
-    useGlobalContext().accommodationContext.accommodationSearch;
+  const router = useRouter();
+
+  const {
+    typeOfAccommodation,
+    accommodationFromDate,
+    accommodationToDate,
+    selectedAccommodation,
+    accommodationPassengersCapacity,
+  } = useGlobalContext().accommodationContext.accommodationSearch;
 
   useEffect(() => {
     if (isQuickReserveOpen && roomTypes.length === 0 && allowGetRooms) {
@@ -107,6 +120,54 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
 
   const handleNext = () => {
     swiperRef.current.swiper.slideNext();
+  };
+
+  // handle move to reservation page
+  const createSearchparams = (
+    selectedAccommodation: AccommodationShoppingCartDataType
+  ) => {
+    const expandedRoomTypes = selectedAccommodation.room_types.flatMap(
+      (room: any) =>
+        Array.from({ length: room.numberOfRoom }, () => {
+          const { numberOfRoom, ...rest } = room;
+          return {
+            ...rest,
+            id: uuidv4(),
+          };
+        })
+    );
+
+    return {
+      ...data,
+      room_types: expandedRoomTypes,
+      details: {
+        ...data.details,
+        from_date: convertToGregorian(accommodationFromDate as string),
+        to_date: convertToGregorian(accommodationToDate as string),
+      },
+    };
+  };
+
+  const moveToReservationPage = () => {
+    const queryParams = createSearchparams(
+      selectedAccommodation as AccommodationShoppingCartDataType
+    );
+    const local_id = uuidv4().substr(0, 6);
+    localStorage.setItem(local_id, JSON.stringify(queryParams));
+    // console.log(222, queryParams);
+    router.push(`/accommodation/checkout?factor=${local_id}` as Route);
+  };
+
+  // handle move to accommodation details page
+  const moveToAccommodationDetailsPage = () => {
+    if (selectedAccommodation) {
+      // moveToReservationPage();
+      console.log("moveToReservationPage");
+    } else {
+      router.push(
+        `/accommodation/info?destination=${data.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+      );
+    }
   };
 
   const Map = useMemo(
@@ -278,12 +339,24 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
           <div className="col-span-1 pb-0 flex flex-col items-center justify-between">
             <div className="grid grid-cols-1 gap-3">
               <Button
+                onClick={moveToAccommodationDetailsPage}
                 variant="contained"
                 color="primary"
                 size="medium"
-                className="rounded-[10px]"
+                className="rounded-[10px] min-w-32"
               >
-                مشاهده و رزرو اتاق
+                {selectedAccommodation?.id === data.id &&
+                selectedAccommodation ? (
+                  "اقدام به رزرو"
+                ) : typeof data.min_price === "undefined" ? (
+                  "Loading"
+                ) : (
+                  <>
+                    <div className="flex items-center justify-center">
+                      {formatInputWithCommas(data.min_price)}{" "}
+                    </div>
+                  </>
+                )}
               </Button>
               <span className="text-sm text-text-main opacity-20 flex items-center justify-center font-semibold">
                 {duration} شب
@@ -352,7 +425,7 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
         </div>
         <div className="flex items-center justify-start">
           <span className="text-sm text-text-main font-semibold cursor-pointer">
-            از {data.min_price} تومان
+            از {formatInputWithCommas(data.min_price)} تومان
           </span>
         </div>
       </div>

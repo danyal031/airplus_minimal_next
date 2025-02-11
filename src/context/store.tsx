@@ -237,6 +237,21 @@ interface GlobalContextProviderProps {
 export const GlobalContextProvider = ({
   children,
 }: GlobalContextProviderProps) => {
+  // theme colors
+  const themes = {
+    "minimal-light-1": require("../global-files/themeColors/light2"),
+    light4: require("../global-files/themeColors/light4"),
+  };
+  const [themeKey, setThemeKey] = useState<keyof typeof themes>(() => {
+    if (localStorage.getItem("minimal_config")) {
+      return JSON.parse(localStorage.getItem("minimal_config") as string).design
+        .theme;
+    } else {
+      return "minimal-light-1";
+    }
+    // return "light4";
+  });
+
   // login
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
@@ -310,7 +325,40 @@ export const GlobalContextProvider = ({
     useState<AccommodationShoppingCartDataType | null>(null);
   const [typeOfAccommodation, setTypeOfAccommodation] = useState("list");
   //
-  const theme = useMemo(() => getTheme("light"), []);
+
+  useEffect(() => {
+    const selectedTheme = themes[themeKey];
+
+    // تغییر `CSS Variables`
+    document.documentElement.style.setProperty(
+      "--primary-main",
+      selectedTheme.primary.main
+    );
+    document.documentElement.style.setProperty(
+      "--background-main",
+      selectedTheme.background.main
+    );
+    document.documentElement.style.setProperty(
+      "--background-paper",
+      selectedTheme.background.paper
+    );
+    document.documentElement.style.setProperty(
+      "--text-main",
+      selectedTheme.text.main
+    );
+    document.documentElement.style.setProperty(
+      "--text-subText",
+      selectedTheme.text.subText
+    );
+    document.documentElement.style.setProperty(
+      "--divider",
+      selectedTheme.divider
+    );
+  }, [themeKey]);
+
+  // const theme = useMemo(() => getTheme("light", themeKey), [config]);
+  const theme = useMemo(() => getTheme("light"), [config]);
+
   // handle user data
   useEffect(() => {
     setUserData(JSON.parse(localStorage.getItem("minimal_user") as string));

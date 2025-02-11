@@ -40,13 +40,24 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #a21441;
+  background: var(--primary-main);
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #a21441;
+  background: var(--primary-main);
 }
 
 /* end style scrollbar  */
+
+/* start theme colors  */
+:root {
+  --primary-main: #b2b3b6;
+  --background-main: #efefef;
+  --background-paper: #fefefe;
+  --text-main: #31020e;
+  --text-subText: #a21441;
+  --divider: #d4d4d4;
+}
+/* end theme colors */

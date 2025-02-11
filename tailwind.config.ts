@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
-const lightTheme = require("./src/global-files/themeColors");
+// const light2 = require("./src/global-files/themeColors/light2");
+// const light4 = require("./src/global-files/themeColors/light4");
 
 const config: Config = {
   important: true,
@@ -17,15 +18,27 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
-          main: lightTheme.primary.main,
+          main: "var(--primary-main)",
         },
         text: {
-          main: lightTheme.text.main,
-          subText: lightTheme.text.subText,
+          main: "var(--text-main)",
+          subText: "var(--text-subText)",
         },
-        main: lightTheme.background.main,
-        paper: lightTheme.background.paper,
-        divider: lightTheme.divider,
+        main: "var(--background-main)",
+        paper: "var(--background-paper)",
+        divider: "var(--divider)",
+        // background: "var(--background)",
+        // foreground: "var(--foreground)",
+        // primary: {
+        //   main: light2.primary.main,
+        // },
+        // text: {
+        //   main: light2.text.main,
+        //   subText: light2.text.subText,
+        // },
+        // main: light2.background.main,
+        // paper: light2.background.paper,
+        // divider: light2.divider,
       },
       fontFamily: {
         sans: ["var(--font-iransans)"],

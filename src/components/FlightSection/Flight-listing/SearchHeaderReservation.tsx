@@ -2,7 +2,7 @@
 import { useGlobalContext } from "@/context/store";
 import { Button, Drawer } from "@mui/material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import FlightSearchForm from "../FlightSearchForm/FlightSearchForm";
@@ -17,8 +17,19 @@ const SearchHeaderReservation = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const path = usePathname();
-  const pathName = path.split("/")[2];
   const [openSearchDrawer, setOpenSearchDrawer] = useState<boolean>(false);
+
+  // handle initial tab value state
+  useEffect(() => {
+    const pathName = path.split("/")[2];
+
+    switch (pathName) {
+      case "flights":
+        setTabValue("1");
+      case "accommodations":
+        setTabValue("2");
+    }
+  }, []);
 
   // handle toggle open search drawer
   const toggleSearchDrawer = (newOpen: boolean) => () => {
@@ -82,7 +93,9 @@ const SearchHeaderReservation = () => {
     }
   };
 
-  const renderSummerySearch = () => {
+  // render types of summery search
+  // for flight
+  const flightSummerySearch = () => {
     return (
       <>
         <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
@@ -105,6 +118,48 @@ const SearchHeaderReservation = () => {
         </div>
       </>
     );
+  };
+
+  // for accommodations
+  const accommodationSummerySearch = () => {
+    return (
+      <>
+        {" "}
+        <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
+          <div className="col-span-4 flex items-center justify-center">
+            <span className="font-semibold text-paper text-sm">
+              <span>هتل های </span>
+              <span>{searchParams.get("destination")}</span>
+            </span>{" "}
+          </div>
+          <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
+            <span className={`text-paper font-semibold`}>
+              تاریخ ورود: {searchParams.get("departing")}
+            </span>{" "}
+            <span className={`text-paper font-semibold`}>
+              تاریخ خروج: {searchParams.get("returning")}
+            </span>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderSummerySearch = () => {
+    switch (tabValue) {
+      case "1":
+        return origin && destination ? (
+          flightSummerySearch()
+        ) : (
+          <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
+            loading...
+          </div>
+        );
+      case "2":
+        return accommodationSummerySearch();
+      default:
+        return "loading";
+    }
   };
 
   // for render on desktop
@@ -141,17 +196,16 @@ const SearchHeaderReservation = () => {
             </Button>
           </div>
           {/* {showSummarySearch ? renderSummerySearch() : renderForm()}{" "} */}
-          {showSummarySearch ? (
-            origin && destination ? (
+          {showSummarySearch
+            ? // origin && destination ? (
+              //   renderSummerySearch()
+              // ) : (
+              //   <div className="flex items-center justify-center text-black">
+              //     loading...
+              //   </div>
+              // )
               renderSummerySearch()
-            ) : (
-              <div className="flex items-center justify-center text-black">
-                loading...
-              </div>
-            )
-          ) : (
-            renderForm()
-          )}
+            : renderForm()}
         </div>
       </>
     );

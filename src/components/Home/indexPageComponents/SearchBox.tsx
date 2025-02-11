@@ -16,13 +16,19 @@ import FlightSearchForm from "@/components/FlightSection/FlightSearchForm/Flight
 import { useGlobalContext } from "@/context/store";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
+import { ConfigDataType } from "@/DataTypes/globalTypes";
 interface SearchBoxProps {
   airports: AirportDataType[] | [];
 }
 const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
   // initial states
-
+  const [config, setConfig] = useState<null | null | ConfigDataType>(null);
   const { setAirports } = useGlobalContext().flightContext.searchContext;
+
+  // handle initial value
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
 
   useEffect(() => {
     console.log("airports list: ", airports);
@@ -31,20 +37,23 @@ const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
 
   return (
     <>
-      <SearchBoxOnDesktop />
-      <SearchBoxOnMobile />
+      <SearchBoxOnDesktop config={config} />
+      <SearchBoxOnMobile config={config} />
     </>
   );
 };
 
 export default SearchBox;
 
-const SearchBoxOnDesktop = () => {
+interface SearchBoxOnDesktopProps {
+  config: ConfigDataType | null;
+}
+const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
   const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
   const handleChangeTab = (newValue: string) => {
     setTabValueSearchBox(newValue);
   };
-  // redner comming soon
+  // render coming soon
   const renderComingSoon = () => {
     return (
       <div className="w-full relative rounded-xl bg-paper p-6 min-h-16 flex gap-5 items-center justify-center">
@@ -52,7 +61,7 @@ const SearchBoxOnDesktop = () => {
           <Lottie animationData={comingSoonLottie} loop={true} />
         </div>
         <span className="font-semibold text-lg">
-          بازدید کننده عزیز، این بخش هنوز در حال توسعه است{" "}
+          بازدید کننده عزیز، این بخش هنوز در حال توسعه است
         </span>
       </div>
     );
@@ -135,6 +144,18 @@ const SearchBoxOnDesktop = () => {
       default:
         return renderComingSoon();
     }
+    // if (config?.office_id === 1001) {
+    //   switch (tabValueSearchBox) {
+    //     case "1":
+    //       return <FlightSearchForm />;
+    //     case "2":
+    //       return <AccommodationSearchForm />;
+    //     default:
+    //       return renderComingSoon();
+    //   }
+    // } else {
+    //   return renderComingSoon();
+    // }
   };
 
   // handle render render Reservations Banner
@@ -166,7 +187,10 @@ const SearchBoxOnDesktop = () => {
   );
 };
 
-const SearchBoxOnMobile = () => {
+interface SearchBoxOnMobileProps {
+  config: ConfigDataType | null;
+}
+const SearchBoxOnMobile: FC<SearchBoxOnMobileProps> = ({ config }) => {
   const { tabValueSearchBox, setTabValueSearchBox } = useGlobalContext().global;
 
   const handleChangeTab = (newValue: string) => {
@@ -244,6 +268,18 @@ const SearchBoxOnMobile = () => {
       default:
         return renderComingSoon();
     }
+    // if (config?.office_id === 1001) {
+    //   switch (tabValueSearchBox) {
+    //     case "1":
+    //       return <FlightSearchForm />;
+    //     // case "2":
+    //     //   return <AccommodationSearchForm />;
+    //     default:
+    //       return renderComingSoon();
+    //   }
+    // } else {
+    //   return renderComingSoon();
+    // }
   };
   return (
     <>
