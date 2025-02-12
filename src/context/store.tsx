@@ -1,7 +1,6 @@
 "use client";
 import { CacheProvider } from "@emotion/react";
-import
-{
+import {
   createContext,
   Dispatch,
   ReactNode,
@@ -18,8 +17,7 @@ import { Alert, Snackbar } from "@mui/material";
 import ProgressLoading from "@/components/BasUIComponents/ProgressLoading";
 import axios from "axios";
 import { getConfig } from "@/global-files/axioses";
-import
-{
+import {
   AlertDetailsDataType,
   ConfigDataType,
   defaultAlertDetails,
@@ -27,29 +25,28 @@ import
 } from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
 import { LoginDialog } from "@/components/Login/LoginDialog";
-import
-{
+import {
   AirportDataType,
   FlightResponseDataType,
   FlightTicketDataType,
   TypeDropOffLocationType,
 } from "@/DataTypes/flight/flightTicket";
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
-import
-{
+import {
   PassengersCapacityDataType,
   PassengersCapacityDefaultValue,
 } from "@/DataTypes/accommodation/accommodationPassengersCapaciy";
-import
-{
+import {
   AccommodationShoppingCartDataType,
   AccommodationsListDataType,
 } from "@/DataTypes/accommodation/accommodationsListTypes";
 import Loading from "@/components/layouts/loading";
+import { minimal_light_1, minimal_light_2 } from "@/global-files/themeColors";
+import ResponsiveAppBar from "@/components/BasUIComponents/ResponsiveAppBar";
+import ResponsiveFooter from "@/components/BasUIComponents/ResponsiveFooter";
 
 // Define combined context type
-interface ContextProps
-{
+interface ContextProps {
   loginContext: {
     openLoginDialog: boolean;
     setOpenLoginDialog: Dispatch<SetStateAction<boolean>>;
@@ -153,265 +150,260 @@ interface ContextProps
 }
 
 // Create combined context
-const GlobalContext = createContext<ContextProps>( {
+const GlobalContext = createContext<ContextProps>({
   loginContext: {
     openLoginDialog: false,
-    setOpenLoginDialog: () => { },
+    setOpenLoginDialog: () => {},
   },
   userContext: {
     userId: "",
-    setUserId: () => { },
+    setUserId: () => {},
     userData: null,
-    setUserData: () => { },
+    setUserData: () => {},
   },
   global: {
     tabValueSearchBox: "1",
-    setTabValueSearchBox: () => { },
+    setTabValueSearchBox: () => {},
     showAlertDetails: defaultAlertDetails,
-    setShowAlertDetails: () => { },
+    setShowAlertDetails: () => {},
     showProgress: false,
-    setShowProgress: () => { },
+    setShowProgress: () => {},
   },
   flightContext: {
     searchContext: {
       dropOffLocationType: "oneWay",
-      setDropOffLocationType: () => { },
+      setDropOffLocationType: () => {},
       travelRoute: "oneWay",
-      setTravelRoute: () => { },
+      setTravelRoute: () => {},
       fromDate: null,
-      setFromDate: () => { },
+      setFromDate: () => {},
       toDate: null,
-      setToDate: () => { },
+      setToDate: () => {},
       origin: undefined,
-      setOrigin: () => { },
+      setOrigin: () => {},
       destination: undefined,
-      setDestination: () => { },
+      setDestination: () => {},
       airports: [],
-      setAirports: () => { },
+      setAirports: () => {},
       ticketLoading: false,
-      setTicketLoading: () => { },
+      setTicketLoading: () => {},
       changeStatusRequest: false,
-      setChangeStatusRequest: () => { },
+      setChangeStatusRequest: () => {},
       isInitialSearchDone: false,
-      setIsInitialSearchDone: () => { },
+      setIsInitialSearchDone: () => {},
       searchFlightResponseData: null,
-      setSearchFlightResponseData: () => { },
+      setSearchFlightResponseData: () => {},
       filteredSearchFlightResponseData: null,
-      setFilteredSearchFlightResponseData: () => { },
+      setFilteredSearchFlightResponseData: () => {},
       selectedWentFlight: null,
-      setSelectedWentFlight: () => { },
+      setSelectedWentFlight: () => {},
       selectedReturnFlight: null,
-      setSelectedReturnFlight: () => { },
+      setSelectedReturnFlight: () => {},
       flightPassengers: [],
-      setFlightPassengers: () => { },
+      setFlightPassengers: () => {},
       flightPassengersTickets: [],
-      setFlightPassengersTickets: () => { },
+      setFlightPassengersTickets: () => {},
       openFlightFilterDrawer: false,
-      setOpenFlightFilterDrawer: () => { },
+      setOpenFlightFilterDrawer: () => {},
     },
   },
   accommodationContext: {
     accommodationSearch: {
       accommodationFromDate: null,
-      setAccommodationFromDate: () => { },
+      setAccommodationFromDate: () => {},
       accommodationToDate: null,
-      setAccommodationToDate: () => { },
+      setAccommodationToDate: () => {},
       accommodationDestination: null,
-      setAccommodationDestination: () => { },
+      setAccommodationDestination: () => {},
       accommodations: [],
-      setAccommodations: () => { },
+      setAccommodations: () => {},
       accommodationPassengersCapacity: PassengersCapacityDefaultValue,
-      setAccommodationPassengersCapacity: () => { },
+      setAccommodationPassengersCapacity: () => {},
       accommodationsList: [],
-      setAccommodationsList: () => { },
+      setAccommodationsList: () => {},
       filteredSearchAccommodationsList: [],
-      setFilteredSearchAccommodationsList: () => { },
+      setFilteredSearchAccommodationsList: () => {},
       accommodationsLoading: false,
-      setAccommodationsLoading: () => { },
+      setAccommodationsLoading: () => {},
       selectedAccommodation: null,
-      setSelectedAccommodation: () => { },
+      setSelectedAccommodation: () => {},
       typeOfAccommodation: "list",
-      setTypeOfAccommodation: () => { },
+      setTypeOfAccommodation: () => {},
     },
   },
-} );
+});
 
-interface GlobalContextProviderProps
-{
+interface GlobalContextProviderProps {
   children: ReactNode;
 }
 
 // Define combined context provider
-export const GlobalContextProvider = ( {
+export const GlobalContextProvider = ({
   children,
-}: GlobalContextProviderProps ) =>
-{
+}: GlobalContextProviderProps) => {
   // theme colors
   const themes = {
-    "minimal-light-1": require( "../global-files/themeColors/light2" ),
-    light4: require( "../global-files/themeColors/light4" ),
+    "minimal-light-1": minimal_light_1,
+    "minimal-light-2": minimal_light_2,
   };
-  const [ themeKey, setThemeKey ] = useState<keyof typeof themes>( () =>
-  {
-    if ( localStorage.getItem( "minimal_config" ) )
-    {
-      return JSON.parse( localStorage.getItem( "minimal_config" ) as string ).design
-        .theme;
-    } else
-    {
-      return "minimal-light-1";
-    }
-    // return "light4";
-  } );
+  // const [themeKey, setThemeKey] = useState<keyof typeof themes | null>(() => {
+  //   const config = localStorage.getItem("minimal_config");
+  //   return config
+  //     ? (JSON.parse(config).design.theme as keyof typeof themes)
+  //     : null;
+  // });
+  const [themeKey, setThemeKey] = useState<keyof typeof themes | null>(null);
 
   // app states
-  const [ appLoading, setAppLoading ] = useState<boolean>( true );
+  const [appLoading, setAppLoading] = useState<boolean>(true);
 
   // login
-  const [ openLoginDialog, setOpenLoginDialog ] = useState<boolean>( false );
-  const [ userId, setUserId ] = useState( "" );
-  const [ userData, setUserData ] = useState<UserDataType | null>( null );
+  const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
+  const [userId, setUserId] = useState("");
+  const [userData, setUserData] = useState<UserDataType | null>(null);
   // global
-  const [ showProgress, setShowProgress ] = useState<boolean>( false );
-  const [ config, setConfig ] = useState<null | ConfigDataType>( null );
-  const [ showProgressConfig, setShowProgressConfig ] = useState<boolean>( false );
-  const [ tabValueSearchBox, setTabValueSearchBox ] = useState<string>( "1" );
-  const [ showAlertDetails, setShowAlertDetails ] =
-    useState<AlertDetailsDataType>( defaultAlertDetails );
+  const [showProgress, setShowProgress] = useState<boolean>(false);
+  const [config, setConfig] = useState<null | ConfigDataType>(null);
+  const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
+  const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
+  const [showAlertDetails, setShowAlertDetails] =
+    useState<AlertDetailsDataType>(defaultAlertDetails);
   // search flight
-  const [ openFlightFilterDrawer, setOpenFlightFilterDrawer ] =
-    useState<boolean>( false );
-  const [ flightPassengersTickets, setFlightPassengersTickets ] = useState<any[]>(
+  const [openFlightFilterDrawer, setOpenFlightFilterDrawer] =
+    useState<boolean>(false);
+  const [flightPassengersTickets, setFlightPassengersTickets] = useState<any[]>(
     []
   );
-  const [ flightPassengers, setFlightPassengers ] = useState<
+  const [flightPassengers, setFlightPassengers] = useState<
     UserInformationDataType[] | []
-  >( [] );
-  const [ selectedWentFlight, setSelectedWentFlight ] =
-    useState<FlightTicketDataType | null>( null );
-  const [ selectedReturnFlight, setSelectedReturnFlight ] =
-    useState<FlightTicketDataType | null>( null );
+  >([]);
+  const [selectedWentFlight, setSelectedWentFlight] =
+    useState<FlightTicketDataType | null>(null);
+  const [selectedReturnFlight, setSelectedReturnFlight] =
+    useState<FlightTicketDataType | null>(null);
   const [
     filteredSearchFlightResponseData,
     setFilteredSearchFlightResponseData,
-  ] = useState<FlightResponseDataType | null>( null );
-  const [ searchFlightResponseData, setSearchFlightResponseData ] =
-    useState<FlightResponseDataType | null>( null );
-  const [ isInitialSearchDone, setIsInitialSearchDone ] =
-    useState<boolean>( false );
-  const [ changeStatusRequest, setChangeStatusRequest ] =
-    useState<boolean>( false );
-  const [ ticketLoading, setTicketLoading ] = useState<boolean>( false );
-  const [ airports, setAirports ] = useState<AirportDataType[] | []>( [] );
-  const [ dropOffLocationType, setDropOffLocationType ] =
-    useState<TypeDropOffLocationType>( "oneWay" );
-  const [ travelRoute, setTravelRoute ] =
-    useState<TypeDropOffLocationType>( "oneWay" );
-  const [ fromDate, setFromDate ] = useState<string | null>( null );
-  const [ toDate, setToDate ] = useState<string | null>( null );
-  const [ origin, setOrigin ] = useState<AirportDataType | undefined>( undefined );
-  const [ destination, setDestination ] = useState<AirportDataType | undefined>(
+  ] = useState<FlightResponseDataType | null>(null);
+  const [searchFlightResponseData, setSearchFlightResponseData] =
+    useState<FlightResponseDataType | null>(null);
+  const [isInitialSearchDone, setIsInitialSearchDone] =
+    useState<boolean>(false);
+  const [changeStatusRequest, setChangeStatusRequest] =
+    useState<boolean>(false);
+  const [ticketLoading, setTicketLoading] = useState<boolean>(false);
+  const [airports, setAirports] = useState<AirportDataType[] | []>([]);
+  const [dropOffLocationType, setDropOffLocationType] =
+    useState<TypeDropOffLocationType>("oneWay");
+  const [travelRoute, setTravelRoute] =
+    useState<TypeDropOffLocationType>("oneWay");
+  const [fromDate, setFromDate] = useState<string | null>(null);
+  const [toDate, setToDate] = useState<string | null>(null);
+  const [origin, setOrigin] = useState<AirportDataType | undefined>(undefined);
+  const [destination, setDestination] = useState<AirportDataType | undefined>(
     undefined
   );
   // search Accommodation
-  const [ accommodationFromDate, setAccommodationFromDate ] = useState<
+  const [accommodationFromDate, setAccommodationFromDate] = useState<
     string | null
-  >( null );
-  const [ accommodationToDate, setAccommodationToDate ] = useState<string | null>(
+  >(null);
+  const [accommodationToDate, setAccommodationToDate] = useState<string | null>(
     null
   );
-  const [ accommodationDestination, setAccommodationDestination ] =
-    useState<AccommodationDataType | null>( null );
-  const [ accommodations, setAccommodations ] = useState<
+  const [accommodationDestination, setAccommodationDestination] =
+    useState<AccommodationDataType | null>(null);
+  const [accommodations, setAccommodations] = useState<
     AccommodationDataType[] | []
-  >( [] );
-  const [ accommodationPassengersCapacity, setAccommodationPassengersCapacity ] =
-    useState<PassengersCapacityDataType>( PassengersCapacityDefaultValue );
-  const [ accommodationsList, setAccommodationsList ] = useState<
+  >([]);
+  const [accommodationPassengersCapacity, setAccommodationPassengersCapacity] =
+    useState<PassengersCapacityDataType>(PassengersCapacityDefaultValue);
+  const [accommodationsList, setAccommodationsList] = useState<
     AccommodationsListDataType[] | []
-  >( [] );
+  >([]);
   const [
     filteredSearchAccommodationsList,
     setFilteredSearchAccommodationsList,
-  ] = useState<AccommodationsListDataType[] | []>( [] );
-  const [ accommodationsLoading, setAccommodationsLoading ] =
-    useState<boolean>( false );
-  const [ selectedAccommodation, setSelectedAccommodation ] =
-    useState<AccommodationShoppingCartDataType | null>( null );
-  const [ typeOfAccommodation, setTypeOfAccommodation ] = useState( "list" );
+  ] = useState<AccommodationsListDataType[] | []>([]);
+  const [accommodationsLoading, setAccommodationsLoading] =
+    useState<boolean>(false);
+  const [selectedAccommodation, setSelectedAccommodation] =
+    useState<AccommodationShoppingCartDataType | null>(null);
+  const [typeOfAccommodation, setTypeOfAccommodation] = useState("list");
   //
 
-  useEffect( () =>
-  {
-    const selectedTheme = themes[ themeKey ];
+  useEffect(() => {
+    if (themeKey) {
+      console.log("themeKey", themeKey);
 
-    // تغییر `CSS Variables`
-    document.documentElement.style.setProperty(
-      "--primary-main",
-      selectedTheme.primary.main
-    );
-    document.documentElement.style.setProperty(
-      "--background-main",
-      selectedTheme.background.main
-    );
-    document.documentElement.style.setProperty(
-      "--background-paper",
-      selectedTheme.background.paper
-    );
-    document.documentElement.style.setProperty(
-      "--text-main",
-      selectedTheme.text.main
-    );
-    document.documentElement.style.setProperty(
-      "--text-subText",
-      selectedTheme.text.subText
-    );
-    document.documentElement.style.setProperty(
-      "--divider",
-      selectedTheme.divider
-    );
-  }, [ themeKey ] );
+      const selectedTheme = themes[themeKey];
 
-  // const theme = useMemo(() => getTheme("light", themeKey), [config]);
-  const theme = useMemo( () => getTheme( "light" ), [ config ] );
-
-  // handle user data
-  useEffect( () =>
-  {
-    setUserData( JSON.parse( localStorage.getItem( "minimal_user" ) as string ) );
-  }, [] );
-
-  // handle get config
-  useEffect( () =>
-  {
-    setConfig( JSON.parse( localStorage.getItem( "minimal_config" ) as string ) );
-  }, [] );
-
-  useEffect( () =>
-  {
-    axios.defaults.headers.common[ "Domain" ] = window.location.hostname;
-    if ( !localStorage.getItem( "minimal_config" ) )
-    {
-      setShowProgressConfig( true );
+      // change `CSS Variables`
+      document.documentElement.style.setProperty(
+        "--primary-main",
+        selectedTheme.primary.main
+      );
+      document.documentElement.style.setProperty(
+        "--background-main",
+        selectedTheme.background.main
+      );
+      document.documentElement.style.setProperty(
+        "--background-paper",
+        selectedTheme.background.paper
+      );
+      document.documentElement.style.setProperty(
+        "--text-main",
+        selectedTheme.text.main
+      );
+      document.documentElement.style.setProperty(
+        "--text-subText",
+        selectedTheme.text.subText
+      );
+      document.documentElement.style.setProperty(
+        "--divider",
+        selectedTheme.divider
+      );
     }
+  }, [themeKey]);
 
+  // const theme = useMemo(() => getTheme("light", themeKey), [config, themeKey]);
+
+  const [theme, setTheme] = useState(getTheme("light"));
+  useEffect(() => {
+    if (themeKey) {
+      console.log("themeKey", themeKey);
+      setTheme(getTheme("light"));
+    }
+  }, [config, themeKey]);
+
+  useEffect(() => {
+    // app loading
+    if (config) {
+      setAppLoading(false);
+    }
+  }, [config]);
+
+  useEffect(() => {
+    // handle user data
+    setUserData(JSON.parse(localStorage.getItem("minimal_user") as string));
+
+    // handle get config
+    axios.defaults.headers.common["Domain"] = window.location.hostname;
+    if (!localStorage.getItem("minimal_config")) {
+      setShowProgressConfig(true);
+    }
     getConfig()
-      .then( ( res: any ) =>
-      {
-        localStorage.setItem( "minimal_config", JSON.stringify( res ) );
-        setShowProgressConfig( false );
-      } )
-      .catch( () => { } );
-  }, [] );
+      .then((res: any) => {
+        localStorage.setItem("minimal_config", JSON.stringify(res));
+        setShowProgressConfig(false);
+        setConfig(res);
+        setThemeKey(res.design.theme);
+      })
+      .catch(() => {});
+  }, []);
 
-  // 
-  useEffect( () =>
-  {
-    setAppLoading( false );
-  }, [] )
   return (
     <GlobalContext.Provider
-      value={ {
+      value={{
         loginContext: { openLoginDialog, setOpenLoginDialog },
         userContext: { userId, setUserId, userData, setUserData },
         global: {
@@ -485,62 +477,71 @@ export const GlobalContextProvider = ( {
             setTypeOfAccommodation,
           },
         },
-      } }
+      }}
     >
       <head>
         <link
           rel="icon"
           type="image/x-icon"
-          href={ `${ process.env.NEXT_PUBLIC_MEDIA_URL_1 }/media/branches/${ config?.design.favicon }` }
+          href={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/branches/${config?.design.favicon}`}
         />
       </head>
-      <CacheProvider value={ cacheRtl }>
-        <ThemeProvider theme={ theme }>
-          { appLoading ? <Loading /> : !showProgressConfig ? (
-            <>
-              <CssBaseline />
-              { children }
-              <Snackbar
-                open={ showAlertDetails.showAlert }
-                onClose={ () =>
-                {
-                  setShowAlertDetails( ( pre ) => ( {
-                    ...pre,
-                    showAlert: false,
-                  } ) );
-                } }
-                autoHideDuration={ showAlertDetails.alertDuration }
-                anchorOrigin={ { vertical: "top", horizontal: "center" } }
-              >
-                <Alert
-                  onClose={ () =>
-                  {
-                    setShowAlertDetails( ( pre ) => ( {
+      <CacheProvider value={cacheRtl}>
+        {" "}
+        {appLoading ? (
+          <Loading />
+        ) : (
+          <ThemeProvider theme={theme}>
+            {!showProgressConfig ? (
+              <>
+                <CssBaseline />
+                {/* {children} */}
+                <div className="flex flex-col min-h-screen">
+                  <ResponsiveAppBar />
+                  <div className="flex-grow w-full bg-main relative">
+                    {children}
+                  </div>
+                  <ResponsiveFooter />
+                </div>
+                <Snackbar
+                  open={showAlertDetails.showAlert}
+                  onClose={() => {
+                    setShowAlertDetails((pre) => ({
                       ...pre,
                       showAlert: false,
-                    } ) );
-                  } }
-                  severity={ showAlertDetails.alertType }
-                  variant="filled"
-                  sx={ { width: "100%" } }
+                    }));
+                  }}
+                  autoHideDuration={showAlertDetails.alertDuration}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
-                  { showAlertDetails.alertMessage }
-                </Alert>
-              </Snackbar>
-              { openLoginDialog && <LoginDialog /> }
-              { showProgress && <ProgressLoading /> }
-              {/* {isLoading && <ProgressLoading />} */ }
-            </>
-          ) : (
-            <div className="h-screen w-full bg-gray-400 flex items-center justify-center">
-              <ProgressLoading />
-            </div>
-          ) }
-
-        </ThemeProvider>
+                  <Alert
+                    onClose={() => {
+                      setShowAlertDetails((pre) => ({
+                        ...pre,
+                        showAlert: false,
+                      }));
+                    }}
+                    severity={showAlertDetails.alertType}
+                    variant="filled"
+                    sx={{ width: "100%" }}
+                  >
+                    {showAlertDetails.alertMessage}
+                  </Alert>
+                </Snackbar>
+                {openLoginDialog && <LoginDialog />}
+                {showProgress && <ProgressLoading />}
+                {/* {isLoading && <ProgressLoading />} */}
+              </>
+            ) : (
+              <div className="h-screen w-full bg-gray-400 flex items-center justify-center">
+                <ProgressLoading />
+              </div>
+            )}{" "}
+          </ThemeProvider>
+        )}{" "}
       </CacheProvider>
     </GlobalContext.Provider>
   );
 };
 
-export const useGlobalContext = () => useContext( GlobalContext );
+export const useGlobalContext = () => useContext(GlobalContext);

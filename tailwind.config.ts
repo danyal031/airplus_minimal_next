@@ -1,6 +1,4 @@
 import type { Config } from "tailwindcss";
-// const light2 = require("./src/global-files/themeColors/light2");
-// const light4 = require("./src/global-files/themeColors/light4");
 
 const config: Config = {
   important: true,
