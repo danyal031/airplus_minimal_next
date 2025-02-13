@@ -61,7 +61,7 @@ const AccommodationSearchForm = () => {
       accommodationDestination?.category.title !== "شهر"
     ) {
       router.push(
-        `/accommodation/info?destination=${accommodationDestination.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+        `/accommodation/details?destination=${accommodationDestination.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
       );
     }
   };

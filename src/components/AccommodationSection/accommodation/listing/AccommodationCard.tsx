@@ -165,7 +165,7 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
       console.log("moveToReservationPage");
     } else {
       router.push(
-        `/accommodation/info?destination=${data.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+        `/accommodation/details?destination=${data.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
       );
     }
   };

@@ -1,11 +1,13 @@
+// "use client";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import "@/styles/custom.css";
 import { iransansFonts } from "./theme/localFont";
 import { GlobalContextProvider } from "@/context/store";
-import ResponsiveAppBar from "@/components/BasUIComponents/ResponsiveAppBar";
-import ResponsiveFooter from "@/components/BasUIComponents/ResponsiveFooter";
+import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
+import { ErrorBoundary } from "react-error-boundary";
+import { useEffect, useState } from "react";
 
 export const metadata: Metadata = {
   title: "بلیط هواپیما - خرید بلیط هواپیما",
