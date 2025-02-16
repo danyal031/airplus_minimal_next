@@ -8,6 +8,8 @@ import { GlobalContextProvider } from "@/context/store";
 import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
 import { ErrorBoundary } from "react-error-boundary";
 import { useEffect, useState } from "react";
+import ResponsiveFooter from "@/components/BasUIComponents/ResponsiveFooter";
+import ResponsiveAppBar from "@/components/BasUIComponents/ResponsiveAppBar";
 
 export const metadata: Metadata = {
   title: "بلیط هواپیما - خرید بلیط هواپیما",
