@@ -11,19 +11,16 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
-  AlertDetailsDataType,
-  ConfigDataType,
-  defaultAlertDetails,
-  UserInformationDataType,
-} from "@/DataTypes/globalTypes";
+
+import { ThemeProvider } from "@mui/material/styles";
+import { cacheRtl, getTheme } from "@/app/theme/theme";
+import CssBaseline from "@mui/material/CssBaseline";
+import { Alert, Snackbar } from "@mui/material";
+import ProgressLoading from "@/components/BasUIComponents/ProgressLoading";
+import axios from "axios";
+import { getConfig } from "@/global-files/axioses";
 import { UserDataType } from "@/DataTypes/user";
-import {
-  AirportDataType,
-  FlightResponseDataType,
-  FlightTicketDataType,
-  TypeDropOffLocationType,
-} from "@/DataTypes/flight/flightTicket";
+
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
 import {
   PassengersCapacityDataType,
@@ -33,9 +30,20 @@ import {
   AccommodationShoppingCartDataType,
   AccommodationsListDataType,
 } from "@/DataTypes/accommodation/accommodationsListTypes";
-import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
-import { ErrorBoundary } from "react-error-boundary";
-import App from "@/components/layouts/App";
+import Loading from "@/components/layouts/loading";
+import {
+  AlertDetailsDataType,
+  ConfigDataType,
+  defaultAlertDetails,
+  UserInformationDataType,
+} from "@/DataTypes/globalTypes";
+import {
+  AirportDataType,
+  FlightResponseDataType,
+  FlightTicketDataType,
+  TypeDropOffLocationType,
+} from "@/DataTypes/flight/flightTicket";
+import { LoginDialog } from "@/components/Login/LoginDialog";
 
 // Define combined context type
 interface ContextProps {
@@ -237,16 +245,36 @@ interface GlobalContextProviderProps {
 export const GlobalContextProvider = ({
   children,
 }: GlobalContextProviderProps) => {
+  // theme colors
+  const themes = {
+    "minimal-light-1": require("../global-files/themeColors/light2"),
+    light4: require("../global-files/themeColors/light4"),
+  };
+  const [themeKey, setThemeKey] = useState<keyof typeof themes>(() => {
+    if (localStorage.getItem("minimal_config")) {
+      return JSON.parse(localStorage.getItem("minimal_config") as string).design
+        .theme;
+    } else {
+      return "minimal-light-1";
+    }
+    // return "light4";
+  });
+
+  // app states
+  const [appLoading, setAppLoading] = useState<boolean>(true);
+
   // login
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
   const [userData, setUserData] = useState<UserDataType | null>(null);
   // global
+  const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
   const [showProgress, setShowProgress] = useState<boolean>(false);
   const [config, setConfig] = useState<null | ConfigDataType>(null);
   const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
+
   // search flight
   const [openFlightFilterDrawer, setOpenFlightFilterDrawer] =
     useState<boolean>(false);
@@ -310,103 +338,199 @@ export const GlobalContextProvider = ({
   const [typeOfAccommodation, setTypeOfAccommodation] = useState("list");
   //
 
-  // handle error boundary
-  function fallbackRender({ error, resetErrorBoundary }: any) {
-    // Call resetErrorBoundary() to reset the error boundary and retry the render.
-    return (
-      <ErrorBoundaryComponent
-        error={error}
-        resetErrorBoundary={resetErrorBoundary}
-      />
+  useEffect(() => {
+    const selectedTheme = themes[themeKey];
+
+    // تغییر `CSS Variables`
+    document.documentElement.style.setProperty(
+      "--primary-main",
+      selectedTheme.primary.main
     );
-  }
+    document.documentElement.style.setProperty(
+      "--background-main",
+      selectedTheme.background.main
+    );
+    document.documentElement.style.setProperty(
+      "--background-paper",
+      selectedTheme.background.paper
+    );
+    document.documentElement.style.setProperty(
+      "--text-main",
+      selectedTheme.text.main
+    );
+    document.documentElement.style.setProperty(
+      "--text-subText",
+      selectedTheme.text.subText
+    );
+    document.documentElement.style.setProperty(
+      "--divider",
+      selectedTheme.divider
+    );
+  }, [themeKey]);
 
+  // const theme = useMemo(() => getTheme("light", themeKey), [config]);
+  const theme = useMemo(() => getTheme("light"), [config]);
+
+  // handle user data
+  useEffect(() => {
+    setUserData(JSON.parse(localStorage.getItem("minimal_user") as string));
+  }, []);
+
+  // handle get config
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
+
+  useEffect(() => {
+    axios.defaults.headers.common["Domain"] = window.location.hostname;
+    if (!localStorage.getItem("minimal_config")) {
+      setShowProgressConfig(true);
+    }
+
+    getConfig()
+      .then((res: any) => {
+        localStorage.setItem("minimal_config", JSON.stringify(res));
+        setShowProgressConfig(false);
+      })
+      .catch(() => {});
+  }, []);
+
+  //
+  useEffect(() => {
+    setAppLoading(false);
+  }, []);
   return (
-    <ErrorBoundary fallbackRender={fallbackRender}>
-      <GlobalContext.Provider
-        value={{
-          loginContext: { openLoginDialog, setOpenLoginDialog },
-          userContext: { userId, setUserId, userData, setUserData },
-          global: {
-            tabValueSearchBox,
-            setTabValueSearchBox,
-            showAlertDetails,
-            setShowAlertDetails,
-            showProgress,
-            setShowProgress,
-            config,
-            setConfig,
-          },
+    <GlobalContext.Provider
+      value={{
+        loginContext: { openLoginDialog, setOpenLoginDialog },
+        userContext: { userId, setUserId, userData, setUserData },
+        global: {
+          tabValueSearchBox,
+          setTabValueSearchBox,
+          showAlertDetails,
+          setShowAlertDetails,
+          showProgress,
+          setShowProgress,
+          config,
+          setConfig,
+        },
 
-          flightContext: {
-            searchContext: {
-              dropOffLocationType,
-              setDropOffLocationType,
-              travelRoute,
-              setTravelRoute,
-              fromDate,
-              setFromDate,
-              setToDate,
-              toDate,
-              origin,
-              setOrigin,
-              destination,
-              setDestination,
-              airports,
-              setAirports,
-              ticketLoading,
-              setTicketLoading,
-              changeStatusRequest,
-              setChangeStatusRequest,
-              isInitialSearchDone,
-              setIsInitialSearchDone,
-              searchFlightResponseData,
-              setSearchFlightResponseData,
-              filteredSearchFlightResponseData,
-              setFilteredSearchFlightResponseData,
-              selectedWentFlight,
-              setSelectedWentFlight,
-              selectedReturnFlight,
-              setSelectedReturnFlight,
-              flightPassengers,
-              setFlightPassengers,
-              flightPassengersTickets,
-              setFlightPassengersTickets,
-              openFlightFilterDrawer,
-              setOpenFlightFilterDrawer,
-            },
+        flightContext: {
+          searchContext: {
+            dropOffLocationType,
+            setDropOffLocationType,
+            travelRoute,
+            setTravelRoute,
+            fromDate,
+            setFromDate,
+            setToDate,
+            toDate,
+            origin,
+            setOrigin,
+            destination,
+            setDestination,
+            airports,
+            setAirports,
+            ticketLoading,
+            setTicketLoading,
+            changeStatusRequest,
+            setChangeStatusRequest,
+            isInitialSearchDone,
+            setIsInitialSearchDone,
+            searchFlightResponseData,
+            setSearchFlightResponseData,
+            filteredSearchFlightResponseData,
+            setFilteredSearchFlightResponseData,
+            selectedWentFlight,
+            setSelectedWentFlight,
+            selectedReturnFlight,
+            setSelectedReturnFlight,
+            flightPassengers,
+            setFlightPassengers,
+            flightPassengersTickets,
+            setFlightPassengersTickets,
+            openFlightFilterDrawer,
+            setOpenFlightFilterDrawer,
           },
-          accommodationContext: {
-            accommodationSearch: {
-              accommodationDestination,
-              accommodationFromDate,
-              accommodationToDate,
-              setAccommodationDestination,
-              setAccommodationFromDate,
-              setAccommodationToDate,
-              accommodations,
-              setAccommodations,
-              accommodationPassengersCapacity,
-              setAccommodationPassengersCapacity,
-              accommodationsList,
-              setAccommodationsList,
-              filteredSearchAccommodationsList,
-              setFilteredSearchAccommodationsList,
-              accommodationsLoading,
-              setAccommodationsLoading,
-              selectedAccommodation,
-              setSelectedAccommodation,
-              typeOfAccommodation,
-              setTypeOfAccommodation,
-            },
+        },
+        accommodationContext: {
+          accommodationSearch: {
+            accommodationDestination,
+            accommodationFromDate,
+            accommodationToDate,
+            setAccommodationDestination,
+            setAccommodationFromDate,
+            setAccommodationToDate,
+            accommodations,
+            setAccommodations,
+            accommodationPassengersCapacity,
+            setAccommodationPassengersCapacity,
+            accommodationsList,
+            setAccommodationsList,
+            filteredSearchAccommodationsList,
+            setFilteredSearchAccommodationsList,
+            accommodationsLoading,
+            setAccommodationsLoading,
+            selectedAccommodation,
+            setSelectedAccommodation,
+            typeOfAccommodation,
+            setTypeOfAccommodation,
           },
-        }}
-      >
-        <Suspense>
-          <App>{children}</App>
-        </Suspense>
-      </GlobalContext.Provider>
-    </ErrorBoundary>
+        },
+      }}
+    >
+      <head>
+        <link
+          rel="icon"
+          type="image/x-icon"
+          href={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/branches/${config?.design.favicon}`}
+        />
+      </head>
+      <CacheProvider value={cacheRtl}>
+        <ThemeProvider theme={theme}>
+          {appLoading ? (
+            <Loading />
+          ) : !showProgressConfig ? (
+            <>
+              <CssBaseline />
+              {children}
+              <Snackbar
+                open={showAlertDetails.showAlert}
+                onClose={() => {
+                  setShowAlertDetails((pre) => ({
+                    ...pre,
+                    showAlert: false,
+                  }));
+                }}
+                autoHideDuration={showAlertDetails.alertDuration}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert
+                  onClose={() => {
+                    setShowAlertDetails((pre) => ({
+                      ...pre,
+                      showAlert: false,
+                    }));
+                  }}
+                  severity={showAlertDetails.alertType}
+                  variant="filled"
+                  sx={{ width: "100%" }}
+                >
+                  {showAlertDetails.alertMessage}
+                </Alert>
+              </Snackbar>
+              {openLoginDialog && <LoginDialog />}
+              {showProgress && <ProgressLoading />}
+              {/* {isLoading && <ProgressLoading />} */}
+            </>
+          ) : (
+            <div className="h-screen w-full bg-gray-400 flex items-center justify-center">
+              <ProgressLoading />
+            </div>
+          )}
+        </ThemeProvider>
+      </CacheProvider>
+    </GlobalContext.Provider>
   );
 };
 

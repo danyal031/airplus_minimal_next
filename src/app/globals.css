@@ -53,11 +53,11 @@ body {
 
 /* start theme colors  */
 :root {
-  --primary-main: #eeeeee;
-  --background-main: #eeeeee;
-  --background-paper: #eeeeee;
-  --text-main: #eeeeee;
-  --text-subText: #eeeeee;
-  --divider: #eeeeee;
+  --primary-main: #b2b3b6;
+  --background-main: #efefef;
+  --background-paper: #fefefe;
+  --text-main: #31020e;
+  --text-subText: #a21441;
+  --divider: #d4d4d4;
 }
 /* end theme colors */

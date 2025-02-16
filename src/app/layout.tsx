@@ -22,7 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en" dir="rtl" className={`${iransansFonts.variable} font-sans`}>
       <body className={`${iransansFonts.variable} font-sans`}>
-        <GlobalContextProvider>{children}</GlobalContextProvider>
+        <GlobalContextProvider>
+          <div className="flex flex-col min-h-screen">
+            <ResponsiveAppBar />
+            <div className="flex-grow w-full bg-main relative">{children}</div>
+            <ResponsiveFooter />
+          </div>
+        </GlobalContextProvider>
       </body>
     </html>
   );

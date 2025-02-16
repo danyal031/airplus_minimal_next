@@ -4,27 +4,25 @@ import createCache from "@emotion/cache";
 import rtlPlugin from "stylis-plugin-rtl";
 import { prefixer } from "stylis";
 import { iransansFonts } from "./localFont";
-// const getCssVariable = (variable: string, fallback: string = "#000") =>
-//   getComputedStyle(document.documentElement)
-//     .getPropertyValue(variable)
-//     .trim() || fallback;
-const getCssVariable = (variable: string, fallback: string = "#000") => {
-  if (typeof window === "undefined") return fallback;
-  return (
-    getComputedStyle(document.documentElement)
-      .getPropertyValue(variable)
-      .trim() || fallback
-  );
-};
-export const getTheme = (mode: "light" | "dark") => {
-  // console.log("themeKey111", themeKey);
+// const minimal-light-1 = require("@/global-files/themeColors/light2");
+// const light4 = require("@/global-files/themeColors/light4");
+const getCssVariable = (variable: string, fallback: string = "#000") =>
+  getComputedStyle(document.documentElement)
+    .getPropertyValue(variable)
+    .trim() || fallback;
+export const getTheme = (
+  mode: "light" | "dark"
+  // themeKey: keyof typeof themes
+) => {
+  // const themes = { light2, light4 };
 
   return createTheme({
     direction: "rtl",
     palette: {
       mode: mode,
       ...(mode === "light"
-        ? ({
+        ? //  themes[themeKey]
+          ({
             // light theme
             primary: {
               main: getCssVariable("--primary-main"),
@@ -39,19 +37,7 @@ export const getTheme = (mode: "light" | "dark") => {
             },
             divider: getCssVariable("--divider"),
           } as PaletteOptions)
-        : // ({
-          //   primary: { main: colors["--primary-main"] },
-          //   background: {
-          //     main: colors["--background-main"],
-          //     paper: colors["--background-paper"],
-          //   },
-          //   text: {
-          //     main: colors["--text-main"],
-          //     subText: colors["--text-subText"],
-          //   },
-          //   divider: colors["--divider"],
-          // } as PaletteOptions)
-          {
+        : {
             // dark theme
             primary: {
               main: "#90caf9",
