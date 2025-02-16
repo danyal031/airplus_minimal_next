@@ -19,8 +19,20 @@ import { Alert, Snackbar } from "@mui/material";
 import ProgressLoading from "@/components/BasUIComponents/ProgressLoading";
 import axios from "axios";
 import { getConfig } from "@/global-files/axioses";
+import {
+  AlertDetailsDataType,
+  ConfigDataType,
+  defaultAlertDetails,
+  UserInformationDataType,
+} from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
-
+import { LoginDialog } from "@/components/Login/LoginDialog";
+import {
+  AirportDataType,
+  FlightResponseDataType,
+  FlightTicketDataType,
+  TypeDropOffLocationType,
+} from "@/DataTypes/flight/flightTicket";
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
 import {
   PassengersCapacityDataType,
@@ -30,20 +42,6 @@ import {
   AccommodationShoppingCartDataType,
   AccommodationsListDataType,
 } from "@/DataTypes/accommodation/accommodationsListTypes";
-import Loading from "@/components/layouts/loading";
-import {
-  AlertDetailsDataType,
-  ConfigDataType,
-  defaultAlertDetails,
-  UserInformationDataType,
-} from "@/DataTypes/globalTypes";
-import {
-  AirportDataType,
-  FlightResponseDataType,
-  FlightTicketDataType,
-  TypeDropOffLocationType,
-} from "@/DataTypes/flight/flightTicket";
-import { LoginDialog } from "@/components/Login/LoginDialog";
 
 // Define combined context type
 interface ContextProps {
@@ -260,21 +258,17 @@ export const GlobalContextProvider = ({
     // return "light4";
   });
 
-  // app states
-  const [appLoading, setAppLoading] = useState<boolean>(true);
-
   // login
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
   const [userData, setUserData] = useState<UserDataType | null>(null);
   // global
-  const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
   const [showProgress, setShowProgress] = useState<boolean>(false);
   const [config, setConfig] = useState<null | ConfigDataType>(null);
+  const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
   const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
-
   // search flight
   const [openFlightFilterDrawer, setOpenFlightFilterDrawer] =
     useState<boolean>(false);
@@ -394,11 +388,6 @@ export const GlobalContextProvider = ({
       })
       .catch(() => {});
   }, []);
-
-  //
-  useEffect(() => {
-    setAppLoading(false);
-  }, []);
   return (
     <GlobalContext.Provider
       value={{
@@ -488,9 +477,7 @@ export const GlobalContextProvider = ({
       </head>
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
-          {appLoading ? (
-            <Loading />
-          ) : !showProgressConfig ? (
+          {!showProgressConfig ? (
             <>
               <CssBaseline />
               {children}
