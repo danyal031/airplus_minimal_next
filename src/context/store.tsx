@@ -229,7 +229,7 @@ const GlobalContext = createContext<ContextProps>({
       setAccommodationsLoading: () => {},
       selectedAccommodation: null,
       setSelectedAccommodation: () => {},
-      typeOfAccommodation: "list",
+      typeOfAccommodation: "grid",
       setTypeOfAccommodation: () => {},
     },
   },
@@ -329,7 +329,7 @@ export const GlobalContextProvider = ({
     useState<boolean>(false);
   const [selectedAccommodation, setSelectedAccommodation] =
     useState<AccommodationShoppingCartDataType | null>(null);
-  const [typeOfAccommodation, setTypeOfAccommodation] = useState("list");
+  const [typeOfAccommodation, setTypeOfAccommodation] = useState("grid");
   //
 
   useEffect(() => {
