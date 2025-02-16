@@ -1,5 +1,4 @@
-"use client";
-import React, { Suspense } from "react";
+import React from "react";
 import SelectedFlightTicketsCards from "./SelectedFlightTicketsCards";
 import CheckoutPassengerContainer from "./CheckoutPassengerContainer";
 import { Button } from "@mui/material";
@@ -16,9 +15,7 @@ import { useRouter } from "next/navigation";
 const CheckoutContainerContent = () => {
   return (
     <div className="grid grid-cols-1 gap-5">
-      <Suspense>
-        <SelectedFlightTicketsCards />
-      </Suspense>
+      <SelectedFlightTicketsCards />
       <CheckoutPassengerContainer />
     </div>
   );

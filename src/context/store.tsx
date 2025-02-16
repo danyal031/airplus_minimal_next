@@ -5,6 +5,7 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  Suspense,
   useContext,
   useEffect,
   useMemo,
@@ -35,7 +36,6 @@ import {
 import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
 import { ErrorBoundary } from "react-error-boundary";
 import App from "@/components/layouts/App";
-import { FallbackProps } from "react-error-boundary";
 
 // Define combined context type
 interface ContextProps {
@@ -311,7 +311,7 @@ export const GlobalContextProvider = ({
   //
 
   // handle error boundary
-  function fallbackRender({ error, resetErrorBoundary }: FallbackProps) {
+  function fallbackRender({ error, resetErrorBoundary }: any) {
     // Call resetErrorBoundary() to reset the error boundary and retry the render.
     return (
       <ErrorBoundaryComponent
@@ -402,7 +402,9 @@ export const GlobalContextProvider = ({
           },
         }}
       >
-        <App>{children}</App>
+        <Suspense>
+          <App>{children}</App>
+        </Suspense>
       </GlobalContext.Provider>
     </ErrorBoundary>
   );

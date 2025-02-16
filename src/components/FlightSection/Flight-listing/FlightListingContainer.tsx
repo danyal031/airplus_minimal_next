@@ -1,5 +1,4 @@
-"use client";
-import React, { FC, Suspense, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import SectionGridFilterCard from "./SectionGridFilterCard";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 interface FlightListingContainerProps {
@@ -11,9 +10,7 @@ const FlightListingContainer: FC<FlightListingContainerProps> = ({
   return (
     <>
       <div className="relative">
-        <Suspense>
-          <SectionGridFilterCard airports={airports} />{" "}
-        </Suspense>
+        <SectionGridFilterCard airports={airports} />{" "}
       </div>
     </>
   );
