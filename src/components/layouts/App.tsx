@@ -1,9 +1,8 @@
 "use client";
-import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
+// import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
 import { GlobalContextProvider, useGlobalContext } from "@/context/store";
 import React, { useEffect, useState } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import Loading from "./loading";
+// import { ErrorBoundary } from "react-error-boundary";
 import { CacheProvider } from "@emotion/react";
 import { Alert, Button, Snackbar } from "@mui/material";
 import { cacheRtl, getTheme } from "@/app/theme/theme";
@@ -16,6 +15,7 @@ import { getConfig } from "@/global-files/axioses";
 import axios from "axios";
 import ProgressLoading from "../BasUIComponents/ProgressLoading";
 import { LoginDialog } from "../Login/LoginDialog";
+import Loading from "./loading";
 
 const App = ({ children }: { children: React.ReactNode }) => {
   // initial states

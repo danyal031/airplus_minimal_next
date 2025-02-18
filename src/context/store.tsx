@@ -1,5 +1,4 @@
 "use client";
-import { CacheProvider } from "@emotion/react";
 import {
   createContext,
   Dispatch,
@@ -32,10 +31,14 @@ import {
   AccommodationShoppingCartDataType,
   AccommodationsListDataType,
 } from "@/DataTypes/accommodation/accommodationsListTypes";
-import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
-import { ErrorBoundary } from "react-error-boundary";
-import App from "@/components/layouts/App";
-import { FallbackProps } from "react-error-boundary";
+// import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
+// import { ErrorBoundary } from "react-error-boundary";
+// import App from "@/components/layouts/App";
+import dynamic from "next/dynamic";
+// import { FallbackProps } from "react-error-boundary";
+const App = dynamic(() => import("@/components/layouts/App"), {
+  ssr: false,
+});
 
 // Define combined context type
 interface ContextProps {
@@ -311,18 +314,19 @@ export const GlobalContextProvider = ({
   //
 
   // handle error boundary
-  function fallbackRender({ error, resetErrorBoundary }: FallbackProps) {
-    // Call resetErrorBoundary() to reset the error boundary and retry the render.
-    return (
-      <ErrorBoundaryComponent
-        error={error}
-        resetErrorBoundary={resetErrorBoundary}
-      />
-    );
-  }
+  // function fallbackRender({ error, resetErrorBoundary }: any) {
+  //   // Call resetErrorBoundary() to reset the error boundary and retry the render.
+  //   return (
+  //     <ErrorBoundaryComponent
+  //       error={error}
+  //       resetErrorBoundary={resetErrorBoundary}
+  //     />
+  //   );
+  // }
 
   return (
-    <ErrorBoundary fallbackRender={fallbackRender}>
+    <>
+      {/* <ErrorBoundary fallbackRender={fallbackRender}> */}
       <GlobalContext.Provider
         value={{
           loginContext: { openLoginDialog, setOpenLoginDialog },
@@ -404,7 +408,8 @@ export const GlobalContextProvider = ({
       >
         <App>{children}</App>
       </GlobalContext.Provider>
-    </ErrorBoundary>
+      {/* </ErrorBoundary> */}
+    </>
   );
 };
 
