@@ -1,10 +1,13 @@
-// import AccommodationListContainer from "./AccommodationListContainer";
+"use client";
+import { Suspense } from "react";
+import AccommodationListContainer from "./AccommodationListContainer";
 
 const AccommodationPageContainer = () => {
   return (
     <>
-      {/* <AccommodationListContainer /> */}
-      sdsadas
+      <Suspense>
+        <AccommodationListContainer />
+      </Suspense>
     </>
   );
 };

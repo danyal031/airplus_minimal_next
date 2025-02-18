@@ -1,8 +1,13 @@
-import React from "react";
+"use client";
+import React, { Suspense } from "react";
 import SearchHeaderReservation from "../../FlightSection/Flight-listing/SearchHeaderReservation";
 
 const SearchHeaderReservationContainer = () => {
-  return <SearchHeaderReservation />;
+  return (
+    <Suspense>
+      <SearchHeaderReservation />
+    </Suspense>
+  );
 };
 
 export default SearchHeaderReservationContainer;

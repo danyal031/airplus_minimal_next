@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect } from "react";
+import React, { FC, Suspense, useEffect } from "react";
 import FlightFilterBox from "./FlightFilterBox";
 import FlightsList from "./FlightsList";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
@@ -189,7 +189,9 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
         <FlightFilterBox />
       </div>
       <div className="col-span-12 md:col-span-9">
-        <FlightsList />
+        <Suspense>
+          <FlightsList />
+        </Suspense>
       </div>
     </div>
   );

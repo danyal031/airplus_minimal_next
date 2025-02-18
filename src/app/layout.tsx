@@ -8,8 +8,6 @@ import { GlobalContextProvider } from "@/context/store";
 import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
 import { ErrorBoundary } from "react-error-boundary";
 import { useEffect, useState } from "react";
-import ResponsiveFooter from "@/components/BasUIComponents/ResponsiveFooter";
-import ResponsiveAppBar from "@/components/BasUIComponents/ResponsiveAppBar";
 
 export const metadata: Metadata = {
   title: "بلیط هواپیما - خرید بلیط هواپیما",
@@ -24,13 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" dir="rtl" className={`${iransansFonts.variable} font-sans`}>
       <body className={`${iransansFonts.variable} font-sans`}>
-        <GlobalContextProvider>
-          <div className="flex flex-col min-h-screen">
-            <ResponsiveAppBar />
-            <div className="flex-grow w-full bg-main relative">{children}</div>
-            <ResponsiveFooter />
-          </div>
-        </GlobalContextProvider>
+        <GlobalContextProvider>{children}</GlobalContextProvider>
       </body>
     </html>
   );

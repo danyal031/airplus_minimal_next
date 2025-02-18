@@ -6,8 +6,9 @@ import { useState } from "react";
 import Lottie from "lottie-react";
 import { useRouter } from "next/navigation";
 import lottieErrorBoundary from "../../../../public/assets/lottie/lottie-error-boundary.json";
+import { FallbackProps } from "react-error-boundary";
 
-function ErrorBoundaryComponent({ error, resetErrorBoundary }: any) {
+function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
   const router = useRouter();
   const [showDetails, setShowDetails] = useState(false);
   return (
