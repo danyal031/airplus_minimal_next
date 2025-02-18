@@ -1,10 +1,14 @@
 "use client";
 import AccommodationDetailsProgress from "@/components/Skelton-Components/AccommodationSection/details/AccommodationDetailsProgress";
 import { useGlobalContext } from "@/context/store";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
 const AccommodationDetailsContainer = () => {
   // initial states
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const { additionalDetailsAccommodation } =
     useGlobalContext().accommodationContext.accommodationSearch;
   const renderAccommodationComponents = () => {

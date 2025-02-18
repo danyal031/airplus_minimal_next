@@ -9,7 +9,7 @@ const ProgressLoading = () => {
       sx={{
         display: "flex",
         position: "fixed",
-        zIndex: 999999999999,
+        zIndex: 99999999999,
         top: 0,
         left: 0,
         right: 0,

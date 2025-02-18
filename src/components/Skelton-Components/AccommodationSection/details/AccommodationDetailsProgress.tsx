@@ -365,7 +365,7 @@ const AccommodationDetailsProgress = () => {
     );
     return (
       <>
-        <div className="hidden md:grid grid-cols-12 gap-4">
+        <div className="hidden md:grid grid-cols-12 gap-4 container py-24">
           <div className="col-span-9 grid grid-cols-1 gap-4">
             {renderImages}
             {renderHotelInfo}
