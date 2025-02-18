@@ -142,6 +142,10 @@ interface ContextProps {
       >;
       typeOfAccommodation: string;
       setTypeOfAccommodation: Dispatch<SetStateAction<string>>;
+      additionalDetailsAccommodation: AccommodationsListDataType | null;
+      setAdditionalDetailsAccommodation: Dispatch<
+        SetStateAction<AccommodationsListDataType | null>
+      >;
     };
   };
 }
@@ -228,6 +232,8 @@ const GlobalContext = createContext<ContextProps>({
       setSelectedAccommodation: () => {},
       typeOfAccommodation: "list",
       setTypeOfAccommodation: () => {},
+      additionalDetailsAccommodation: null,
+      setAdditionalDetailsAccommodation: () => {},
     },
   },
 });
@@ -311,6 +317,8 @@ export const GlobalContextProvider = ({
   const [selectedAccommodation, setSelectedAccommodation] =
     useState<AccommodationShoppingCartDataType | null>(null);
   const [typeOfAccommodation, setTypeOfAccommodation] = useState("list");
+  const [additionalDetailsAccommodation, setAdditionalDetailsAccommodation] =
+    useState<AccommodationsListDataType | null>(null);
   //
 
   // handle error boundary
@@ -402,6 +410,8 @@ export const GlobalContextProvider = ({
               setSelectedAccommodation,
               typeOfAccommodation,
               setTypeOfAccommodation,
+              additionalDetailsAccommodation,
+              setAdditionalDetailsAccommodation,
             },
           },
         }}

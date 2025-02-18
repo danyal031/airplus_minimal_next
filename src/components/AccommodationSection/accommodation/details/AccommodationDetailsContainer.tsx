@@ -1,16 +1,34 @@
+"use client";
+import AccommodationDetailsProgress from "@/components/Skelton-Components/AccommodationSection/details/AccommodationDetailsProgress";
+import { useGlobalContext } from "@/context/store";
 import React from "react";
 
 const AccommodationDetailsContainer = () => {
+  // initial states
+  const { additionalDetailsAccommodation } =
+    useGlobalContext().accommodationContext.accommodationSearch;
+  const renderAccommodationComponents = () => {
+    return (
+      <>
+        {/* for desktop */}
+        <div className="hidden md:block">
+          <AccommodationDetailsOnDesktop />
+        </div>
+        {/* for mobile */}
+        <div className="md:hidden">
+          <AccommodationDetailsOnMobile />
+        </div>
+      </>
+    );
+  };
   return (
     <>
-      {/* for desktop */}
-      <div className="hidden md:block">
-        <AccommodationDetailsOnDesktop />
-      </div>
-      {/* for mobile */}
-      <div className="md:hidden">
-        <AccommodationDetailsOnMobile />
-      </div>
+      {" "}
+      {additionalDetailsAccommodation ? (
+        <>{renderAccommodationComponents()}</>
+      ) : (
+        <AccommodationDetailsProgress />
+      )}
     </>
   );
 };
