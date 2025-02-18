@@ -1,5 +1,3 @@
-import { Toman } from "@/components/Toman";
-
 const moment = require("jalali-moment");
 
 export const formatInputWithCommas = (
