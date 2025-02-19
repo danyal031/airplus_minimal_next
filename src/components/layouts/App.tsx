@@ -15,9 +15,10 @@ import { getConfig } from "@/global-files/axioses";
 import axios from "axios";
 import ProgressLoading from "../BasUIComponents/ProgressLoading";
 import { LoginDialog } from "../Login/LoginDialog";
-import Loading from "./loading";
+// import Loading from "./loading";
 
-const App = ({ children }: { children: React.ReactNode }) => {
+const App = ( { children }: { children: React.ReactNode } ) =>
+{
   // initial states
   // theme colors
   const themes = {
@@ -30,10 +31,10 @@ const App = ({ children }: { children: React.ReactNode }) => {
   //     ? (JSON.parse(config).design.theme as keyof typeof themes)
   //     : null;
   // });
-  const [themeKey, setThemeKey] = useState<keyof typeof themes | null>(null);
+  const [ themeKey, setThemeKey ] = useState<keyof typeof themes | null>( null );
   // app states
-  const [appLoading, setAppLoading] = useState<boolean>(true);
-  const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
+  const [ appLoading, setAppLoading ] = useState<boolean>( true );
+  const [ showProgressConfig, setShowProgressConfig ] = useState<boolean>( false );
 
   const {
     setShowAlertDetails,
@@ -45,11 +46,13 @@ const App = ({ children }: { children: React.ReactNode }) => {
   const { setUserData } = useGlobalContext().userContext;
   const { openLoginDialog } = useGlobalContext().loginContext;
 
-  useEffect(() => {
-    if (themeKey) {
-      console.log("themeKey", themeKey);
+  useEffect( () =>
+  {
+    if ( themeKey )
+    {
+      console.log( "themeKey", themeKey );
 
-      const selectedTheme = themes[themeKey];
+      const selectedTheme = themes[ themeKey ];
 
       // change `CSS Variables`
       document.documentElement.style.setProperty(
@@ -77,104 +80,111 @@ const App = ({ children }: { children: React.ReactNode }) => {
         selectedTheme.divider
       );
     }
-  }, [themeKey]);
+  }, [ themeKey ] );
 
   // const theme = useMemo(() => getTheme("light", themeKey), [config, themeKey]);
 
-  const [theme, setTheme] = useState(getTheme("light"));
-  useEffect(() => {
-    if (themeKey) {
-      console.log("themeKey", themeKey);
-      setTheme(getTheme("light"));
+  const [ theme, setTheme ] = useState( getTheme( "light" ) );
+  useEffect( () =>
+  {
+    if ( themeKey )
+    {
+      console.log( "themeKey", themeKey );
+      setTheme( getTheme( "light" ) );
     }
-  }, [config, themeKey]);
+  }, [ config, themeKey ] );
 
-  useEffect(() => {
+  useEffect( () =>
+  {
     // app loading
-    if (config) {
-      setAppLoading(false);
+    if ( config )
+    {
+      setAppLoading( false );
     }
-  }, [config]);
+  }, [ config ] );
 
-  useEffect(() => {
+  useEffect( () =>
+  {
     // handle user data
-    setUserData(JSON.parse(localStorage.getItem("minimal_user") as string));
+    setUserData( JSON.parse( localStorage.getItem( "minimal_user" ) as string ) );
 
     // handle get config
-    axios.defaults.headers.common["Domain"] = window.location.hostname;
-    if (!localStorage.getItem("minimal_config")) {
-      setShowProgressConfig(true);
+    axios.defaults.headers.common[ "Domain" ] = window.location.hostname;
+    if ( !localStorage.getItem( "minimal_config" ) )
+    {
+      setShowProgressConfig( true );
     }
     getConfig()
-      .then((res: any) => {
-        localStorage.setItem("minimal_config", JSON.stringify(res));
-        setShowProgressConfig(false);
-        setConfig(res);
-        setThemeKey(res.design.theme);
-      })
-      .catch(() => {});
-  }, []);
+      .then( ( res: any ) =>
+      {
+        localStorage.setItem( "minimal_config", JSON.stringify( res ) );
+        setShowProgressConfig( false );
+        setConfig( res );
+        setThemeKey( res.design.theme );
+      } )
+      .catch( () => { } );
+  }, [] );
 
   return (
     <>
-      <head>
-        <link
-          rel="icon"
-          type="image/x-icon"
-          href={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/branches/${config?.design.favicon}`}
-        />
-      </head>
-      <CacheProvider value={cacheRtl}>
-        {appLoading ? (
-          <Loading />
+      <link
+        rel="icon"
+        type="image/x-icon"
+        href={ `${ process.env.NEXT_PUBLIC_MEDIA_URL_1 }/media/branches/${ config?.design?.favicon }` }
+      />
+      <CacheProvider value={ cacheRtl }>
+        { appLoading ? (
+          <ProgressLoading />
         ) : (
-          <ThemeProvider theme={theme}>
-            {!showProgressConfig ? (
+          <ThemeProvider theme={ theme }>
+            { !showProgressConfig ? (
               <>
                 <CssBaseline />
                 <div className="flex flex-col min-h-screen">
                   <ResponsiveAppBar />
                   <div className="flex-grow w-full bg-main relative">
-                    {children}
+                    { children }
                   </div>
                   <ResponsiveFooter />
                 </div>
                 <Snackbar
-                  open={showAlertDetails.showAlert}
-                  onClose={() => {
-                    setShowAlertDetails((pre) => ({
+                  open={ showAlertDetails.showAlert }
+                  onClose={ () =>
+                  {
+                    setShowAlertDetails( ( pre ) => ( {
                       ...pre,
                       showAlert: false,
-                    }));
-                  }}
-                  autoHideDuration={showAlertDetails.alertDuration}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                    } ) );
+                  } }
+                  autoHideDuration={ showAlertDetails.alertDuration }
+                  anchorOrigin={ { vertical: "top", horizontal: "center" } }
                 >
                   <Alert
-                    onClose={() => {
-                      setShowAlertDetails((pre) => ({
+                    onClose={ () =>
+                    {
+                      setShowAlertDetails( ( pre ) => ( {
                         ...pre,
                         showAlert: false,
-                      }));
-                    }}
-                    severity={showAlertDetails.alertType}
+                      } ) );
+                    } }
+                    severity={ showAlertDetails.alertType }
                     variant="filled"
-                    sx={{ width: "100%" }}
+                    sx={ { width: "100%" } }
                   >
-                    {showAlertDetails.alertMessage}
+                    { showAlertDetails.alertMessage }
                   </Alert>
                 </Snackbar>
-                {openLoginDialog && <LoginDialog />}
-                {showProgress && <ProgressLoading />}
-                {/* {isLoading && <ProgressLoading />} */}
+                { openLoginDialog && <LoginDialog /> }
+                { showProgress && <ProgressLoading /> }
+                {/* {isLoading && <ProgressLoading />} */ }
               </>
             ) : (
               <div className="h-screen w-full bg-gray-400 flex items-center justify-center">
                 <ProgressLoading />
               </div>
-            )}{" "}
+            ) }{ " " }
           </ThemeProvider>
-        )}{" "}
+        ) }{ " " }
       </CacheProvider>
     </>
   );

@@ -3,14 +3,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import Box from "@mui/material/Box";
 import { Button, CircularProgress, Paper, useTheme } from "@mui/material";
 import { useState } from "react";
-import Lottie from "lottie-react";
 import { useRouter } from "next/navigation";
 import lottieErrorBoundary from "../../../../public/assets/lottie/lottie-error-boundary.json";
 import { FallbackProps } from "react-error-boundary";
-
-function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
+import dynamic from "next/dynamic";
+const Lottie = dynamic( () => import( "lottie-react" ), { ssr: false } );
+function ErrorBoundaryComponent ( { error, resetErrorBoundary }: FallbackProps )
+{
   const router = useRouter();
-  const [showDetails, setShowDetails] = useState(false);
+  const [ showDetails, setShowDetails ] = useState( false );
   return (
     // <div className="flex flex-col flex-auto justify-center items-center sm:justify-center min-w-0 md:p-[51px] bg-paper">
     <div className="bg-paper w-full h-screen fixed z-[99999] flex items-center justify-center">
@@ -20,14 +21,14 @@ function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
             <div className="w-full flex flex-col items-center justify-start p-[25px] gap-4">
               <div>
                 <Lottie
-                  animationData={lottieErrorBoundary}
-                  loop={false}
-                  style={{ width: "200px" }}
+                  animationData={ lottieErrorBoundary }
+                  loop={ false }
+                  style={ { width: "200px" } }
                 />
               </div>
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
+                initial={ { opacity: 0, y: 40 } }
+                animate={ { opacity: 1, y: 0, transition: { delay: 0.2 } } }
                 className="flex flex-col gap-2 text-gray-800"
               >
                 <span className="text-base font-bold">خطایی رخ داده است</span>
@@ -51,7 +52,7 @@ function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
           >
             <Box
               component="g"
-              sx={{ color: "primary.light" }}
+              sx={ { color: "primary.light" } }
               className="opacity-20"
               fill="none"
               stroke="currentColor"
@@ -64,7 +65,7 @@ function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
           <Box
             component="svg"
             className="absolute -top-[102px] -right-[102px] opacity-20"
-            sx={{ color: "primary.light" }}
+            sx={ { color: "primary.light" } }
             viewBox="0 0 220 192"
             width="220px"
             height="192px"
@@ -99,7 +100,7 @@ function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
                 <div className="flex items-center justify-center gap-4">
                   <Button
                     size="small"
-                    onClick={resetErrorBoundary}
+                    onClick={ resetErrorBoundary }
                     variant="contained"
                     className="rounded-xl bg-primary-main"
                   >
@@ -107,10 +108,11 @@ function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
                   </Button>
                   <Button
                     size="small"
-                    onClick={() => {
+                    onClick={ () =>
+                    {
                       resetErrorBoundary();
-                      router.push("/");
-                    }}
+                      router.push( "/" );
+                    } }
                     variant="contained"
                     className="rounded-xl bg-primary-main"
                   >
@@ -120,38 +122,38 @@ function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
               </div>
               <div className="w-full bg-white/90 backdrop-blur-md text-gray-700 rounded-md p-4 shadow-1">
                 <p className="text-lg text-center leading-10">
-                  فقط در صورت عدم دسترسی به بخش پشتیبانی از طریق شماره تلفن{" "}
+                  فقط در صورت عدم دسترسی به بخش پشتیبانی از طریق شماره تلفن{ " " }
                   <a
                     href="tel:02191016838"
                     className="font-bold whitespace-nowrap"
                     dir="ltr"
                   >
                     021-9101-6838
-                  </a>{" "}
-                  داخلی <span className="font-bold whitespace-nowrap">102</span>{" "}
+                  </a>{ " " }
+                  داخلی <span className="font-bold whitespace-nowrap">102</span>{ " " }
                   گزارش خطای خود را همراه با کد پیگیری اعلام نمائید
                 </p>
               </div>
               <Box
-                display={"flex"}
-                flexDirection={"column"}
-                gap={2}
-                justifyContent={"center"}
-                alignItems={"center"}
+                display={ "flex" }
+                flexDirection={ "column" }
+                gap={ 2 }
+                justifyContent={ "center" }
+                alignItems={ "center" }
               >
                 <Button
                   color="error"
-                  onClick={() => setShowDetails(!showDetails)}
+                  onClick={ () => setShowDetails( !showDetails ) }
                 >
                   <span className="text-xl text-main font-semibold">
-                    {showDetails ? "بستن جزئیات" : "مشاهده جزئیات"}
+                    { showDetails ? "بستن جزئیات" : "مشاهده جزئیات" }
                   </span>
                 </Button>
                 <AnimatePresence>
-                  {showDetails && (
+                  { showDetails && (
                     <motion.div
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
+                      initial={ { opacity: 0, y: 40 } }
+                      animate={ { opacity: 1, y: 0, transition: { delay: 0.2 } } }
                     >
                       <div
                         role="alert"
@@ -159,10 +161,10 @@ function ErrorBoundaryComponent({ error, resetErrorBoundary }: FallbackProps) {
                         className="bg-white rounded-xl p-2 max-h-[121px] overflow-y-auto"
                       >
                         <p>Something went wrong:</p>
-                        <pre style={{ color: "red" }}>{error.message}</pre>
+                        <pre style={ { color: "red" } }>{ error.message }</pre>
                       </div>
                     </motion.div>
-                  )}
+                  ) }
                 </AnimatePresence>
               </Box>
             </div>

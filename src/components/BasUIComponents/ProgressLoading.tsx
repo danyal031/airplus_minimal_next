@@ -1,12 +1,14 @@
 "use client";
 import { Box } from "@mui/material";
-import Lottie from "lottie-react";
 import React from "react";
 import lottieProgress from "../../../public/assets/lottie/lottie-progress.json";
-const ProgressLoading = () => {
+import dynamic from "next/dynamic";
+const Lottie = dynamic( () => import( "lottie-react" ), { ssr: false } );
+const ProgressLoading = () =>
+{
   return (
     <Box
-      sx={{
+      sx={ {
         display: "flex",
         position: "fixed",
         zIndex: 99999999999,
@@ -19,12 +21,12 @@ const ProgressLoading = () => {
         height: "100%",
         backdropFilter: "blur(2px)", // Adjust the blur value as needed
         backgroundColor: "rgba(255, 255, 255, 0.7)",
-      }}
+      } }
     >
       <Lottie
-        animationData={lottieProgress}
-        loop={true}
-        style={{ width: "500px" }}
+        animationData={ lottieProgress }
+        loop={ true }
+        style={ { width: "500px" } }
       />
     </Box>
   );
