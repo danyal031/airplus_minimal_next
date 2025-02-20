@@ -110,9 +110,9 @@ export const getTheme = (mode: "light" | "dark") => {
           root: {
             backgroundColor: getCssVariable("--background-main"),
             color: getCssVariable("--text-main"),
-            borderRadius: "1rem",
+            borderRadius: "6px",
             "& .MuiOutlinedInput-root": {
-              borderRadius: "1rem",
+              borderRadius: "6px",
             },
           },
         },
@@ -120,14 +120,14 @@ export const getTheme = (mode: "light" | "dark") => {
       MuiAutocomplete: {
         styleOverrides: {
           inputRoot: {
-            borderRadius: "1rem",
+            borderRadius: "6px",
             backgroundColor: getCssVariable("--background-paper"),
           },
           // input: {
           //   height: "0.7rem",
           // },
           paper: {
-            borderRadius: "1rem",
+            borderRadius: "6px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             marginTop: "0.3rem",
             marginBottom: "0.3rem",

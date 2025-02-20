@@ -61,7 +61,7 @@ const AccommodationDetailsProgress = () => {
         </Typography>
       </div>
     );
-    const renderHotelInfo = (
+    const renderAccommodationInfo = (
       <div className="grid grid-cols-1 gap-2">
         <div className="flex items-center justify-between">
           <Skeleton
@@ -135,7 +135,7 @@ const AccommodationDetailsProgress = () => {
         </div>
       </div>
     );
-    const renderHotelRooms = (
+    const renderAccommodationRooms = (
       <div className="grid grid-cols-1 gap-3 mt-7">
         <div className="flex items-center justify-start">
           <Skeleton
@@ -245,7 +245,7 @@ const AccommodationDetailsProgress = () => {
         </div>
       </div>
     );
-    const renderAboutHotel = (
+    const renderAboutAccommodation = (
       <div className="grid grid-cols-1 gap-2 mt-7">
         {" "}
         <div className="flex items-center justify-start mt-7">
@@ -366,16 +366,16 @@ const AccommodationDetailsProgress = () => {
     return (
       <>
         <div className="hidden md:grid grid-cols-12 gap-4 container py-24">
-          <div className="col-span-9 grid grid-cols-1 gap-4">
-            {renderImages}
-            {renderHotelInfo}
-            {renderHotelRooms}
-            {renderMap}
-            {renderAboutHotel}
-          </div>
           <div className="relative col-span-3 flex flex-col items-center justify-start gap-4">
             {renderHelpixBox}
             {renderSearchRooms}
+          </div>
+          <div className="col-span-9 grid grid-cols-1 gap-4">
+            {renderImages}
+            {renderAccommodationInfo}
+            {renderAccommodationRooms}
+            {renderMap}
+            {renderAboutAccommodation}
           </div>
         </div>
       </>
@@ -423,7 +423,7 @@ const AccommodationDetailsProgress = () => {
         {/* <div className=""></div> */}
       </div>
     );
-    const renderHotelInfo = (
+    const renderAccommodationInfo = (
       <div className="grid grid-cols-1 gap-8 p-2">
         <div className="flex flex-col justify-center items-center gap-1">
           <div className="w-full flex items-center justify-between">
@@ -498,7 +498,7 @@ const AccommodationDetailsProgress = () => {
         </div>
       </div>
     );
-    const renderHotelRooms = (
+    const renderAccommodationRooms = (
       <div className="grid grid-cols-1 gap-2 p-2">
         <div className="flex items-center justify-start">
           <Skeleton
@@ -589,7 +589,7 @@ const AccommodationDetailsProgress = () => {
         </div>
       </div>
     );
-    const renderAboutHotel = (
+    const renderAboutAccommodation = (
       <div className="grid grid-cols-1 gap-2 p-2">
         <div className="flex flex-col items-start justify-center gap-8 border border-neutral-200 bg-white rounded-2xl p-4">
           {Array.from(Array(3)).map((item) => {
@@ -638,10 +638,10 @@ const AccommodationDetailsProgress = () => {
       <>
         <div className="grid grid-cols-1 gap-4 md:hidden">
           {renderImages}
-          {renderHotelInfo}
-          {renderHotelRooms}
+          {renderAccommodationInfo}
+          {renderAccommodationRooms}
           {renderMap}
-          {renderAboutHotel}
+          {renderAboutAccommodation}
         </div>
       </>
     );

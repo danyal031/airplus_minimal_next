@@ -1,6 +1,5 @@
 "use client";
-import
-{
+import {
   createContext,
   Dispatch,
   ReactNode,
@@ -10,31 +9,28 @@ import
   useMemo,
   useState,
 } from "react";
-import
-{
+import {
   AlertDetailsDataType,
   ConfigDataType,
   defaultAlertDetails,
   UserInformationDataType,
 } from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
-import
-{
+import {
   AirportDataType,
   FlightResponseDataType,
   FlightTicketDataType,
   TypeDropOffLocationType,
 } from "@/DataTypes/flight/flightTicket";
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
-import
-{
+import {
   PassengersCapacityDataType,
   PassengersCapacityDefaultValue,
 } from "@/DataTypes/accommodation/accommodationPassengersCapaciy";
-import
-{
+import {
   AccommodationShoppingCartDataType,
   AccommodationsListDataType,
+  RoomsDetailsDataType,
 } from "@/DataTypes/accommodation/accommodationsListTypes";
 import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
 import { ErrorBoundary } from "react-error-boundary";
@@ -46,8 +42,7 @@ import dynamic from "next/dynamic";
 // });
 
 // Define combined context type
-interface ContextProps
-{
+interface ContextProps {
   loginContext: {
     openLoginDialog: boolean;
     setOpenLoginDialog: Dispatch<SetStateAction<boolean>>;
@@ -152,200 +147,204 @@ interface ContextProps
       setAdditionalDetailsAccommodation: Dispatch<
         SetStateAction<AccommodationsListDataType | null>
       >;
+      roomsDetails: RoomsDetailsDataType[] | null;
+      setRoomsDetails: Dispatch<SetStateAction<RoomsDetailsDataType[] | null>>;
     };
   };
 }
 
 // Create combined context
-const GlobalContext = createContext<ContextProps>( {
+const GlobalContext = createContext<ContextProps>({
   loginContext: {
     openLoginDialog: false,
-    setOpenLoginDialog: () => { },
+    setOpenLoginDialog: () => {},
   },
   userContext: {
     userId: "",
-    setUserId: () => { },
+    setUserId: () => {},
     userData: null,
-    setUserData: () => { },
+    setUserData: () => {},
   },
   global: {
     tabValueSearchBox: "1",
-    setTabValueSearchBox: () => { },
+    setTabValueSearchBox: () => {},
     showAlertDetails: defaultAlertDetails,
-    setShowAlertDetails: () => { },
+    setShowAlertDetails: () => {},
     showProgress: false,
-    setShowProgress: () => { },
+    setShowProgress: () => {},
     config: null,
-    setConfig: () => { },
+    setConfig: () => {},
   },
   flightContext: {
     searchContext: {
       dropOffLocationType: "oneWay",
-      setDropOffLocationType: () => { },
+      setDropOffLocationType: () => {},
       travelRoute: "oneWay",
-      setTravelRoute: () => { },
+      setTravelRoute: () => {},
       fromDate: null,
-      setFromDate: () => { },
+      setFromDate: () => {},
       toDate: null,
-      setToDate: () => { },
+      setToDate: () => {},
       origin: undefined,
-      setOrigin: () => { },
+      setOrigin: () => {},
       destination: undefined,
-      setDestination: () => { },
+      setDestination: () => {},
       airports: [],
-      setAirports: () => { },
+      setAirports: () => {},
       ticketLoading: false,
-      setTicketLoading: () => { },
+      setTicketLoading: () => {},
       changeStatusRequest: false,
-      setChangeStatusRequest: () => { },
+      setChangeStatusRequest: () => {},
       isInitialSearchDone: false,
-      setIsInitialSearchDone: () => { },
+      setIsInitialSearchDone: () => {},
       searchFlightResponseData: null,
-      setSearchFlightResponseData: () => { },
+      setSearchFlightResponseData: () => {},
       filteredSearchFlightResponseData: null,
-      setFilteredSearchFlightResponseData: () => { },
+      setFilteredSearchFlightResponseData: () => {},
       selectedWentFlight: null,
-      setSelectedWentFlight: () => { },
+      setSelectedWentFlight: () => {},
       selectedReturnFlight: null,
-      setSelectedReturnFlight: () => { },
+      setSelectedReturnFlight: () => {},
       flightPassengers: [],
-      setFlightPassengers: () => { },
+      setFlightPassengers: () => {},
       flightPassengersTickets: [],
-      setFlightPassengersTickets: () => { },
+      setFlightPassengersTickets: () => {},
       openFlightFilterDrawer: false,
-      setOpenFlightFilterDrawer: () => { },
+      setOpenFlightFilterDrawer: () => {},
     },
   },
   accommodationContext: {
     accommodationSearch: {
       accommodationFromDate: null,
-      setAccommodationFromDate: () => { },
+      setAccommodationFromDate: () => {},
       accommodationToDate: null,
-      setAccommodationToDate: () => { },
+      setAccommodationToDate: () => {},
       accommodationDestination: null,
-      setAccommodationDestination: () => { },
+      setAccommodationDestination: () => {},
       accommodations: [],
-      setAccommodations: () => { },
+      setAccommodations: () => {},
       accommodationPassengersCapacity: PassengersCapacityDefaultValue,
-      setAccommodationPassengersCapacity: () => { },
+      setAccommodationPassengersCapacity: () => {},
       accommodationsList: [],
-      setAccommodationsList: () => { },
+      setAccommodationsList: () => {},
       filteredSearchAccommodationsList: [],
-      setFilteredSearchAccommodationsList: () => { },
+      setFilteredSearchAccommodationsList: () => {},
       accommodationsLoading: false,
-      setAccommodationsLoading: () => { },
+      setAccommodationsLoading: () => {},
       selectedAccommodation: null,
-      setSelectedAccommodation: () => { },
+      setSelectedAccommodation: () => {},
       typeOfAccommodation: "list",
-      setTypeOfAccommodation: () => { },
+      setTypeOfAccommodation: () => {},
       additionalDetailsAccommodation: null,
-      setAdditionalDetailsAccommodation: () => { },
+      setAdditionalDetailsAccommodation: () => {},
+      roomsDetails: null,
+      setRoomsDetails: () => {},
     },
   },
-} );
+});
 
-interface GlobalContextProviderProps
-{
+interface GlobalContextProviderProps {
   children: ReactNode;
 }
 
 // Define combined context provider
-export const GlobalContextProvider = ( {
+export const GlobalContextProvider = ({
   children,
-}: GlobalContextProviderProps ) =>
-{
+}: GlobalContextProviderProps) => {
   // login
-  const [ openLoginDialog, setOpenLoginDialog ] = useState<boolean>( false );
-  const [ userId, setUserId ] = useState( "" );
-  const [ userData, setUserData ] = useState<UserDataType | null>( null );
+  const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
+  const [userId, setUserId] = useState("");
+  const [userData, setUserData] = useState<UserDataType | null>(null);
   // global
-  const [ showProgress, setShowProgress ] = useState<boolean>( false );
-  const [ config, setConfig ] = useState<null | ConfigDataType>( null );
-  const [ tabValueSearchBox, setTabValueSearchBox ] = useState<string>( "1" );
-  const [ showAlertDetails, setShowAlertDetails ] =
-    useState<AlertDetailsDataType>( defaultAlertDetails );
+  const [showProgress, setShowProgress] = useState<boolean>(false);
+  const [config, setConfig] = useState<null | ConfigDataType>(null);
+  const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
+  const [showAlertDetails, setShowAlertDetails] =
+    useState<AlertDetailsDataType>(defaultAlertDetails);
   // search flight
-  const [ openFlightFilterDrawer, setOpenFlightFilterDrawer ] =
-    useState<boolean>( false );
-  const [ flightPassengersTickets, setFlightPassengersTickets ] = useState<any[]>(
+  const [openFlightFilterDrawer, setOpenFlightFilterDrawer] =
+    useState<boolean>(false);
+  const [flightPassengersTickets, setFlightPassengersTickets] = useState<any[]>(
     []
   );
-  const [ flightPassengers, setFlightPassengers ] = useState<
+  const [flightPassengers, setFlightPassengers] = useState<
     UserInformationDataType[] | []
-  >( [] );
-  const [ selectedWentFlight, setSelectedWentFlight ] =
-    useState<FlightTicketDataType | null>( null );
-  const [ selectedReturnFlight, setSelectedReturnFlight ] =
-    useState<FlightTicketDataType | null>( null );
+  >([]);
+  const [selectedWentFlight, setSelectedWentFlight] =
+    useState<FlightTicketDataType | null>(null);
+  const [selectedReturnFlight, setSelectedReturnFlight] =
+    useState<FlightTicketDataType | null>(null);
   const [
     filteredSearchFlightResponseData,
     setFilteredSearchFlightResponseData,
-  ] = useState<FlightResponseDataType | null>( null );
-  const [ searchFlightResponseData, setSearchFlightResponseData ] =
-    useState<FlightResponseDataType | null>( null );
-  const [ isInitialSearchDone, setIsInitialSearchDone ] =
-    useState<boolean>( false );
-  const [ changeStatusRequest, setChangeStatusRequest ] =
-    useState<boolean>( false );
-  const [ ticketLoading, setTicketLoading ] = useState<boolean>( false );
-  const [ airports, setAirports ] = useState<AirportDataType[] | []>( [] );
-  const [ dropOffLocationType, setDropOffLocationType ] =
-    useState<TypeDropOffLocationType>( "oneWay" );
-  const [ travelRoute, setTravelRoute ] =
-    useState<TypeDropOffLocationType>( "oneWay" );
-  const [ fromDate, setFromDate ] = useState<string | null>( null );
-  const [ toDate, setToDate ] = useState<string | null>( null );
-  const [ origin, setOrigin ] = useState<AirportDataType | undefined>( undefined );
-  const [ destination, setDestination ] = useState<AirportDataType | undefined>(
+  ] = useState<FlightResponseDataType | null>(null);
+  const [searchFlightResponseData, setSearchFlightResponseData] =
+    useState<FlightResponseDataType | null>(null);
+  const [isInitialSearchDone, setIsInitialSearchDone] =
+    useState<boolean>(false);
+  const [changeStatusRequest, setChangeStatusRequest] =
+    useState<boolean>(false);
+  const [ticketLoading, setTicketLoading] = useState<boolean>(false);
+  const [airports, setAirports] = useState<AirportDataType[] | []>([]);
+  const [dropOffLocationType, setDropOffLocationType] =
+    useState<TypeDropOffLocationType>("oneWay");
+  const [travelRoute, setTravelRoute] =
+    useState<TypeDropOffLocationType>("oneWay");
+  const [fromDate, setFromDate] = useState<string | null>(null);
+  const [toDate, setToDate] = useState<string | null>(null);
+  const [origin, setOrigin] = useState<AirportDataType | undefined>(undefined);
+  const [destination, setDestination] = useState<AirportDataType | undefined>(
     undefined
   );
   // search Accommodation
-  const [ accommodationFromDate, setAccommodationFromDate ] = useState<
+  const [accommodationFromDate, setAccommodationFromDate] = useState<
     string | null
-  >( null );
-  const [ accommodationToDate, setAccommodationToDate ] = useState<string | null>(
+  >(null);
+  const [accommodationToDate, setAccommodationToDate] = useState<string | null>(
     null
   );
-  const [ accommodationDestination, setAccommodationDestination ] =
-    useState<AccommodationDataType | null>( null );
-  const [ accommodations, setAccommodations ] = useState<
+  const [accommodationDestination, setAccommodationDestination] =
+    useState<AccommodationDataType | null>(null);
+  const [accommodations, setAccommodations] = useState<
     AccommodationDataType[] | []
-  >( [] );
-  const [ accommodationPassengersCapacity, setAccommodationPassengersCapacity ] =
-    useState<PassengersCapacityDataType>( PassengersCapacityDefaultValue );
-  const [ accommodationsList, setAccommodationsList ] = useState<
+  >([]);
+  const [accommodationPassengersCapacity, setAccommodationPassengersCapacity] =
+    useState<PassengersCapacityDataType>(PassengersCapacityDefaultValue);
+  const [accommodationsList, setAccommodationsList] = useState<
     AccommodationsListDataType[] | []
-  >( [] );
+  >([]);
   const [
     filteredSearchAccommodationsList,
     setFilteredSearchAccommodationsList,
-  ] = useState<AccommodationsListDataType[] | []>( [] );
-  const [ accommodationsLoading, setAccommodationsLoading ] =
-    useState<boolean>( false );
-  const [ selectedAccommodation, setSelectedAccommodation ] =
-    useState<AccommodationShoppingCartDataType | null>( null );
-  const [ typeOfAccommodation, setTypeOfAccommodation ] = useState( "list" );
-  const [ additionalDetailsAccommodation, setAdditionalDetailsAccommodation ] =
-    useState<AccommodationsListDataType | null>( null );
+  ] = useState<AccommodationsListDataType[] | []>([]);
+  const [accommodationsLoading, setAccommodationsLoading] =
+    useState<boolean>(false);
+  const [selectedAccommodation, setSelectedAccommodation] =
+    useState<AccommodationShoppingCartDataType | null>(null);
+  const [typeOfAccommodation, setTypeOfAccommodation] = useState("list");
+  const [additionalDetailsAccommodation, setAdditionalDetailsAccommodation] =
+    useState<AccommodationsListDataType | null>(null);
+  const [roomsDetails, setRoomsDetails] = useState<
+    RoomsDetailsDataType[] | null
+  >(null);
   //
 
   // handle error boundary
-  function fallbackRender ( { error, resetErrorBoundary }: any )
-  {
+  function fallbackRender({ error, resetErrorBoundary }: any) {
     // Call resetErrorBoundary() to reset the error boundary and retry the render.
     return (
       <ErrorBoundaryComponent
-        error={ error }
-        resetErrorBoundary={ resetErrorBoundary }
+        error={error}
+        resetErrorBoundary={resetErrorBoundary}
       />
     );
   }
 
   return (
     <>
-      <ErrorBoundary fallbackRender={ fallbackRender }>
+      <ErrorBoundary fallbackRender={fallbackRender}>
         <GlobalContext.Provider
-          value={ {
+          value={{
             loginContext: { openLoginDialog, setOpenLoginDialog },
             userContext: { userId, setUserId, userData, setUserData },
             global: {
@@ -421,15 +420,17 @@ export const GlobalContextProvider = ( {
                 setTypeOfAccommodation,
                 additionalDetailsAccommodation,
                 setAdditionalDetailsAccommodation,
+                roomsDetails,
+                setRoomsDetails,
               },
             },
-          } }
+          }}
         >
-          <App>{ children }</App>
+          <App>{children}</App>
         </GlobalContext.Provider>
       </ErrorBoundary>
     </>
   );
 };
 
-export const useGlobalContext = () => useContext( GlobalContext );
+export const useGlobalContext = () => useContext(GlobalContext);

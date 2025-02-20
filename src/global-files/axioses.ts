@@ -423,7 +423,7 @@ export const getMinPrice = (
 };
 
 export const getRoomTypesAccommodation = (
-  hotelId: number,
+  accommodationId: number,
   checkin_date: string,
   checkout_date: string
 ) => {
@@ -431,10 +431,11 @@ export const getRoomTypesAccommodation = (
     axios
       .get(
         ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env.NEXT_PUBLIC_GET_ROOM_TYPES_RESIDENCE_ENDPOINT) as string,
+          process.env
+            .NEXT_PUBLIC_GET_ROOM_TYPES_ACCOMMODATION_ENDPOINT) as string,
         {
           params: {
-            hotel_id: hotelId,
+            accommodation_id: accommodationId,
             checkin_date: convertToGregorian(checkin_date),
             checkout_date: convertToGregorian(checkout_date),
           },
@@ -453,8 +454,8 @@ export const getRoomTypesAccommodation = (
   });
 };
 
-export const getResidenceDetails = (
-  hotelId: number,
+export const getAccommodationDetails = (
+  accommodationId: number,
   checkin_date: string,
   checkout_date: string
 ) => {
@@ -464,10 +465,10 @@ export const getResidenceDetails = (
     axios
       .get(
         ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env.NEXT_PUBLIC_GET_RESIDENCE_DETAILS) as string,
+          process.env.NEXT_PUBLIC_GET_ACCOMMODATION_DETAILS) as string,
         {
           params: {
-            hotel_id: hotelId,
+            accommodation_id: accommodationId,
             checkin_date: convertToGregorian(checkin_date),
             checkout_date: convertToGregorian(checkout_date),
           },
