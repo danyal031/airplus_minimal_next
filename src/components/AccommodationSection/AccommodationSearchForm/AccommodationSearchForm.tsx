@@ -307,7 +307,7 @@ const AccommodationSearchForm = () => {
                 >
                   <AddIcon fontSize="small" />
                 </IconButton>
-                <span className="text-sm text-text-main min min-w-[2ch]">
+                <span className="text-sm text-text-main min-w-[2ch]">
                   {accommodationPassengersCapacity.adultCapacity}
                 </span>
                 <IconButton

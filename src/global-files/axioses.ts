@@ -443,7 +443,7 @@ export const getRoomTypesAccommodation = (
       )
       .then((response) => {
         // Handle successful response here
-        console.log("get_room_types response: ", response.data);
+        console.log("get_room_types response: ", response);
         resolve(response.data);
       })
       .catch((error) => {

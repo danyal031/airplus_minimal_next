@@ -3,53 +3,148 @@ export interface AccommodationsListDataType {
   id: number;
   type: string;
   title: Title;
-  rate: number;
   communicational: Communicational;
-  media: any;
-  facilities: any[];
+  logo: string;
+  media: Media;
+  rules: Rules;
+  facility_categories: FacilityCategory[];
+  rate: number;
+  details: Details;
+  board: any;
+  description: any;
+  priority: number;
   status: number;
-  min_price?: any;
 }
 
-export interface Title {
+interface Title {
   en: string;
   fa: string;
 }
 
-export interface Communicational {
-  phone?: string | false;
+interface Communicational {
+  country: Country;
+  state: State;
+  city: City;
+  phone: string;
   address: string;
   location: string;
+  "nearby_places ": any;
+}
+
+interface Country {
+  id: number;
+  fips: string;
+  iso: string;
+  alpha3: string;
+  numeric_code: string;
+  domain: string;
+  en_nationality: string;
+  fa_nationality: string;
+  en_name: string;
+  fa_name: string;
+  status: number;
+}
+
+interface State {
+  id: number;
+  en_name: string;
+  fa_name: string;
+  country: number;
+  status: number;
+}
+
+interface City {
+  id: number;
+  en_name: string;
+  fa_name: string;
+  national_prefix: string;
+  state: number;
+  status: number;
+}
+
+interface Media {
+  images: Image[];
+  videos: any;
+}
+
+interface Image {
+  type: string;
+  name: string;
+  path: string;
+  size: number;
+  extension: string;
+}
+
+interface Rules {
+  cancellation: any;
+  public: any;
+  policies: Policies;
+}
+
+interface Policies {
+  id: number;
+  accommodation: number;
+  half_charge_from: any;
+  half_charge_to: any;
+  concubine: number;
+  single_woman: number;
+  welcome_transfer: number;
+  return_transfer: number;
+  status: number;
+}
+
+interface FacilityCategory {
+  id: number;
+  title_en: any;
+  title_fa: string;
+  icon: any;
+  description: any;
+  status: number;
+  branch: number;
+  facilities: Facility[];
+}
+
+interface Facility {
+  id: number;
+  category_id: number;
+  title_en: any;
+  title_fa: string;
+  icon: any;
+  description: any;
+  branch: number;
+  status: number;
+}
+
+interface Details {
+  rooms: any;
+  floors: any;
+  login: string;
+  logout: string;
 }
 
 // start handle rooms data type
 
 export interface RoomsDetailsDataType {
   id: number;
-  name: string;
+  title: Title;
   beds: number;
-  adult_capacity: number;
-  child_capacity: number;
-  image: boolean;
+  capacity: Capacity;
+  image: RoomImage[];
   status: number;
-  financial: RoomsFinancial[] | boolean;
+  board_type_list: boolean;
 }
 
-export interface RoomsFinancial {
-  board_type: BoardType;
-  rate_date: string;
-  board_price: number;
-  net_price: number;
-  final_price: number;
+interface Capacity {
+  adult: number;
+  child: number;
+  room: number;
 }
 
-interface BoardType {
-  id: number;
-  title_en: string;
-  title_fa: string;
-  description: string;
-  code: string;
-  status: number;
+interface RoomImage {
+  name: string;
+  path: string;
+  size: number;
+  extension: string;
 }
 
 // end rooms data type

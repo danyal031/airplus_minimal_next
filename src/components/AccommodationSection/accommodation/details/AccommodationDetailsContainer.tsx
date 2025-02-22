@@ -1,7 +1,6 @@
 "use client";
 import AccommodationDetailsProgress from "@/components/Skelton-Components/AccommodationSection/details/AccommodationDetailsProgress";
 import { useGlobalContext } from "@/context/store";
-import { RoomsDetailsDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
 import {
   getAccommodationDetails,
   getRoomTypesAccommodation,
@@ -9,7 +8,11 @@ import {
 import {
   Button,
   Card,
+  CardActions,
   CardContent,
+  Chip,
+  Dialog,
+  DialogContent,
   IconButton,
   Rating,
   TextField,
@@ -19,7 +22,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import HistoryEduOutlinedIcon from "@mui/icons-material/HistoryEduOutlined";
 import EventSeatOutlinedIcon from "@mui/icons-material/EventSeatOutlined";
@@ -31,6 +34,27 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import BalconyOutlinedIcon from "@mui/icons-material/BalconyOutlined";
+import AccommodationRoomsProgress from "./AccommodationRoomsProgress";
+import { formatInputWithCommas } from "@/global-files/function";
+import Image from "next/image";
+import { Swiper } from "swiper/types"; // Add this import for the type
+import { Navigation, Thumbs } from "swiper/modules";
+import { Swiper as SwiperComponent, SwiperSlide } from "swiper/react";
+import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
+import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import { RoomsDetailsDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import {
+  defaultChildrenInformation,
+  defaultPassengerInformation,
+} from "@/DataTypes/globalTypes";
+import Map from "@/components/global/map/Map";
+import { motion, AnimatePresence } from "framer-motion";
+
 const AccommodationDetailsContainer = () => {
   // initial states
   const [adult_capacity, set_adult_capacity] = useState<number>(1);
@@ -47,6 +71,7 @@ const AccommodationDetailsContainer = () => {
     setAccommodationPassengersCapacity,
     accommodationPassengersCapacity,
     setRoomsDetails,
+    roomsDetails,
   } = useGlobalContext().accommodationContext.accommodationSearch;
 
   // handle clear selected rooms
@@ -175,7 +200,7 @@ const AccommodationDetailsContainer = () => {
       <>
         {/* for desktop */}
         <div className="hidden md:block">
-          <AccommodationDetailsOnDesktop />
+          <AccommodationDetailsOnDesktop roomTypesLoading={roomTypesLoading} />
         </div>
         {/* for mobile */}
         <div className="md:hidden">
@@ -199,14 +224,44 @@ const AccommodationDetailsContainer = () => {
 export default AccommodationDetailsContainer;
 
 // for desktop
-const AccommodationDetailsOnDesktop = () => {
+interface AccommodationDetailsOnDesktopProps {
+  roomTypesLoading: boolean;
+}
+const AccommodationDetailsOnDesktop: FC<AccommodationDetailsOnDesktopProps> = ({
+  roomTypesLoading,
+}) => {
   // initial states
-  const { additionalDetailsAccommodation } =
+  const [openGallery, setOpenGallery] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const swiperRef = useRef<any>(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<Swiper | null>(null);
+
+  const { additionalDetailsAccommodation, roomsDetails } =
     useGlobalContext().accommodationContext.accommodationSearch;
+
+  // handle open gallery
+  const handleOpenGallery = (index: number) => {
+    setSelectedIndex(index);
+    setOpenGallery(true);
+  };
+  // handle close Gallery
+  const handleCloseGallery = () => {
+    setOpenGallery(false);
+    setThumbsSwiper(null);
+  };
+
+  const handlePrev = () => {
+    swiperRef.current.swiper.slidePrev();
+  };
+
+  const handleNext = () => {
+    swiperRef.current.swiper.slideNext();
+  };
+
   const renderInitialDetails = () => {
     return (
       <>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="w-full grid grid-cols-1 gap-3">
           <span className="flex items-center justify-center text-primary-main font-bold text-base">
             {additionalDetailsAccommodation?.title.fa}
           </span>
@@ -218,7 +273,7 @@ const AccommodationDetailsOnDesktop = () => {
                 readOnly
               />
             </div>
-            <span className="flex items-center justify-center text-text-main text-xs text-justify">
+            <span className="flex items-center justify-center text-text-main text-sm text-justify">
               {additionalDetailsAccommodation?.communicational.address}
             </span>
           </div>
@@ -280,7 +335,7 @@ const AccommodationDetailsOnDesktop = () => {
   const renderKindOfDetails = () => {
     return (
       <>
-        <div className="text-text-main p-1 border border-divider rounded-2xl grid grid-cols-6 gap-1 h-fit sticky top-20 bg-paper">
+        <div className="text-text-main p-1 border border-divider rounded-2xl grid grid-cols-6 gap-1 h-fit sticky top-20 bg-paper z-50">
           <div className="flex items-center justify-center gap-0">
             <HistoryEduOutlinedIcon fontSize="small" />
             <span className="text-base truncate">امکانات هتل</span>
@@ -314,39 +369,202 @@ const AccommodationDetailsOnDesktop = () => {
     );
   };
 
+  // handle show images
+  const renderImageDialog = () => {
+    return (
+      <Dialog
+        open={openGallery}
+        onClose={handleCloseGallery}
+        fullWidth
+        maxWidth="md"
+        PaperProps={{ style: { overflow: "hidden", borderRadius: "12px" } }}
+      >
+        <DialogContent>
+          <SwiperComponent
+            ref={swiperRef}
+            initialSlide={selectedIndex}
+            navigation={false}
+            modules={[Navigation, Thumbs]}
+            className="imageSwiper"
+            loop={false}
+            spaceBetween={10}
+            slidesPerView={1}
+            thumbs={{ swiper: thumbsSwiper }}
+            style={{ width: "100%", height: "500px" }}
+            onSlideChange={(swiper) => setSelectedIndex(swiper.activeIndex)}
+          >
+            {additionalDetailsAccommodation?.media.images.map(
+              (image, index: number) => (
+                <SwiperSlide key={index}>
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={
+                        process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + image.path
+                      }
+                      alt={`Hotel Image ${index + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
+                </SwiperSlide>
+              )
+            )}
+            <div className="absolute top-1/2 left-2 transform -translate-y-1/2 z-[2] bg-gray-500 bg-opacity-55 rounded-full flex items-center justify-center">
+              <ChevronLeftOutlinedIcon
+                fontSize="large"
+                className="hover:cursor-pointer text-neutral-200"
+                onClick={handleNext}
+              />
+            </div>
+            <div className="absolute top-1/2 right-2 transform -translate-y-1/2 z-[2] bg-gray-500 bg-opacity-55 rounded-full flex items-center justify-center">
+              <KeyboardArrowRightOutlinedIcon
+                fontSize="large"
+                className="hover:cursor-pointer text-neutral-200"
+                onClick={handlePrev}
+              />
+            </div>
+          </SwiperComponent>
+          <SwiperComponent
+            modules={[Thumbs]}
+            onSwiper={setThumbsSwiper}
+            spaceBetween={10}
+            slidesPerView={5}
+            style={{ marginTop: "20px" }}
+            className="px-1"
+          >
+            {additionalDetailsAccommodation?.media.images.map(
+              (image, index: number) => (
+                <SwiperSlide key={index}>
+                  <div
+                    className={`relative w-full rounded-md overflow-hidden h-24 cursor-pointer ${
+                      selectedIndex === index
+                        ? "border-2 border-primary-main"
+                        : ""
+                    }`}
+                  >
+                    <Image
+                      src={
+                        process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + image.path
+                      }
+                      alt={`Thumbnail ${index + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
+                </SwiperSlide>
+              )
+            )}
+          </SwiperComponent>
+        </DialogContent>
+      </Dialog>
+    );
+  };
   const renderAccommodationImages = () => {
-    return <></>;
+    if (!additionalDetailsAccommodation) {
+      return (
+        <>
+          <div className="w-full h-64 flex flex-col items-center justify-center bg-main rounded-2xl">
+            <PhotoLibraryOutlinedIcon fontSize="large" />{" "}
+          </div>
+        </>
+      );
+    }
+    const remainingImages =
+      additionalDetailsAccommodation.media.images.length - 4;
+
+    return (
+      <>
+        <div className="grid grid-cols-3 gap-2 relative">
+          <div
+            className="min-h-80 col-span-3 relative cursor-pointer"
+            onClick={() => {
+              handleOpenGallery(0);
+            }}
+          >
+            <Image
+              src={
+                process.env.NEXT_PUBLIC_MEDIA_URL_1 +
+                "/" +
+                additionalDetailsAccommodation.media.images[0].path
+              }
+              alt=""
+              layout="fill"
+              objectFit="cover"
+              className="rounded-t-2xl"
+            />
+          </div>
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className={`relative h-28 cursor-pointer`}
+              onClick={() => {
+                handleOpenGallery(item);
+              }}
+            >
+              <Image
+                src={
+                  process.env.NEXT_PUBLIC_MEDIA_URL_1 +
+                  "/" +
+                  additionalDetailsAccommodation.media.images[item].path
+                }
+                alt=""
+                layout="fill"
+                objectFit="cover"
+                className={`${
+                  item === 1
+                    ? "rounded-br-2xl"
+                    : item === 2
+                    ? ""
+                    : "rounded-bl-2xl"
+                }`}
+              />
+            </div>
+          ))}
+          {remainingImages > 0 && (
+            <button
+              className="absolute bottom-4 left-2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-lg z-10"
+              onClick={() => handleOpenGallery(5)}
+            >
+              +{remainingImages} تصویر دیگر
+            </button>
+          )}
+        </div>
+      </>
+    );
   };
 
   const renderAccommodationFacilities = () => {
     return (
       <>
-        <div className="bg-main grid-cols-1 gap-3 rounded-2xl">
-          <div className="p-3 flex items-center justify-between">
-            <div className="flex items-center justify-center gap-1">
-              <HistoryEduOutlinedIcon fontSize="small" />
-              <span className="text-text-main font-semibold text-sm">
-                امکانات هتل
-              </span>
+        {additionalDetailsAccommodation &&
+          additionalDetailsAccommodation.facility_categories && (
+            <div className="bg-main grid-cols-1 gap-3 rounded-2xl">
+              <div className="p-3 flex items-center justify-between">
+                <div className="flex items-center justify-center gap-1">
+                  <HistoryEduOutlinedIcon fontSize="small" />
+                  <span className="text-text-main font-semibold text-sm">
+                    امکانات هتل
+                  </span>
+                </div>
+                <div className="flex items-center justify-center gap-1">
+                  <VisibilityOutlinedIcon fontSize="small" />
+                  <span className="text-text-main font-semibold text-sm">
+                    مشاهده همه امکانات
+                  </span>
+                </div>
+              </div>
+              <div className="h-[2px] bg-paper"></div>
+              <div className="py-5 px-9 grid grid-cols-3 gap-3">
+                {additionalDetailsAccommodation.facility_categories
+                  .find((item) => item.title_fa === "عمومی")
+                  ?.facilities?.map((element) => (
+                    <span className="text-text-main text-sm font-semibold">
+                      {element.title_fa}
+                    </span>
+                  ))}
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-1">
-              <VisibilityOutlinedIcon fontSize="small" />
-              <span className="text-text-main font-semibold text-sm">
-                مشاهده همه امکانات
-              </span>
-            </div>
-          </div>
-          <div className="h-[2px] bg-paper"></div>
-          <div className="py-5 px-9 grid grid-cols-3 gap-3">
-            {additionalDetailsAccommodation?.facility_categories
-              .find((item) => item.title_fa === "عمومی")
-              .facilities.map((element) => (
-                <span className="text-text-main text-sm font-semibold">
-                  {element.title_fa}
-                </span>
-              ))}
-          </div>
-        </div>
+          )}
       </>
     );
   };
@@ -377,6 +595,50 @@ const AccommodationDetailsOnDesktop = () => {
               </span>
             </div>
           </div>
+          {roomsDetails && roomsDetails.length !== 0 ? (
+            <div className="grid grid-cols-1 gap-2">
+              {roomsDetails.map((room) => {
+                return <RoomCard room={room} id={room.id} />;
+              })}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <span className="text-sm font-semibold">
+                اتاقی جهت رزرو وجود ندارد
+              </span>
+            </div>
+          )}{" "}
+        </div>
+      </>
+    );
+  };
+
+  // for render accommodation map
+  const renderAccommodationMap = () => {
+    return (
+      <>
+        <div className="bg-paper border-[3px] border-main rounded-2xl grid grid-cols-1 gap-0 overflow-hidden">
+          <div className="p-3 flex items-center justify-start gap-2">
+            <LocationOnOutlinedIcon fontSize="small" />
+            <span className="text-sm text-text-main font-semibold">
+              مکان های مهم اطراف هتل{" "}
+            </span>
+          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="h-64"
+          >
+            <Map
+              zoom={13}
+              posix={
+                additionalDetailsAccommodation?.communicational.location
+                  .split(",")
+                  .map(Number) as [number, number]
+              }
+            />
+          </motion.div>
         </div>
       </>
     );
@@ -386,24 +648,23 @@ const AccommodationDetailsOnDesktop = () => {
     <>
       <div className="container py-24">
         <div className="grid grid-cols-12 gap-4 p-5 rounded-2xl bg-paper relative">
-          <div className="col-span-3 flex flex-col items-center justify-start gap-8">
+          <div className="col-span-4 flex flex-col items-center justify-start gap-8">
             {renderInitialDetails()}
             {renderFilterDateBox()}
           </div>
-          <div className="col-span-9 grid grid-cols-1 gap-3">
+          <div className="col-span-8 grid grid-cols-1 gap-3">
             {renderKindOfDetails()}
-            {!additionalDetailsAccommodation ||
-            !additionalDetailsAccommodation.media ||
-            !additionalDetailsAccommodation.media.images ||
-            additionalDetailsAccommodation.media.images.length === 0 ? (
-              <div className="w-full h-64 flex flex-col items-center justify-center bg-main rounded-2xl">
-                <PhotoLibraryOutlinedIcon fontSize="large" />{" "}
-              </div>
-            ) : (
-              renderAccommodationImages()
-            )}
+
+            {renderAccommodationImages()}
+            {renderImageDialog()}
+
             {renderAccommodationFacilities()}
-            {renderRoomList()}
+            {!roomTypesLoading ? (
+              renderRoomList()
+            ) : (
+              <AccommodationRoomsProgress />
+            )}
+            {renderAccommodationMap()}
           </div>
         </div>
       </div>
@@ -414,4 +675,350 @@ const AccommodationDetailsOnDesktop = () => {
 // for mobile
 const AccommodationDetailsOnMobile = () => {
   return <></>;
+};
+
+// handle roomCard component
+interface RoomCardProps {
+  room: RoomsDetailsDataType;
+  id: number;
+}
+const RoomCard: FC<RoomCardProps> = ({ room, id }) => {
+  // initial states
+  const searchParams = useSearchParams();
+
+  const {
+    accommodationFromDate,
+    accommodationToDate,
+    selectedAccommodation,
+    additionalDetailsAccommodation,
+    setSelectedAccommodation,
+    accommodationPassengersCapacity,
+  } = useGlobalContext().accommodationContext.accommodationSearch;
+
+  const [roomCounter, setRoomCounter] = useState<number>(() => {
+    const matchingRoom = selectedAccommodation?.room_types.find(
+      (el) => el.id === room.id
+    );
+    return matchingRoom?.numberOfRoom || 0;
+  });
+
+  // handle add room
+  const handleAddRoom = (room: RoomsDetailsDataType, boardType: any) => {
+    if (additionalDetailsAccommodation) {
+      if (selectedAccommodation) {
+        const updatedRoomTypes = selectedAccommodation.room_types
+          ? selectedAccommodation.room_types.map((item) =>
+              item.id === room.id
+                ? {
+                    ...item,
+                    numberOfRoom: item.numberOfRoom + 1,
+                  }
+                : item
+            )
+          : [];
+
+        const isNewRoom = !updatedRoomTypes.some((item) => item.id === room.id);
+
+        if (isNewRoom) {
+          updatedRoomTypes.push({
+            ...room,
+            board_type: boardType,
+            numberOfRoom: 1,
+          });
+        }
+
+        setSelectedAccommodation({
+          communicational: additionalDetailsAccommodation.communicational,
+          facilities: additionalDetailsAccommodation.facilities,
+          id: additionalDetailsAccommodation.id,
+          rate: additionalDetailsAccommodation.rate,
+          status: additionalDetailsAccommodation.status,
+          title: additionalDetailsAccommodation.title,
+          type: additionalDetailsAccommodation.type,
+          rules: additionalDetailsAccommodation.rules,
+          logo: additionalDetailsAccommodation.logo,
+
+          room_types: updatedRoomTypes.map((room) => ({
+            ...room,
+            passengers: {
+              child: Array.from(
+                Array(accommodationPassengersCapacity.childCapacity)
+              ).map(() => {
+                return {
+                  ...defaultChildrenInformation,
+                  id: uuidv4(),
+                  ageCategory: "child",
+                };
+              }),
+              adult: Array.from(
+                Array(accommodationPassengersCapacity.adultCapacity)
+              ).map((el, ind) => {
+                return {
+                  ...defaultPassengerInformation,
+                  id: uuidv4(),
+                  ageCategory: "adult",
+                  leader: ind === 0 ? true : false,
+                };
+              }),
+            },
+          })),
+          details: {
+            ...additionalDetailsAccommodation.details,
+            fromDate: accommodationFromDate as string,
+            toDate: accommodationToDate as string,
+          },
+        });
+        setRoomCounter((pre) => pre + 1);
+      } else {
+        const updatedRoomTypes: RoomsDetailsDataType[] = [];
+        const existingRoom = updatedRoomTypes.find(
+          (item) => item.id === room.id
+        );
+
+        if (existingRoom) {
+          updatedRoomTypes.forEach((item) => {
+            if (item.id === room.id) {
+              item.numberOfRoom += 1;
+            }
+          });
+        } else {
+          updatedRoomTypes.push({
+            ...room,
+            board_type: boardType,
+            numberOfRoom: 1,
+          });
+        }
+
+        const adultCapacity = Number(
+          searchParams.get("adultCapacity") as string
+        );
+        const childCapacity = Number(
+          searchParams.get("childCapacity") as string
+        );
+        setSelectedAccommodation({
+          communicational: additionalDetailsAccommodation.communicational,
+          facilities: additionalDetailsAccommodation.facilities,
+          id: additionalDetailsAccommodation.id,
+          rate: additionalDetailsAccommodation.rate,
+          status: additionalDetailsAccommodation.status,
+          title: additionalDetailsAccommodation.title,
+          type: additionalDetailsAccommodation.type,
+          rules: additionalDetailsAccommodation.rules,
+          logo: additionalDetailsAccommodation.logo,
+          room_types: updatedRoomTypes.map((room) => ({
+            ...room,
+            passengers: {
+              child: Array.from(
+                Array(accommodationPassengersCapacity.childCapacity)
+              ).map(() => {
+                return {
+                  ...defaultChildrenInformation,
+                  id: uuidv4(),
+                  ageCategory: "child",
+                };
+              }),
+              adult: Array.from(
+                Array(accommodationPassengersCapacity.adultCapacity)
+              ).map((el, ind) => {
+                return {
+                  ...defaultPassengerInformation,
+                  id: uuidv4(),
+                  ageCategory: "adult",
+                  leader: ind === 0 ? true : false,
+                };
+              }),
+            },
+          })),
+          details: {
+            ...additionalDetailsAccommodation.details,
+            fromDate: accommodationFromDate as string,
+            toDate: accommodationToDate as string,
+          },
+        });
+        setRoomCounter((pre) => pre + 1);
+      }
+    }
+  };
+
+  // handle Decrease room
+  const handleDecreaseRoom = (selectedRoomId: string) => {
+    if (additionalDetailsAccommodation) {
+      const updatedRoomTypes = selectedAccommodation.room_types
+        ? selectedAccommodation.room_types.reduce<RoomsDetailsDataType[]>(
+            (acc, item) => {
+              if (item.id === selectedRoomId) {
+                if (item.numberOfRoom > 1) {
+                  acc.push({
+                    ...item,
+                    numberOfRoom: item.numberOfRoom - 1,
+                  });
+                }
+              } else {
+                acc.push(item);
+              }
+              return acc;
+            },
+            []
+          )
+        : [];
+
+      if (updatedRoomTypes.length === 0) {
+        setSelectedAccommodation(null);
+      } else {
+        setSelectedAccommodation({
+          communicational: additionalDetailsAccommodation.communicational,
+          facilities: additionalDetailsAccommodation.facilities,
+          id: additionalDetailsAccommodation.id,
+          rate: additionalDetailsAccommodation.rate,
+          status: additionalDetailsAccommodation.status,
+          title: additionalDetailsAccommodation.title,
+          type: additionalDetailsAccommodation.type,
+          rules: additionalDetailsAccommodation.rules,
+          logo: additionalDetailsAccommodation.logo,
+          room_types: updatedRoomTypes.map((room) => ({
+            ...room,
+            passengers: {
+              child: Array.from(
+                Array(accommodationPassengersCapacity.childCapacity)
+              ).map(() => {
+                return defaultChildrenInformation;
+              }),
+              adult: Array.from(
+                Array(accommodationPassengersCapacity.adultCapacity)
+              ).map(() => {
+                return defaultPassengerInformation;
+              }),
+            },
+          })),
+          details: {
+            ...additionalDetailsAccommodation.details,
+            fromDate: accommodationFromDate as string,
+            toDate: accommodationToDate as string,
+          },
+        });
+      }
+      setRoomCounter((pre) => pre - 1);
+    }
+  };
+
+  useEffect(() => {
+    console.log("selectedAccommodation", selectedAccommodation);
+  }, [selectedAccommodation]);
+
+  // handle mobile
+  const renderOnMobile = () => {
+    return (
+      <>
+        <div className="md:hidden"></div>
+      </>
+    );
+  };
+
+  // handle desktop
+  const renderOnDesktop = () => {
+    return (
+      <>
+        <div className="hidden md:grid grid-cols-12 bg-main hover:shadow-md rounded-2xl overflow-hidden transition-shadow">
+          <div className="col-span-4">
+            <div className="relative min-h-32">
+              <Image
+                src={
+                  process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + room.image[0].path
+                }
+                alt={`room image`}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </div>
+          <div className="col-span-8 grid grid-cols-4 gap-2 px-3 py-4">
+            <div className="col-span-3 flex flex-col items-start justify-between">
+              <div className="flex flex-col items-start justify-start gap-2">
+                <span className="text-sm text-text-main font-semibold">
+                  {room.title.fa}
+                </span>
+                <div className="flex items-center justify-start gap-2">
+                  <Chip
+                    variant="outlined"
+                    color="primary"
+                    label={`با صبحانه`}
+                    size="small"
+                  />{" "}
+                  <Chip
+                    variant="outlined"
+                    color="primary"
+                    label={`با صبحانه`}
+                    size="small"
+                  />{" "}
+                  <Chip
+                    variant="outlined"
+                    color="primary"
+                    label={`با صبحانه`}
+                    size="small"
+                  />
+                </div>
+              </div>
+              <span className="text-text-main text-xs font-semibold">
+                {room.capacity.adult} بزرگسال، {room.capacity.child} کودک
+              </span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-1">
+              <span className="text-primary-main font-semibold text-base">
+                {formatInputWithCommas(1250000)}
+              </span>
+              {roomCounter === 0 ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="min-w-24 rounded-lg"
+                  disabled={roomCounter < room.capacity.room ? false : true}
+                  onClick={() => {
+                    handleAddRoom(room, room.board_type as any);
+                  }}
+                >
+                  {roomCounter < room.capacity.room
+                    ? "رزرو اتاق"
+                    : "تکمیل ظرفیت"}
+                </Button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <IconButton
+                    color="primary"
+                    size="small"
+                    className="h-7 w-7 rounded-full"
+                    disabled={roomCounter < room.capacity.room ? false : true}
+                    onClick={() => {
+                      handleAddRoom(room, room.board_type as any);
+                    }}
+                  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                  {roomCounter}
+                  <IconButton
+                    color="primary"
+                    size="small"
+                    className="h-7 w-7 rounded-full"
+                    disabled={roomCounter === 0 ? true : false}
+                    onClick={() => {
+                      handleDecreaseRoom(room.id);
+                    }}
+                  >
+                    <RemoveIcon fontSize="small" />
+                  </IconButton>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <>
+      {renderOnMobile()}
+      {renderOnDesktop()}
+    </>
+  );
 };
