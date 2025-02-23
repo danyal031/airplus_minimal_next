@@ -393,7 +393,7 @@ export const getAccommodationsList = (
 export const getMinPrice = (
   checkin_date: string,
   checkout_date: string,
-  residencesId: number[]
+  accommodationId: number[]
 ) => {
   return new Promise((resolve, reject) => {
     axios
@@ -405,7 +405,7 @@ export const getMinPrice = (
           params: {
             checkin_date: convertToGregorian(checkin_date),
             checkout_date: convertToGregorian(checkout_date),
-            residences: residencesId,
+            accommodations: accommodationId,
           },
         }
       )

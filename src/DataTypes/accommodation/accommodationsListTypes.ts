@@ -28,7 +28,7 @@ interface Communicational {
   phone: string;
   address: string;
   location: string;
-  "nearby_places ": any;
+  nearby_places: any;
 }
 
 interface Country {
@@ -125,13 +125,14 @@ interface Details {
 // start handle rooms data type
 
 export interface RoomsDetailsDataType {
-  id: number;
+  id: string;
   title: Title;
   beds: number;
   capacity: Capacity;
   image: RoomImage[];
   status: number;
-  board_type_list: boolean;
+  board_type: BoardType;
+  room_type_id: number;
 }
 
 interface Capacity {
@@ -145,6 +146,24 @@ interface RoomImage {
   path: string;
   size: number;
   extension: string;
+}
+
+interface BoardType {
+  id: number;
+  description: string;
+  code: string;
+  status: number;
+  service: string;
+  title: Title;
+  financial: Financial[];
+}
+
+interface Financial {
+  board_type_id: number;
+  rate_date: string;
+  board_price: number;
+  net_price: number;
+  final_price: number;
 }
 
 // end rooms data type

@@ -239,6 +239,10 @@ const AccommodationDetailsOnDesktop: FC<AccommodationDetailsOnDesktopProps> = ({
   const { additionalDetailsAccommodation, roomsDetails } =
     useGlobalContext().accommodationContext.accommodationSearch;
 
+  useEffect(() => {
+    console.log("roomsDetails", roomsDetails);
+  }, [roomsDetails]);
+
   // handle open gallery
   const handleOpenGallery = (index: number) => {
     setSelectedIndex(index);
@@ -371,6 +375,12 @@ const AccommodationDetailsOnDesktop: FC<AccommodationDetailsOnDesktopProps> = ({
 
   // handle show images
   const renderImageDialog = () => {
+    if (
+      !additionalDetailsAccommodation ||
+      !additionalDetailsAccommodation?.media ||
+      additionalDetailsAccommodation?.media.images.length === 0
+    )
+      return null;
     return (
       <Dialog
         open={openGallery}
@@ -460,76 +470,92 @@ const AccommodationDetailsOnDesktop: FC<AccommodationDetailsOnDesktopProps> = ({
     );
   };
   const renderAccommodationImages = () => {
-    if (!additionalDetailsAccommodation) {
+    if (
+      !additionalDetailsAccommodation ||
+      !additionalDetailsAccommodation.media ||
+      additionalDetailsAccommodation.media.images.length === 0
+    ) {
       return (
-        <>
-          <div className="w-full h-64 flex flex-col items-center justify-center bg-main rounded-2xl">
-            <PhotoLibraryOutlinedIcon fontSize="large" />{" "}
-          </div>
-        </>
+        <div className="w-full h-64 flex flex-col items-center justify-center bg-main rounded-2xl">
+          <PhotoLibraryOutlinedIcon fontSize="large" />
+        </div>
       );
     }
-    const remainingImages =
-      additionalDetailsAccommodation.media.images.length - 4;
+
+    const images = additionalDetailsAccommodation.media.images;
+    const remainingImages = images.length - 4;
 
     return (
-      <>
-        <div className="grid grid-cols-3 gap-2 relative">
-          <div
-            className="min-h-80 col-span-3 relative cursor-pointer"
-            onClick={() => {
-              handleOpenGallery(0);
-            }}
-          >
+      <div className="grid grid-cols-3 gap-2 relative">
+        <div
+          className="min-h-80 col-span-3 relative cursor-pointer"
+          onClick={() => {
+            handleOpenGallery(0);
+          }}
+        >
+          {images[0] ? (
             <Image
-              src={
-                process.env.NEXT_PUBLIC_MEDIA_URL_1 +
-                "/" +
-                additionalDetailsAccommodation.media.images[0].path
-              }
+              src={process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + images[0]?.path}
               alt=""
               layout="fill"
               objectFit="cover"
               className="rounded-t-2xl"
             />
-          </div>
-          {[1, 2, 3].map((item) => (
-            <div
-              key={item}
-              className={`relative h-28 cursor-pointer`}
-              onClick={() => {
-                handleOpenGallery(item);
-              }}
-            >
-              <Image
-                src={
-                  process.env.NEXT_PUBLIC_MEDIA_URL_1 +
-                  "/" +
-                  additionalDetailsAccommodation.media.images[item].path
-                }
-                alt=""
-                layout="fill"
-                objectFit="cover"
-                className={`${
-                  item === 1
-                    ? "rounded-br-2xl"
-                    : item === 2
-                    ? ""
-                    : "rounded-bl-2xl"
-                }`}
-              />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-main rounded-t-2xl text-center text-text-main">
+              عکس نداره
             </div>
-          ))}
-          {remainingImages > 0 && (
-            <button
-              className="absolute bottom-4 left-2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-lg z-10"
-              onClick={() => handleOpenGallery(5)}
-            >
-              +{remainingImages} تصویر دیگر
-            </button>
           )}
         </div>
-      </>
+
+        {[1, 2, 3].map((item) => {
+          const image = images[item];
+          return (
+            <div
+              key={item}
+              className="relative h-28 cursor-pointer"
+              onClick={() => handleOpenGallery(item)}
+            >
+              {image ? (
+                <Image
+                  src={process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + image.path}
+                  alt=""
+                  layout="fill"
+                  objectFit="cover"
+                  className={
+                    item === 1
+                      ? "rounded-br-2xl"
+                      : item === 2
+                      ? ""
+                      : "rounded-bl-2xl"
+                  }
+                />
+              ) : (
+                <div
+                  className={`w-full h-full flex items-center justify-center bg-main text-text-main ${
+                    item === 1
+                      ? "rounded-br-2xl"
+                      : item === 2
+                      ? ""
+                      : "rounded-bl-2xl"
+                  }`}
+                >
+                  عکس نداره
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {remainingImages > 0 && (
+          <button
+            className="absolute bottom-4 left-2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-lg z-10"
+            onClick={() => handleOpenGallery(5)}
+          >
+            +{remainingImages} تصویر دیگر
+          </button>
+        )}
+      </div>
     );
   };
 
@@ -680,7 +706,7 @@ const AccommodationDetailsOnMobile = () => {
 // handle roomCard component
 interface RoomCardProps {
   room: RoomsDetailsDataType;
-  id: number;
+  id: string;
 }
 const RoomCard: FC<RoomCardProps> = ({ room, id }) => {
   // initial states
@@ -916,6 +942,9 @@ const RoomCard: FC<RoomCardProps> = ({ room, id }) => {
 
   // handle desktop
   const renderOnDesktop = () => {
+    const totalPrice = room.board_type.financial.reduce((sum, item) => {
+      return sum + item.board_price;
+    }, 0);
     return (
       <>
         <div className="hidden md:grid grid-cols-12 bg-main hover:shadow-md rounded-2xl overflow-hidden transition-shadow">
@@ -937,26 +966,12 @@ const RoomCard: FC<RoomCardProps> = ({ room, id }) => {
                 <span className="text-sm text-text-main font-semibold">
                   {room.title.fa}
                 </span>
-                <div className="flex items-center justify-start gap-2">
-                  <Chip
-                    variant="outlined"
-                    color="primary"
-                    label={`با صبحانه`}
-                    size="small"
-                  />{" "}
-                  <Chip
-                    variant="outlined"
-                    color="primary"
-                    label={`با صبحانه`}
-                    size="small"
-                  />{" "}
-                  <Chip
-                    variant="outlined"
-                    color="primary"
-                    label={`با صبحانه`}
-                    size="small"
-                  />
-                </div>
+                <Chip
+                  variant="outlined"
+                  color="primary"
+                  label={room.board_type.title.fa}
+                  size="small"
+                />{" "}
               </div>
               <span className="text-text-main text-xs font-semibold">
                 {room.capacity.adult} بزرگسال، {room.capacity.child} کودک
@@ -964,7 +979,7 @@ const RoomCard: FC<RoomCardProps> = ({ room, id }) => {
             </div>
             <div className="flex flex-col items-center justify-center gap-1">
               <span className="text-primary-main font-semibold text-base">
-                {formatInputWithCommas(1250000)}
+                {formatInputWithCommas(totalPrice / 10)}
               </span>
               {roomCounter === 0 ? (
                 <Button
