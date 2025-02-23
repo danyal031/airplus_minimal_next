@@ -3,7 +3,7 @@ import { createTheme, PaletteOptions, Theme } from "@mui/material/styles";
 import createCache from "@emotion/cache";
 import rtlPlugin from "stylis-plugin-rtl";
 import { prefixer } from "stylis";
-import { iransansFonts } from "./localFont";
+import { iranyekanxFonts } from "./localFont";
 // const getCssVariable = (variable: string, fallback: string = "#000") =>
 //   getComputedStyle(document.documentElement)
 //     .getPropertyValue(variable)
@@ -71,7 +71,7 @@ export const getTheme = (mode: "light" | "dark") => {
           }),
     },
     typography: {
-      fontFamily: iransansFonts.style.fontFamily,
+      fontFamily: iranyekanxFonts.style.fontFamily,
     },
     components: {
       MuiMenuItem: {

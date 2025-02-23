@@ -24,6 +24,12 @@ body {
   }
 }
 
+.ss02 {
+  -moz-font-feature-settings: "ss02";
+  -webkit-font-feature-settings: "ss02";
+  font-feature-settings: "ss02";
+}
+
 /* handle style scrollbar */
 
 ::-webkit-scrollbar {

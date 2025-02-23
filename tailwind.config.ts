@@ -39,7 +39,7 @@ const config: Config = {
         // divider: light2.divider,
       },
       fontFamily: {
-        sans: ["var(--font-iransans)"],
+        sans: ["var(--font-iranyekanx)"],
       },
     },
   },
