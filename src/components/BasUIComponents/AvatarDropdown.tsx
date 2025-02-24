@@ -135,7 +135,7 @@ export default function AvatarDropdown({ className = "" }: Props) {
               <ListItemButton
                 className="cursor-pointer"
                 onClick={() => {
-                  router.push("/account");
+                  router.push("/profile/account");
                 }}
               >
                 <ListItemText

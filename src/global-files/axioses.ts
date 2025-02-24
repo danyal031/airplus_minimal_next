@@ -184,7 +184,7 @@ export const unSubmitDiscountCode = async (data: any) => {
   });
 };
 
-export const getShoppingList = async () => {
+export const getOrderList = async () => {
   axios.defaults.headers.common["Authorization"] =
     "Bearer " + localStorage.getItem("access_token");
   // axios.defaults.headers.common["Authorization"] =
