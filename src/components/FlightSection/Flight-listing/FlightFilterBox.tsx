@@ -14,16 +14,81 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import { styled } from "@mui/material/styles";
 import { useGlobalContext } from "@/context/store";
 import ClearIcon from "@mui/icons-material/Clear";
+import Image from "next/image";
+import { Airline } from "@/DataTypes/flight/flightTicket";
 
 const FlightFilterBox = () => {
   // initial states
-  const { openFlightFilterDrawer, setOpenFlightFilterDrawer } =
-    useGlobalContext().flightContext.searchContext;
+  const {
+    openFlightFilterDrawer,
+    setOpenFlightFilterDrawer,
+    filteredSearchFlightResponseData,
+    travelRoute,
+    selectedWentFlight,
+  } = useGlobalContext().flightContext.searchContext;
+  const { setFlightFilter, flightFilteredItemsData } =
+    useGlobalContext().flightContext.flightFilterContext;
+
   const [openTimeToMove, setOpenTimeToMove] = useState<boolean>(false);
   const [openTicketType, setOpenTicketType] = useState<boolean>(false);
   const [openAirlines, setOpenAirlines] = useState<boolean>(false);
   const [openFlightClass, setOpenFlightClass] = useState<boolean>(false);
+  const [selectedTimeRange, setSelectedTimeRange] = useState<number | null>(
+    null
+  );
+  const [selectedTicketType, setSelectedTicketType] = useState<string | null>(
+    null
+  );
+  const [selectedAirline, setSelectedAirline] = useState<Airline[]>([]);
+
+  const [selectedCabinType, setSelectedCabinType] = useState<string | null>([]);
+
   const theme = useTheme();
+
+  // handle change cabin type
+  const handleChangeCabinType = (newValue: string) => {
+    setSelectedCabinType((prev) => (prev === newValue ? null : newValue));
+    setFlightFilter((prevFilters: any) => ({
+      ...prevFilters,
+      cabinType: prevFilters.cabinType === newValue ? [] : newValue,
+    }));
+  };
+
+  // handle change airline value
+  const handleChangeAirline = (airline: Airline) => {
+    setSelectedAirline((prev: any) => {
+      const isSelected = prev.some((a) => a.id === airline.id);
+      return isSelected
+        ? prev.filter((a) => a.id !== airline.id)
+        : [...prev, airline];
+    });
+
+    setFlightFilter((prevFilter: any) => ({
+      ...prevFilter,
+      airline: selectedAirline.some((a) => a.id === airline.id)
+        ? selectedAirline.filter((a) => a.id !== airline.id)
+        : [...selectedAirline, airline],
+    }));
+  };
+
+  // handle change ticket type value
+  const handleChangeTicketType = (value: string) => {
+    setSelectedTicketType((prev) => (prev === value ? null : value));
+    setFlightFilter((prevFilter: any) => ({
+      ...prevFilter,
+      ticketType: prevFilter.ticketType === value ? [] : value,
+    }));
+  };
+
+  // handle change time range value
+  const handleChangeTimeRange = (value: number, range: number[]) => {
+    setSelectedTimeRange((prev) => (prev === value ? null : value));
+    setFlightFilter((prevFilter: any) => ({
+      ...prevFilter,
+      timeRange:
+        prevFilter.timeRange?.toString() === range.toString() ? [0, 24] : range,
+    }));
+  };
 
   // for toggle drawer
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -56,7 +121,12 @@ const FlightFilterBox = () => {
       <>
         <div className="bg-paper p-2 rounded-xl flex items-center justify-between w-full text-sm">
           <span className="text-text-main font-semibold cursor-pointer">
-            تعداد نتایج
+            تعداد نتایج:{" "}
+            {travelRoute === "oneWay"
+              ? filteredSearchFlightResponseData?.Went.length
+              : !selectedWentFlight
+              ? filteredSearchFlightResponseData?.Went.length
+              : filteredSearchFlightResponseData?.Return.length}{" "}
           </span>
           <span className="text-primary-main font-semibold">حذف فیلتر</span>
         </div>
@@ -72,24 +142,28 @@ const FlightFilterBox = () => {
         label: "بامداد",
         icon: <LightModeIcon fontSize="small" />,
         range: "0-6",
+        value: [0, 6],
       },
       {
         id: 2,
         label: "صبح",
         icon: <LightModeIcon fontSize="small" />,
         range: "6-12",
+        value: [6, 12],
       },
       {
         id: 3,
         label: "ظهر",
         icon: <LightModeIcon fontSize="small" />,
         range: "12-18",
+        value: [12, 18],
       },
       {
         id: 4,
         label: "شب",
         icon: <LightModeIcon fontSize="small" />,
         range: "18-24",
+        value: [18, 24],
       },
     ];
     return (
@@ -114,8 +188,14 @@ const FlightFilterBox = () => {
             <div className="grid grid-cols-4 gap-2">
               {timeRange.map((item) => (
                 <div
+                  onClick={() => {
+                    handleChangeTimeRange(item.id, item.value);
+                  }}
                   key={item.id}
-                  className={`bg-main text-gray-400 p-1 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-px`}
+                  className={`${
+                    selectedTimeRange === item.id &&
+                    "bg-primary-main text-paper"
+                  } bg-main text-gray-400 p-1 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-px`}
                 >
                   {item.icon}
                   <span className="font-semibold text-xs">{item.label}</span>
@@ -153,12 +233,21 @@ const FlightFilterBox = () => {
           </div>
           {openTicketType && (
             <div className="flex items-center justify-start gap-2">
-              <span className="border border-gray-400 p-1 px-2 rounded-xl text-gray-400 hover:border-primary-main hover:text-primary-main cursor-pointer">
-                سیستمی
-              </span>
-              <span className="border border-gray-400 p-1 px-2 rounded-xl text-gray-400 hover:border-primary-main hover:text-primary-main cursor-pointer">
-                چارتری
-              </span>
+              {flightFilteredItemsData.ticketType.map((item: any) => (
+                <span
+                  onClick={() => {
+                    handleChangeTicketType(item);
+                  }}
+                  key={item.id}
+                  className={`${
+                    selectedTicketType === item
+                      ? "border-primary-main text-primary-main"
+                      : "text-text-main"
+                  } p-1 border-divider border px-2 rounded-xl hover:border-primary-main hover:text-primary-main cursor-pointer`}
+                >
+                  {item === "Charter" ? "چارتری" : "سیستمی"}
+                </span>
+              ))}
             </div>
           )}
         </div>
@@ -219,7 +308,6 @@ const FlightFilterBox = () => {
         backgroundColor: theme.palette.primary.main,
       },
     });
-    const airlines = [1, 2, 3, 4, 5];
     return (
       <>
         <div className="bg-paper p-2 md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
@@ -240,7 +328,7 @@ const FlightFilterBox = () => {
           </div>
           {openAirlines && (
             <div className="grid grid-cols-1 gap-2">
-              {airlines.map((item) => {
+              {flightFilteredItemsData.airlineType.map((item: any) => {
                 return (
                   <>
                     <div
@@ -248,12 +336,19 @@ const FlightFilterBox = () => {
                       className="flex items-center justify-between"
                     >
                       <div className="flex items-center justify-center gap-2">
-                        <span className="text-xs text-black">logo</span>
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${item.logo}`}
+                          alt={item.title_fa}
+                          width={30}
+                          height={30}
+                        />
                         <span className="text-sm text-gray-400">
-                          هواپیمایی وارش
+                          {item.title_fa}
                         </span>
                       </div>
                       <Checkbox
+                        checked={selectedAirline.some((a) => a.id === item.id)}
+                        onChange={() => handleChangeAirline(item)}
                         checkedIcon={<BpCheckedIcon />}
                         icon={<BpIcon />}
                       />
@@ -292,15 +387,21 @@ const FlightFilterBox = () => {
           </div>
           {openFlightClass && (
             <div className="flex items-center justify-start gap-2">
-              <span className="border border-gray-400 p-1 px-2 rounded-xl text-gray-400 hover:border-primary-main hover:text-primary-main cursor-pointer">
-                پریمیوم اکونومی
-              </span>
-              <span className="border border-gray-400 p-1 px-2 rounded-xl text-gray-400 hover:border-primary-main hover:text-primary-main cursor-pointer">
-                اکونومی
-              </span>{" "}
-              <span className="border border-gray-400 p-1 px-2 rounded-xl text-gray-400 hover:border-primary-main hover:text-primary-main cursor-pointer">
-                سیستمی
-              </span>
+              {flightFilteredItemsData?.cabinType.map((item: string) => (
+                <span
+                  onClick={() => {
+                    handleChangeCabinType(item);
+                  }}
+                  key={item}
+                  className={`${
+                    selectedCabinType === item
+                      ? "border-primary-main text-primary-main"
+                      : "text-text-main"
+                  } border border-divider p-1 px-2 rounded-xl hover:border-primary-main hover:text-primary-main cursor-pointer`}
+                >
+                  {item}
+                </span>
+              ))}
             </div>
           )}
         </div>

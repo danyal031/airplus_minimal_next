@@ -9,7 +9,7 @@ import { FlightCardSkelton } from "@/components/Skelton-Components/FlightSection
 
 const FlightsList = () => {
   // initial states
-  const { travelRoute, filteredSearchFlightResponseData, ticketLoading } =
+  const { filteredSearchFlightResponseData, ticketLoading } =
     useGlobalContext().flightContext.searchContext;
   const searchParams = useSearchParams();
   return (

@@ -1,8 +1,12 @@
 "use client";
-import React, { FC, Suspense, useEffect } from "react";
+import React, { FC, Suspense, useEffect, useState } from "react";
 import FlightFilterBox from "./FlightFilterBox";
 import FlightsList from "./FlightsList";
-import { AirportDataType } from "@/DataTypes/flight/flightTicket";
+import {
+  Airline,
+  AirportDataType,
+  FilteredItemsDataDataType,
+} from "@/DataTypes/flight/flightTicket";
 import { useGlobalContext } from "@/context/store";
 import {
   ReadonlyURLSearchParams,
@@ -37,8 +41,19 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
     destination,
     fromDate,
     toDate,
-    // airports,
+    searchFlightResponseData,
+    travelRoute,
+    selectedWentFlight,
+    ticketLoading,
   } = useGlobalContext().flightContext.searchContext;
+  const {
+    flightFilter,
+    flightSelectedSortFiltered,
+    flightFilteredItemsData,
+    setFlightFilteredItemsData,
+    setSelectedAirlineFiltered,
+  } = useGlobalContext().flightContext.flightFilterContext;
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -46,7 +61,6 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   useEffect(() => {
     setAirports(airports);
   }, []);
-
   const paramsValidation = (searchParams: ReadonlyURLSearchParams) => {
     console.log("airport listing: ", airports);
     let dateRegex: RegExp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/i;
@@ -183,10 +197,150 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
     handleSearchByStatusRequest();
   }, [changeStatusRequest]);
 
+  // handle filters
+  useEffect(() => {
+    if (searchFlightResponseData) {
+      let filteredData =
+        searchFlightResponseData[
+          travelRoute === "oneWay"
+            ? "Went"
+            : !selectedWentFlight
+            ? "Went"
+            : "Return"
+        ];
+
+      // handle cabin type
+      if (flightFilter.cabinType.length > 0) {
+        filteredData = filteredData.filter((item) =>
+          flightFilter.cabinType.includes(item.Classes[0].CabinType.title.fa)
+        );
+      }
+
+      // handle airline filter
+      if (flightFilter.airline.length > 0) {
+        filteredData = filteredData.filter((item) =>
+          flightFilter.airline.some(
+            (airline) => airline.iata === item.Airline.iata
+          )
+        );
+      }
+
+      // handle ticket type filter
+      if (flightFilter.ticketType.length > 0) {
+        filteredData = filteredData.filter((item) =>
+          flightFilter.ticketType.includes(item.FlightType)
+        );
+      }
+
+      // handle filter time range
+      filteredData = filteredData.filter((flight) => {
+        const timePart = flight.DepartureDateTime.split(" ")[1];
+        const [hours, minutes] = timePart.split(":").map(Number);
+        const departureTime = hours + minutes / 60;
+        return (
+          departureTime >= flightFilter.timeRange[0] &&
+          departureTime <= flightFilter.timeRange[1]
+        );
+      });
+
+      // handle sort filter
+      if (flightSelectedSortFiltered === "4") {
+        filteredData.sort(
+          (a, b) =>
+            new Date(a.DepartureDateTime).getTime() -
+            new Date(b.DepartureDateTime).getTime()
+        );
+      } else if (flightSelectedSortFiltered === "5") {
+        filteredData.sort(
+          (a, b) =>
+            new Date(b.DepartureDateTime).getTime() -
+            new Date(a.DepartureDateTime).getTime()
+        );
+      } else if (flightSelectedSortFiltered === "2") {
+        filteredData.sort(
+          (a, b) =>
+            new Date(a.Classes[0].Financial.Adult.Payable).getTime() -
+            new Date(b.Classes[0].Financial.Adult.Payable).getTime()
+        );
+      } else if (flightSelectedSortFiltered === "3") {
+        filteredData.sort(
+          (a, b) =>
+            new Date(b.Classes[0].Financial.Adult.Payable).getTime() -
+            new Date(a.Classes[0].Financial.Adult.Payable).getTime()
+        );
+      }
+
+      // handle set new filtered data
+      travelRoute === "oneWay"
+        ? setFilteredSearchFlightResponseData((pre) => ({
+            ...pre,
+            Went: filteredData ?? [],
+            Return: pre?.Return ?? [],
+          }))
+        : !selectedWentFlight
+        ? setFilteredSearchFlightResponseData((pre) => ({
+            ...pre,
+            Went: filteredData ?? [],
+            Return: pre?.Return ?? [],
+          }))
+        : setFilteredSearchFlightResponseData((pre) => ({
+            ...pre,
+            Went: pre?.Went ?? [],
+            Return: filteredData ?? [],
+          }));
+    }
+  }, [
+    flightFilter,
+    flightSelectedSortFiltered,
+    searchFlightResponseData,
+    travelRoute,
+    selectedWentFlight,
+  ]);
+
+  const handleResetFilteredItems = () => {
+    setSelectedAirlineFiltered([]);
+    setFilteredSearchFlightResponseData(searchFlightResponseData);
+  };
+
+  useEffect(() => {
+    if (searchFlightResponseData) {
+      handleResetFilteredItems();
+      // for cabin type filter
+      const cabinItemsFilterData: string[] = [];
+      const ticketItemsFilterData: string[] = [];
+      const airlineItemsFilterData: Airline[] = [];
+      searchFlightResponseData[
+        travelRoute == "oneWay"
+          ? "Went"
+          : !selectedWentFlight
+          ? "Went"
+          : "Return"
+      ].forEach((item) => {
+        if (
+          !cabinItemsFilterData.includes(item.Classes[0].CabinType.title.fa)
+        ) {
+          cabinItemsFilterData.push(item.Classes[0].CabinType.title.fa);
+        }
+        if (!ticketItemsFilterData.includes(item.FlightType)) {
+          ticketItemsFilterData.push(item.FlightType);
+        }
+        airlineItemsFilterData.push(item.Airline);
+      });
+      console.log(airlineItemsFilterData);
+      setFlightFilteredItemsData({
+        ...flightFilteredItemsData,
+        cabinType: cabinItemsFilterData,
+        ticketType: ticketItemsFilterData,
+        airlineType: removeDuplicatesAirlines(airlineItemsFilterData),
+      });
+      console.log("exist cabin's type", cabinItemsFilterData);
+    }
+  }, [searchFlightResponseData, travelRoute, selectedWentFlight]);
+
   return (
     <div className="grid grid-cols-12 gap-4">
       <div className="col-span-3">
-        <FlightFilterBox />
+        {ticketLoading ? "loading" : <FlightFilterBox />}
       </div>
       <div className="col-span-12 md:col-span-9">
         <Suspense>
@@ -196,5 +350,16 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
     </div>
   );
 };
+
+function removeDuplicatesAirlines(arr: Airline[]): Airline[] {
+  const uniqueMap = new Map();
+  arr.forEach((item) => {
+    const keyValue: string = item["iata"];
+    if (!uniqueMap.has(keyValue)) {
+      uniqueMap.set(keyValue, item);
+    }
+  });
+  return Array.from(uniqueMap.values());
+}
 
 export default SectionGridFilterCard;

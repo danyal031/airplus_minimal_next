@@ -38,6 +38,11 @@ const TicketsList = () => {
     selectedReturnFlight,
     setOpenFlightFilterDrawer,
   } = useGlobalContext().flightContext.searchContext;
+  const {
+    setFlightFilter,
+    flightSelectedSortFiltered,
+    setFlightSelectedSortFiltered,
+  } = useGlobalContext().flightContext.flightFilterContext;
   const [openSortingDrawer, setOpenSortingDrawer] = useState<boolean>(false);
 
   // handle change open sorting drawer
@@ -48,6 +53,9 @@ const TicketsList = () => {
   // handle change of filter tab
   const handleFilterTabChange = (newValue: string) => {
     setFilterTabValue(newValue);
+    if (newValue && newValue !== flightSelectedSortFiltered) {
+      setFlightSelectedSortFiltered(newValue);
+    }
   };
 
   const renderFilterTab = () => {
@@ -66,7 +74,9 @@ const TicketsList = () => {
             return (
               <span
                 key={tab.id}
-                onClick={() => handleFilterTabChange(tab.id)}
+                onClick={() => {
+                  handleFilterTabChange(tab.id);
+                }}
                 className={`truncate col-span-2 text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${
                   isActive
                     ? "bg-main text-primary-main"

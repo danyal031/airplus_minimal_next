@@ -1,6 +1,14 @@
 //? type drop of location type
 export type TypeDropOffLocationType = "roundTrip" | "oneWay" | "";
 
+//? filtered items type
+export type FilteredItemsDataDataType = {
+  cabinType: string[];
+  ticketType: string[];
+  airlineType: Airline[];
+};
+//? end filtered items type
+
 //? airport type
 export type AirportDataType = {
   id: number;

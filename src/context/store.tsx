@@ -17,7 +17,9 @@ import {
 } from "@/DataTypes/globalTypes";
 import { UserDataType } from "@/DataTypes/user";
 import {
+  Airline,
   AirportDataType,
+  FilteredItemsDataDataType,
   FlightResponseDataType,
   FlightTicketDataType,
   TypeDropOffLocationType,
@@ -109,6 +111,16 @@ interface ContextProps {
       setFlightPassengersTickets: Dispatch<SetStateAction<any[]>>;
       openFlightFilterDrawer: boolean;
       setOpenFlightFilterDrawer: Dispatch<SetStateAction<boolean>>;
+    };
+    flightFilterContext: {
+      flightFilter: any;
+      setFlightFilter: Dispatch<SetStateAction<any>>;
+      flightSelectedSortFiltered: string;
+      setFlightSelectedSortFiltered: Dispatch<SetStateAction<string>>;
+      flightFilteredItemsData: any;
+      setFlightFilteredItemsData: Dispatch<SetStateAction<any>>;
+      selectedAirlinesFiltered: Airline[];
+      setSelectedAirlineFiltered: Dispatch<SetStateAction<Airline[]>>;
     };
   };
   accommodationContext: {
@@ -212,6 +224,21 @@ const GlobalContext = createContext<ContextProps>({
       openFlightFilterDrawer: false,
       setOpenFlightFilterDrawer: () => {},
     },
+    flightFilterContext: {
+      flightFilter: {
+        cabinType: [] as string[],
+        ticketType: [] as string[],
+        airline: [] as Airline[],
+        timeRange: [0, 24] as number[],
+      },
+      setFlightFilter: () => {},
+      flightSelectedSortFiltered: "1",
+      setFlightSelectedSortFiltered: () => {},
+      flightFilteredItemsData: null,
+      setFlightFilteredItemsData: () => {},
+      selectedAirlinesFiltered: [],
+      setSelectedAirlineFiltered: () => {},
+    },
   },
   accommodationContext: {
     accommodationSearch: {
@@ -261,6 +288,21 @@ export const GlobalContextProvider = ({
   const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
+
+  // flight filter
+  const [flightFilter, setFlightFilter] = useState({
+    cabinType: [] as string[],
+    ticketType: [] as string[],
+    airline: [] as Airline[],
+    timeRange: [0, 24] as number[],
+  });
+  const [flightSelectedSortFiltered, setFlightSelectedSortFiltered] =
+    useState<string>("1");
+  const [flightFilteredItemsData, setFlightFilteredItemsData] =
+    useState<FilteredItemsDataDataType | null>(null);
+  const [selectedAirlinesFiltered, setSelectedAirlineFiltered] = useState<
+    Airline[]
+  >([]);
   // search flight
   const [openFlightFilterDrawer, setOpenFlightFilterDrawer] =
     useState<boolean>(false);
@@ -394,6 +436,16 @@ export const GlobalContextProvider = ({
                 setFlightPassengersTickets,
                 openFlightFilterDrawer,
                 setOpenFlightFilterDrawer,
+              },
+              flightFilterContext: {
+                flightFilter,
+                setFlightFilter,
+                flightSelectedSortFiltered,
+                setFlightSelectedSortFiltered,
+                flightFilteredItemsData,
+                setFlightFilteredItemsData,
+                selectedAirlinesFiltered,
+                setSelectedAirlineFiltered,
               },
             },
             accommodationContext: {
