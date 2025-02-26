@@ -340,7 +340,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   return (
     <div className="grid grid-cols-12 gap-4">
       <div className="col-span-3">
-        {ticketLoading ? "loading" : <FlightFilterBox />}
+        <FlightFilterBox />
       </div>
       <div className="col-span-12 md:col-span-9">
         <Suspense>

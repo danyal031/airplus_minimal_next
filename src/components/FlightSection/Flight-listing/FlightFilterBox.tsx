@@ -16,6 +16,7 @@ import { useGlobalContext } from "@/context/store";
 import ClearIcon from "@mui/icons-material/Clear";
 import Image from "next/image";
 import { Airline } from "@/DataTypes/flight/flightTicket";
+import AirlineSkelton from "@/components/Skelton-Components/FlightSection/FlightFilterBoxItems/Airlines/AirlineSkelton";
 
 const FlightFilterBox = () => {
   // initial states
@@ -328,34 +329,40 @@ const FlightFilterBox = () => {
           </div>
           {openAirlines && (
             <div className="grid grid-cols-1 gap-2">
-              {flightFilteredItemsData.airlineType.map((item: any) => {
-                return (
-                  <>
-                    <div
-                      key={item}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${item.logo}`}
-                          alt={item.title_fa}
-                          width={30}
-                          height={30}
+              {flightFilteredItemsData ? (
+                flightFilteredItemsData.airlineType.map((item: any) => {
+                  return (
+                    <>
+                      <div
+                        key={item}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center justify-center gap-2">
+                          <Image
+                            src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${item.logo}`}
+                            alt={item.title_fa}
+                            width={30}
+                            height={30}
+                          />
+                          <span className="text-sm text-gray-400">
+                            {item.title_fa}
+                          </span>
+                        </div>
+                        <Checkbox
+                          checked={selectedAirline.some(
+                            (a) => a.id === item.id
+                          )}
+                          onChange={() => handleChangeAirline(item)}
+                          checkedIcon={<BpCheckedIcon />}
+                          icon={<BpIcon />}
                         />
-                        <span className="text-sm text-gray-400">
-                          {item.title_fa}
-                        </span>
                       </div>
-                      <Checkbox
-                        checked={selectedAirline.some((a) => a.id === item.id)}
-                        onChange={() => handleChangeAirline(item)}
-                        checkedIcon={<BpCheckedIcon />}
-                        icon={<BpIcon />}
-                      />
-                    </div>
-                  </>
-                );
-              })}
+                    </>
+                  );
+                })
+              ) : (
+                <AirlineSkelton />
+              )}
             </div>
           )}
         </div>
