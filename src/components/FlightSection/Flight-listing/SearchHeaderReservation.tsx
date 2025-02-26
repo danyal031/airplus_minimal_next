@@ -14,7 +14,6 @@ const SearchHeaderReservation = () => {
     useGlobalContext().flightContext.searchContext;
   const [showSummarySearch, setShowSummarySearch] = useState<boolean>(true);
   const [tabValue, setTabValue] = useState<string>("1");
-  const router = useRouter();
   const searchParams = useSearchParams();
   const path = usePathname();
   const [openSearchDrawer, setOpenSearchDrawer] = useState<boolean>(false);
@@ -26,10 +25,8 @@ const SearchHeaderReservation = () => {
     switch (pathName) {
       case "flights":
         setTabValue("1");
-      case "accommodations":
-        setTabValue("2");
     }
-  }, []);
+  }, [path]);
 
   // handle toggle open search drawer
   const toggleSearchDrawer = (newOpen: boolean) => () => {
@@ -44,11 +41,11 @@ const SearchHeaderReservation = () => {
   // handle render tab
   const renderTab = () => {
     const tabs = [
-      { id: "1", label: "پرواز" },
-      { id: "2", label: "هتل و اقامتگاه" },
-      { id: "3", label: "اتوبوس" },
-      { id: "4", label: "تور" },
-      { id: "5", label: "قطار" },
+      { id: "1", label: "پرواز", active: true },
+      { id: "2", label: "هتل و اقامتگاه", active: false },
+      { id: "3", label: "اتوبوس", active: false },
+      { id: "4", label: "تور", active: false },
+      { id: "5", label: "قطار", active: false },
     ];
     return (
       <>
@@ -61,7 +58,11 @@ const SearchHeaderReservation = () => {
             return (
               <span
                 key={tab.id}
-                onClick={() => handleChangeTab(tab.id)}
+                onClick={() => {
+                  if (tab.active) {
+                    handleChangeTab(tab.id);
+                  }
+                }}
                 className={`text-paper hover:cursor-pointer ${
                   isActive
                     ? showSummarySearch
