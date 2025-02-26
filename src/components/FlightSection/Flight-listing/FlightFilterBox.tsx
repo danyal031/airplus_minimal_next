@@ -17,6 +17,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Image from "next/image";
 import { Airline } from "@/DataTypes/flight/flightTicket";
 import AirlineSkelton from "@/components/Skelton-Components/FlightSection/FlightFilterBoxItems/Airlines/AirlineSkelton";
+import TicketTypesSkelton from "@/components/Skelton-Components/FlightSection/FlightFilterBoxItems/TicketTypes/TicketTypesSkelton";
+import CabinTypesSkelton from "@/components/Skelton-Components/FlightSection/FlightFilterBoxItems/CabinTypes/CabinTypesSkelton";
 
 const FlightFilterBox = () => {
   // initial states
@@ -234,21 +236,25 @@ const FlightFilterBox = () => {
           </div>
           {openTicketType && (
             <div className="flex items-center justify-start gap-2">
-              {flightFilteredItemsData.ticketType.map((item: any) => (
-                <span
-                  onClick={() => {
-                    handleChangeTicketType(item);
-                  }}
-                  key={item.id}
-                  className={`${
-                    selectedTicketType === item
-                      ? "border-primary-main text-primary-main"
-                      : "text-text-main"
-                  } p-1 border-divider border px-2 rounded-xl hover:border-primary-main hover:text-primary-main cursor-pointer`}
-                >
-                  {item === "Charter" ? "چارتری" : "سیستمی"}
-                </span>
-              ))}
+              {flightFilteredItemsData ? (
+                flightFilteredItemsData.ticketType.map((item: any) => (
+                  <span
+                    onClick={() => {
+                      handleChangeTicketType(item);
+                    }}
+                    key={item.id}
+                    className={`${
+                      selectedTicketType === item
+                        ? "border-primary-main text-primary-main"
+                        : "text-text-main"
+                    } p-1 border-divider border px-2 rounded-xl hover:border-primary-main hover:text-primary-main cursor-pointer`}
+                  >
+                    {item === "Charter" ? "چارتری" : "سیستمی"}
+                  </span>
+                ))
+              ) : (
+                <TicketTypesSkelton />
+              )}
             </div>
           )}
         </div>
@@ -394,21 +400,25 @@ const FlightFilterBox = () => {
           </div>
           {openFlightClass && (
             <div className="flex items-center justify-start gap-2">
-              {flightFilteredItemsData?.cabinType.map((item: string) => (
-                <span
-                  onClick={() => {
-                    handleChangeCabinType(item);
-                  }}
-                  key={item}
-                  className={`${
-                    selectedCabinType === item
-                      ? "border-primary-main text-primary-main"
-                      : "text-text-main"
-                  } border border-divider p-1 px-2 rounded-xl hover:border-primary-main hover:text-primary-main cursor-pointer`}
-                >
-                  {item}
-                </span>
-              ))}
+              {flightFilteredItemsData ? (
+                flightFilteredItemsData?.cabinType.map((item: string) => (
+                  <span
+                    onClick={() => {
+                      handleChangeCabinType(item);
+                    }}
+                    key={item}
+                    className={`${
+                      selectedCabinType === item
+                        ? "border-primary-main text-primary-main"
+                        : "text-text-main"
+                    } border border-divider p-1 px-2 rounded-xl hover:border-primary-main hover:text-primary-main cursor-pointer`}
+                  >
+                    {item}
+                  </span>
+                ))
+              ) : (
+                <CabinTypesSkelton />
+              )}
             </div>
           )}
         </div>
