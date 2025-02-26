@@ -140,7 +140,7 @@ const ServicesOnDesktop = () => {
       <div className="hidden md:grid grid-cols-12 gap-6">
         <div className="col-span-12 flex items-center justify-center">
           <span className="text-text-main font-bold text-lg">
-            خدمات {config?.title.fa}
+            خدمات {config?.brand.fa}
           </span>
         </div>
         <div className="col-span-12">{renderTypeOfServices()}</div>
@@ -239,7 +239,7 @@ const ServicesOnMobile = () => {
       <div className="md:hidden grid grid-cols-1 gap-5">
         <div className="flex items-center justify-center">
           <span className="text-text-main font-bold text-lg">
-            خدمات {config?.title.fa}
+            خدمات {config?.brand.fa}
           </span>
         </div>
         <div className="">{renderTypeOfServices()}</div>
