@@ -42,11 +42,14 @@ const ResponsiveAppBar = () => {
   const renderOnDesktop = () => {
     return (
       <>
-        <AppBar
-          position="sticky"
-          className="border-b-2 border-paper md:block hidden"
+        <div
+          // position="sticky"
+          className="md:block hidden sticky z-20 top-0 border-0 bg-main"
         >
-          <Container maxWidth="lg" className="">
+          <Container
+            maxWidth="lg"
+            className=" bg-paper rounded-tab-up px-6 py-1"
+          >
             <Toolbar disableGutters className="grid grid-cols-12">
               <div className="flex items-center justify-start col-span-3">
                 <Image
@@ -78,18 +81,11 @@ const ResponsiveAppBar = () => {
                 ))}
               </div>
               <div className="flex items-center justify-end gap-3 col-span-3">
-                <Button
-                  variant="contained"
-                  size="medium"
-                  className="rounded-lg bg-paper text-primary-main font-semibold"
-                >
-                  Helpix
-                </Button>
                 <AvatarDropdown />
               </div>
             </Toolbar>
           </Container>
-        </AppBar>
+        </div>
       </>
     );
   };
