@@ -37,12 +37,17 @@ const ProfileTabsContainer = () => {
   // handle render tabs
   const renderTabs = () => {
     const tabs = [
-      { id: "1", label: "حساب کاربری", path: "/profile/account" },
-      { id: "2", label: "مسافران", path: "/profile/passengers" },
-      { id: "3", label: "نشان ها", path: "/profile/bookmarks" },
-      { id: "4", label: "تراکنش ها", path: "/profile/transactions" },
-      { id: "5", label: "سفرها", path: "/profile/orders" },
-      { id: "6", label: "پشتیبانی", path: "/profile/support" },
+      { id: "1", label: "حساب کاربری", path: "/profile/account", active: true },
+      { id: "2", label: "مسافران", path: "/profile/passengers", active: true },
+      { id: "3", label: "نشان ها", path: "/profile/bookmarks", active: false },
+      {
+        id: "4",
+        label: "تراکنش ها",
+        path: "/profile/transactions",
+        active: true,
+      },
+      { id: "5", label: "سفرها", path: "/profile/orders", active: true },
+      { id: "6", label: "پشتیبانی", path: "/profile/support", active: false },
     ];
 
     return (
@@ -58,8 +63,10 @@ const ProfileTabsContainer = () => {
             <span
               key={tab.id}
               onClick={() => {
-                handleChangeTabValue(tab.id);
-                router.push(tab.path as Route);
+                if (tab.active) {
+                  handleChangeTabValue(tab.id);
+                  router.push(tab.path as Route);
+                }
               }}
               className={`text-paper hover:cursor-pointer truncate w-auto ${
                 isActive ? "rounded-tab-down" : ""

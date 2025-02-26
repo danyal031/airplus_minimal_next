@@ -96,41 +96,47 @@ const TransactionsContainer = () => {
   const renderFinancialList = () => {
     return (
       <>
-        {showLoading ? (
-          <FinancialListProgress />
-        ) : financialList.length === 0 ? (
-          <span className="text-text-main text-base">سندی وجود ندارد</span>
-        ) : (
-          <div className="grid grid-cols-1 gap-0 border border-divider rounded-2xl overflow-hidden">
-            <div className="bg-main p-4 grid grid-cols-6 gap-2">
-              <span className="flex items-center justify-center text-sm font-semibold">
-                شماره سند
-              </span>
-              <span className="flex items-center justify-center text-sm font-semibold">
-                مبلغ
-              </span>
-              <span className="flex items-center justify-center text-sm font-semibold">
-                نحوه پرداخت
-              </span>
-              <span className="flex items-center justify-center text-sm font-semibold">
-                تاریخ سند
-              </span>
-              <span className="flex items-center justify-center text-sm font-semibold">
-                نوع سند
-              </span>
-              <span className="flex items-center justify-center text-sm font-semibold">
-                کد پیگیری
-              </span>
-            </div>
-            {financialList.map((financial, index) => (
+        <div className="grid grid-cols-1 gap-0 border border-divider rounded-2xl overflow-hidden">
+          <div className="bg-main p-4 grid grid-cols-6 gap-2">
+            <span className="flex items-center justify-center text-sm font-semibold">
+              شماره سند
+            </span>
+            <span className="flex items-center justify-center text-sm font-semibold">
+              مبلغ
+            </span>
+            <span className="flex items-center justify-center text-sm font-semibold">
+              نحوه پرداخت
+            </span>
+            <span className="flex items-center justify-center text-sm font-semibold">
+              تاریخ سند
+            </span>
+            <span className="flex items-center justify-center text-sm font-semibold">
+              نوع سند
+            </span>
+            <span className="flex items-center justify-center text-sm font-semibold">
+              کد پیگیری
+            </span>
+          </div>
+          {showLoading ? (
+            Array.from(Array(5)).map((item, index) => {
+              return (
+                <FinancialListProgress
+                  isLast={index === financialList.length - 1}
+                />
+              );
+            })
+          ) : financialList.length === 0 ? (
+            <span className="text-text-main text-base">سندی وجود ندارد</span>
+          ) : (
+            financialList.map((financial, index) => (
               <FinancialCard
                 isLast={index === financialList.length - 1}
                 financial={financial}
                 key={index}
               />
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </>
     );
   };
