@@ -17,10 +17,8 @@ import { useGlobalContext } from "@/context/store";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
-interface SearchBoxProps {
-  airports: AirportDataType[] | [];
-}
-const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
+
+const SearchBox = () => {
   // initial states
   const [config, setConfig] = useState<null | null | ConfigDataType>(null);
   const { setAirports } = useGlobalContext().flightContext.searchContext;
@@ -29,11 +27,6 @@ const SearchBox: FC<SearchBoxProps> = ({ airports }) => {
   useEffect(() => {
     setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
   }, []);
-
-  useEffect(() => {
-    console.log("airports list: ", airports);
-    setAirports(airports);
-  }, [airports]);
 
   return (
     <>

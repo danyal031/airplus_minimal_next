@@ -1,12 +1,37 @@
-import React from "react";
-import SearchBox from "./indexPageComponents/SearchBox";
-import Services from "./indexPageComponents/Services";
-import TabDescriptionsComponent from "./indexPageComponents/TabDescriptionsComponent";
+"use client";
+import React, { FC, lazy, useEffect } from "react";
+import { motion } from "framer-motion";
 import { getAirportsInServer } from "@/global-files/fetches";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
-const HomeComponents = async () => {
-  const airports: AirportDataType[] = await getAirportsInServer();
+import { useGlobalContext } from "@/context/store";
+// for lazy loading
+const SearchBox = lazy(() => import("./indexPageComponents/SearchBox"));
+const Services = lazy(() => import("./indexPageComponents/Services"));
+const TabDescriptionsComponent = lazy(
+  () => import("./indexPageComponents/TabDescriptionsComponent")
+);
+
+interface HomeComponentsProps {
+  airports: AirportDataType[] | [];
+}
+
+const HomeComponents: FC<HomeComponentsProps> = ({ airports }) => {
+  // initial states
+  const { setAirports } = useGlobalContext().flightContext.searchContext;
+
+  // handle initial states
+  useEffect(() => {
+    setAirports(airports);
+  }, []);
+
+  // base animation for each component
+  const itemAnimation = {
+    initial: { opacity: 0, y: 50 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.5 },
+  };
 
   const renderOnDesktop = () => {
     return (
@@ -21,10 +46,22 @@ const HomeComponents = async () => {
                 <HeadsetMicIcon fontSize="small" className="text-paper" />
               </span>
             </div> */}
-
-            <SearchBox airports={airports} />
-            <Services />
-            <TabDescriptionsComponent />
+            <motion.div {...itemAnimation}>
+              <SearchBox />
+            </motion.div>{" "}
+            <motion.div
+              {...itemAnimation}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Services />
+            </motion.div>{" "}
+            <motion.div
+              {...itemAnimation}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="grid grid-cols-1 gap-14"
+            >
+              <TabDescriptionsComponent />
+            </motion.div>
           </div>
         </div>
       </>
@@ -34,7 +71,7 @@ const HomeComponents = async () => {
     return (
       <>
         <div className="md:hidden grid grid-cols-1 gap-14 p-4">
-          <SearchBox airports={airports} />
+          <SearchBox />
           <Services />
           <TabDescriptionsComponent />
         </div>
