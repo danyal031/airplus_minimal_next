@@ -1,5 +1,5 @@
 "use client";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import React from "react";
 
 const AccountContainer = () => {
@@ -173,6 +173,17 @@ const AccountContainer = () => {
 
       {/* render financial details */}
       {renderFinancialDetails()}
+
+      {/* render submit button */}
+      <div className="flex items-center justify-end">
+        <Button
+          variant="contained"
+          color="primary"
+          className="rounded-lg min-w-44"
+        >
+          ذخیره اطلاعات
+        </Button>
+      </div>
     </div>
   );
 };
