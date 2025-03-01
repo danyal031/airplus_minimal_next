@@ -112,7 +112,7 @@ const FlightDescriptionOnDesktop = () => {
         <div className="grid grid-cols-1 gap-4">
           <div className="flex items-center justify-center">
             <span className="text-text-main text-lg font-bold">
-              مزایای خرید هواپیما از ههروماه{" "}
+              مزایای خرید بلیت هواپیما از {config?.brand.fa}{" "}
             </span>
           </div>
           <div className="w-3/4 flex items-center justify-center gap-3 justify-self-center">
@@ -270,7 +270,7 @@ const FlightDescriptionOnMobile = () => {
         <div className="grid grid-cols-1 gap-4">
           <div className="flex items-center justify-center">
             <span className="text-text-main text-lg font-bold">
-              مزایای خرید هواپیما از ههروماه{" "}
+              مزایای خرید بلیت هواپیما از {config?.brand.fa}{" "}
             </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
