@@ -129,26 +129,26 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
 
   // render form
   const renderForm = () => {
-    switch (tabValueSearchBox) {
-      case "1":
-        return <FlightSearchForm />;
-      case "2":
-        return <AccommodationSearchForm />;
-      default:
-        return renderComingSoon();
-    }
-    // if (config?.office_id === 1001) {
-    //   switch (tabValueSearchBox) {
-    //     case "1":
-    //       return <FlightSearchForm />;
-    //     case "2":
-    //       return <AccommodationSearchForm />;
-    //     default:
-    //       return renderComingSoon();
-    //   }
-    // } else {
-    //   return renderComingSoon();
+    // switch (tabValueSearchBox) {
+    //   case "1":
+    //     return <FlightSearchForm />;
+    //   case "2":
+    //     return <AccommodationSearchForm />;
+    //   default:
+    //     return renderComingSoon();
     // }
+    if (config?.office_id === 1001) {
+      switch (tabValueSearchBox) {
+        case "1":
+          return <FlightSearchForm />;
+        case "2":
+          return <AccommodationSearchForm />;
+        default:
+          return renderComingSoon();
+      }
+    } else {
+      return renderComingSoon();
+    }
   };
 
   // handle render render Reservations Banner
