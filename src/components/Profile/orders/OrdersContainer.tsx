@@ -166,7 +166,7 @@ interface OrderCardProps {
 const OrderCard: FC<OrderCardProps> = ({ order }) => {
   return (
     <>
-      <div className="p-3 pb-0 border border-divider grid grid-cols-1 gap-2 min-h-48 rounded-md">
+      <div className="p-3 border border-divider grid grid-cols-1 gap-2 min-h-48 rounded-md">
         <div className="flex items-center justify-between">
           <span className="text-text-main font-semibold text-sm">پرواز</span>
           <Chip
@@ -203,11 +203,23 @@ const OrderCard: FC<OrderCardProps> = ({ order }) => {
               )}
             </span>
           </div>
-        </div>
-        <div className="flex items-end justify-center">
-          <span className="rounded-tab-down-sm min-w-36 h-8 bg-divider text-text-main text-sm flex items-center justify-center">
-            جزئیات
-          </span>
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              size="small"
+              variant="outlined"
+              className="rounded-lg"
+              color="primary"
+            >
+              نمایش
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
+              className="rounded-lg bg-divider shadow-none text-text-main"
+            >
+              جزئیات
+            </Button>
+          </div>
         </div>
       </div>
     </>
