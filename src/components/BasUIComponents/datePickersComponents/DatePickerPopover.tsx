@@ -534,7 +534,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
             horizontal: "left",
           }}
           sx={{
-            marginTop: "-4px",
+            marginTop: "-7px",
           }}
           classes={{
             paper: "p-2 border-2 border-primary-main rounded-xl",

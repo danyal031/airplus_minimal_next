@@ -659,7 +659,7 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
           horizontal: "left",
         }}
         sx={{
-          marginTop: "-4px",
+          marginTop: "-7px",
           "& .MuiPopover-paper": {
             width: anchorWidth,
             maxHeight: "420px",
