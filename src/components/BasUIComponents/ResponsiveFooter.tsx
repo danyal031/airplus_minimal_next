@@ -120,7 +120,7 @@ const ResponsiveFooter = () => {
     {
       id: 6,
       label: `مجله ${config?.brand.fa}`,
-      link: "#",
+      link: "/mag",
     },
   ];
   const complementaryInfoOptions = [

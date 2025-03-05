@@ -36,7 +36,7 @@ const ResponsiveAppBar = () => {
       link: `https://${config?.erp_domain}`,
       target: "_blank",
     },
-    { title: "مجله", link: "http://mag.savosh.com", target: "_blank" },
+    { title: "مجله", link: "/mag", target: "_blank" },
     { title: "درباره ما", link: "/about-us", target: "_self" },
   ];
   const renderOnDesktop = () => {

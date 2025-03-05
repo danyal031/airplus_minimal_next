@@ -512,6 +512,57 @@ export const lockResidence = (props: any) => {
   });
 };
 
+// handle mag axios
+export const getCategoryList = (categoryId?: number) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(
+        (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
+          process.env.NEXT_PUBLIC_CATEGORY_LIST
+      )
+      .then((response) => {
+        // Handle successful response here
+        console.log("getCategoryList response: ", response);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("getCategoryList error: ", error);
+        reject(error);
+      });
+  });
+};
+
+export const getArticleList = (
+  sortByScore: boolean = false,
+  sortByViews: boolean = false,
+  categoryId?: number
+) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(
+        (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
+          process.env.NEXT_PUBLIC_ARTICLE_LIST,
+        {
+          params: {
+            sortByScore,
+            sortByViews,
+          },
+        }
+      )
+      .then((response) => {
+        // Handle successful response here
+        console.log("getArticleList response: ", response);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("getArticleList error: ", error);
+        reject(error);
+      });
+  });
+};
+
 // handle get config
 export const getConfig = () => {
   return new Promise((resolve, reject) => {
