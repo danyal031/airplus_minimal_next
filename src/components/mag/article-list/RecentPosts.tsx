@@ -42,7 +42,7 @@ const RecentPosts = () => {
       <CardContent className="divide-y-2">
         {showLoading ? (
           <RecentPostsProgress />
-        ) : (
+        ) : resentPosts.length !== 0 ? (
           resentPosts.map((item) => (
             <div key={item.id} className="grid grid-cols-12 gap-7 py-4">
               <div className="rounded-xl col-span-5 aspect-video relative overflow-hidden">
@@ -78,6 +78,12 @@ const RecentPosts = () => {
               </div>
             </div>
           ))
+        ) : (
+          <div className="flex items-center justify-center">
+            <span className="text-text-main font-semibold text-sm">
+              پستی جهت نمایش وجود ندارد
+            </span>
+          </div>
         )}
       </CardContent>
     </Card>

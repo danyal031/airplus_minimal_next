@@ -54,74 +54,86 @@ const AmazingPosts = () => {
             <AmazingPostsProgress />
           ) : (
             <>
-              <div className="absolute top-[-20px] left-4 flex items-center gap-2 z-10">
-                <IconButton
-                  ref={prevRef}
-                  className="bg-paper shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
-                >
-                  {" "}
-                  <NavigateNextIcon fontSize="small" />{" "}
-                </IconButton>
-                <IconButton
-                  ref={nextRef}
-                  className="bg-paper shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
-                >
-                  <NavigateBeforeIcon fontSize="small" />
-                </IconButton>
-              </div>
-              <Swiper
-                spaceBetween={16}
-                slidesPerView={2}
-                modules={[Navigation]}
-                navigation={{
-                  prevEl: prevRef.current,
-                  nextEl: nextRef.current,
-                }}
-                onBeforeInit={(swiper: any) => {
-                  swiper.params.navigation.prevEl = prevRef.current;
-                  swiper.params.navigation.nextEl = nextRef.current;
-                }}
-                className="mySwiper"
-              >
-                {amazingPosts.map((post) => (
-                  <SwiperSlide
-                    key={post.id}
-                    className="rounded-lg overflow-hidden"
+              {amazingPosts.length !== 0 ? (
+                <>
+                  <div className="absolute top-[-20px] left-4 flex items-center gap-2 z-10">
+                    <IconButton
+                      ref={prevRef}
+                      className="bg-paper shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
+                    >
+                      {" "}
+                      <NavigateNextIcon fontSize="small" />{" "}
+                    </IconButton>
+                    <IconButton
+                      ref={nextRef}
+                      className="bg-paper shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
+                    >
+                      <NavigateBeforeIcon fontSize="small" />
+                    </IconButton>
+                  </div>
+                  <Swiper
+                    spaceBetween={16}
+                    slidesPerView={2}
+                    modules={[Navigation]}
+                    navigation={{
+                      prevEl: prevRef.current,
+                      nextEl: nextRef.current,
+                    }}
+                    onBeforeInit={(swiper: any) => {
+                      swiper.params.navigation.prevEl = prevRef.current;
+                      swiper.params.navigation.nextEl = nextRef.current;
+                    }}
+                    className="mySwiper"
                   >
-                    <div className="relative w-full h-56">
-                      <Image
-                        src={
-                          process.env.NEXT_PUBLIC_MEDIA_URL_1 +
-                          "/" +
-                          post.thumbnail
-                        }
-                        alt=""
-                        fill
-                        style={{ objectFit: "cover" }}
-                        className="rounded-lg hover:cursor-pointer hover:scale-110"
-                      />
-                      <div className="absolute inset-0 flex flex-col justify-end gap-3 p-4 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                        <div className="flex items-center justify-start gap-2">
-                          {post.tags.map((item) => (
-                            <span className="bg-primary-main text-main text-xs font-semibold px-2 py-1 rounded-lg">
-                              {item.title}
-                            </span>
-                          ))}
-                        </div>
-                        <h3 className="text-white text-sm font-bold mt-2">
-                          {post.title}
-                        </h3>
-                        <PublisherInformation
-                          date="۵ فروردین ۱۴۰۲"
-                          image={post.operator.avatar}
-                          name={post.operator.fullname}
-                          className="text-xs text-gray-300"
-                        />
-                      </div>
-                    </div>{" "}
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                    {amazingPosts.map((post) => (
+                      <SwiperSlide
+                        key={post.id}
+                        className="rounded-lg overflow-hidden"
+                      >
+                        <div className="relative w-full h-56">
+                          <Image
+                            src={
+                              process.env.NEXT_PUBLIC_MEDIA_URL_1 +
+                              "/" +
+                              post.thumbnail
+                            }
+                            alt=""
+                            fill
+                            style={{ objectFit: "cover" }}
+                            className="rounded-lg hover:cursor-pointer hover:scale-110"
+                          />
+                          <div className="absolute inset-0 flex flex-col justify-end gap-3 p-4 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
+                            <div className="flex items-center justify-start gap-2">
+                              {post.tags.map((item) => (
+                                <span className="bg-primary-main text-main text-xs font-semibold px-2 py-1 rounded-lg">
+                                  {item.title}
+                                </span>
+                              ))}
+                            </div>
+                            <h3 className="text-white text-sm font-bold mt-2">
+                              {post.title}
+                            </h3>
+                            <PublisherInformation
+                              date="۵ فروردین ۱۴۰۲"
+                              image={post.operator.avatar}
+                              name={post.operator.fullname}
+                              className="text-xs text-gray-300"
+                            />
+                          </div>
+                        </div>{" "}
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-center">
+                    <span className="text-text-main font-semibold text-sm">
+                      پستی جهت نمایش وجود ندارد
+                    </span>
+                  </div>
+                </>
+              )}
             </>
           )}
         </CardContent>

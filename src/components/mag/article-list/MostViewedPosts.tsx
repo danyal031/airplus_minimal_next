@@ -42,7 +42,7 @@ const MostViewedPosts = () => {
         <CardContent className="grid grid-cols-1 gap-4">
           {showLoading ? (
             <MostViewedPostsProgress />
-          ) : (
+          ) : mostViewedPosts.length !== 0 ? (
             mostViewedPosts.map((item) => {
               return (
                 <>
@@ -81,6 +81,12 @@ const MostViewedPosts = () => {
                 </>
               );
             })
+          ) : (
+            <div className="flex items-center justify-center">
+              <span className="text-text-main font-semibold text-sm">
+                پستی جهت نمایش وجود ندارد
+              </span>
+            </div>
           )}
         </CardContent>
       </Card>
