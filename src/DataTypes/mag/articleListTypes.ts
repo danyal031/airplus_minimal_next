@@ -1,31 +1,33 @@
 export interface ArticleDataTypes {
   id: number;
   title: string;
-  sub_title: any;
+  sub_title?: string;
   slug: string;
   body: string;
   summary: string;
-  thumbnail: string;
+  thumbnail?: string;
   views: number;
   score: number;
-  operator: string;
-  operator_avatar: string;
-  operator_fullname: string;
+  operator: Operator;
   branch: number;
   published_at: any;
-  categories: string;
-  categories_item: CategoriesItem[];
-  tags: string;
-  tags_item: TagsItem[];
+  categories: Category[];
+  tags: Tag[];
   metatags: any[];
 }
 
-interface CategoriesItem {
+export interface Operator {
+  id: string;
+  avatar: any;
+  fullname: string;
+}
+
+export interface Category {
   id: number;
   main: any;
   title: string;
   slug: string;
-  image: any;
+  image: string;
   description: any;
   branch: number;
   created_at: string;
@@ -33,7 +35,7 @@ interface CategoriesItem {
   deleted_at: any;
 }
 
-interface TagsItem {
+export interface Tag {
   id: number;
   title: string;
   slug: string;

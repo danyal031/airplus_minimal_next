@@ -14,6 +14,7 @@ import TitleDivider from "./TitleDivider";
 import PublisherInformation from "./PublisherInformation";
 import { getArticleList } from "@/global-files/axioses";
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
+import AmazingPostsProgress from "@/components/Skelton-Components/mag/amazingPosts/AmazingPostsProgress";
 
 const AmazingPosts = () => {
   // initial states
@@ -50,20 +51,20 @@ const AmazingPosts = () => {
         <CardContent className="relative">
           {/* Navigation buttons */}
           {showLoading ? (
-            "loading"
+            <AmazingPostsProgress />
           ) : (
             <>
               <div className="absolute top-[-20px] left-4 flex items-center gap-2 z-10">
                 <IconButton
                   ref={prevRef}
-                  className="bg-default shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
+                  className="bg-paper shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
                 >
                   {" "}
                   <NavigateNextIcon fontSize="small" />{" "}
                 </IconButton>
                 <IconButton
                   ref={nextRef}
-                  className="bg-default shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
+                  className="bg-paper shadow-lg w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200"
                 >
                   <NavigateBeforeIcon fontSize="small" />
                 </IconButton>
@@ -94,14 +95,14 @@ const AmazingPosts = () => {
                           "/" +
                           post.thumbnail
                         }
-                        alt={post.thumbnail}
+                        alt=""
                         fill
                         style={{ objectFit: "cover" }}
                         className="rounded-lg hover:cursor-pointer hover:scale-110"
                       />
                       <div className="absolute inset-0 flex flex-col justify-end gap-3 p-4 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
                         <div className="flex items-center justify-start gap-2">
-                          {post.tags_item.map((item) => (
+                          {post.tags.map((item) => (
                             <span className="bg-primary-main text-main text-xs font-semibold px-2 py-1 rounded-lg">
                               {item.title}
                             </span>
@@ -112,8 +113,8 @@ const AmazingPosts = () => {
                         </h3>
                         <PublisherInformation
                           date="۵ فروردین ۱۴۰۲"
-                          image={post.operator_avatar}
-                          name={post.operator_fullname}
+                          image={post.operator.avatar}
+                          name={post.operator.fullname}
                           className="text-xs text-gray-300"
                         />
                       </div>
