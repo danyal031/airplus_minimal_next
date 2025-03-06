@@ -539,16 +539,20 @@ export const getArticleList = (
   categoryId?: number
 ) => {
   return new Promise((resolve, reject) => {
+    const params: Record<string, any> = {
+      sortByScore,
+      sortByViews,
+    };
+
+    if (categoryId !== undefined) {
+      params.categoryId = categoryId;
+    }
+
     axios
       .get(
         (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
           process.env.NEXT_PUBLIC_ARTICLE_LIST,
-        {
-          params: {
-            sortByScore,
-            sortByViews,
-          },
-        }
+        { params }
       )
       .then((response) => {
         // Handle successful response here
