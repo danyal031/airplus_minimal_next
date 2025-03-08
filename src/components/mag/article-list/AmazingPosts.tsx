@@ -15,11 +15,14 @@ import PublisherInformation from "./PublisherInformation";
 import { getArticleList } from "@/global-files/axioses";
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import AmazingPostsProgress from "@/components/Skelton-Components/mag/amazingPosts/AmazingPostsProgress";
+import { useRouter } from "next/navigation";
 
 const AmazingPosts = () => {
   // initial states
   const [amazingPosts, setAmazingPosts] = useState<ArticleDataTypes[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(true);
+
+  const router = useRouter();
 
   // Refs for navigation buttons
   const prevRef = useRef(null);
@@ -36,6 +39,11 @@ const AmazingPosts = () => {
       })
       .catch((err) => {});
   }, []);
+
+  // handle move to article details page
+  const moveToArticlePage = (id: number) => {
+    router.push(`/mag/articles/${id}`);
+  };
 
   return (
     <div>
@@ -90,7 +98,10 @@ const AmazingPosts = () => {
                         key={post.id}
                         className="rounded-lg overflow-hidden"
                       >
-                        <div className="relative w-full h-56">
+                        <div
+                          className="relative w-full h-56 cursor-pointer"
+                          onClick={() => moveToArticlePage(post.id)}
+                        >
                           <Image
                             src={
                               process.env.NEXT_PUBLIC_MEDIA_URL_1 +

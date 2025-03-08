@@ -11,13 +11,15 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { getArticleList } from "@/global-files/axioses";
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import RecentPostsProgress from "@/components/Skelton-Components/mag/RecentPosts/RecentPostsProgress";
+import { useRouter } from "next/navigation";
 const RecentPosts = () => {
   // initial states
   const [resentPosts, setResentPosts] = useState<ArticleDataTypes[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(true);
 
-  // handle get resent posts
+  const router = useRouter();
 
+  // handle get resent posts
   useEffect(() => {
     getArticleList()
       .then((res: any) => {
@@ -28,6 +30,11 @@ const RecentPosts = () => {
       })
       .catch((err) => {});
   }, []);
+
+  // handle move to article details page
+  const moveToArticlePage = (id: number) => {
+    router.push(`/mag/articles/${id}`);
+  };
 
   return (
     <Card>
@@ -44,7 +51,11 @@ const RecentPosts = () => {
           <RecentPostsProgress />
         ) : resentPosts.length !== 0 ? (
           resentPosts.map((item) => (
-            <div key={item.id} className="grid grid-cols-12 gap-7 py-4">
+            <div
+              onClick={() => moveToArticlePage(item.id)}
+              key={item.id}
+              className="grid grid-cols-12 gap-7 py-4 cursor-pointer"
+            >
               <div className="rounded-xl col-span-5 aspect-video relative overflow-hidden">
                 <Image
                   src={

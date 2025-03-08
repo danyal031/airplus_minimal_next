@@ -10,12 +10,15 @@ import { formatInputWithCommas } from "@/global-files/function";
 import { getArticleList } from "@/global-files/axioses";
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import MostViewedPostsProgress from "@/components/Skelton-Components/mag/MostViewedPosts/MostViewedPostsProgress";
+import { useRouter } from "next/navigation";
 const MostViewedPosts = () => {
   // initial states
   const [mostViewedPosts, setMostViewedPosts] = useState<ArticleDataTypes[]>(
     []
   );
   const [showLoading, setShowLoading] = useState<boolean>(true);
+
+  const router = useRouter();
 
   // handle get MostViewedPosts
   useEffect(() => {
@@ -28,6 +31,12 @@ const MostViewedPosts = () => {
       })
       .catch((err) => {});
   }, []);
+
+  // handle move to article details page
+  const moveToArticlePage = (id: number) => {
+    router.push(`/mag/articles/${id}`);
+  };
+
   return (
     <div className="sticky top-40">
       <Card>
@@ -48,7 +57,8 @@ const MostViewedPosts = () => {
                 <>
                   <div
                     key={item.id}
-                    className="flex items-center justify-start gap-2"
+                    className="flex items-center justify-start gap-2 cursor-pointer"
+                    onClick={() => moveToArticlePage(item.id)}
                   >
                     <div className="rounded-md aspect-video relative h-16 w-20 overflow-hidden">
                       <Image

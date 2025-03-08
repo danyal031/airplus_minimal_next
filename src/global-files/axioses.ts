@@ -567,6 +567,28 @@ export const getArticleList = (
   });
 };
 
+export const getArticle = (articleId: number) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(
+        (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
+          process.env.NEXT_PUBLIC_ARTICLE +
+          "/" +
+          articleId
+      )
+      .then((response) => {
+        // Handle successful response here
+        console.log("getArticle response: ", response);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("getArticle error: ", error);
+        reject(error);
+      });
+  });
+};
+
 // handle get config
 export const getConfig = () => {
   return new Promise((resolve, reject) => {
