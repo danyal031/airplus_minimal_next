@@ -69,7 +69,6 @@ const ResponsiveFooter = () => {
     return (
       <div className="justify-self-center w-3/4 grid grid-cols-12 gap-5 bg-paper rounded-xl p-3 absolute -top-9">
         {slogans.map((item, index) => {
-          const isLastItem = index === slogans?.length - 1;
           return (
             <React.Fragment key={item.id}>
               <div className="col-span-3 grid grid-cols-12 gap-2">
@@ -84,9 +83,6 @@ const ResponsiveFooter = () => {
                   </span>
                 </div>
               </div>
-              {/* {!isLastItem && (
-                <Divider orientation="vertical" className="col-span-1" />
-              )} */}
             </React.Fragment>
           );
         })}
