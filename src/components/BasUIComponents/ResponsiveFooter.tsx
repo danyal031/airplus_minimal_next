@@ -20,6 +20,9 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import warrantyLottie from "../../../public/assets/lottie/warranty.json";
+import supportLottie from "../../../public/assets/lottie/support.json";
+import onlineReserve from "../../../public/assets/lottie/onlineReserve.json";
+import helpixLottie from "../../../public/assets/lottie/Helpix.json";
 // import Lottie from "lottie-react";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -44,7 +47,7 @@ const ResponsiveFooter = () => {
     const slogans = [
       {
         id: 1,
-        cover: warrantyLottie,
+        cover: onlineReserve,
         label: "رزرو 100 درصد آنلاین",
       },
       {
@@ -54,12 +57,12 @@ const ResponsiveFooter = () => {
       },
       {
         id: 3,
-        cover: warrantyLottie,
+        cover: supportLottie,
         label: "پشتیبانی 7/24",
       },
       {
         id: 4,
-        cover: warrantyLottie,
+        cover: helpixLottie,
         label: "هوش مصنوعی Helpix",
       },
     ];
