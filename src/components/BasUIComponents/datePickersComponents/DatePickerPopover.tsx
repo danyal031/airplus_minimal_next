@@ -186,8 +186,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
             className={`aspect-square w-10 md:w-8 flex flex-col items-center justify-center rounded-lg md:rounded-xl border cursor-pointer transition-all duration-300 
               ${dayId < currentDate && "cursor-auto"} 
               ${
-                dayId == currentDate &&
-                " shadow-main-500 shadow-[inset_0_-2px_4px_rgba(162,20,65,1)]"
+                dayId == currentDate && "!bg-main border border-primary-main"
               } ${
               isFirstSelected
                 ? "bg-primary-main text-paper"
