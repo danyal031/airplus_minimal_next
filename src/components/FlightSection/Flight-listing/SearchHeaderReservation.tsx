@@ -112,9 +112,11 @@ const SearchHeaderReservation = () => {
             <span className={`text-paper font-semibold`}>
               رفت: {searchParams.get("departure_date")}
             </span>{" "}
-            <span className={`text-paper font-semibold`}>
-              برگشت: {searchParams.get("returning_date")}
-            </span>
+            {searchParams.get("returning_date") !== "false" && (
+              <span className={`text-paper font-semibold`}>
+                برگشت: {searchParams.get("returning_date")}
+              </span>
+            )}
           </div>
         </div>
       </>
@@ -275,9 +277,11 @@ const SearchHeaderReservation = () => {
               <span className={`text-paper font-light opacity-50`}>
                 رفت: {searchParams.get("departure_date")}
               </span>{" "}
-              <span className={`text-paper font-light opacity-50`}>
-                برگشت: {searchParams.get("returning_date")}
-              </span>
+              {searchParams.get("returning_date") !== "false" && (
+                <span className={`text-paper font-light opacity-50`}>
+                  برگشت: {searchParams.get("returning_date")}
+                </span>
+              )}
             </div>
           </div>
           <Button
