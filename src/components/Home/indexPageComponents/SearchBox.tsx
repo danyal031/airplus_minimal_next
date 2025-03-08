@@ -85,11 +85,11 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
   // render tab
   const renderTab = () => {
     const tabs = [
-      { id: "1", label: "پرواز" },
-      { id: "2", label: "هتل و اقامتگاه" },
-      { id: "3", label: "اتوبوس" },
-      { id: "4", label: "تور" },
-      { id: "5", label: "قطار" },
+      { id: "1", label: "پرواز", active: true },
+      { id: "2", label: "هتل و اقامتگاه", active: false },
+      { id: "3", label: "اتوبوس", active: false },
+      { id: "4", label: "تور", active: false },
+      { id: "5", label: "قطار", active: false },
     ];
 
     return (
@@ -106,7 +106,11 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
           return (
             <span
               key={tab.id}
-              onClick={() => handleChangeTab(tab.id)}
+              onClick={() => {
+                if (tab.active) {
+                  handleChangeTab(tab.id);
+                }
+              }}
               className={`text-paper hover:cursor-pointer ${
                 isActive ? "rounded-tab-down" : ""
               } col-span-2 flex items-center justify-center font-semibold h-12 ${
@@ -191,11 +195,11 @@ const SearchBoxOnMobile: FC<SearchBoxOnMobileProps> = ({ config }) => {
   };
   const renderTab = () => {
     const tabs = [
-      { id: "1", label: "پرواز" },
-      { id: "2", label: "اقامتگاه" },
-      { id: "3", label: "اتوبوس" },
-      { id: "4", label: "تور" },
-      { id: "5", label: "قطار" },
+      { id: "1", label: "پرواز", active: true },
+      { id: "2", label: "اقامتگاه", active: false },
+      { id: "3", label: "اتوبوس", active: false },
+      { id: "4", label: "تور", active: false },
+      { id: "5", label: "قطار", active: false },
     ];
     return (
       <>
@@ -214,7 +218,11 @@ const SearchBoxOnMobile: FC<SearchBoxOnMobileProps> = ({ config }) => {
             return (
               <span
                 key={tab.id}
-                onClick={() => handleChangeTab(tab.id)}
+                onClick={() => {
+                  if (tab.active) {
+                    handleChangeTab(tab.id);
+                  }
+                }}
                 className={`text-paper text-xs rounded-tab-down-sm hover:cursor-pointer px-5 truncate flex-shrink-0 ${
                   isActive ? "" : ""
                 } flex items-center justify-center font-semibold h-10 ${
