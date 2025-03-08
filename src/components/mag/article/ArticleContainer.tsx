@@ -7,6 +7,7 @@ import { Divider, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { FC, useEffect, useState } from "react";
+import PublisherInformation from "../article-list/PublisherInformation";
 
 export interface ArticlePageProps {
   params: {
@@ -39,9 +40,15 @@ const ArticleContainer: FC<ArticlePageProps> = ({ params }) => {
           <ArticleProgress />
         ) : (
           <div className="grid grid-cols-1 gap-3">
-            <span className="flex items-center justify-start font-bold text-lg">
-              {article?.title}
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-lg">{article?.title}</span>
+              <PublisherInformation
+                className="text-text-main"
+                date=" ۱۹ آذر ۱۴۰۳"
+                image={article?.operator.avatar}
+                name={article?.operator.fullname}
+              />
+            </div>
             <div className="col-span-1 overflow-hidden relative h-72 rounded-xl">
               <Image
                 src={
@@ -54,7 +61,7 @@ const ArticleContainer: FC<ArticlePageProps> = ({ params }) => {
               />
             </div>
             <div
-              className=""
+              className="text-justify leading-9"
               dangerouslySetInnerHTML={{ __html: article?.body }}
             ></div>
           </div>
@@ -82,7 +89,7 @@ const ArticleContainer: FC<ArticlePageProps> = ({ params }) => {
                   key={index}
                   className="flex items-center justify-start gap-2 text-text-main hover:text-primary-main"
                 >
-                  <div className="rounded-md aspect-video relative h-14 w-16 overflow-hidden">
+                  <div className="rounded-md aspect-video relative h-10 w-12 overflow-hidden">
                     <Image
                       src={
                         process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + item.image
@@ -104,7 +111,7 @@ const ArticleContainer: FC<ArticlePageProps> = ({ params }) => {
   };
 
   return (
-    <div className="container my-24 grid grid-cols-4 gap-3">
+    <div className="container my-24 grid grid-cols-4 gap-7">
       <div className="col-span-3">{renderArticle()}</div>
       <div className="col-span-1">{renderCategories()}</div>
     </div>
