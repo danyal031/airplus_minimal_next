@@ -756,21 +756,23 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
           </div>
           <div className="p-2 col-span-1 border-dashed border-r-2 border-paper flex flex-col items-center justify-center gap-2">
             <Button
+              disabled
               onClick={() => {
                 handleChooseTicket(data, 0);
               }}
               variant="contained"
               size="small"
-              className="rounded-lg min-w-28"
+              className="rounded-lg min-w-28 text-sm"
             >
-              {Array.isArray(data.Classes) &&
+              {/* {Array.isArray(data.Classes) &&
                 formatInputWithCommas(
                   data.Classes[0].Financial.Adult.Payable / 10
-                )}
+                )} */}
+              امکان رزرو وجود ندارد
             </Button>
-            <span className="text-xs font-semibold text-gray-400">
+            {/* <span className="text-xs font-semibold text-gray-400">
               {data.Classes[0].AvailableSeat} صندلی باقی مانده
-            </span>
+            </span> */}
           </div>
 
           {showDetails && (
@@ -1111,8 +1113,10 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                 variant="contained"
                 size="medium"
                 color="primary"
+                disabled
               >
-                انتخاب بلیت وادامه
+                {/* انتخاب بلیت وادامه */}
+                امکان رزرو وجود ندارد
               </Button>
             </div>
           </div>
