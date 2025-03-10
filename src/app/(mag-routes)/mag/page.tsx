@@ -1,5 +1,5 @@
+import MagContainer from "@/components/mag/magIndexPage/MagContainer";
 import React from "react";
-import MagContainer from "@/components/mag/MagContainer";
 
 const page = () => {
   return <MagContainer />;
