@@ -14,10 +14,10 @@ const ArticleList = () => {
     useState<boolean>(true);
 
   //   handle get latest articles & most viewed articles
-  useEffect(() => {
-    // get latest articles
-    // get most viewed articles
-  }, []);
+  //   useEffect(() => {
+  // get latest articles
+  // get most viewed articles
+  //   }, []);
 
   // for render most viewed
   const renderMostViewed = () => {
