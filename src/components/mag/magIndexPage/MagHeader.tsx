@@ -41,18 +41,19 @@ const MagHeader = () => {
   );
   const [thirdPost, setThirdPost] = useState<ArticleDataTypes | null>(posts[2]);
 
-  //  handle click for posts
-  const handleClickPost = (id: number) => {
-    switch (id) {
-      case 2:
-        setSecondPost(firstPost);
-        setFirstPost(secondPost);
-        break;
-
-      case 3:
-        setThirdPost(firstPost);
-        setFirstPost(thirdPost);
-        break;
+  //   handle click for posts
+  const handleClickPost = (
+    clickedPost: ArticleDataTypes,
+    postType: "second" | "third"
+  ) => {
+    if (firstPost?.id !== clickedPost.id) {
+      const temp = firstPost;
+      setFirstPost(clickedPost);
+      if (postType === "second") {
+        setSecondPost(temp);
+      } else if (postType === "third") {
+        setThirdPost(temp);
+      }
     }
   };
 
@@ -106,38 +107,88 @@ const MagHeader = () => {
     return (
       <>
         <div className="w-full grid grid-cols-3 gap-3">
-          <div className="relative overflow-hidden rounded-b-2xl col-span-3 min-h-72">
+          <div className="relative overflow-hidden rounded-b-2xl col-span-3 min-h-96">
             <Image
+              style={{
+                WebkitMaskImage: `url('/assets/images/mag/indexPage/postsCover/maskImage/mask-image-down-main.svg')`,
+                WebkitMaskSize: "cover",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskImage: `url('/assets/images/mag/indexPage/postsCover/maskImage/mask-image-down-main.svg')`,
+                maskSize: "cover",
+                maskRepeat: "no-repeat",
+                maskPosition: "center",
+              }}
               src={firstPost?.thumbnail as string}
-              alt=""
-              fill
+              alt={""}
               className="object-cover"
+              fill
             />
           </div>
-          <div className="relative overflow-hidden rounded-2xl min-h-48">
+          <div className="relative overflow-hidden rounded-2xl min-h-48 aspect-video">
             <Image
+              style={{
+                WebkitMaskImage: `url('/assets/images/mag/indexPage/postsCover/maskImage/mask-image-down.svg')`,
+                WebkitMaskSize: "cover",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskImage: `url('/assets/images/mag/indexPage/postsCover/maskImage/mask-image-down.svg')`,
+                maskSize: "cover",
+                maskRepeat: "no-repeat",
+                maskPosition: "center",
+              }}
               src={secondPost?.thumbnail as string}
-              alt=""
-              fill
+              alt={""}
               className="object-cover"
+              fill
               onClick={() => {
-                handleClickPost(secondPost?.id as number);
+                handleClickPost(secondPost as ArticleDataTypes, "second");
               }}
             />
+            <span
+              className={`h-5 w-20 absolute bottom-0 left-1/2 -translate-x-1/2  text-center font-bold text-base text-text-main truncate z-[3]`}
+            >
+              {secondPost?.title}
+            </span>
           </div>
-          <div className="h-full flex items-center justify-center bg-gray-300 rounded-2xl">
-            <span className="text-text-main text-sm">{firstPost?.summary}</span>
+          <div className="h-full flex items-center justify-center bg-gray-300 rounded-2xl relative">
+            <span className="rounded-tab-up-sm h-7 w-4/5 flex items-center justify-center absolute top-0 bg-main">
+              <span className="font-bold text-base text-primary-main">
+                {firstPost?.title}
+              </span>
+            </span>
+            <span className="text-text-main text-sm font-semibold">
+              {firstPost?.summary}
+            </span>
+            <span className="text-primary-main text-xs font-bold absolute bottom-5">
+              بیشتر بخوانید...
+            </span>
           </div>
-          <div className="relative overflow-hidden rounded-2xl min-h-48">
+          <div className="relative overflow-hidden rounded-2xl min-h-48 aspect-video">
             <Image
+              style={{
+                WebkitMaskImage: `url('/assets/images/mag/indexPage/postsCover/maskImage/mask-image-down.svg')`,
+                WebkitMaskSize: "cover",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskImage: `url('/assets/images/mag/indexPage/postsCover/maskImage/mask-image-down.svg')`,
+                maskSize: "cover",
+                maskRepeat: "no-repeat",
+                maskPosition: "center",
+              }}
               src={thirdPost?.thumbnail as string}
-              alt=""
-              fill
+              alt={""}
               className="object-cover"
+              fill
               onClick={() => {
-                handleClickPost(thirdPost?.id as number);
+                handleClickPost(thirdPost as ArticleDataTypes, "third");
               }}
             />
+            <span
+              className={`h-5 w-20 absolute bottom-0 left-1/2 -translate-x-1/2  text-center font-bold text-base text-text-main truncate z-[3]`}
+            >
+              {thirdPost?.title}
+            </span>
           </div>
         </div>
       </>
