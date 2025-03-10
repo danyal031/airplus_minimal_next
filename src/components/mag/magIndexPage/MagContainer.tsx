@@ -1,12 +1,14 @@
 import React from "react";
 import MagHeader from "./MagHeader";
 import SubCategoryList from "./SubCategoryList";
+import ArticleList from "./ArticleList";
 
 const MagContainer = () => {
   return (
     <div className="container my-24 flex flex-col items-center justify-start gap-24">
       <MagHeader />
       <SubCategoryList />
+      <ArticleList />
       {/* <MagHeader /> */}
       {/* <LatestPosts /> */}
       {/* <CategoriesPosts />
