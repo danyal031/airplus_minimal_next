@@ -45,19 +45,30 @@ interface NewsArticleProps {
   article: ArticleDataTypes;
 }
 const NewsArticle: FC<NewsArticleProps> = ({ article }) => {
+  // initial states
+  const [hoverArticle, setHoverArticle] = useState<boolean>(false);
+
   return (
     <>
-      <div className="w-44 h-40 rounded-2xl border-2 hover:border-primary-main relative overflow-hidden">
+      <div
+        onMouseEnter={() => {
+          setHoverArticle(true);
+        }}
+        onMouseLeave={() => {
+          setHoverArticle(false);
+        }}
+        className="w-44 h-40 rounded-2xl border-2 hover:border-primary-main relative overflow-hidden"
+      >
         <Image
           src={process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + article.thumbnail}
           alt={article.title}
           fill
           className="object-cover object-center"
         />
-        {/* <div className="px-2 pb-1 flex flex-col items-start justify-center gap-1 absolute bottom-0 bg-rose-500"> */}
         <div
-          className="px-2 pb-3 flex flex-col items-start justify-center gap-1 absolute bottom-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent  hover:from-primary-main hover:via-primary-main hover:to-transparent 
-      transition-all duration-300"
+          className={`px-2 pb-3 flex flex-col items-start justify-center gap-1 absolute bottom-0 w-full bg-gradient-to-t from-black/90 to-transparent  ${
+            hoverArticle ? "from-primary-main  to-transparent" : ""
+          } transition-all duration-500 ease-in-out`}
         >
           <span
             style={{
