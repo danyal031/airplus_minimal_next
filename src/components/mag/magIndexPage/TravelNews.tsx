@@ -56,7 +56,7 @@ const NewsArticle: FC<NewsArticleProps> = ({ article }) => {
         />
         {/* <div className="px-2 pb-1 flex flex-col items-start justify-center gap-1 absolute bottom-0 bg-rose-500"> */}
         <div
-          className="px-2 pb-3 flex flex-col items-start justify-center gap-1 absolute bottom-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent  hover:from-yellow-500 -hover:via-yellow-300 hover:to-transparent 
+          className="px-2 pb-3 flex flex-col items-start justify-center gap-1 absolute bottom-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent  hover:from-primary-main hover:via-primary-main hover:to-transparent 
       transition-all duration-300"
         >
           <span
