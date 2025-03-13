@@ -15,6 +15,7 @@ import { getConfig } from "@/global-files/axioses";
 import axios from "axios";
 import ProgressLoading from "../BasUIComponents/ProgressLoading";
 import { LoginDialog } from "../Login/LoginDialog";
+import { usePathname } from "next/navigation";
 // import Loading from "./loading";
 
 const App = ({ children }: { children: React.ReactNode }) => {
@@ -34,7 +35,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
   // app states
   const [appLoading, setAppLoading] = useState<boolean>(true);
   const [showProgressConfig, setShowProgressConfig] = useState<boolean>(false);
-
+  const [showAppBar, setShowAppBar] = useState<boolean>(true);
   const {
     setShowAlertDetails,
     showAlertDetails,
@@ -44,6 +45,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
   } = useGlobalContext().global;
   const { setUserData } = useGlobalContext().userContext;
   const { openLoginDialog } = useGlobalContext().loginContext;
+  const pathName = usePathname();
 
   useEffect(() => {
     if (themeKey) {
@@ -115,6 +117,19 @@ const App = ({ children }: { children: React.ReactNode }) => {
       .catch(() => {});
   }, []);
 
+  // handle change responsive app bar
+  useEffect(() => {
+    console.log("pathName", pathName);
+    const path = pathName.split("/")[1];
+    switch (path) {
+      case "mag":
+        setShowAppBar(false);
+        break;
+      default:
+        setShowAppBar(true);
+    }
+  }, [pathName]);
+
   return (
     <>
       <link
@@ -131,7 +146,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
               <>
                 <CssBaseline />
                 <div className="flex flex-col min-h-screen">
-                  <ResponsiveAppBar />
+                  {showAppBar && <ResponsiveAppBar />}
                   <div className="flex-grow w-full bg-main relative">
                     {children}
                   </div>
