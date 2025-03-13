@@ -4,6 +4,8 @@ import SubCategoryList from "./SubCategoryList";
 import MostViewedPosts from "./MostViewedPosts";
 import LatestPosts from "./LatestPosts";
 import TravelNews from "./TravelNews";
+import Travelogue from "./Travelogue";
+import Services from "./Services";
 
 const MagContainer = () => {
   return (
@@ -20,6 +22,14 @@ const MagContainer = () => {
         </div>
       </div>
       <TravelNews />
+      <div className="w-full grid grid-cols-12 gap-7">
+        <div className="col-span-9">
+          <Travelogue />
+        </div>
+        <div className="col-span-3">
+          <Services />
+        </div>
+      </div>
       {/* <MagHeader /> */}
       {/* <LatestPosts /> */}
       {/* <CategoriesPosts />

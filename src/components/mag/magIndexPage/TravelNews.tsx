@@ -26,7 +26,7 @@ const TravelNews = () => {
   return (
     <div className="w-full flex flex-col items-center justify-start gap-4">
       <TitleDivider label="اخبار سفر" />
-      <div className="w-full flex items-center justify-start gap-2 overflow-x-hidden">
+      <div className="flex items-center justify-start gap-2 max-w-full overflow-x-auto w-full">
         {showNewsLoading
           ? "loading"
           : newsArticles.length === 0
@@ -57,7 +57,7 @@ const NewsArticle: FC<NewsArticleProps> = ({ article }) => {
         onMouseLeave={() => {
           setHoverArticle(false);
         }}
-        className="w-44 h-40 rounded-2xl border-2 hover:border-primary-main relative overflow-hidden"
+        className="w-44 h-40 rounded-2xl border-2 hover:border-primary-main relative overflow-hidden flex-shrink-0"
       >
         <Image
           src={process.env.NEXT_PUBLIC_MEDIA_URL_1 + "/" + article.thumbnail}
