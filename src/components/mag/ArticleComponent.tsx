@@ -16,11 +16,6 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
   // initial states
   const router = useRouter();
 
-  // handle move to article page
-  const moveToArticlePage = () => {
-    router.push(("/mag/articles/" + article.id + "/" + article.slug) as Route);
-  };
-
   // handle render full width
   const renderFullWidthCard = () => {
     return (
