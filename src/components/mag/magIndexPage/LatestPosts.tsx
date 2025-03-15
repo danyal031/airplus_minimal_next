@@ -5,6 +5,7 @@ import React, { FC, useEffect, useState } from "react";
 import TitleDivider from "../TitleDivider";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
+import Link from "next/link";
 
 const LatestPosts = () => {
   // initial states
@@ -62,9 +63,16 @@ const Article: FC<ArticleProps> = ({ article }) => {
           />
         </div>
         <div className="flex flex-col items-center justify-start gap-2 w-full overflow-hidden">
-          <span className="text-text-main font-semibold text-sm cursor-pointer hover:text-primary-main truncate w-full">
+          {/* <span className="text-text-main font-semibold text-sm cursor-pointer hover:text-primary-main truncate w-full">
             {article.title}
-          </span>
+          </span> */}
+          <Link
+            className="text-text-main font-semibold text-sm cursor-pointer hover:text-primary-main truncate w-full"
+            href={"/mag/articles/" + article.id + "/" + article.slug}
+            target="_blank"
+          >
+            {article.title}
+          </Link>
           <Tooltip title={article.summary}>
             <span className="text-text-main text-xs truncate w-full">
               {article.summary}

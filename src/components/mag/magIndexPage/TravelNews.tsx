@@ -5,6 +5,7 @@ import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import Image from "next/image";
 import { getArticleList } from "@/global-files/axioses";
 import { Tooltip } from "@mui/material";
+import Link from "next/link";
 
 const TravelNews = () => {
   // initial states
@@ -50,7 +51,9 @@ const NewsArticle: FC<NewsArticleProps> = ({ article }) => {
 
   return (
     <>
-      <div
+      <Link
+        href={"/mag/articles/" + article.id + "/" + article.slug}
+        target="_blank"
         onMouseEnter={() => {
           setHoverArticle(true);
         }}
@@ -97,7 +100,7 @@ const NewsArticle: FC<NewsArticleProps> = ({ article }) => {
             </span>
           </Tooltip>
         </div>
-      </div>
+      </Link>
     </>
   );
 };

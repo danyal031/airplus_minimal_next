@@ -5,6 +5,7 @@ import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import { getArticleList } from "@/global-files/axioses";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
+import Link from "next/link";
 
 const Travelogue = () => {
   // initial states
@@ -57,7 +58,11 @@ const TravelogueItem: FC<TravelogueItemProps> = ({ article }) => {
           fill
           className="object-cover object-center"
         />
-        <div className="h-7 px-3 flex items-center justify-center absolute bottom-0 w-full backdrop-blur-sm">
+        <Link
+          href={"/mag/articles/" + article.id + "/" + article.slug}
+          target="_blank"
+          className="h-7 px-3 flex items-center justify-center absolute bottom-0 w-full backdrop-blur-sm"
+        >
           <Tooltip title={article.title}>
             <span
               style={{
@@ -72,7 +77,7 @@ const TravelogueItem: FC<TravelogueItemProps> = ({ article }) => {
               {article.title}
             </span>
           </Tooltip>
-        </div>
+        </Link>
       </div>
     </>
   );
