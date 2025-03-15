@@ -2,7 +2,6 @@ import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { FC } from "react";
 
 interface ArticleComponentProps {
@@ -13,9 +12,6 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
   article,
   typeRendering,
 }) => {
-  // initial states
-  const router = useRouter();
-
   // handle render full width
   const renderFullWidthCard = () => {
     return (
