@@ -5,7 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { FC, useEffect, useState } from "react";
 
-const RecommendedArticles = () => {
+interface RecommendedArticlesProps {
+  className?: string;
+}
+const RecommendedArticles: FC<RecommendedArticlesProps> = ({ className }) => {
   // initial states
   const [articles, setArticles] = useState<ArticleDataTypes[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(true);
@@ -23,7 +26,9 @@ const RecommendedArticles = () => {
   }, []);
 
   return (
-    <div className="bg-main p-5 rounded-2xl grid grid-cols-1 gap-4">
+    <div
+      className={`bg-main p-5 rounded-2xl grid grid-cols-1 gap-4 sticky top-20 ${className}`}
+    >
       <span className="flex items-center justify-center text-text-main font-bold text-base">
         راهنمای کشف زیبایی های ایران
       </span>

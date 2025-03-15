@@ -16,7 +16,7 @@ const PublisherInformation: FC<PublisherInformationProps> = ({
 }) => {
   return (
     <div className={`flex items-center justify-start gap-5 ${className}`}>
-      <div className="relative w-11 h-11">
+      <div className="relative w-10 h-10">
         <Image
           src={avatar}
           alt=""
