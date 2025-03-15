@@ -6,6 +6,7 @@ import { getArticleList } from "@/global-files/axioses";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
 import Link from "next/link";
+import TravelogueProgress from "@/components/Skelton-Components/mag/indexPage/TravelogueProgress";
 
 const Travelogue = () => {
   // initial states
@@ -31,13 +32,15 @@ const Travelogue = () => {
     <div className="flex flex-col items-center justify-start gap-4 p-4 bg-paper rounded-2xl">
       <TitleDivider label="سفرنامه" />
       <div className="flex items-center justify-start gap-2 w-full overflow-x-auto">
-        {showTravelogueLoading
-          ? "loading"
-          : travelogueArticles.length === 0
-          ? "موجود نیست"
-          : travelogueArticles.map((item, index) => (
-              <TravelogueItem key={item.id} article={item} />
-            ))}
+        {showTravelogueLoading ? (
+          <TravelogueProgress />
+        ) : travelogueArticles.length === 0 ? (
+          "موجود نیست"
+        ) : (
+          travelogueArticles.map((item, index) => (
+            <TravelogueItem key={item.id} article={item} />
+          ))
+        )}
       </div>
     </div>
   );

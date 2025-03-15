@@ -4,6 +4,7 @@ import { getArticleList } from "@/global-files/axioses";
 import React, { useEffect, useState } from "react";
 import ArticleComponent from "../ArticleComponent";
 import TitleDivider from "../TitleDivider";
+import MostViewedArticlesProgress from "@/components/Skelton-Components/mag/indexPage/MostViewedArticlesProgress";
 
 const MostViewedPosts = () => {
   // initial states
@@ -29,25 +30,29 @@ const MostViewedPosts = () => {
     <div className="flex flex-col items-center justify-start gap-4">
       <TitleDivider label="پربازدید ترین مقالات" />
       <div className="grid grid-cols-2 gap-2 w-full">
-        {showMostViewedLoading
-          ? "loading"
-          : mostViewedArticles.length === 0
-          ? "موجود نیست"
-          : mostViewedArticles.slice(0, 4).map((item, index) => (
-              <div
-                key={item.id}
-                className={`${
-                  index === 0 || index === 3 ? "col-span-2" : "col-span-1"
-                } `}
-              >
-                <ArticleComponent
-                  article={item}
-                  typeRendering={
-                    index === 0 || index === 3 ? "full-width" : "half-width"
-                  }
-                />
-              </div>
-            ))}
+        {showMostViewedLoading ? (
+          <div className="col-span-2">
+            <MostViewedArticlesProgress />
+          </div>
+        ) : mostViewedArticles.length === 0 ? (
+          "موجود نیست"
+        ) : (
+          mostViewedArticles.slice(0, 4).map((item, index) => (
+            <div
+              key={item.id}
+              className={`${
+                index === 0 || index === 3 ? "col-span-2" : "col-span-1"
+              } `}
+            >
+              <ArticleComponent
+                article={item}
+                typeRendering={
+                  index === 0 || index === 3 ? "full-width" : "half-width"
+                }
+              />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

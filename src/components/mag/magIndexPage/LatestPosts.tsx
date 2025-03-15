@@ -6,6 +6,7 @@ import TitleDivider from "../TitleDivider";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
 import Link from "next/link";
+import LatestArticlesProgress from "@/components/Skelton-Components/mag/indexPage/LatestArticlesProgress";
 
 const LatestPosts = () => {
   // initial states
@@ -29,13 +30,15 @@ const LatestPosts = () => {
       <div>
         <TitleDivider label="آخرین مطالب" />
       </div>
-      {showLatestLoading
-        ? "loading"
-        : latestArticles.length === 0
-        ? "موجود نیست"
-        : latestArticles.map((item, index) => (
-            <Article article={item} key={item.id} />
-          ))}
+      {showLatestLoading ? (
+        <LatestArticlesProgress />
+      ) : latestArticles.length === 0 ? (
+        "موجود نیست"
+      ) : (
+        latestArticles.map((item, index) => (
+          <Article article={item} key={item.id} />
+        ))
+      )}
       <div className="flex items-end justify-center">
         <span className="rounded-tab-down-sm bg-main flex items-center justify-center h-10 w-3/5 text-primary-main text-sm font-semibold cursor-pointer">
           مشاهده همه

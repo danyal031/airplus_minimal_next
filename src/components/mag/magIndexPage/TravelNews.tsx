@@ -6,6 +6,7 @@ import Image from "next/image";
 import { getArticleList } from "@/global-files/axioses";
 import { Tooltip } from "@mui/material";
 import Link from "next/link";
+import TravelNewsProgress from "@/components/Skelton-Components/mag/indexPage/TravelNewsProgress";
 
 const TravelNews = () => {
   // initial states
@@ -28,13 +29,15 @@ const TravelNews = () => {
     <div className="w-full flex flex-col items-center justify-start gap-4">
       <TitleDivider label="اخبار سفر" />
       <div className="flex items-center justify-start gap-2 max-w-full overflow-x-auto w-full">
-        {showNewsLoading
-          ? "loading"
-          : newsArticles.length === 0
-          ? "موجود نیست"
-          : newsArticles.map((item, index) => (
-              <NewsArticle key={item.id} article={item} />
-            ))}
+        {showNewsLoading ? (
+          <TravelNewsProgress />
+        ) : newsArticles.length === 0 ? (
+          "موجود نیست"
+        ) : (
+          newsArticles.map((item, index) => (
+            <NewsArticle key={item.id} article={item} />
+          ))
+        )}
       </div>
     </div>
   );
