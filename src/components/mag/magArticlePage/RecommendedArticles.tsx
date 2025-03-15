@@ -1,4 +1,5 @@
 "use client";
+import RecommendedArticlesProgress from "@/components/Skelton-Components/mag/articlePage/RecommendedArticlesProgress";
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import { getArticleList } from "@/global-files/axioses";
 import Image from "next/image";
@@ -33,7 +34,7 @@ const RecommendedArticles: FC<RecommendedArticlesProps> = ({ className }) => {
         راهنمای کشف زیبایی های ایران
       </span>
       {showLoading ? (
-        "loading"
+        <RecommendedArticlesProgress />
       ) : (
         <div className="grid grid-cols-1 gap-2">
           {articles.map((item, index) => (
