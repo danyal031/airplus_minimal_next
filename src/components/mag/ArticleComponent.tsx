@@ -1,5 +1,8 @@
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
+import { Route } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { FC } from "react";
 
 interface ArticleComponentProps {
@@ -10,6 +13,14 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
   article,
   typeRendering,
 }) => {
+  // initial states
+  const router = useRouter();
+
+  // handle move to article page
+  const moveToArticlePage = () => {
+    router.push(("/mag/articles/" + article.id + "/" + article.slug) as Route);
+  };
+
   // handle render full width
   const renderFullWidthCard = () => {
     return (
@@ -45,9 +56,13 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
                 {article.summary}
               </p>
               <div className="w-full flex items-center justify-end">
-                <span className="text-primary-main text-xs font-bold">
+                <Link
+                  className="text-primary-main text-xs font-bold"
+                  href={"/mag/articles/" + article.id + "/" + article.slug}
+                  target="_blank"
+                >
                   بیشتر بخوانید...
-                </span>
+                </Link>
               </div>
             </div>
           </div>
@@ -88,9 +103,13 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
               {article.summary}
             </p>
             <div className="w-full flex items-center justify-end">
-              <span className="text-primary-main text-xs font-bold">
+              <Link
+                className="text-primary-main text-xs font-bold"
+                href={"/mag/articles/" + article.id + "/" + article.slug}
+                target="_blank"
+              >
                 بیشتر بخوانید...
-              </span>
+              </Link>
             </div>
           </div>
         </div>
