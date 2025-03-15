@@ -4,6 +4,8 @@ import { getArticle } from "@/global-files/axioses";
 import { Button, Container, Toolbar } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import RecommendedArticles from "./RecommendedArticles";
+import PublisherInformation from "../PublisherInformation";
 
 export interface MagArticleContainerProps {
   params: {
@@ -71,7 +73,27 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
   const renderArticleDetails = () => {
     return (
       <>
-        <div className="grid grid-cols-1 gap-3"></div>
+        {article ? (
+          <div className="grid grid-cols-1 gap-3">
+            <PublisherInformation
+              avatar={article.operator.avatar}
+              name={article.operator.fullname}
+              // date={article.published_at}
+              date="۱۹ آذر ۱۴۰۳"
+            />
+          </div>
+        ) : (
+          "loading"
+        )}
+      </>
+    );
+  };
+
+  // for render other articles
+  const renderOtherArticles = () => {
+    return (
+      <>
+        <RecommendedArticles />
       </>
     );
   };
@@ -80,17 +102,9 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
     <>
       {renderNavBar()}
       <div className="container my-24">
-        <div className="col-span-12 grid grid-cols-12 gap-7 bg-paper rounded-2xl p-2 pl-0">
-          {article ? (
-            <>
-              <div className="col-span-9">{renderArticleDetails()}</div>
-              <div className="col-span-3"></div>
-            </>
-          ) : (
-            <div className="col-span-12 flex items-center justify-center">
-              loading
-            </div>
-          )}
+        <div className="col-span-12 grid grid-cols-12 gap-7 bg-paper rounded-2xl p-3">
+          <div className="col-span-9">{renderArticleDetails()}</div>
+          <div className="col-span-3">{renderOtherArticles()}</div>
         </div>
       </div>
     </>

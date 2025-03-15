@@ -63,9 +63,6 @@ const Article: FC<ArticleProps> = ({ article }) => {
           />
         </div>
         <div className="flex flex-col items-center justify-start gap-2 w-full overflow-hidden">
-          {/* <span className="text-text-main font-semibold text-sm cursor-pointer hover:text-primary-main truncate w-full">
-            {article.title}
-          </span> */}
           <Link
             className="text-text-main font-semibold text-sm cursor-pointer hover:text-primary-main truncate w-full"
             href={"/mag/articles/" + article.id + "/" + article.slug}
