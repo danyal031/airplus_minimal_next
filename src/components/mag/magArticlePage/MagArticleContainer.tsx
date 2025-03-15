@@ -11,6 +11,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from "@mui/icons-material/Menu";
+import ArticleDetailsProgress from "@/components/Skelton-Components/mag/articlePage/ArticleDetailsProgress";
 
 export interface MagArticleContainerProps {
   params: {
@@ -153,7 +154,7 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
             </div>
           </div>
         ) : (
-          "loading"
+          <ArticleDetailsProgress />
         )}
       </>
     );
