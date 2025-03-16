@@ -1,10 +1,17 @@
 import Image from "next/image";
-import React from "react";
+import React, { FC } from "react";
 import magBanner from "../../../public/assets/images/mag/indexPage/indexPageBanner/mag-banner.svg";
 import { Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-const MagHeader = () => {
+interface MagHeaderProps {
+  navBarClassName?: string;
+  bannerClassName?: string;
+}
+const MagHeader: FC<MagHeaderProps> = ({
+  bannerClassName,
+  navBarClassName,
+}) => {
   //   for render banner
   const renderBanner = () => {
     return (
@@ -28,7 +35,7 @@ const MagHeader = () => {
     ];
     return (
       <>
-        <div className="w-full bg-paper p-4 flex items-center justify-between rounded-t-2xl">
+        <div className={`${navBarClassName} w-full bg-paper p-4 flex items-center justify-between rounded-t-2xl`}>
           <div className="flex items-center justify-center gap-5">
             {navItems.map((item, index) => (
               <span
