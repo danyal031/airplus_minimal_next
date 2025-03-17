@@ -1,9 +1,10 @@
+"use client";
 import Image from "next/image";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import magBanner from "../../../public/assets/images/mag/indexPage/indexPageBanner/mag-banner.svg";
-import { Button } from "@mui/material";
+import { Button, Popover } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 interface MagHeaderProps {
   navBarClassName?: string;
   bannerClassName?: string;
@@ -12,6 +13,13 @@ const MagHeader: FC<MagHeaderProps> = ({
   bannerClassName,
   navBarClassName,
 }) => {
+  // initial states
+  const [moreCategory, setMoreCategory] = useState(null);
+
+  const userMenuClose = () => {
+    setMoreCategory(null);
+  };
+
   //   for render banner
   const renderBanner = () => {
     return (
@@ -35,7 +43,9 @@ const MagHeader: FC<MagHeaderProps> = ({
     ];
     return (
       <>
-        <div className={`${navBarClassName} w-full bg-paper p-4 flex items-center justify-between rounded-t-2xl`}>
+        <div
+          className={`${navBarClassName} w-full bg-paper p-4 flex items-center justify-between rounded-t-2xl`}
+        >
           <div className="flex items-center justify-center gap-5">
             {navItems.map((item, index) => (
               <span
@@ -45,6 +55,10 @@ const MagHeader: FC<MagHeaderProps> = ({
                 {item.label}
               </span>
             ))}
+            <div className="flex items-center justify-center gap-1">
+              <span className="text-sm text-text-main font-semibold">سایر</span>
+              <ExpandMoreIcon fontSize="small" />
+            </div>
           </div>
           <div className="flex items-center justify-center gap-2">
             <SearchIcon fontSize="medium" color="primary" />
@@ -52,6 +66,22 @@ const MagHeader: FC<MagHeaderProps> = ({
               بازگشت به ایرپلاس
             </Button>
           </div>
+          <Popover
+            open={Boolean(moreCategory)}
+            anchorEl={moreCategory}
+            onClose={userMenuClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+            classes={{
+              paper: "py-8",
+            }}
+          ></Popover>
         </div>
       </>
     );

@@ -12,7 +12,7 @@ import Diversity3Icon from "@mui/icons-material/Diversity3";
 import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArticleDetailsProgress from "@/components/Skelton-Components/mag/articlePage/ArticleDetailsProgress";
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 export interface MagArticleContainerProps {
   params: {
     articleId: string[];
@@ -85,6 +85,12 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
                     {item.label}
                   </span>
                 ))}
+                <div className="flex items-center justify-center gap-1">
+                  <span className="text-sm text-text-main font-semibold">
+                    سایر
+                  </span>
+                  <ExpandMoreIcon fontSize="small" />
+                </div>
               </div>{" "}
               <div className="flex items-center justify-center gap-2">
                 <SearchIcon fontSize="medium" color="primary" />
