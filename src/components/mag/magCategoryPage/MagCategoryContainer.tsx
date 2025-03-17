@@ -16,7 +16,7 @@ const MagCategoryContainer: FC<MagCategoryContainerProps> = ({ params }) => {
         <div className="col-span-9">
           <ArticleList params={params} />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-3 relative">
           <SuggestedArticles params={params} />
         </div>
       </div>
