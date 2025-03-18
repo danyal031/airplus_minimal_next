@@ -16,7 +16,7 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
   const renderFullWidthCard = () => {
     return (
       <>
-        <div className="min-h-48 border-4 border-paper bg-main rounded-2xl grid grid-cols-5 gap-1">
+        <div className="min-h-48 border-2 border-primary-main bg-paper rounded-2xl grid grid-cols-5 gap-1">
           <div className="p-2 col-span-2">
             <div className="relative overflow-hidden rounded-xl h-full">
               <Image
@@ -30,7 +30,7 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
             </div>
           </div>
           <div className="p-3 pt-0 col-span-3 relative flex flex-col items-start justify-start gap-4">
-            <span className="rounded-tab-up-sm self-center h-9 w-3/4 bg-paper text-primary-main font-bold text-sm truncate flex items-center justify-center">
+            <span className="rounded-tab-up-sm self-center h-9 w-3/4 bg-primary-main text-paper font-bold text-sm truncate flex items-center justify-center">
               {article.title}
             </span>
             <div className="h-full w-full flex flex-col items-start justify-between">
