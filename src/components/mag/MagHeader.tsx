@@ -5,6 +5,7 @@ import magBanner from "../../../public/assets/images/mag/indexPage/indexPageBann
 import { Button, Popover } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Link from "next/link";
 interface MagHeaderProps {
   navBarClassName?: string;
   bannerClassName?: string;
@@ -55,10 +56,6 @@ const MagHeader: FC<MagHeaderProps> = ({
                 {item.label}
               </span>
             ))}
-            <div className="flex items-center justify-center gap-1">
-              <span className="text-sm text-text-main font-semibold">سایر</span>
-              <ExpandMoreIcon fontSize="small" />
-            </div>
           </div>
           <div className="flex items-center justify-center gap-2">
             <SearchIcon fontSize="medium" color="primary" />
