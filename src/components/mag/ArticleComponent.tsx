@@ -16,7 +16,11 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
   const renderFullWidthCard = () => {
     return (
       <>
-        <div className="min-h-48 border-2 border-primary-main bg-paper rounded-2xl grid grid-cols-5 gap-1">
+        <Link
+          href={"/mag/articles/" + article.id + "/" + article.slug}
+          target="_blank"
+          className="min-h-48 border-2 border-primary-main bg-paper rounded-2xl grid grid-cols-5 gap-1"
+        >
           <div className="p-2 col-span-2">
             <div className="relative overflow-hidden rounded-xl h-full">
               <Image
@@ -47,17 +51,13 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
                 {article.summary}
               </p>
               <div className="w-full flex items-center justify-end">
-                <Link
-                  className="text-primary-main text-xs font-bold"
-                  href={"/mag/articles/" + article.id + "/" + article.slug}
-                  target="_blank"
-                >
+                <span className="text-primary-main text-xs font-bold">
                   بیشتر بخوانید...
-                </Link>
+                </span>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       </>
     );
   };
@@ -66,9 +66,13 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
   const renderHalfWidthCard = () => {
     return (
       <>
-        <div className="pb-2 min-h-72 border-4 border-paper bg-main rounded-2xl flex flex-col items-center justify-start gap-0 overflow-hidden">
+        <Link
+          href={"/mag/articles/" + article.id + "/" + article.slug}
+          target="_blank"
+          className="pb-2 min-h-72 border-2 border-primary-main bg-paper rounded-2xl flex flex-col items-center justify-start gap-0 overflow-hidden"
+        >
           <div className="w-full h-40 relative">
-            <span className="rounded-tab-up-sm absolute top-0 left-1/2 -translate-x-1/2 self-center h-9 w-3/4 bg-paper text-primary-main font-bold text-sm truncate flex items-center justify-center z-10">
+            <span className="rounded-tab-up-sm absolute top-0 left-1/2 -translate-x-1/2 self-center h-9 w-3/4 bg-primary-main text-paper font-bold text-sm truncate flex items-center justify-center z-10">
               {article.title}
             </span>
             <Image
@@ -94,16 +98,12 @@ const ArticleComponent: FC<ArticleComponentProps> = ({
               {article.summary}
             </p>
             <div className="w-full flex items-center justify-end">
-              <Link
-                className="text-primary-main text-xs font-bold"
-                href={"/mag/articles/" + article.id + "/" + article.slug}
-                target="_blank"
-              >
+              <span className="text-primary-main text-xs font-bold">
                 بیشتر بخوانید...
-              </Link>
+              </span>
             </div>
           </div>
-        </div>
+        </Link>
       </>
     );
   };
