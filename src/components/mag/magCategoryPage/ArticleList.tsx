@@ -146,13 +146,3 @@ const ArticleList: FC<ArticleListProps> = ({ params }) => {
 };
 
 export default ArticleList;
-
-interface InterestingArticleComponentPops {
-  article: ArticleDataTypes;
-}
-
-const InterestingArticleComponent: FC<InterestingArticleComponentPops> = ({
-  article,
-}) => {
-  return <></>;
-};
