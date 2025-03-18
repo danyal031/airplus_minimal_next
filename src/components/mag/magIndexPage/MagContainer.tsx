@@ -9,7 +9,7 @@ import MagSubHeader from "./MagSubHeader";
 
 const MagContainer = () => {
   return (
-    <div className="container my-24 flex flex-col items-center justify-start gap-24">
+    <div className="container my-24 mt-5 flex flex-col items-center justify-start gap-10">
       <MagSubHeader />
       <SubCategoryList />
       <div className="w-full grid grid-cols-12 gap-7">
