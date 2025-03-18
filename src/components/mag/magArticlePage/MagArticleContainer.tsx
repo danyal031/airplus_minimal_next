@@ -172,7 +172,7 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
   return (
     <>
       {renderNavBar()}
-      <div className="container my-24">
+      <div className="container my-24 mt-10">
         <div className="col-span-12 grid grid-cols-12 gap-7 bg-paper rounded-2xl">
           <div className="col-span-9">{renderArticleDetails()}</div>
           <div className="col-span-3 relative p-3 pr-0">
