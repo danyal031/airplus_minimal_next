@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import notFoundBanner from "../../../public/assets/images/global/404-banner.svg";
+import Link from "next/link";
 
 const NotFoundPage = () => {
   // render 404 banner
@@ -98,11 +99,14 @@ const NotFoundPage = () => {
           </div>
           <div className="col-span-3">
             <div className="bg-primary-main rounded-xl p-4 flex flex-col items-center justify-start gap-3 h-full">
-              <div className="w-full flex items-center justify-center p-3 rounded-md bg-paper">
+              <Link
+                href={"/"}
+                className="w-full flex items-center justify-center p-3 rounded-md bg-paper"
+              >
                 <span className="text-primary-main text-base font-semibold">
                   برگشتن به صفحه اصلی
                 </span>
-              </div>
+              </Link>
               <div className="w-full flex items-center justify-center">
                 <p className="text-sm text-paper font-semibold">
                   لینک های مشابه آنچه جستجو کردید
@@ -116,7 +120,7 @@ const NotFoundPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-3 container">
+    <div className="grid grid-cols-1 gap-3 container my-24">
       {render404Banner()}
       <div className="flex items-center justify-center">
         <span className="text-primary-main font-bold text-2xl">
