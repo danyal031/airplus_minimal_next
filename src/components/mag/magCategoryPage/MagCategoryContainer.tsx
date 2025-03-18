@@ -10,7 +10,7 @@ interface MagCategoryContainerProps {
 }
 const MagCategoryContainer: FC<MagCategoryContainerProps> = ({ params }) => {
   return (
-    <div className="container my-24 flex flex-col items-center justify-start gap-16">
+    <div className="container my-24 mt-8 flex flex-col items-center justify-start gap-5">
       <MagHeader navBarClassName="rounded-2xl" />
       <div className="grid grid-cols-12 gap-7 w-full">
         <div className="col-span-9">
