@@ -5,6 +5,7 @@ import Image from "next/image";
 import React, { FC, useEffect, useState } from "react";
 import ArticleComponent from "../ArticleComponent";
 import InterestingArticlesProgress from "@/components/Skelton-Components/mag/categoryPage/articleList/InterestingArticlesProgress";
+import CategoryArticlesProgress from "@/components/Skelton-Components/mag/categoryPage/articleList/CategoryArticlesProgress";
 
 interface ArticleListProps {
   params: {
@@ -120,17 +121,19 @@ const ArticleList: FC<ArticleListProps> = ({ params }) => {
     return (
       <>
         <div className="w-full grid grid-cols-1 gap-3">
-          {categoryArticlesLoading
-            ? "loading"
-            : categoryArticles.length === 0
-            ? "موجود نیست"
-            : categoryArticles.map((item, index) => (
-                <ArticleComponent
-                  key={item.id}
-                  article={item}
-                  typeRendering={"full-width"}
-                />
-              ))}
+          {categoryArticlesLoading ? (
+            <CategoryArticlesProgress />
+          ) : categoryArticles.length === 0 ? (
+            "موجود نیست"
+          ) : (
+            categoryArticles.map((item, index) => (
+              <ArticleComponent
+                key={item.id}
+                article={item}
+                typeRendering={"full-width"}
+              />
+            ))
+          )}
         </div>
       </>
     );
