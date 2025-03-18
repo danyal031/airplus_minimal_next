@@ -6,6 +6,7 @@ import React, { FC, useEffect, useState } from "react";
 import ArticleComponent from "../ArticleComponent";
 import InterestingArticlesProgress from "@/components/Skelton-Components/mag/categoryPage/articleList/InterestingArticlesProgress";
 import CategoryArticlesProgress from "@/components/Skelton-Components/mag/categoryPage/articleList/CategoryArticlesProgress";
+import { Tooltip } from "@mui/material";
 
 interface ArticleListProps {
   params: {
@@ -74,8 +75,35 @@ const ArticleList: FC<ArticleListProps> = ({ params }) => {
                       className="object-cover"
                     />
                     <div
-                      className={`h-1/3 flex flex-col items-start justify-center gap-1 absolute bottom-0 w-full bg-gradient-to-t from-black/80  to-transparent transition-all duration-500 ease-in-out`}
-                    ></div>
+                      className={`py-2 px-3 h-1/3 flex flex-col items-center justify-end gap-0 absolute bottom-0 w-full bg-gradient-to-t from-black/80  to-transparent transition-all duration-500 ease-in-out`}
+                    >
+                      <span
+                        style={{
+                          display: "-webkit-box",
+                          WebkitBoxOrient: "vertical",
+                          WebkitLineClamp: 1,
+                          wordBreak: "break-word",
+                          overflowWrap: "break-word",
+                        }}
+                        className="text-paper text-[10px] font-semibold overflow-hidden w-full"
+                      >
+                        {interestingArticles[0].title}
+                      </span>
+                      <Tooltip title={interestingArticles[0].summary}>
+                        <span
+                          style={{
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 1,
+                            wordBreak: "break-word",
+                            overflowWrap: "break-word",
+                          }}
+                          className="text-paper text-[10px] font-semibold overflow-hidden w-full"
+                        >
+                          {interestingArticles[0].summary}
+                        </span>
+                      </Tooltip>
+                    </div>
                   </div>
                   <div className="w-full h-3/5 relative rounded-2xl overflow-hidden">
                     <Image
@@ -89,8 +117,35 @@ const ArticleList: FC<ArticleListProps> = ({ params }) => {
                       className="object-cover"
                     />
                     <div
-                      className={`h-1/3 flex flex-col items-start justify-center gap-1 absolute bottom-0 w-full bg-gradient-to-t from-black/80  to-transparent transition-all duration-500 ease-in-out`}
-                    ></div>
+                      className={`py-2 px-3 h-1/3 flex flex-col items-center justify-end gap-0 absolute bottom-0 w-full bg-gradient-to-t from-black/80  to-transparent transition-all duration-500 ease-in-out`}
+                    >
+                      <span
+                        style={{
+                          display: "-webkit-box",
+                          WebkitBoxOrient: "vertical",
+                          WebkitLineClamp: 1,
+                          wordBreak: "break-word",
+                          overflowWrap: "break-word",
+                        }}
+                        className="text-paper text-[10px] font-semibold overflow-hidden w-full"
+                      >
+                        {interestingArticles[1].title}
+                      </span>
+                      <Tooltip title={interestingArticles[1].summary}>
+                        <span
+                          style={{
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 1,
+                            wordBreak: "break-word",
+                            overflowWrap: "break-word",
+                          }}
+                          className="text-paper text-[10px] font-semibold overflow-hidden w-full"
+                        >
+                          {interestingArticles[1].summary}
+                        </span>
+                      </Tooltip>
+                    </div>
                   </div>
                 </>
               </div>
@@ -106,8 +161,35 @@ const ArticleList: FC<ArticleListProps> = ({ params }) => {
                   className="object-cover"
                 />{" "}
                 <div
-                  className={`h-1/3 flex flex-col items-start justify-center gap-1 absolute bottom-0 w-full bg-gradient-to-t from-black/80  to-transparent transition-all duration-500 ease-in-out`}
-                ></div>
+                  className={`py-2 px-3 h-1/3 flex flex-col items-center justify-end gap-0 absolute bottom-0 w-full bg-gradient-to-t from-black/80  to-transparent transition-all duration-500 ease-in-out`}
+                >
+                  <span
+                    style={{
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 1,
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                    }}
+                    className="text-paper text-[10px] font-semibold overflow-hidden w-full"
+                  >
+                    {interestingArticles[2].title}
+                  </span>
+                  <Tooltip title={interestingArticles[2].summary}>
+                    <span
+                      style={{
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 1,
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
+                      className="text-paper text-[10px] font-semibold overflow-hidden w-full"
+                    >
+                      {interestingArticles[2].summary}
+                    </span>
+                  </Tooltip>
+                </div>
               </div>
             </>
           )}
