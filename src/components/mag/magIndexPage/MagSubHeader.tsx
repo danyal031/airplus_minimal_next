@@ -60,7 +60,7 @@ const MagSubHeader = () => {
     return (
       <>
         <div className="w-full grid grid-cols-3 gap-3">
-          <div className="relative overflow-hidden rounded-b-2xl col-span-3 min-h-96">
+          <div className="relative overflow-hidden rounded-b-2xl col-span-3 min-h-[430px]">
             <Image
               style={{
                 WebkitMaskImage: `url('/assets/images/mag/indexPage/postsCover/maskImage/mask-image-down-main.svg')`,
