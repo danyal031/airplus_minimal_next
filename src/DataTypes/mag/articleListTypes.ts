@@ -16,13 +16,13 @@ export interface ArticleDataTypes {
   metatags: any[];
 }
 
-export interface Operator {
+interface Operator {
   id: string;
   avatar: any;
   fullname: string;
 }
 
-export interface Category {
+interface Category {
   id: number;
   main: any;
   title: string;
@@ -35,7 +35,7 @@ export interface Category {
   deleted_at: any;
 }
 
-export interface Tag {
+interface Tag {
   id: number;
   title: string;
   slug: string;

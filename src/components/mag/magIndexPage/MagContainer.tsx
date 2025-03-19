@@ -5,12 +5,12 @@ import LatestPosts from "./LatestPosts";
 import TravelNews from "./TravelNews";
 import Travelogue from "./Travelogue";
 import Services from "./Services";
-import MagSubHeader from "./MagSubHeader";
+import InterestingArticlesCover from "./InterestingArticlesCover";
 
 const MagContainer = () => {
   return (
-    <div className="container my-24 mt-5 flex flex-col items-center justify-start gap-10">
-      <MagSubHeader />
+    <div className="flex flex-col items-center justify-start gap-10">
+      <InterestingArticlesCover />
       <SubCategoryList />
       <div className="w-full grid grid-cols-12 gap-7">
         <div className="col-span-9">

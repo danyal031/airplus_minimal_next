@@ -35,26 +35,28 @@ const MagHeader: FC<MagHeaderProps> = ({
   //   for render nav bar
   const renderNavBar = () => {
     const navItems = [
-      { label: "صفحه اصلی", id: "1" },
-      { label: "ایران گردی", id: "2" },
-      { label: "جهان گردی", id: "3" },
-      { label: "راهنمای سفر", id: "4" },
-      { label: "اخبار سفر", id: "5" },
-      { label: "سفر نامه", id: "6" },
+      { label: "صفحه اصلی", id: "1", path: "/mag" },
+      { label: "ایران گردی", id: "2", path: "#" },
+      { label: "جهان گردی", id: "3", path: "#" },
+      { label: "راهنمای سفر", id: "4", path: "#" },
+      { label: "اخبار سفر", id: "5", path: "#" },
+      { label: "سفر نامه", id: "6", path: "#" },
+      { label: "دسته‌ بندی‌ ها", id: "7", path: "/mag/categories/list" },
     ];
     return (
       <>
         <div
-          className={`${navBarClassName} w-full bg-paper p-4 flex items-center justify-between rounded-t-2xl`}
+          className={`${navBarClassName} w-full bg-paper p-4 flex items-center justify-between rounded-2xl`}
         >
           <div className="flex items-center justify-center gap-5">
             {navItems.map((item, index) => (
-              <span
+              <Link
+                href={item.path}
                 key={index}
                 className="text-sm text-text-main font-semibold"
               >
                 {item.label}
-              </span>
+              </Link>
             ))}
           </div>
           <div className="flex items-center justify-center gap-2">
