@@ -12,7 +12,7 @@ import Diversity3Icon from "@mui/icons-material/Diversity3";
 import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArticleDetailsProgress from "@/components/Skelton-Components/mag/articlePage/ArticleDetailsProgress";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Link from "next/link";
 export interface MagArticleContainerProps {
   params: {
     articleId: string[];
@@ -61,12 +61,13 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
   //   handle  render nav bar
   const renderNavBar = () => {
     const navItems = [
-      { label: "صفحه اصلی", id: "1" },
-      { label: "ایران گردی", id: "2" },
-      { label: "جهان گردی", id: "3" },
-      { label: "راهنمای سفر", id: "4" },
-      { label: "اخبار سفر", id: "5" },
-      { label: "سفر نامه", id: "6" },
+      { label: "صفحه اصلی", id: "1", path: "/mag" },
+      { label: "ایران گردی", id: "2", path: "#" },
+      { label: "جهان گردی", id: "3", path: "#" },
+      { label: "راهنمای سفر", id: "4", path: "#" },
+      { label: "اخبار سفر", id: "5", path: "#" },
+      { label: "سفر نامه", id: "6", path: "#" },
+      { label: "دسته‌ بندی‌ ها", id: "7", path: "/mag/categories/list" },
     ];
     return (
       <>
@@ -78,12 +79,13 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
             >
               <div className="flex items-center justify-center gap-5">
                 {navItems.map((item, index) => (
-                  <span
+                  <Link
+                    href={item.path}
                     key={index}
                     className="text-sm text-text-main font-semibold"
                   >
                     {item.label}
-                  </span>
+                  </Link>
                 ))}
               </div>{" "}
               <div className="flex items-center justify-center gap-2">
