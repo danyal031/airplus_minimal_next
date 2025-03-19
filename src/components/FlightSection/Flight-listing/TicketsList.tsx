@@ -563,16 +563,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
         <div className="w-full overflow-x-auto flex items-center justify-start gap-2 p-2">
           {rules.map((rule) => {
             return (
-              <>
-                <div className="grid grid-cols-1 gap-3 border border-dashed border-primary-main rounded-2xl p-3 min-w-36">
-                  <span className="text-text-main text-xs font-semibold text-justify">
-                    {rule.title}
-                  </span>
-                  <span className="flex items-center justify-center text-primary-main text-xs font-semibold">
-                    {rule.penalty}
-                  </span>
-                </div>
-              </>
+              <div
+                key={rule.id}
+                className="grid grid-cols-1 gap-3 border border-dashed border-primary-main rounded-2xl p-3 min-w-36"
+              >
+                <span className="text-text-main text-xs font-semibold text-justify">
+                  {rule.title}
+                </span>
+                <span className="flex items-center justify-center text-primary-main text-xs font-semibold">
+                  {rule.penalty}
+                </span>
+              </div>
             );
           })}
         </div>
@@ -965,16 +966,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
         <div className="w-full overflow-y-auto flex flex-col items-center justify-start gap-3 px-2 py-5">
           {rules.map((rule) => {
             return (
-              <>
-                <div className="flex items-center justify-between gap-5 border border-dashed border-primary-main rounded-2xl p-5 w-full">
-                  <span className="text-text-main text-xs font-semibold text-justify truncate">
-                    {rule.title}
-                  </span>
-                  <span className="flex items-center justify-center text-primary-main text-sm font-semibold">
-                    {rule.penalty}
-                  </span>
-                </div>
-              </>
+              <div
+                key={rule.id}
+                className="flex items-center justify-between gap-5 border border-dashed border-primary-main rounded-2xl p-5 w-full"
+              >
+                <span className="text-text-main text-xs font-semibold text-justify truncate">
+                  {rule.title}
+                </span>
+                <span className="flex items-center justify-center text-primary-main text-sm font-semibold">
+                  {rule.penalty}
+                </span>
+              </div>
             );
           })}
         </div>

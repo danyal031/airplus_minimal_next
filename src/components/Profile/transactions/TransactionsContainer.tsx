@@ -121,6 +121,7 @@ const TransactionsContainer = () => {
             Array.from(Array(5)).map((item, index) => {
               return (
                 <FinancialListProgress
+                  key={index}
                   isLast={index === financialList.length - 1}
                 />
               );

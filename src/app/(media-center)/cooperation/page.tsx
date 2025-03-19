@@ -59,16 +59,14 @@ const page = () => {
           <div className="w-full grid grid-cols-5 gap-2">
             {features.map((item) => {
               return (
-                <>
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-center p-3 bg-paper rounded-xl border-2 border-primary-main"
-                  >
-                    <span className="text-text-main text-sm font-semibold">
-                      {item.title}
-                    </span>
-                  </div>
-                </>
+                <div
+                  key={item.id}
+                  className="flex items-center justify-center p-3 bg-paper rounded-xl border-2 border-primary-main"
+                >
+                  <span className="text-text-main text-sm font-semibold">
+                    {item.title}
+                  </span>
+                </div>
               );
             })}
           </div>

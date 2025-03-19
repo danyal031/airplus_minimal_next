@@ -76,24 +76,22 @@ const NotFoundPage = () => {
             </div>
             {Articles.map((item) => {
               return (
-                <>
-                  <div
-                    key={item.id}
-                    className="col-span-1 flex items-center justify-start gap-2"
-                  >
-                    <div className="text-text-main text-sm font-semibold flex items-center justify-center h-20 w-28 rounded-xl bg-gray-200">
-                      image
-                    </div>
-                    <div className="flex flex-col items-start justify-center gap-2">
-                      <span className="text-text-main font-bold text-sm">
-                        {item.title}
-                      </span>
-                      <span className="text-text-main font-semibold text-xs text-justify">
-                        {item.description}
-                      </span>
-                    </div>
+                <div
+                  key={item.id}
+                  className="col-span-1 flex items-center justify-start gap-2"
+                >
+                  <div className="text-text-main text-sm font-semibold flex items-center justify-center h-20 w-28 rounded-xl bg-gray-200">
+                    image
                   </div>
-                </>
+                  <div className="flex flex-col items-start justify-center gap-2">
+                    <span className="text-text-main font-bold text-sm">
+                      {item.title}
+                    </span>
+                    <span className="text-text-main font-semibold text-xs text-justify">
+                      {item.description}
+                    </span>
+                  </div>
+                </div>
               );
             })}
           </div>

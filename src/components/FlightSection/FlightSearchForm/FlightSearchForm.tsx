@@ -590,6 +590,7 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
             <div className="flex flex-col items-start justify-start gap-2">
               {filteredData.map((item: AirportDataType) => (
                 <div
+                  key={item.id}
                   className="w-full flex items-center justify-start gap-1 py-1 px-2 text-gray-500 hover:text-primary-main cursor-pointer"
                   onClick={() => {
                     handleClickSelectItem(item);
@@ -614,6 +615,7 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
           <div className="flex flex-col items-start justify-start gap-2">
             {airportsList.slice(0, 10).map((item: AirportDataType) => (
               <div
+                key={item.id}
                 onClick={() => {
                   handleClickSelectItem(item);
                 }}
@@ -774,6 +776,7 @@ const DrawerMobile: FC<DrawerMobileProps> = ({
           <div className="flex flex-col items-start justify-start gap-2">
             {filteredData.map((item: AirportDataType) => (
               <div
+                key={item.id}
                 className="w-full flex items-center justify-start gap-1 py-1 px-2 text-gray-500 hover:text-primary-main cursor-pointer"
                 onClick={() => {
                   handleClickSelectItem(item);
@@ -798,6 +801,7 @@ const DrawerMobile: FC<DrawerMobileProps> = ({
         <div className="flex flex-col items-start justify-start gap-2">
           {data.slice(0, 10).map((item: AirportDataType) => (
             <div
+              key={item.id}
               onClick={() => {
                 handleClickSelectItem(item);
               }}

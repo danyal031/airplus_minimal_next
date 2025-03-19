@@ -38,14 +38,12 @@ const page = () => {
           <div className="grid grid-cols-5 gap-3 w-full">
             {achievements.map((item) => {
               return (
-                <>
-                  <div
-                    key={item.id}
-                    className="bg-main rounded-xl p-3 flex items-center justify-center"
-                  >
-                    {item.title}
-                  </div>
-                </>
+                <div
+                  key={item.id}
+                  className="bg-main rounded-xl p-3 flex items-center justify-center"
+                >
+                  {item.title}
+                </div>
               );
             })}
           </div>
@@ -70,14 +68,12 @@ const page = () => {
           <div className="grid grid-cols-5 gap-3 w-full">
             {achievements.map((item) => {
               return (
-                <>
-                  <div
-                    key={item.id}
-                    className="bg-main rounded-xl p-3 flex items-center justify-center"
-                  >
-                    {item.title}
-                  </div>
-                </>
+                <div
+                  key={item.id}
+                  className="bg-main rounded-xl p-3 flex items-center justify-center"
+                >
+                  {item.title}
+                </div>
               );
             })}
           </div>

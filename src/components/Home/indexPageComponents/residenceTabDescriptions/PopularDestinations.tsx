@@ -26,24 +26,21 @@ const PopularDestinations = () => {
           {tabList.map((tab) => {
             const isActive = destinationsTab === tab.id;
             return (
-              <>
-                {" "}
-                <span
-                  key={tab.id}
-                  onClick={() => handleChangeTab(tab.id)}
-                  className={`h-9 hover:cursor-pointer col-span-1 flex items-center justify-center font-semibold  ${
-                    isActive
-                      ? "bg-primary-main text-paper z-[1]"
-                      : "text-primary-main bg-paper z-[0]"
-                  } ${
-                    destinationsTab === "1"
-                      ? "rounded-r-none border-r-0 rounded-tab-down-sm -ml-4"
-                      : "rounded-l-none border-l-0 rounded-tab-up-sm -mr-4"
-                  }`}
-                >
-                  {tab.label}
-                </span>
-              </>
+              <span
+                key={tab.id}
+                onClick={() => handleChangeTab(tab.id)}
+                className={`h-9 hover:cursor-pointer col-span-1 flex items-center justify-center font-semibold  ${
+                  isActive
+                    ? "bg-primary-main text-paper z-[1]"
+                    : "text-primary-main bg-paper z-[0]"
+                } ${
+                  destinationsTab === "1"
+                    ? "rounded-r-none border-r-0 rounded-tab-down-sm -ml-4"
+                    : "rounded-l-none border-l-0 rounded-tab-up-sm -mr-4"
+                }`}
+              >
+                {tab.label}
+              </span>
             );
           })}
         </div>
@@ -118,17 +115,11 @@ const PopularDestinations = () => {
       <>
         <div className="bg-paper overflow-x-auto max-w-full flex items-center justify-start rounded-xl gap-2 p-2">
           {internalResidences.map((item: any[]) => {
-            return (
-              <>
-                {item.map((el: any, index) => {
-                  return (
-                    <>
-                      <RenderImageComponent index={index} element={el} />
-                    </>
-                  );
-                })}
-              </>
-            );
+            return item.map((el: any, index) => {
+              return (
+                <RenderImageComponent index={index} element={el} key={index} />
+              );
+            });
           })}
         </div>
       </>

@@ -69,17 +69,11 @@ const PopularResidence = () => {
       <>
         <div className="bg-paper overflow-x-auto max-w-full flex items-center justify-start rounded-xl gap-2 p-2">
           {internalResidences.map((item: any[]) => {
-            return (
-              <>
-                {item.map((el: any, index) => {
-                  return (
-                    <>
-                      <RenderImageComponent index={index} element={el} />
-                    </>
-                  );
-                })}
-              </>
-            );
+            return item.map((el: any, index) => {
+              return (
+                <RenderImageComponent index={index} element={el} key={index} />
+              );
+            });
           })}
         </div>
       </>

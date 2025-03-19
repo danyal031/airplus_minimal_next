@@ -36,13 +36,11 @@ const Services = () => {
       <div className="grid grid-cols-1 gap-3 w-full">
         {services.map((item) => {
           return (
-            <>
-              <div key={item.id} className="flex items-center justify-start">
-                <span className="text-text-main font-extrabold text-sm">
-                  {item.title}
-                </span>
-              </div>
-            </>
+            <div key={item.id} className="flex items-center justify-start">
+              <span className="text-text-main font-extrabold text-sm">
+                {item.title}
+              </span>
+            </div>
           );
         })}
       </div>

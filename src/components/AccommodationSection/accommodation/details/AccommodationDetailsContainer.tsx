@@ -584,7 +584,10 @@ const AccommodationDetailsOnDesktop: FC<AccommodationDetailsOnDesktopProps> = ({
                 {additionalDetailsAccommodation.facility_categories
                   .find((item) => item.title_fa === "عمومی")
                   ?.facilities?.map((element) => (
-                    <span className="text-text-main text-sm font-semibold">
+                    <span
+                      key={element.id}
+                      className="text-text-main text-sm font-semibold"
+                    >
                       {element.title_fa}
                     </span>
                   ))}
@@ -624,7 +627,7 @@ const AccommodationDetailsOnDesktop: FC<AccommodationDetailsOnDesktopProps> = ({
           {roomsDetails && roomsDetails.length !== 0 ? (
             <div className="grid grid-cols-1 gap-2">
               {roomsDetails.map((room) => {
-                return <RoomCard room={room} id={room.id} />;
+                return <RoomCard room={room} id={room.id} key={room.id} />;
               })}
             </div>
           ) : (

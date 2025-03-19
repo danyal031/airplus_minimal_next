@@ -62,19 +62,17 @@ const CheckoutPassengerContainer = () => {
     return (
       <>
         {flightPassengers.map((item, index) => (
-          <>
-            <PassengerInformation
-              key={item.id}
-              index={index}
-              item={item}
-              type="flight"
-              passengers={flightPassengers}
-              setPassengers={setFlightPassengers}
-              ref={(el) => (childRef.current[index] = el)}
-              handleOnChange={handleChangeUserInfo}
-              handleRemovePassenger={handleRemovePassenger}
-            />
-          </>
+          <PassengerInformation
+            key={item.id}
+            index={index}
+            item={item}
+            type="flight"
+            passengers={flightPassengers}
+            setPassengers={setFlightPassengers}
+            ref={(el) => (childRef.current[index] = el)}
+            handleOnChange={handleChangeUserInfo}
+            handleRemovePassenger={handleRemovePassenger}
+          />
         ))}
       </>
     );

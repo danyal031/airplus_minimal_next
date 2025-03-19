@@ -130,20 +130,19 @@ const FlightDescriptionOnDesktop = () => {
           </div>
           <div className="grid grid-cols-2 gap-14">
             {benefits.map((benefit) => (
-              <>
-                <div
-                  className={`${
-                    benefit.id === 5 ? "col-span-2" : "col-span-1"
-                  } grid grid-cols-1 gap-2 text-text-main`}
-                >
-                  <div className="flex items-center justify-center">
-                    <span className="text-lg font-bold">{benefit.title} </span>
-                  </div>
-                  <p className="text-justify text-sm font-semibold leading-7">
-                    {benefit.description}
-                  </p>
+              <div
+                key={benefit.id}
+                className={`${
+                  benefit.id === 5 ? "col-span-2" : "col-span-1"
+                } grid grid-cols-1 gap-2 text-text-main`}
+              >
+                <div className="flex items-center justify-center">
+                  <span className="text-lg font-bold">{benefit.title} </span>
                 </div>
-              </>
+                <p className="text-justify text-sm font-semibold leading-7">
+                  {benefit.description}
+                </p>
+              </div>
             ))}
           </div>
         </div>
@@ -290,16 +289,17 @@ const FlightDescriptionOnMobile = () => {
           </div>
           <div className="grid grid-cols-1 gap-14">
             {benefits.map((benefit) => (
-              <>
-                <div className={`grid grid-cols-1 gap-2 text-text-main`}>
-                  <div className="flex items-center justify-center">
-                    <span className="text-lg font-bold">{benefit.title} </span>
-                  </div>
-                  <p className="text-justify text-sm font-semibold leading-7">
-                    {benefit.description}
-                  </p>
+              <div
+                key={benefit.id}
+                className={`grid grid-cols-1 gap-2 text-text-main`}
+              >
+                <div className="flex items-center justify-center">
+                  <span className="text-lg font-bold">{benefit.title} </span>
                 </div>
-              </>
+                <p className="text-justify text-sm font-semibold leading-7">
+                  {benefit.description}
+                </p>
+              </div>
             ))}
           </div>
         </div>

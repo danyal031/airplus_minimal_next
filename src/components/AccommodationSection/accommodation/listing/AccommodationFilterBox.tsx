@@ -346,8 +346,11 @@ const AccommodationFilterBox = () => {
           </div>
           {openFacilities && (
             <div className="grid grid-cols-1 gap-1">
-              {data.map((item: string) => (
-                <div className="flex items-center justify-start gap-2">
+              {data.map((item: string, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-start gap-2"
+                >
                   <Checkbox checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} />
                   <span className="text-text-main text-sm font-semibold">
                     {item}

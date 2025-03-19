@@ -63,11 +63,7 @@ const SuggestedArticles: FC<SuggestedArticlesProps> = ({ params }) => {
             "موجود نیست"
           ) : (
             mostViewedArticles.map((item) => {
-              return (
-                <>
-                  <MostViewedArticle key={item.id} article={item} />
-                </>
-              );
+              return <MostViewedArticle key={item.id} article={item} />;
             })
           )}{" "}
           <div className="flex items-start justify-center">
@@ -94,9 +90,7 @@ const SuggestedArticles: FC<SuggestedArticlesProps> = ({ params }) => {
             "موجود نیست"
           ) : (
             otherArticles.map((item) => (
-              <>
-                <OtherArticle article={item} key={item.id} />
-              </>
+              <OtherArticle article={item} key={item.id} />
             ))
           )}
           <div className="flex items-start justify-center">

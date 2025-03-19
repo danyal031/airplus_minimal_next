@@ -21,19 +21,17 @@ const page = () => {
         <div className="grid grid-cols-2 gap-14">
           {content.map((item) => {
             return (
-              <>
-                <div
-                  key={item.id}
-                  className="flex flex-col items-start justify-start gap-3"
-                >
-                  <span className="text-text-main font-bold text-base">
-                    {item.label}
-                  </span>
-                  <span className="text-text-main font-semibold text-sm text-justify leading-7">
-                    {item.description}
-                  </span>
-                </div>
-              </>
+              <div
+                key={item.id}
+                className="flex flex-col items-start justify-start gap-3"
+              >
+                <span className="text-text-main font-bold text-base">
+                  {item.label}
+                </span>
+                <span className="text-text-main font-semibold text-sm text-justify leading-7">
+                  {item.description}
+                </span>
+              </div>
             );
           })}{" "}
         </div>
@@ -58,14 +56,12 @@ const page = () => {
           </div>
           {features.map((item) => {
             return (
-              <>
-                <div
-                  key={item.id}
-                  className="bg-main rounded-lg p-4 flex items-center justify-center border-2 hover:border-primary-main cursor-pointer"
-                >
-                  <span className="text-text-main font-bold">{item.title}</span>
-                </div>
-              </>
+              <div
+                key={item.id}
+                className="bg-main rounded-lg p-4 flex items-center justify-center border-2 hover:border-primary-main cursor-pointer"
+              >
+                <span className="text-text-main font-bold">{item.title}</span>
+              </div>
             );
           })}
         </div>

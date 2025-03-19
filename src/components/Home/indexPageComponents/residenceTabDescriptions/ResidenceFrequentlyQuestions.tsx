@@ -218,24 +218,22 @@ const ResidenceFrequentlyQuestions = () => {
           <div className="grid grid-cols-1 gap-6 max-h-[490px] overflow-y-auto p-5">
             {questionsList.map((item) => {
               return (
-                <>
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-start gap-3"
-                  >
-                    <div className="h-20 w-20 p-4 rounded-lg bg-gray-200 flex items-center justify-center">
-                      image
-                    </div>
-                    <div className="flex flex-col items-start justify-center gap-1">
-                      <span className="text-primary-main font-bold text-sm">
-                        {item.question}
-                      </span>
-                      <span className="text-text-main text-justify text-xs font-semibold">
-                        {item.answer}
-                      </span>
-                    </div>
+                <div
+                  key={item.id}
+                  className="flex items-center justify-start gap-3"
+                >
+                  <div className="h-20 w-20 p-4 rounded-lg bg-gray-200 flex items-center justify-center">
+                    image
                   </div>
-                </>
+                  <div className="flex flex-col items-start justify-center gap-1">
+                    <span className="text-primary-main font-bold text-sm">
+                      {item.question}
+                    </span>
+                    <span className="text-text-main text-justify text-xs font-semibold">
+                      {item.answer}
+                    </span>
+                  </div>
+                </div>
               );
             })}
           </div>

@@ -336,11 +336,11 @@ const FlightFilterBox = () => {
           {openAirlines && (
             <div className="grid grid-cols-1 gap-2">
               {flightFilteredItemsData ? (
-                flightFilteredItemsData.airlineType.map((item: any) => {
-                  return (
-                    <>
+                flightFilteredItemsData.airlineType.map(
+                  (item: any, index: any) => {
+                    return (
                       <div
-                        key={item}
+                        key={index}
                         className="flex items-center justify-between"
                       >
                         <div className="flex items-center justify-center gap-2">
@@ -363,9 +363,9 @@ const FlightFilterBox = () => {
                           icon={<BpIcon />}
                         />
                       </div>
-                    </>
-                  );
-                })
+                    );
+                  }
+                )
               ) : (
                 <AirlineSkelton />
               )}
