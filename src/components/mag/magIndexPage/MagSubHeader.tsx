@@ -99,14 +99,14 @@ const MagSubHeader = () => {
               }}
             />
             <span
-              className={`h-5 w-20 absolute bottom-0 left-1/2 -translate-x-1/2  text-center font-bold text-base text-text-main truncate z-[3]`}
+              className={`h-5 w-48 absolute bottom-0 left-1/2 -translate-x-1/2  text-center font-bold text-base text-text-main truncate z-[3]`}
             >
               {secondPost?.title}
             </span>
           </div>
           <div className="h-full flex items-center justify-center bg-gray-300 rounded-2xl relative">
             <span className="rounded-tab-up-sm h-7 w-4/5 flex items-center justify-center absolute top-0 bg-main">
-              <span className="font-bold text-base text-primary-main">
+              <span className="font-bold text-base text-primary-main truncate">
                 {firstPost?.title}
               </span>
             </span>
@@ -138,7 +138,7 @@ const MagSubHeader = () => {
               }}
             />
             <span
-              className={`h-5 w-20 absolute bottom-0 left-1/2 -translate-x-1/2  text-center font-bold text-base text-text-main truncate z-[3]`}
+              className={`h-5 w-48 absolute bottom-0 left-1/2 -translate-x-1/2  text-center font-bold text-base text-text-main truncate z-[3]`}
             >
               {thirdPost?.title}
             </span>
