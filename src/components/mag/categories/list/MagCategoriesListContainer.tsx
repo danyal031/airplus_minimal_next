@@ -1,4 +1,5 @@
 "use client";
+import CategoriesListProgress from "@/components/Skelton-Components/mag/categories/list/CategoriesListProgress";
 import { CategoryDataType } from "@/DataTypes/mag/categoryListTypes";
 import { getCategoryList } from "@/global-files/axioses";
 import Image from "next/image";
@@ -25,8 +26,8 @@ const MagCategoriesListContainer = () => {
   return (
     <div className="grid grid-cols-4 gap-3">
       {showLoading ? (
-        <div className="col-span-4 flex items-center justify-center">
-          loading
+        <div className="col-span-4">
+          <CategoriesListProgress />
         </div>
       ) : categoriesList.length === 0 ? (
         "موجود نیست"
