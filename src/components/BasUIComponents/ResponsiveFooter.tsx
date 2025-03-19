@@ -70,20 +70,18 @@ const ResponsiveFooter = () => {
       <div className="justify-self-center w-3/4 grid grid-cols-12 gap-5 bg-paper rounded-xl p-3 absolute -top-9">
         {slogans.map((item, index) => {
           return (
-            <React.Fragment key={item.id}>
-              <div className="col-span-3 grid grid-cols-12 gap-2">
-                <div className="col-span-4 flex items-center justify-end">
-                  <div className="w-12 h-12 flex items-center justify-end overflow-hidden relative aspect-video">
-                    <Lottie animationData={item.cover} loop={true} />
-                  </div>
-                </div>
-                <div className="col-span-8 flex flex-col items-start justify-center gap-1">
-                  <span className="text-sm font-semibold text-text-main">
-                    {item.label}
-                  </span>
+            <div key={index} className="col-span-3 grid grid-cols-12 gap-2">
+              <div className="col-span-4 flex items-center justify-end">
+                <div className="w-12 h-12 flex items-center justify-end overflow-hidden relative aspect-video">
+                  <Lottie animationData={item.cover} loop={true} />
                 </div>
               </div>
-            </React.Fragment>
+              <div className="col-span-8 flex flex-col items-start justify-center gap-1">
+                <span className="text-sm font-semibold text-text-main">
+                  {item.label}
+                </span>
+              </div>
+            </div>
           );
         })}
       </div>
@@ -221,17 +219,15 @@ const ResponsiveFooter = () => {
             خدمات مشتریان
           </span>
           <div className="flex flex-col items-center justify-start gap-3">
-            {customerServicesOptions.map((item) => {
+            {customerServicesOptions.map((item, index) => {
               return (
-                <>
-                  <Link
-                    href={item.link}
-                    key={item.id}
-                    className="text-xs text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
-                  >
-                    {item.label}
-                  </Link>
-                </>
+                <Link
+                  href={item.link}
+                  key={index}
+                  className="text-xs text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
+                >
+                  {item.label}
+                </Link>
               );
             })}
           </div>
@@ -248,17 +244,15 @@ const ResponsiveFooter = () => {
             اطلاعات تکمیلی
           </span>
           <div className="flex flex-col items-center justify-start gap-3">
-            {complementaryInfoOptions.map((item) => {
+            {complementaryInfoOptions.map((item, index) => {
               return (
-                <>
-                  <Link
-                    href={item.link}
-                    key={item.id}
-                    className="text-xs text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
-                  >
-                    {item.label}
-                  </Link>
-                </>
+                <Link
+                  href={item.link}
+                  key={index}
+                  className="text-xs text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
+                >
+                  {item.label}
+                </Link>
               );
             })}
           </div>
@@ -329,12 +323,11 @@ const ResponsiveFooter = () => {
                     {config?.communicational?.certificates?.map(
                       (item, index) => {
                         return (
-                          <>
-                            <div
-                              dangerouslySetInnerHTML={{ __html: item.content }}
-                              className="bg-paper col-span-2 h-14 w-14 border border-divider rounded-lg p-1 flex items-center justify-center"
-                            ></div>
-                          </>
+                          <div
+                            key={index}
+                            dangerouslySetInnerHTML={{ __html: item.content }}
+                            className="bg-paper col-span-2 h-14 w-14 border border-divider rounded-lg p-1 flex items-center justify-center"
+                          ></div>
                         );
                       }
                     )}
@@ -419,17 +412,15 @@ const ResponsiveFooter = () => {
                   // unmountOnExit
                 >
                   <div className="flex flex-col items-start justify-center gap-2 p-2">
-                    {customerServicesOptions.map((item) => {
+                    {customerServicesOptions.map((item, index) => {
                       return (
-                        <>
-                          <Link
-                            href={item.link}
-                            key={item.id}
-                            className="text-sm text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
-                          >
-                            {item.label}
-                          </Link>
-                        </>
+                        <Link
+                          href={item.link}
+                          key={index}
+                          className="text-sm text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
+                        >
+                          {item.label}
+                        </Link>
                       );
                     })}
                   </div>
@@ -461,17 +452,15 @@ const ResponsiveFooter = () => {
                   // unmountOnExit
                 >
                   <div className="flex flex-col items-start justify-center gap-2 p-2">
-                    {complementaryInfoOptions.map((item) => {
+                    {complementaryInfoOptions.map((item, index) => {
                       return (
-                        <>
-                          <Link
-                            href={item.link}
-                            key={item.id}
-                            className="text-sm text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
-                          >
-                            {item.label}
-                          </Link>
-                        </>
+                        <Link
+                          href={item.link}
+                          key={index}
+                          className="text-sm text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
+                        >
+                          {item.label}
+                        </Link>
                       );
                     })}
                   </div>
