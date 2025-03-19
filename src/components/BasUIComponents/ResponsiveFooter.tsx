@@ -157,7 +157,7 @@ const ResponsiveFooter = () => {
     return (
       <>
         <div className="text-text-main col-span-4 flex flex-col items-start justify-start gap-4 w-full h-full">
-          <div className="flex items-center self-start justify-center w-full">
+          <div className="flex items-center self-start justify-start w-full">
             {" "}
             <Image
               src={

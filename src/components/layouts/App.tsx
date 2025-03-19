@@ -135,7 +135,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
       <link
         rel="icon"
         type="image/x-icon"
-        href={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/branches/${config?.design?.favicon}`}
+        href={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/branches/favicon/${config?.design?.favicon}`}
       />
       <CacheProvider value={cacheRtl}>
         {appLoading ? (
