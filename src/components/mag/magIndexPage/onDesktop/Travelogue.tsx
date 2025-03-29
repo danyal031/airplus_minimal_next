@@ -1,12 +1,12 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import TitleDivider from "../TitleDivider";
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import { getArticleList } from "@/global-files/axioses";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
 import Link from "next/link";
 import TravelogueProgress from "@/components/Skelton-Components/mag/indexPage/TravelogueProgress";
+import TitleDivider from "../../TitleDivider";
 
 const Travelogue = () => {
   // initial states
@@ -29,9 +29,9 @@ const Travelogue = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-start gap-4 p-4 bg-paper rounded-2xl">
+    <div className="w-full flex flex-col items-center justify-start gap-4 p-4 bg-paper rounded-2xl">
       <TitleDivider label="سفرنامه" />
-      <div className="flex items-center justify-start gap-2 w-full overflow-x-auto">
+      <div className="flex items-center justify-start gap-2 max-w-full overflow-x-auto">
         {showTravelogueLoading ? (
           <TravelogueProgress />
         ) : travelogueArticles.length === 0 ? (

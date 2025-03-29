@@ -2,9 +2,9 @@
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import Image from "next/image";
 import React, { useState } from "react";
-import isfahan from "../../../../public/assets/images/mag/indexPage/postsCover/isfahan.png";
-import mesr from "../../../../public/assets/images/mag/indexPage/postsCover/mesr.png";
-import qatar from "../../../../public/assets/images/mag/indexPage/postsCover/qatar.png";
+import isfahan from "../../../../../public/assets/images/mag/indexPage/postsCover/isfahan.png";
+import mesr from "../../../../../public/assets/images/mag/indexPage/postsCover/mesr.png";
+import qatar from "../../../../../public/assets/images/mag/indexPage/postsCover/qatar.png";
 
 const posts: any = [
   {

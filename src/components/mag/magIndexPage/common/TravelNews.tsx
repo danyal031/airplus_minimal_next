@@ -1,12 +1,12 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import TitleDivider from "../TitleDivider";
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import Image from "next/image";
 import { getArticleList } from "@/global-files/axioses";
 import { Tooltip } from "@mui/material";
 import Link from "next/link";
 import TravelNewsProgress from "@/components/Skelton-Components/mag/indexPage/TravelNewsProgress";
+import TitleDivider from "../../TitleDivider";
 
 const TravelNews = () => {
   // initial states

@@ -3,7 +3,7 @@ import React from "react";
 
 const LatestArticlesProgress = () => {
   return (
-    <div className="grid grid-cols-1 gap-3">
+    <div className="grid grid-cols-1 gap-3 w-full">
       {Array.from(Array(5)).map((item, index) => (
         <div key={index} className="flex items-center justify-start gap-2">
           <Skeleton

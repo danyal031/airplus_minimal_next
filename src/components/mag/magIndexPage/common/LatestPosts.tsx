@@ -2,11 +2,11 @@
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import { getArticleList } from "@/global-files/axioses";
 import React, { FC, useEffect, useState } from "react";
-import TitleDivider from "../TitleDivider";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
 import Link from "next/link";
 import LatestArticlesProgress from "@/components/Skelton-Components/mag/indexPage/LatestArticlesProgress";
+import TitleDivider from "../../TitleDivider";
 
 const LatestPosts = () => {
   // initial states
@@ -26,7 +26,7 @@ const LatestPosts = () => {
   }, []);
 
   return (
-    <div className="p-3 pb-0 grid grid-cols-1 gap-4 bg-paper rounded-2xl sticky top-20">
+    <div className="w-full p-3 pb-0 grid grid-cols-1 gap-4 bg-paper rounded-2xl md:sticky md:top-20">
       <div>
         <TitleDivider label="آخرین مطالب" />
       </div>

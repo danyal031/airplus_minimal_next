@@ -1,4 +1,4 @@
-import MagSubHeader from "@/components/mag/magIndexPage/MagSubHeader";
+import MagHeader from "@/components/mag/MagHeader";
 import React, { FC } from "react";
 
 export interface MagLayoutProps {
@@ -6,8 +6,8 @@ export interface MagLayoutProps {
 }
 const MagLayout: FC<MagLayoutProps> = ({ children }) => {
   return (
-    <div className="container my-24 mt-5 grid grid-cols-1 gap-5">
-      <MagSubHeader />
+    <div className="container mt-28 md:mt-24 mb-24 grid grid-cols-1 gap-5">
+      <MagHeader />
       {children}
     </div>
   );

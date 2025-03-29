@@ -4,8 +4,9 @@ import React, { FC, useState } from "react";
 import magBanner from "../../../public/assets/images/mag/indexPage/indexPageBanner/mag-banner.svg";
 import { Button, Popover } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Link from "next/link";
+import MenuIcon from "@mui/icons-material/Menu";
+
 interface MagHeaderProps {
   navBarClassName?: string;
   bannerClassName?: string;
@@ -86,11 +87,46 @@ const MagHeader: FC<MagHeaderProps> = ({
     );
   };
 
+  const renderNavBarOnMobile = () => {
+    return (
+      <>
+        <div className="px-4 flex items-center justify-between fixed top-0 bg-paper h-20 left-0 right-0 z-50">
+          <div className="flex items-center justify-center gap-2">
+            <MenuIcon fontSize="small" className="text-text-main" />
+            <span className="font-semibold text-xl text-text-main">
+              مجله ایرپلاس
+            </span>
+          </div>
+          <div className="flex items-center justify-center gap-2">
+            <SearchIcon fontSize="medium" color="primary" />
+            <Button className="rounded-lg" variant="contained" size="small">
+              بازگشت به ایرپلاس
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderOnDesktop = () => {
+    return (
+      <>
+        <div className="w-full hidden md:flex flex-col items-center justify-center gap-0">
+          {renderBanner()}
+          {renderNavBar()}
+        </div>
+      </>
+    );
+  };
+  const renderOnMobile = () => {
+    return <>{renderNavBarOnMobile()}</>;
+  };
+
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-0">
-      {renderBanner()}
-      {renderNavBar()}
-    </div>
+    <>
+      {renderOnDesktop()}
+      {renderOnMobile()}
+    </>
   );
 };
 

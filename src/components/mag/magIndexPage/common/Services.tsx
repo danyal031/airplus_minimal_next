@@ -1,5 +1,5 @@
 import React from "react";
-import TitleDivider from "../TitleDivider";
+import TitleDivider from "../../TitleDivider";
 
 const Services = () => {
   const services = [
@@ -31,7 +31,7 @@ const Services = () => {
   ];
 
   return (
-    <div className="flex flex-col items-start justify-start gap-4 p-4 bg-paper rounded-2xl">
+    <div className="w-full flex flex-col items-start justify-start gap-4 p-4 bg-paper rounded-2xl">
       <TitleDivider label="خدمات" />
       <div className="grid grid-cols-1 gap-3 w-full">
         {services.map((item) => {

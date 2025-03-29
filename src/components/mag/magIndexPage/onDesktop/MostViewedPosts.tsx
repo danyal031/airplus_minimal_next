@@ -2,9 +2,9 @@
 import { ArticleDataTypes } from "@/DataTypes/mag/articleListTypes";
 import { getArticleList } from "@/global-files/axioses";
 import React, { useEffect, useState } from "react";
-import ArticleComponent from "../ArticleComponent";
-import TitleDivider from "../TitleDivider";
 import MostViewedArticlesProgress from "@/components/Skelton-Components/mag/indexPage/MostViewedArticlesProgress";
+import TitleDivider from "../../TitleDivider";
+import ArticleComponent from "../../ArticleComponent";
 
 const MostViewedPosts = () => {
   // initial states
