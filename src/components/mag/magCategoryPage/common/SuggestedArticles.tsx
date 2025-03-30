@@ -7,7 +7,7 @@ import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import React, { FC, useEffect, useState } from "react";
-import TitleDivider from "../TitleDivider";
+import TitleDivider from "../../TitleDivider";
 
 interface SuggestedArticlesProps {
   params: {
@@ -52,27 +52,25 @@ const SuggestedArticles: FC<SuggestedArticlesProps> = ({ params }) => {
   // for render most viewed articles
   const renderMostViewedArticles = () => {
     return (
-      <>
-        <div className="bg-paper rounded-t-xl px-4 pt-4 grid grid-cols-1 gap-3">
-          <div className="mb-2">
-            <TitleDivider label="پربازدیدترین" />
-          </div>
-          {mostViewedArticlesLoading ? (
-            <MostViewedCategoryArticlesProgress />
-          ) : mostViewedArticles.length === 0 ? (
-            "موجود نیست"
-          ) : (
-            mostViewedArticles.map((item) => {
-              return <MostViewedArticle key={item.id} article={item} />;
-            })
-          )}{" "}
-          <div className="flex items-start justify-center">
-            <span className="bg-gray-300 flex items-center justify-center text-sm text-primary-main font-bold px-5 rounded-tab-down-sm h-10">
-              مشاهده همه{" "}
-            </span>
-          </div>
+      <div className="bg-paper rounded-t-xl px-4 pt-4 hidden md:grid grid-cols-1 gap-3">
+        <div className="mb-2">
+          <TitleDivider label="پربازدیدترین" />
         </div>
-      </>
+        {mostViewedArticlesLoading ? (
+          <MostViewedCategoryArticlesProgress />
+        ) : mostViewedArticles.length === 0 ? (
+          "موجود نیست"
+        ) : (
+          mostViewedArticles.map((item) => {
+            return <MostViewedArticle key={item.id} article={item} />;
+          })
+        )}{" "}
+        <div className="flex items-start justify-center">
+          <span className="bg-gray-300 flex items-center justify-center text-sm text-primary-main font-bold px-5 rounded-tab-down-sm h-10">
+            مشاهده همه{" "}
+          </span>
+        </div>
+      </div>
     );
   };
 
@@ -80,7 +78,7 @@ const SuggestedArticles: FC<SuggestedArticlesProps> = ({ params }) => {
   const renderOtherArticles = () => {
     return (
       <>
-        <div className="bg-gray-300 rounded-b-xl px-4 pt-4 grid grid-cols-1 gap-3">
+        <div className="bg-paper md:bg-gray-300 rounded-2xl md:rounded-t-none px-4 pt-4 grid grid-cols-1 gap-3">
           <div className="mb-2">
             <TitleDivider label="راهنمای کشف زیبایی‌های ایران" />
           </div>

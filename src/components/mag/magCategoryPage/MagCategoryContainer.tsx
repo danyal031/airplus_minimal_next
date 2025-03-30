@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import SuggestedArticles from "./SuggestedArticles";
-import ArticleList from "./ArticleList";
+import ArticleList from "./common/ArticleList";
+import SuggestedArticles from "./common/SuggestedArticles";
 
 interface MagCategoryContainerProps {
   params: {
@@ -8,15 +8,35 @@ interface MagCategoryContainerProps {
   };
 }
 const MagCategoryContainer: FC<MagCategoryContainerProps> = ({ params }) => {
-  return (
-    <div className="grid grid-cols-12 gap-7 w-full">
-      <div className="col-span-9">
+  //  render on mobile
+  const renderOnMobile = () => {
+    return (
+      <div className="md:hidden grid grid-cols-1 gap-3">
         <ArticleList params={params} />
-      </div>
-      <div className="col-span-3 relative">
         <SuggestedArticles params={params} />
       </div>
-    </div>
+    );
+  };
+
+  // render on desktop
+  const renderOnDesktop = () => {
+    return (
+      <div className="hidden md:grid grid-cols-12 gap-7 w-full">
+        <div className="col-span-9">
+          <ArticleList params={params} />
+        </div>
+        <div className="col-span-3 relative">
+          <SuggestedArticles params={params} />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {renderOnDesktop()}
+      {renderOnMobile()}
+    </>
   );
 };
 
