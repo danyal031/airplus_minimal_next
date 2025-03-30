@@ -90,7 +90,7 @@ const MagHeader: FC<MagHeaderProps> = ({
   const renderNavBarOnMobile = () => {
     return (
       <>
-        <div className="px-4 flex items-center justify-between fixed top-0 bg-paper h-20 left-0 right-0 z-50">
+        <div className="px-4 flex items-center justify-between md:hidden fixed top-0 bg-paper h-20 left-0 right-0 z-50">
           <div className="flex items-center justify-center gap-2">
             <MenuIcon fontSize="small" className="text-text-main" />
             <span className="font-semibold text-xl text-text-main">
