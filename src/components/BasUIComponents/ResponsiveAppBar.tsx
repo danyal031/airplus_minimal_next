@@ -36,6 +36,11 @@ const ResponsiveAppBar = () => {
       link: `https://${config?.erp_domain}`,
       target: "_blank",
     },
+    {
+      title: "پنل اعتباری",
+      link: `/credit-card`,
+      target: "_blank",
+    },
     { title: "مجله", link: "/mag", target: "_blank" },
     { title: "درباره ما", link: "/about-us", target: "_self" },
   ];
@@ -51,7 +56,7 @@ const ResponsiveAppBar = () => {
             className=" bg-paper rounded-tab-up px-6 py-1"
           >
             <Toolbar disableGutters className="grid grid-cols-12">
-              <div className="flex items-center justify-start col-span-3">
+              <div className="flex items-center justify-start col-span-2">
                 <Image
                   src={
                     (process.env.NEXT_PUBLIC_MEDIA_URL_1 as string) +
@@ -67,7 +72,7 @@ const ResponsiveAppBar = () => {
                   className="cursor-pointer"
                 />
               </div>
-              <div className="flex items-center justify-center gap-16 truncate col-span-6">
+              <div className="flex items-center justify-center gap-16 truncate col-span-8">
                 {pages.map((page, index) => (
                   <Link
                     key={index}
@@ -80,7 +85,7 @@ const ResponsiveAppBar = () => {
                   </Link>
                 ))}
               </div>
-              <div className="flex items-center justify-end gap-3 col-span-3">
+              <div className="flex items-center justify-end gap-3 col-span-2">
                 <AvatarDropdown />
               </div>
             </Toolbar>
