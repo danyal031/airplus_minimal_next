@@ -606,3 +606,29 @@ export const getConfig = () => {
       });
   });
 };
+
+// for credit card
+export const getCreditCard = (passengerId: any) => {
+  axios.defaults.headers.common["Authorization"] =
+    "Bearer " + localStorage.getItem("access_token");
+  return new Promise((resolve, reject) => {
+    axios
+      .get(
+        ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
+          process.env.NEXT_PUBLIC_CREDIT_CARD) as string,
+        {
+          params: { passenger_id: passengerId },
+        }
+      )
+      .then((response) => {
+        // Handle successful response here
+        console.log("getCreditCard response: ", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("getCreditCard error: ", error);
+        reject(error);
+      });
+  });
+};

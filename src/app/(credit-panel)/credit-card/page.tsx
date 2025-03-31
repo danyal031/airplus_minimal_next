@@ -1,7 +1,8 @@
+import CreditCardContainer from "@/components/CreditCard/CreditCardContainer";
 import React from "react";
 
 const page = () => {
-  return <div>page</div>;
+  return <CreditCardContainer />;
 };
 
 export default page;
