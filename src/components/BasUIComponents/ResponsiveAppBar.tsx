@@ -31,13 +31,13 @@ const ResponsiveAppBar = () => {
 
   const pages = [
     { title: "صفحه نخست", link: "/", target: "_self" },
+    // {
+    //   title: "پنل سازمانی",
+    //   link: `https://${config?.erp_domain}`,
+    //   target: "_blank",
+    // },
     {
-      title: "پنل سازمانی",
-      link: `https://${config?.erp_domain}`,
-      target: "_blank",
-    },
-    {
-      title: "پنل اعتباری",
+      title: "کارت اعتباری",
       link: `/credit-card`,
       target: "_blank",
     },
