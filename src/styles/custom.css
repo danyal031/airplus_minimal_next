@@ -66,3 +66,13 @@
   mask: radial-gradient(var(--r) at var(--r), #0000 calc(100% - 1px), #000)
     calc(-1 * var(--r));
 }
+
+/* for article page in mag */
+.content img {
+  max-width: 50% !important;
+  object-fit: cover;
+  margin: 20px;
+  border: 2px solid gray;
+  border-radius: 10px;
+  width: 50%;
+}

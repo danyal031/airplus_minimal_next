@@ -106,7 +106,7 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
     return (
       <>
         {article ? (
-          <div className="grid grid-cols-1 gap-5">
+          <div className="grid grid-cols-1 gap-5 mb-14">
             <PublisherInformation
               avatar={article.operator.avatar}
               name={article.operator.fullname}
@@ -149,7 +149,7 @@ const MagArticleContainer: FC<MagArticleContainerProps> = ({ params }) => {
                   </div>
                 </div>
                 <div
-                  className="text-justify leading-8"
+                  className="text-justify leading-8 content"
                   dangerouslySetInnerHTML={{ __html: article.body }}
                 ></div>
               </div>
