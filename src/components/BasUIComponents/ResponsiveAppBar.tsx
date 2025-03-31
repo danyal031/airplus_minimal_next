@@ -38,8 +38,9 @@ const ResponsiveAppBar = () => {
     // },
     {
       title: "کارت اعتباری",
-      link: `/credit-card`,
-      target: "_blank",
+      // link: `/credit-card`,
+      link: "#credit-card",
+      target: "_self",
     },
     { title: "مجله", link: "/mag", target: "_blank" },
     { title: "درباره ما", link: "/about-us", target: "_self" },
