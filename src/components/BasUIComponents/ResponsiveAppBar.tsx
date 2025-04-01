@@ -31,17 +31,6 @@ const ResponsiveAppBar = () => {
 
   const pages = [
     { title: "صفحه نخست", link: "/", target: "_self" },
-    // {
-    //   title: "پنل سازمانی",
-    //   link: `https://${config?.erp_domain}`,
-    //   target: "_blank",
-    // },
-    {
-      title: "کارت اعتباری",
-      // link: `/credit-card`,
-      link: "#credit-card",
-      target: "_self",
-    },
     { title: "مجله", link: "/mag", target: "_blank" },
     { title: "درباره ما", link: "/about-us", target: "_self" },
   ];

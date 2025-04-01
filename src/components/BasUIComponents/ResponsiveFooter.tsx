@@ -123,8 +123,8 @@ const ResponsiveFooter = () => {
   const complementaryInfoOptions = [
     {
       id: 1,
-      label: "فروش سازمانی",
-      link: "#",
+      label: "پنل سازمانی",
+      link: config?.erp_domain,
     },
     {
       id: 2,
@@ -241,7 +241,7 @@ const ResponsiveFooter = () => {
         {" "}
         <div className="col-span-2 flex flex-col items-start justify-start gap-5">
           <span className="text-base font-bold text-text-main">
-            اطلاعات تکمیلی
+            {config?.brand.fa}{" "}
           </span>
           <div className="flex flex-col items-center justify-start gap-3">
             {complementaryInfoOptions.map((item, index) => {
@@ -428,7 +428,7 @@ const ResponsiveFooter = () => {
               </div>
               <div className="py-1 grid grid-cols-1 gap-1">
                 <div className="flex items-center justify-between text-text-main font-bold text-sm">
-                  <span>اطلاعات تکمیلی</span>
+                  <span>{config?.brand.fa}</span>
                   <IconButton
                     size="small"
                     onClick={() => {
