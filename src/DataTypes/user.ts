@@ -7,6 +7,7 @@ interface Data {
   first_name_fa?: string;
   last_name_fa?: string;
   mobile: string;
+  national_code: string;
 }
 
 export interface UserDataType {

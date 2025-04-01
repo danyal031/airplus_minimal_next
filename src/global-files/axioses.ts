@@ -632,3 +632,27 @@ export const getCreditCard = (passengerId: any) => {
       });
   });
 };
+
+export const createCreditCard = (passengerId: any) => {
+  axios.defaults.headers.common["Authorization"] =
+    "Bearer " + localStorage.getItem("access_token");
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
+          process.env.NEXT_PUBLIC_CREDIT_CARD) as string,
+        { passenger: passengerId }
+      )
+      .then((response) => {
+        // Handle successful response here
+        console.log("create CreditCard response: ", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("create CreditCard error: ", error);
+        reject(error);
+      });
+  });
+};

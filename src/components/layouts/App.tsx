@@ -160,7 +160,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
                       showAlert: false,
                     }));
                   }}
-                  autoHideDuration={showAlertDetails.alertDuration}
+                  autoHideDuration={showAlertDetails.alertDuration || 6000}
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
                   <Alert
