@@ -222,7 +222,7 @@ const ResponsiveFooter = () => {
             {customerServicesOptions.map((item, index) => {
               return (
                 <Link
-                  href={item.link}
+                  href={item.link || "#"}
                   key={index}
                   className="text-xs text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
                 >
@@ -247,7 +247,7 @@ const ResponsiveFooter = () => {
             {complementaryInfoOptions.map((item, index) => {
               return (
                 <Link
-                  href={item.link}
+                  href={item.link || "#"}
                   key={index}
                   className="text-xs text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
                 >
@@ -415,7 +415,7 @@ const ResponsiveFooter = () => {
                     {customerServicesOptions.map((item, index) => {
                       return (
                         <Link
-                          href={item.link}
+                          href={item.link || "#"}
                           key={index}
                           className="text-sm text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
                         >
@@ -455,7 +455,7 @@ const ResponsiveFooter = () => {
                     {complementaryInfoOptions.map((item, index) => {
                       return (
                         <Link
-                          href={item.link}
+                          href={item.link || "#"}
                           key={index}
                           className="text-sm text-text-main font-semibold hover:text-primary-main transition-colors duration-300"
                         >

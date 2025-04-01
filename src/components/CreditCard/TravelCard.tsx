@@ -142,18 +142,29 @@ const TravelCard: FC<TravelCardProps> = ({
     switch (creditCard?.status) {
       case 1:
         return (
-          <Alert severity="info">وضعیت فعلی کارت شما درحال برسی میباشید.</Alert>
+          <Alert severity="info">
+            وضعیت فعلی کارت شما{" "}
+            <span style={{ color: "#1565C0", fontWeight: "bold" }}>
+              {" "}
+              درحال بررسی
+            </span>{" "}
+            می‌باشد.
+          </Alert>
         );
       case 2:
         return (
           <Alert severity="error">
-            وضعیت فعلی کارت اعتباری شما غیرفعال میباشد.
+            وضعیت فعلی کارت اعتباری شما
+            <span style={{ color: "red", fontWeight: "bold" }}> غیرفعال </span>
+            می‌باشد.
           </Alert>
         );
       case 3:
         return (
           <Alert severity="success">
-            وضعیت فعلی کارت اعتباری شما فعال میباشد.
+            وضعیت فعلی کارت اعتباری شما
+            <span style={{ color: "green", fontWeight: "bold" }}> فعال </span>
+            می‌باشد.
           </Alert>
         );
     }
