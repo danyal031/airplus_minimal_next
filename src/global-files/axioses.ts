@@ -6,6 +6,7 @@ import {
   baseDataDataType,
 } from "@/DataTypes/globalTypes";
 import { onlineFlightSearchInputType } from "@/DataTypes/flight/flightTicket";
+import customAxios from "@/utils/customAxios";
 
 // axios.defaults.headers.common["Authorization"] =
 //   "Bearer " + localStorage.getItem("access_token");
@@ -609,17 +610,13 @@ export const getConfig = () => {
 
 // for credit card
 export const getCreditCard = (passengerId: any) => {
-  axios.defaults.headers.common["Authorization"] =
-    "Bearer " + localStorage.getItem("access_token");
+  // axios.defaults.headers.common["Authorization"] =
+  //   "Bearer " + localStorage.getItem("access_token");
   return new Promise((resolve, reject) => {
-    axios
-      .get(
-        ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env.NEXT_PUBLIC_CREDIT_CARD) as string,
-        {
-          params: { passenger_id: passengerId },
-        }
-      )
+    customAxios
+      .get(process.env.NEXT_PUBLIC_CREDIT_CARD as string, {
+        params: { passenger_id: passengerId },
+      })
       .then((response) => {
         // Handle successful response here
         console.log("getCreditCard response: ", response.data);
