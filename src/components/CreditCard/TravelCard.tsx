@@ -178,7 +178,7 @@ const TravelCard: FC<TravelCardProps> = ({
         } relative rounded-2xl p-5 shadow h-60 w-[450px] overflow-hidden`}
       >
         <div
-          className={`absolute -top-8 -right-64 w-full h-full bg-cover bg-center rounded-tl-[150px] rounded-bl-[150px] ${selectedColor.bg} !h-80`}
+          className={`absolute -top-8 -right-64 w-full bg-cover bg-center rounded-tl-[150px] rounded-bl-[150px] ${selectedColor.bg} !h-80`}
         ></div>
         {helperTextCard ? (
           <div className="w-full flex items-center justify-center z-[7]">
