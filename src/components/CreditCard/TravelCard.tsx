@@ -1,13 +1,13 @@
 "use client";
 import { CreditCardDataTypes } from "@/DataTypes/creditCard/creditCardTypes";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import IconPlus from "../icons/IconPlus";
 import {
   convertMiladiToJalaliDate,
   formatDateWithSlash,
   formatInputWithCommas,
 } from "@/global-files/function";
-import { Alert, Button, IconButton } from "@mui/material";
+import { Alert, Button, IconButton, Tooltip } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { createCreditCard } from "@/global-files/axioses";
 import { useGlobalContext } from "@/context/store";
@@ -110,20 +110,25 @@ interface TravelCardProps {
   showLoadingCard: boolean;
   helperTextCard: string;
   // baseColor: keyof typeof colorClasses;
-  baseColor: string;
 }
 const TravelCard: FC<TravelCardProps> = ({
   creditCard,
   helperTextCard,
   showLoadingCard,
-  baseColor,
 }) => {
   // initial states
   const router = useRouter();
   const { userData } = useGlobalContext().userContext;
   const { setShowAlertDetails, setShowProgress } = useGlobalContext().global;
   const { copyToClipboard } = useCopyToClipboard();
-  const selectedColor = colorClasses[baseColor] || colorClasses.gray;
+  // for choose card color
+  const [cardColor, setCardColor] = useState<string>("");
+  const selectedColor = colorClasses[cardColor] || colorClasses.gray;
+
+  // for toggle card color
+  const toggleCardColor = (color: string) => {
+    setCardColor(color);
+  };
 
   // for create new card
   const createNewCreditCard = () => {
@@ -348,11 +353,53 @@ const TravelCard: FC<TravelCardProps> = ({
     );
   };
 
+  // for render color list
+  const renderColorList = () => {
+    // color list
+    const colors = [
+      { id: 1, name: "gray", title: "مشکی", bgColor: "bg-gray-600" },
+      {
+        id: 2,
+        name: "blue",
+        title: "برنزی",
+        bgColor: "bg-blue-600",
+      },
+      {
+        id: 3,
+        name: "yellow",
+        title: "طلایی",
+        bgColor: "bg-yellow-600",
+      },
+      {
+        id: 4,
+        name: "teal",
+        title: "الماسی",
+        bgColor: "bg-teal-600",
+      },
+    ];
+    return (
+      <div className="flex flex-col items-center justify-center gap-4">
+        {colors.map((item) => (
+          <Tooltip placement="right" title={item.title}>
+            <div
+              onClick={() => {
+                toggleCardColor(item.name);
+              }}
+              key={item.id}
+              className={`h-11 w-11 rounded-full ${item.bgColor} cursor-pointer`}
+            ></div>
+          </Tooltip>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col items-center justify-center gap-5">
       {showStatusCard()}
       <div className="flex items-center justify-between w-full">
         {renderDetailsCreditCard()}
+        {renderColorList()}
         {renderCard()}
       </div>
     </div>

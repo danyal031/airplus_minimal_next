@@ -6,7 +6,6 @@ import TransactionList from "./TransactionList";
 import { CreditCardDataTypes } from "@/DataTypes/creditCard/creditCardTypes";
 import { getCreditCard } from "@/global-files/axioses";
 import { useGlobalContext } from "@/context/store";
-import CardColorList from "./CardColorList";
 
 const CreditCardContainer = () => {
   // initial states
@@ -16,13 +15,6 @@ const CreditCardContainer = () => {
   const [showLoadingCard, setShowLoadingCard] = useState<boolean>(true);
   const [helperTextCard, setHelperTextCard] = useState<string>("");
   const { userData } = useGlobalContext().userContext;
-  // for choose card color
-  const [cardColor, setCardColor] = useState<string>("");
-
-  // for toggle card color
-  const toggleCardColor = (color: string) => {
-    setCardColor(color);
-  };
 
   // handle get credit card
   useEffect(() => {
@@ -46,9 +38,7 @@ const CreditCardContainer = () => {
           creditCard={creditCard}
           helperTextCard={helperTextCard}
           showLoadingCard={showLoadingCard}
-          baseColor={cardColor}
         />
-        <CardColorList toggleCardColor={toggleCardColor} />
         <CreditList helperTextCard={helperTextCard} />
         <TransactionList />
       </div>
