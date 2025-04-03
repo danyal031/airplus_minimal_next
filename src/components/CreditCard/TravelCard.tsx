@@ -321,6 +321,12 @@ const TravelCard: FC<TravelCardProps> = ({
             می‌باشد.
           </Alert>
         );
+      default:
+        return (
+          <Alert className="w-full rounded-xl" severity="warning">
+            در حال دریافت اطلاعات مربوط به وضعیت فعلی کارت اعتباری شما...
+          </Alert>
+        );
     }
   };
 
@@ -386,7 +392,7 @@ const TravelCard: FC<TravelCardProps> = ({
                 toggleCardColor(item.name);
               }}
               key={item.id}
-              className={`h-11 w-11 rounded-full ${item.bgColor} cursor-pointer`}
+              className={`h-9 w-9 rounded-full ${item.bgColor} cursor-pointer`}
             ></div>
           </Tooltip>
         ))}
