@@ -150,17 +150,18 @@ export default function AvatarDropdown({ className = "" }: Props) {
               </ListItemButton>
               <Divider variant="fullWidth" />
               <ListItemButton
-                onClick={() => {
-                  router.push("/credit-card");
-                }}
+                className="opacity-30"
+                // onClick={() => {
+                //   router.push("/credit-card");
+                // }}
               >
                 <ListItemText
-                  primaryTypographyProps={{
-                    style: {
-                      fontWeight: "bold",
-                      color: theme.palette.primary.main,
-                    },
-                  }}
+                  // primaryTypographyProps={{
+                  //   style: {
+                  //     fontWeight: "bold",
+                  //     color: theme.palette.primary.main,
+                  //   },
+                  // }}
                   primary="کارت اعتباری"
                 />
               </ListItemButton>
