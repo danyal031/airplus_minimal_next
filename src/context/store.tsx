@@ -37,7 +37,8 @@ import {
 import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoundaryComponent";
 import { ErrorBoundary } from "react-error-boundary";
 import App from "@/components/layouts/App";
-import dynamic from "next/dynamic";
+import { ReCaptchaProvider } from "next-recaptcha-v3";
+
 // import { FallbackProps } from "react-error-boundary";
 // const App = dynamic(() => import("@/components/layouts/App"), {
 //   ssr: false,
@@ -478,7 +479,11 @@ export const GlobalContextProvider = ({
             },
           }}
         >
-          <App>{children}</App>
+          <ReCaptchaProvider
+            reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+          >
+            <App>{children}</App>
+          </ReCaptchaProvider>
         </GlobalContext.Provider>
       </ErrorBoundary>
     </>
