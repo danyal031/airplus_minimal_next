@@ -124,7 +124,7 @@ const ResponsiveFooter = () => {
     {
       id: 1,
       label: "پنل سازمانی",
-      link: config?.erp_domain,
+      link: `https://${config?.erp_domain}`,
     },
     {
       id: 2,
