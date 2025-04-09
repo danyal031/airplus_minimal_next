@@ -103,7 +103,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
     setUserData(JSON.parse(localStorage.getItem("minimal_user") as string));
 
     // handle get config
-    axios.defaults.headers.common["Domain"] = window.location.hostname;
+    // axios.defaults.headers.common["Domain"] = window.location.hostname;
     if (!localStorage.getItem("minimal_config")) {
       setShowProgressConfig(true);
     }
@@ -113,6 +113,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
         setShowProgressConfig(false);
         setConfig(res);
         setThemeKey(res.design.theme);
+        document.title = `خرید بلیت هواپیما | ${res.brand.fa}`;
       })
       .catch(() => {});
   }, []);

@@ -593,7 +593,7 @@ export const getArticle = (articleId: number) => {
 // handle get config
 export const getConfig = () => {
   return new Promise((resolve, reject) => {
-    axios
+    customAxios
       .get(process.env.NEXT_PUBLIC_BASE_URL_2 + "/config")
       .then((response) => {
         // Handle successful response here
