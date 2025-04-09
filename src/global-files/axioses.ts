@@ -516,7 +516,7 @@ export const lockResidence = (props: any) => {
 // handle mag axios
 export const getCategoryList = (categoryId?: number) => {
   return new Promise((resolve, reject) => {
-    axios
+    customAxios
       .get(
         (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
           process.env.NEXT_PUBLIC_CATEGORY_LIST
@@ -549,7 +549,7 @@ export const getArticleList = (
       params.categoryId = categoryId;
     }
 
-    axios
+    customAxios
       .get(
         (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
           process.env.NEXT_PUBLIC_ARTICLE_LIST,
@@ -570,7 +570,7 @@ export const getArticleList = (
 
 export const getArticle = (articleId: number) => {
   return new Promise((resolve, reject) => {
-    axios
+    customAxios
       .get(
         (process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
           process.env.NEXT_PUBLIC_ARTICLE +
