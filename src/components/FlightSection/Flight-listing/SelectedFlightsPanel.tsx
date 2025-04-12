@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@mui/material";
 import {
   convertToPersianDate,
+  convertToPersianShortDate,
   formatInputWithCommas,
 } from "@/global-files/function";
 import Image from "next/image";
@@ -24,6 +25,7 @@ const SelectedFlightsPanel = () => {
   const handleChangeReturnTicket = () => {
     setSelectedReturnFlight(null);
   };
+
   return (
     <div className="grid grid-cols-2 gap-3">
       {selectedWentFlight && (
@@ -39,7 +41,9 @@ const SelectedFlightsPanel = () => {
                 بلیت رفت
               </span>
               <span className="text-xs text-text-main font-semibold">
-                {convertToPersianDate(selectedWentFlight.DepartureDateTime)}
+                {convertToPersianShortDate(
+                  selectedWentFlight.DepartureDateTime
+                )}
               </span>{" "}
             </div>
             <div className="w-full flex items-center justify-start gap-1 md:gap-2">
@@ -106,7 +110,7 @@ const SelectedFlightsPanel = () => {
       )}
       {!selectedWentFlight && (
         <motion.div
-          className="col-span-2 md:col-span-1 h-36 border-dashed border border-primary-main rounded-xl p-2 flex items-start justify-start"
+          className="col-span-2 md:col-span-1 h-36 border-dashed border border-primary-main rounded-xl p-2 flex items-center justify-center"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}
@@ -130,7 +134,9 @@ const SelectedFlightsPanel = () => {
                 بلیت برگشت
               </span>
               <span className="text-xs text-text-main font-semibold">
-                {convertToPersianDate(selectedReturnFlight.DepartureDateTime)}
+                {convertToPersianShortDate(
+                  selectedReturnFlight.DepartureDateTime
+                )}
               </span>{" "}
             </div>
             <div className="w-full flex items-center justify-start gap-1 md:gap-2">
@@ -197,7 +203,7 @@ const SelectedFlightsPanel = () => {
       )}
       {!selectedReturnFlight && (
         <motion.div
-          className="col-span-2 md:col-span-1 h-36 border-dashed border border-primary-main rounded-xl p-2 flex items-start justify-start"
+          className="col-span-2 md:col-span-1 h-36 border-dashed border border-primary-main rounded-xl p-2 flex items-center justify-center"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}

@@ -105,6 +105,26 @@ export function convertToPersianDate(input: string): string {
   return finalPersianDate;
 }
 
+// convertToPersianShortDate("2025-04-12 23:45:00");
+// final: شنبه،۲۳ فروردین
+export function convertToPersianShortDate(input: string): string {
+  if (!input) return input;
+
+  const isoInput = input.replace(" ", "T");
+
+  const date = new Date(isoInput);
+
+  const formatter = new Intl.DateTimeFormat("fa-IR-u-nu-latn", {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+  });
+
+  const formatted = formatter.format(date);
+
+  return formatted.replace("، ", "،");
+}
+
 // takes two date-time strings in the format "2023-10-07T11:19:10.000000Z" and returns an object representing the distance between them in hours and minutes
 export function calculateTimeDistance(
   startDateTime: string,
