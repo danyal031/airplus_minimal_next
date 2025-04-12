@@ -119,6 +119,11 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
           : false,
     })
       .then((response: any) => {
+        console.log("flight search response:", response);
+        // const newData= response.data.map((item: any) => {
+        //   return {
+
+        // })
         setSearchFlightResponseData(response.data);
         setFilteredSearchFlightResponseData(response.data);
         setIsInitialSearchDone(true);
