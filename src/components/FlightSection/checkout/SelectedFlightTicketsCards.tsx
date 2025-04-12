@@ -6,6 +6,7 @@ import {
   calculateAgeCategory,
   convertPersianToEnglishNumbers,
   convertToPersianDate,
+  convertToPersianShortDate,
   formatInputWithCommas,
 } from "@/global-files/function";
 import { Button } from "@mui/material";
@@ -126,7 +127,9 @@ const SelectedFlightTicketsCards = () => {
                   بلیت رفت
                 </span>
                 <span className="text-xs text-text-main font-semibold">
-                  {convertToPersianDate(selectedWentFlight.DepartureDateTime)}
+                  {convertToPersianShortDate(
+                    selectedWentFlight.DepartureDateTime
+                  )}
                 </span>{" "}
               </div>
               <div className="flex items-center justify-start gap-2">
@@ -336,7 +339,7 @@ const SelectedFlightTicketsCards = () => {
                     بلیت برگشت
                   </span>
                   <span className="text-xs text-text-main font-semibold">
-                    {convertToPersianDate(
+                    {convertToPersianShortDate(
                       selectedReturnFlight.DepartureDateTime
                     )}
                   </span>{" "}
@@ -516,7 +519,7 @@ const SelectedFlightTicketsCards = () => {
                     بلیت برگشت
                   </span>
                   <span className="text-xs text-text-main font-semibold">
-                    {convertToPersianDate(
+                    {convertToPersianShortDate(
                       selectedReturnFlight.DepartureDateTime
                     )}
                   </span>{" "}
@@ -597,7 +600,9 @@ const SelectedFlightTicketsCards = () => {
                   بلیت رفت
                 </span>
                 <span className="text-xs text-text-main font-semibold">
-                  {convertToPersianDate(selectedWentFlight.DepartureDateTime)}
+                  {convertToPersianShortDate(
+                    selectedWentFlight.DepartureDateTime
+                  )}
                 </span>{" "}
               </div>
               <div className="grid grid-cols-4 gap-2">
