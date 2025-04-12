@@ -147,7 +147,7 @@ export const getTheme = (mode: "light" | "dark") => {
       MuiOutlinedInput: {
         styleOverrides: {
           root: {
-            borderRadius: "1rem",
+            borderRadius: "6px",
             backgroundColor: getCssVariable("--background-paper"),
           },
         },
