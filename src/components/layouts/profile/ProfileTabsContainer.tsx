@@ -68,7 +68,7 @@ const ProfileTabsContainer = () => {
                   router.push(tab.path as Route);
                 }
               }}
-              className={`text-paper hover:cursor-pointer truncate w-auto ${
+              className={`text-paper px-14 hover:cursor-pointer truncate w-auto ${
                 isActive ? "rounded-tab-down" : ""
               } col-span-2 flex items-center justify-center font-semibold h-12 ${
                 tabValue === "1"
