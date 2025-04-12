@@ -256,6 +256,16 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
     return days;
   };
 
+  // handle move to today
+  const resetToToday = () => {
+    const today = moment();
+    setFullCurrentDate(today);
+    setCurrentMonths([
+      getMonth(today),
+      getMonth(today.clone().add(1, "months")),
+    ]);
+  };
+
   const renderInDesktop = () => {
     const popoverContent = (
       <>
@@ -266,7 +276,10 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                 <CalendarMonthIcon fontSize="small" color="primary" />
                 تقویم میلادی
               </span>
-              <span className="text-primary-main font-semibold text-sm bg-main p-2 rounded-xl">
+              <span
+                onClick={resetToToday}
+                className="text-primary-main font-semibold text-sm bg-main p-2 rounded-xl cursor-pointer border hover:border-primary-main"
+              >
                 امروز
               </span>
             </div>
@@ -572,7 +585,10 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                 <CalendarMonthIcon fontSize="small" color="primary" />
                 تقویم میلادی
               </span>
-              <span className="text-primary-main font-semibold text-sm bg-main px-3 p-2 rounded-xl">
+              <span
+                onClick={resetToToday}
+                className="text-primary-main font-semibold text-sm bg-main px-3 p-2 rounded-xl cursor-pointer border hover:border-primary-main"
+              >
                 امروز
               </span>{" "}
             </div>
