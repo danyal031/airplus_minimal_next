@@ -48,6 +48,21 @@ const FlightFilterBox = () => {
 
   const theme = useTheme();
 
+  // handle reset filter
+  const resetFilters = () => {
+    setSelectedTimeRange(null);
+    setSelectedTicketType(null);
+    setSelectedAirline([]);
+    setSelectedCabinType(null);
+
+    setFlightFilter({
+      timeRange: [0, 24],
+      ticketType: [],
+      airline: [],
+      cabinType: [],
+    });
+  };
+
   // handle change cabin type
   const handleChangeCabinType = (newValue: string) => {
     setSelectedCabinType((prev) => (prev === newValue ? null : newValue));
@@ -131,7 +146,12 @@ const FlightFilterBox = () => {
               ? filteredSearchFlightResponseData?.Went.length
               : filteredSearchFlightResponseData?.Return.length}{" "}
           </span>
-          <span className="text-primary-main font-semibold">حذف فیلتر</span>
+          <span
+            onClick={resetFilters}
+            className="text-primary-main font-semibold cursor-pointer"
+          >
+            حذف فیلتر
+          </span>
         </div>
       </>
     );
