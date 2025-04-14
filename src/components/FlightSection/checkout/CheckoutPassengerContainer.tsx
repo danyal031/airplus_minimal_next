@@ -21,6 +21,7 @@ import { handleStoreFlightJson, lockFlight } from "@/global-files/axioses";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Route } from "next";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { debounce } from "lodash";
 const CheckoutPassengerContainer = () => {
   // initial states
   const {
@@ -511,19 +512,18 @@ const CheckoutPassengerContainer = () => {
   }, [flightPassengers]);
 
   // handle onchange user information
-  const handleChangeUserInfo = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    id: number,
-    field: string
-  ) => {
-    const updatedUserInfo = flightPassengers.map((pass: any, i: number) => {
-      if (pass.id === id) {
-        return { ...pass, [field]: e.target.value };
-      }
-      return pass;
-    });
-    // setFlightPassengers(updatedUserInfo);
-  };
+  const handleChangeUserInfo = debounce(
+    (e: React.ChangeEvent<HTMLInputElement>, id: number, field: string) => {
+      const updatedUserInfo = flightPassengers.map((pass: any, i: number) => {
+        if (pass.id === id) {
+          return { ...pass, [field]: e.target.value };
+        }
+        return pass;
+      });
+      setFlightPassengers(updatedUserInfo);
+    },
+    200
+  );
 
   // handle add flight Passengers Tickets
   useEffect(() => {
@@ -674,54 +674,54 @@ const CheckoutPassengerContainer = () => {
       //
       if (allValid) {
         setShowProgress(true);
-        lockFlight({
-          data: jsonData.data.map((element: any) => {
-            const passengerType = element.passenger.birthday;
-            const passengers = {
-              Adult: 0,
-              Child: 0,
-              Infant: 0,
-            };
-            if (calculateAgeCategory(passengerType) === "ADU") {
-              passengers.Adult += 1;
-            } else if (calculateAgeCategory(passengerType) === "CHI") {
-              passengers.Child += 1;
-            } else if (calculateAgeCategory(passengerType) === "INF") {
-              passengers.Infant += 1;
-            }
-            return {
-              ...element.online,
-              Classes: {
-                ...element.online.Classes,
-                Passengers: passengers,
-              },
-            };
-          }),
-        })
-          .then((res: any) => {
-            console.log(res.status);
-            if (res.status) {
-              // handleStoreFlightJson(jsonData)
-              //   .then((res: any) => {
-              //     setShowProgress(false);
-              //     if (res.status) {
-              //       jsonData["type"] = "flight";
-              //       localStorage.setItem(id, JSON.stringify(jsonData));
-              //       router.replace(res.return);
-              //     } else {
-              //       handleAlertDetails(res.message, "error");
-              //     }
-              //   })
-              //   .catch((err) => {
-              //     setShowProgress(false);
-              //   });
-              console.log(true);
-            } else {
-              handleAlertDetails(res.message, "error");
-              console.log(111, res);
-            }
-          })
-          .catch((err) => {});
+        // lockFlight({
+        //   data: jsonData.data.map((element: any) => {
+        //     const passengerType = element.passenger.birthday;
+        //     const passengers = {
+        //       Adult: 0,
+        //       Child: 0,
+        //       Infant: 0,
+        //     };
+        //     if (calculateAgeCategory(passengerType) === "ADU") {
+        //       passengers.Adult += 1;
+        //     } else if (calculateAgeCategory(passengerType) === "CHI") {
+        //       passengers.Child += 1;
+        //     } else if (calculateAgeCategory(passengerType) === "INF") {
+        //       passengers.Infant += 1;
+        //     }
+        //     return {
+        //       ...element.online,
+        //       Classes: {
+        //         ...element.online.Classes,
+        //         Passengers: passengers,
+        //       },
+        //     };
+        //   }),
+        // })
+        //   .then((res: any) => {
+        //     console.log(res.status);
+        //     if (res.status) {
+        //       // handleStoreFlightJson(jsonData)
+        //       //   .then((res: any) => {
+        //       //     setShowProgress(false);
+        //       //     if (res.status) {
+        //       //       jsonData["type"] = "flight";
+        //       //       localStorage.setItem(id, JSON.stringify(jsonData));
+        //       //       router.replace(res.return);
+        //       //     } else {
+        //       //       handleAlertDetails(res.message, "error");
+        //       //     }
+        //       //   })
+        //       //   .catch((err) => {
+        //       //     setShowProgress(false);
+        //       //   });
+        //       console.log(true);
+        //     } else {
+        //       handleAlertDetails(res.message, "error");
+        //       console.log(111, res);
+        //     }
+        //   })
+        //   .catch((err) => {});
 
         console.log("تمام فیلدها معتبر هستند");
       }

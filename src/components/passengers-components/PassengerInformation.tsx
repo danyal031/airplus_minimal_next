@@ -40,12 +40,13 @@ import {
   removeMask,
   validateMelliCode,
 } from "@/global-files/function";
-import { useMask } from "@react-input/mask";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { v4 as uuidv4 } from "uuid";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { useMask } from "@react-input/mask";
+
 interface PassengerInformationProps {
   index: number;
   item: UserInformationDataType;
@@ -115,6 +116,7 @@ const PassengerInformation = forwardRef<
         }),
       birthdayValidation: yup
         .string()
+        .trim()
         .matches(vReg?.date_yyyy_mm_dd, "")
         .test("minYear", "سال تولد باید بعد از 1310 باشد", (value) => {
           if (!value) return false;
@@ -183,6 +185,22 @@ const PassengerInformation = forwardRef<
     const togglePassengerForm = () => {
       setOpenPassengerForm(!openPassengerForm);
     };
+
+    useEffect(() => {
+      setValue("nameFaValidation", item.name_fa);
+      setValue("lastNameFaValidation", item.lastname_fa);
+      setValue("sexValidation", item.sex);
+      setValue("nationalCodeValidation", item.national_code);
+      setValue("nameEnValidation", item.name_en);
+      setValue("lastNameEnValidation", item.lastname_en);
+      setValue(
+        "birthdayValidation",
+        applyMask("date", item.birthday as string)
+      );
+      setValue("mobileValidation", item.mobile);
+      setValue("passportCodeValidation", item.pass_code);
+      setValue("passExValidation", applyMask("date", item.pass_ex as string));
+    }, [tabFormValue]);
 
     // handle change tab form value
     const handleChangeTabFormValue = (newValue: string) => {
@@ -277,7 +295,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="نام"
-                value={item.name_fa}
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
@@ -300,7 +317,6 @@ const PassengerInformation = forwardRef<
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                value={item.lastname_fa}
                 label="نام خانوادگی"
                 className="col-span-3"
                 autoComplete="off"
@@ -326,7 +342,6 @@ const PassengerInformation = forwardRef<
               render={({ field }) => (
                 <Select
                   {...field}
-                  value={item.sex}
                   size="small"
                   label="جنسیت"
                   // className="col-span-3"
@@ -351,7 +366,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 disabled={item.citizenship.title.fa === "ایرانی" ? false : true}
                 {...field}
-                value={item.national_code}
                 className="col-span-3"
                 autoComplete="off"
                 label="شماره ملی"
@@ -377,7 +391,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="نام لاتین"
-                value={item.name_en}
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
@@ -396,7 +409,6 @@ const PassengerInformation = forwardRef<
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                value={item.lastname_en}
                 label="نام خانوادگی لاتین"
                 className="col-span-3"
                 autoComplete="off"
@@ -424,8 +436,8 @@ const PassengerInformation = forwardRef<
                 className="col-span-3"
                 label="تاریخ تولد"
                 autoComplete="off"
-                // value={applyMask("date", item.birthday as string)}
                 size="small"
+                inputRef={dateRef}
                 onChange={(e) => {
                   field.onChange(e);
                   handleOnChange(
@@ -440,7 +452,6 @@ const PassengerInformation = forwardRef<
                   );
                 }}
                 placeholder="YYYY-MM-DD"
-                inputRef={dateRef}
                 dir="ltr"
                 InputLabelProps={{
                   sx: {
@@ -450,7 +461,7 @@ const PassengerInformation = forwardRef<
                 error={!!errors.birthdayValidation}
               />
             )}
-          />{" "}
+          />
           <Controller
             control={control}
             name="mobileValidation"
@@ -459,7 +470,6 @@ const PassengerInformation = forwardRef<
                 {...field}
                 label="تلفن همراه"
                 className="col-span-3"
-                value={item.mobile}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -482,7 +492,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="نام"
-                value={item.name_fa}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -504,7 +513,6 @@ const PassengerInformation = forwardRef<
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                value={item.lastname_fa}
                 label="نام خانوادگی"
                 autoComplete="off"
                 size="small"
@@ -528,7 +536,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="نام لاتین"
-                value={item.name_en}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -546,7 +553,6 @@ const PassengerInformation = forwardRef<
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                value={item.lastname_en}
                 label="نام خانوادگی لاتین"
                 autoComplete="off"
                 size="small"
@@ -572,7 +578,6 @@ const PassengerInformation = forwardRef<
               render={({ field }) => (
                 <Select
                   {...field}
-                  value={item.sex}
                   size="small"
                   label="جنسیت"
                   // className="col-span-3"
@@ -597,7 +602,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 disabled={item.citizenship.title.fa === "ایرانی" ? false : true}
                 {...field}
-                value={item.national_code}
                 autoComplete="off"
                 label="شماره ملی"
                 size="small"
@@ -621,16 +625,16 @@ const PassengerInformation = forwardRef<
             render={({ field }) => (
               <TextField
                 {...field}
+                // inputRef={dateRef}
                 label="تاریخ تولد"
                 autoComplete="off"
-                // value={applyMask("date", item.birthday as string)}
                 size="small"
                 onChange={(e) => {
                   field.onChange(e);
                   handleOnChange(
                     {
                       target: {
-                        value: removeMask("date", e.target.value),
+                        value: e.target.value,
                       },
                     } as any,
                     item.id as number,
@@ -639,7 +643,6 @@ const PassengerInformation = forwardRef<
                   );
                 }}
                 placeholder="YYYY-MM-DD"
-                inputRef={dateRef}
                 dir="ltr"
                 InputLabelProps={{
                   sx: {
@@ -657,7 +660,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="تلفن همراه"
-                value={item.mobile}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -690,7 +692,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="نام"
-                value={item.name_fa}
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
@@ -713,7 +714,6 @@ const PassengerInformation = forwardRef<
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                value={item.lastname_fa}
                 label="نام خانوادگی"
                 className="col-span-3"
                 autoComplete="off"
@@ -739,7 +739,6 @@ const PassengerInformation = forwardRef<
               render={({ field }) => (
                 <Select
                   {...field}
-                  value={item.sex}
                   size="small"
                   label="جنسیت"
                   // className="col-span-2"
@@ -763,7 +762,6 @@ const PassengerInformation = forwardRef<
             render={({ field }) => (
               <TextField
                 {...field}
-                value={item.pass_code}
                 className="col-span-2"
                 label="شماره گذرنامه"
                 autoComplete="off"
@@ -785,7 +783,6 @@ const PassengerInformation = forwardRef<
                 <TextField
                   {...field}
                   label="انقضای گذرنامه"
-                  // value={item.pass_ex}
                   autoComplete="off"
                   className="col-span-2"
                   size="small"
@@ -819,7 +816,6 @@ const PassengerInformation = forwardRef<
                 {...field}
                 label="نام لاتین"
                 className="col-span-3"
-                value={item.name_en}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -840,7 +836,6 @@ const PassengerInformation = forwardRef<
                 label="نام خانوادگی لاتین"
                 className="col-span-3"
                 autoComplete="off"
-                value={item.lastname_en}
                 size="small"
                 onChange={(e) => {
                   field.onChange(e);
@@ -862,17 +857,17 @@ const PassengerInformation = forwardRef<
             render={({ field }) => (
               <TextField
                 {...field}
+                inputRef={dateRef}
                 className="col-span-3"
                 label="تاریخ تولد"
                 autoComplete="off"
-                // value={applyMask("date", item.birthday as string)}
                 size="small"
                 onChange={(e) => {
                   field.onChange(e);
                   handleOnChange(
                     {
                       target: {
-                        value: removeMask("date", e.target.value),
+                        value: e.target.value,
                       },
                     } as any,
                     item.id as number,
@@ -881,7 +876,6 @@ const PassengerInformation = forwardRef<
                   );
                 }}
                 placeholder="YYYY-MM-DD"
-                inputRef={dateRef}
                 dir="ltr"
                 InputLabelProps={{
                   sx: {
@@ -899,7 +893,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="تلفن همراه"
-                value={item.mobile}
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
@@ -924,7 +917,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="نام"
-                value={item.name_fa}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -946,7 +938,6 @@ const PassengerInformation = forwardRef<
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                value={item.lastname_fa}
                 label="نام خانوادگی"
                 autoComplete="off"
                 size="small"
@@ -971,7 +962,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="نام لاتین"
-                value={item.name_en}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -991,7 +981,6 @@ const PassengerInformation = forwardRef<
                 {...field}
                 label="نام خانوادگی لاتین"
                 autoComplete="off"
-                value={item.lastname_en}
                 size="small"
                 onChange={(e) => {
                   field.onChange(e);
@@ -1015,7 +1004,6 @@ const PassengerInformation = forwardRef<
               render={({ field }) => (
                 <Select
                   {...field}
-                  value={item.sex}
                   size="small"
                   label="جنسیت"
                   onChange={(e: SelectChangeEvent) => {
@@ -1039,14 +1027,13 @@ const PassengerInformation = forwardRef<
                 {...field}
                 label="تاریخ تولد"
                 autoComplete="off"
-                // value={applyMask("date", item.birthday as string)}
                 size="small"
                 onChange={(e) => {
                   field.onChange(e);
                   handleOnChange(
                     {
                       target: {
-                        value: removeMask("date", e.target.value),
+                        value: e.target.value,
                       },
                     } as any,
                     item.id as number,
@@ -1073,7 +1060,6 @@ const PassengerInformation = forwardRef<
               <TextField
                 {...field}
                 label="تلفن همراه"
-                value={item.mobile}
                 autoComplete="off"
                 size="small"
                 onChange={(e) => {
@@ -1091,7 +1077,6 @@ const PassengerInformation = forwardRef<
             render={({ field }) => (
               <TextField
                 {...field}
-                value={item.pass_code}
                 label="شماره گذرنامه"
                 autoComplete="off"
                 size="small"
@@ -1112,7 +1097,6 @@ const PassengerInformation = forwardRef<
                 <TextField
                   {...field}
                   label="انقضای گذرنامه"
-                  // value={item.pass_ex}
                   autoComplete="off"
                   size="small"
                   onChange={(e) => {

@@ -16,7 +16,7 @@
     "@mui/lab": "^5.0.0-alpha.169",
     "@mui/material": "^5.15.14",
     "@mui/styled-engine-sc": "^6.3.0",
-    "@react-input/mask": "^2.0.4",
+    "@react-input/mask": "^1.2.7",
     "@types/leaflet": "^1.9.14",
     "@types/react-window-infinite-loader": "^1.0.9",
     "axios": "^1.6.8",

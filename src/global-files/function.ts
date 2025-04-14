@@ -237,6 +237,13 @@ export const applyMask = (action: string, input: string) => {
       return input;
 
     case "date":
+      // const digits = input.replaceAll("-", "");
+      // if (digits.length <= 4) return digits;
+      // if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+      // return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(
+      //   6,
+      //   8
+      // )}`;
       if (input?.length === 8) {
         return `${input.slice(0, 4)}-${input.slice(4, 6)}-${input.slice(6)}`;
       }
