@@ -653,3 +653,20 @@ export const createCreditCard = (passengerId: any) => {
       });
   });
 };
+
+export const getPreviousPassengers = () => {
+  return new Promise((resolve, reject) => {
+    customAxios
+      .get(process.env.NEXT_PUBLIC_PREVIOUS_PASSENGERS_ENDPOINT as string)
+      .then((response) => {
+        // Handle successful response here
+        console.log("getPreviousPassengers response: ", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("getPreviousPassengers error: ", error);
+        reject(error);
+      });
+  });
+};
