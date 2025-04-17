@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig } from "axios";
+import { axiosErrorHandler } from "./axiosErrorHandler";
 
 const customAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL_2,
@@ -30,7 +31,11 @@ customAxios.interceptors.request.use(
 
 customAxios.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  (error) => {
+    const status = error?.response?.status;
+    axiosErrorHandler(status);
+    return Promise.reject(error);
+  }
 );
 
 export default customAxios;

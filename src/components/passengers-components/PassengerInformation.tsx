@@ -102,12 +102,14 @@ const PassengerInformation = forwardRef<
     const localRef = useRef("1");
     const [tabFormValue, setTabFormValue] = React.useState("1");
     const [openPassengerForm, setOpenPassengerForm] =
-      React.useState<boolean>(false);
+      React.useState<boolean>(true);
     const [openPreviousPassengersList, setOpenPreviousPassengersList] =
       useState<boolean>(false);
     const theme = useTheme();
-    const dateRef = useMask(vMask?.date_yyyy_mm_dd);
-    const passExRef = useMask(vMask?.date_yyyy_mm_dd);
+    const dateRefOnDesktop = useMask(vMask?.date_yyyy_mm_dd);
+    const dateRefOnMobile = useMask(vMask?.date_yyyy_mm_dd);
+    const passExRefOnDesktop = useMask(vMask?.date_yyyy_mm_dd);
+    const passExRefOnMobile = useMask(vMask?.date_yyyy_mm_dd);
 
     //for validation
     const schema = yup.object().shape({
@@ -324,8 +326,12 @@ const PassengerInformation = forwardRef<
       );
     };
 
-    const renderForm = () => {
-      const renderOnDesktop = (
+    useEffect(() => {
+      console.log("localRef.current", localRef.current);
+    }, [localRef.current]);
+    // for desktop
+    const passengerInformationContainerOnDesktop = () => {
+      const renderFormOnDesktop = (
         <div className="hidden md:grid grid-cols-12 gap-2">
           <Controller
             control={control}
@@ -445,7 +451,7 @@ const PassengerInformation = forwardRef<
                           );
                         }}
                         placeholder="YYYY-MM-DD"
-                        inputRef={passExRef}
+                        inputRef={passExRefOnDesktop}
                         dir="ltr"
                         error={!!errors.passExValidation}
                       />
@@ -536,7 +542,7 @@ const PassengerInformation = forwardRef<
                 label="تاریخ تولد"
                 autoComplete="off"
                 size="small"
-                inputRef={dateRef}
+                inputRef={dateRefOnDesktop}
                 onChange={(e) => {
                   field.onChange(e);
                   handleOnChange(
@@ -582,7 +588,91 @@ const PassengerInformation = forwardRef<
           />
         </div>
       );
-      const renderOnMobile = (
+      return (
+        <>
+          {" "}
+          <div className="p-2 hidden md:grid grid-cols-1 gap-4 border-b-2 border-main">
+            {renderHeaderPassenger()}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              {renderFormOnDesktop}
+            </motion.div>
+          </div>
+        </>
+      );
+    };
+
+    // for mobile
+
+    const renderHeaderPassengerOnMobile = () => {
+      return (
+        <>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center gap-2">
+              <RadioGroup
+                row
+                onChange={(e) => handleChangeTabFormValue(e.target.value)}
+                defaultValue="1"
+              >
+                <FormControlLabel
+                  value="1"
+                  control={<Radio size="small" />}
+                  label="کارت ملی"
+                  sx={{
+                    fontBold: "bold",
+                    color:
+                      localRef.current === "1"
+                        ? theme.palette.primary.main
+                        : "",
+                    "& .MuiTypography-root": {
+                      fontSize: "0.9rem",
+                    },
+                  }}
+                />
+                <FormControlLabel
+                  value="2"
+                  control={<Radio size="small" />}
+                  label="پاسپورت"
+                  sx={{
+                    fontBold: "bold",
+                    color:
+                      localRef.current === "2"
+                        ? theme.palette.primary.main
+                        : "",
+                    "& .MuiTypography-root": {
+                      fontSize: "0.9rem",
+                    },
+                  }}
+                />
+              </RadioGroup>
+            </div>
+            <div className="flex items-center justify-center gap-0">
+              <Tooltip title="انتخاب مسافران سابق">
+                <IconButton onClick={handleOpenPreviousPassengers}>
+                  <PersonSearchIcon />
+                </IconButton>
+              </Tooltip>
+              {index !== 0 && (
+                <Tooltip title="حذف مسافر">
+                  <IconButton
+                    onClick={() => {
+                      handleRemovePassenger(item);
+                    }}
+                  >
+                    <DeleteSweepIcon className={`text-primary-main`} />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </div>
+          </div>
+        </>
+      );
+    };
+    const passengerInformationContainerOnMobile = () => {
+      const renderFormOnMobile = (
         <div className="md:hidden grid grid-cols-2 gap-2">
           <Controller
             control={control}
@@ -738,7 +828,7 @@ const PassengerInformation = forwardRef<
                         );
                       }}
                       placeholder="YYYY-MM-DD"
-                      inputRef={passExRef}
+                      inputRef={passExRefOnMobile}
                       dir="ltr"
                       error={!!errors.passExValidation}
                     />
@@ -779,7 +869,7 @@ const PassengerInformation = forwardRef<
             render={({ field }) => (
               <TextField
                 {...field}
-                inputRef={dateRef}
+                inputRef={dateRefOnMobile}
                 label="تاریخ تولد"
                 autoComplete="off"
                 size="small"
@@ -829,102 +919,6 @@ const PassengerInformation = forwardRef<
       );
       return (
         <>
-          {renderOnDesktop}
-          {renderOnMobile}
-        </>
-      );
-    };
-    useEffect(() => {
-      console.log("localRef.current", localRef.current);
-    }, [localRef.current]);
-    // for desktop
-    const passengerInformationContainerOnDesktop = () => {
-      return (
-        <>
-          {" "}
-          <div className="p-2 hidden md:grid grid-cols-1 gap-4 border-b-2 border-main">
-            {renderHeaderPassenger()}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              {renderForm()}
-            </motion.div>
-          </div>
-        </>
-      );
-    };
-
-    // for mobile
-
-    const renderHeaderPassengerOnMobile = () => {
-      return (
-        <>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center justify-center gap-2">
-              <RadioGroup
-                row
-                onChange={(e) => handleChangeTabFormValue(e.target.value)}
-                defaultValue="1"
-              >
-                <FormControlLabel
-                  value="1"
-                  control={<Radio size="small" />}
-                  label="کارت ملی"
-                  sx={{
-                    fontBold: "bold",
-                    color:
-                      localRef.current === "1"
-                        ? theme.palette.primary.main
-                        : "",
-                    "& .MuiTypography-root": {
-                      fontSize: "0.9rem",
-                    },
-                  }}
-                />
-                <FormControlLabel
-                  value="2"
-                  control={<Radio size="small" />}
-                  label="پاسپورت"
-                  sx={{
-                    fontBold: "bold",
-                    color:
-                      localRef.current === "2"
-                        ? theme.palette.primary.main
-                        : "",
-                    "& .MuiTypography-root": {
-                      fontSize: "0.9rem",
-                    },
-                  }}
-                />
-              </RadioGroup>
-            </div>
-            <div className="flex items-center justify-center gap-0">
-              <Tooltip title="انتخاب مسافران سابق">
-                <IconButton>
-                  <PersonSearchIcon />
-                </IconButton>
-              </Tooltip>
-              {index !== 0 && (
-                <Tooltip title="حذف مسافر">
-                  <IconButton
-                    onClick={() => {
-                      handleRemovePassenger(item);
-                    }}
-                  >
-                    <DeleteSweepIcon className={`text-primary-main`} />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </div>
-          </div>
-        </>
-      );
-    };
-    const passengerInformationContainerOnMobile = () => {
-      return (
-        <>
           <div className="p-2 md:hidden">
             <div className="overflow-hidden border border-divider rounded-xl grid grid-cols-1 gap-0">
               <div className="flex items-center justify-between py-1 px-3">
@@ -965,7 +959,7 @@ const PassengerInformation = forwardRef<
               {openPassengerForm && (
                 <div className="border-t border-divider grid grid-cols-1 gap-4 p-3">
                   {renderHeaderPassengerOnMobile()}
-                  {renderForm()}
+                  {renderFormOnMobile}
                 </div>
               )}
             </div>
@@ -978,6 +972,7 @@ const PassengerInformation = forwardRef<
       <>
         {passengerInformationContainerOnDesktop()}
         {passengerInformationContainerOnMobile()}
+
         <PreviousPassengersDialog
           passengers={item}
           onClose={handleClosePreviousPassengers}
@@ -1103,7 +1098,7 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
             <div className="flex items-center justify-center text-text-main font-semibold">
               درحال دریافت اطلاعات مسافران...
             </div>
-          ) : (
+          ) : previousPassengersList.length > 0 ? (
             <div className="w-full flex flex-col items-start justify-center gap-2">
               {previousPassengersList.map((previousPassenger) => {
                 return (
@@ -1123,10 +1118,15 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
                       />
                     </div>
                     <div className="flex items-center justify-start">
-                      <span>
-                        {previousPassenger.fullname.first_name.fa}{" "}
-                        {previousPassenger.fullname.last_name.fa}
-                      </span>
+                      <Tooltip
+                        placement="top"
+                        title={`${previousPassenger.fullname.first_name.fa} ${previousPassenger.fullname.last_name.fa}`}
+                      >
+                        <span className="truncate">
+                          {previousPassenger.fullname.first_name.fa}{" "}
+                          {previousPassenger.fullname.last_name.fa}
+                        </span>
+                      </Tooltip>
                     </div>
                     <div className="flex items-center justify-center">
                       <span>
@@ -1137,7 +1137,9 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
                       <span>
                         {previousPassenger.identity.id
                           ? previousPassenger.identity.id
-                          : previousPassenger.passport.id}
+                          : previousPassenger.passport.id
+                          ? previousPassenger.passport.id
+                          : "-"}
                       </span>
                     </div>
                     <div className="flex items-center justify-center">
@@ -1150,6 +1152,10 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
                   </div>
                 );
               })}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center text-text-main font-semibold">
+              مسافری جهت نمایش موجود نیست{" "}
             </div>
           )}
         </div>

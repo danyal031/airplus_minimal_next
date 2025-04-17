@@ -673,7 +673,7 @@ const CheckoutPassengerContainer = () => {
       });
       //
       if (allValid) {
-        setShowProgress(true);
+        // setShowProgress(true);
         // lockFlight({
         //   data: jsonData.data.map((element: any) => {
         //     const passengerType = element.passenger.birthday;

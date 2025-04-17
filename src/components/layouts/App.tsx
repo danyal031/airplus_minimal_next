@@ -16,9 +16,14 @@ import axios from "axios";
 import ProgressLoading from "../BasUIComponents/ProgressLoading";
 import { LoginDialog } from "../Login/LoginDialog";
 import { usePathname } from "next/navigation";
+import { LogoutListener } from "../LogoutListener";
 // import Loading from "./loading";
 
 const App = ({ children }: { children: React.ReactNode }) => {
+  if (process.env.NODE_ENV === "production") {
+    console.log = function () {};
+  }
+
   // initial states
   // theme colors
   const themes = {
@@ -145,6 +150,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
           <ThemeProvider theme={theme}>
             {!showProgressConfig ? (
               <>
+                <LogoutListener />
                 <CssBaseline />
                 <div className="flex flex-col min-h-screen">
                   {showAppBar && <ResponsiveAppBar />}

@@ -39,7 +39,7 @@ const ResponsiveAppBar = () => {
       <>
         <div
           // position="sticky"
-          className="md:block hidden sticky z-20 top-0 border-0 bg-main"
+          className="md:block hidden sticky z-20 top-0 border-0 bg-paper" // bg-main
         >
           <Container
             maxWidth="lg"
