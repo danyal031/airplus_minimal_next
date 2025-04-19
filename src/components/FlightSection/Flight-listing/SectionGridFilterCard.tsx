@@ -5,7 +5,10 @@ import FlightsList from "./FlightsList";
 import {
   Airline,
   AirportDataType,
+  Class,
   FilteredItemsDataDataType,
+  FlightResponseDataType,
+  FlightTicketDataType,
 } from "@/DataTypes/flight/flightTicket";
 import { useGlobalContext } from "@/context/store";
 import {
@@ -120,12 +123,27 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
     })
       .then((response: any) => {
         console.log("flight search response:", response);
-        // const newData= response.data.map((item: any) => {
-        //   return {
+        const wentNewData = response.data.Went.flatMap((item: any) =>
+          item.Classes.map((classItem: Class) => ({
+            ...item,
+            Classes: classItem,
+          }))
+        );
 
-        // })
-        setSearchFlightResponseData(response.data);
-        setFilteredSearchFlightResponseData(response.data);
+        const returnNewData = response.data.Return.flatMap((item: any) =>
+          item.Classes.map((classItem: Class) => ({
+            ...item,
+            Classes: classItem,
+          }))
+        );
+
+        const finalData = {
+          Went: wentNewData,
+          Return: returnNewData,
+        };
+
+        setSearchFlightResponseData(finalData);
+        setFilteredSearchFlightResponseData(finalData);
         setIsInitialSearchDone(true);
         setChangeStatusRequest(false);
         setTicketLoading(false);
@@ -187,8 +205,28 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
             : false,
       })
         .then((response: any) => {
-          setSearchFlightResponseData(response.data);
-          setFilteredSearchFlightResponseData(response.data);
+          console.log("flight search response:", response);
+          const wentNewData = response.data.Went.flatMap((item: any) =>
+            item.Classes.map((classItem: Class) => ({
+              ...item,
+              Classes: classItem,
+            }))
+          );
+
+          const returnNewData = response.data.Return.flatMap((item: any) =>
+            item.Classes.map((classItem: Class) => ({
+              ...item,
+              Classes: classItem,
+            }))
+          );
+
+          const finalData = {
+            Went: wentNewData,
+            Return: returnNewData,
+          };
+
+          setSearchFlightResponseData(finalData);
+          setFilteredSearchFlightResponseData(finalData);
           setIsInitialSearchDone(true);
           setChangeStatusRequest(false);
           setTicketLoading(false);
@@ -217,7 +255,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
       // handle cabin type
       if (flightFilter.cabinType.length > 0) {
         filteredData = filteredData.filter((item) =>
-          flightFilter.cabinType.includes(item.Classes[0].CabinType.title.fa)
+          flightFilter.cabinType.includes(item.Classes.CabinType.title.fa)
         );
       }
 
@@ -264,14 +302,14 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
       } else if (flightSelectedSortFiltered === "2") {
         filteredData.sort(
           (a, b) =>
-            new Date(a.Classes[0].Financial.Adult.Payable).getTime() -
-            new Date(b.Classes[0].Financial.Adult.Payable).getTime()
+            new Date(a.Classes.Financial.Adult.Payable).getTime() -
+            new Date(b.Classes.Financial.Adult.Payable).getTime()
         );
       } else if (flightSelectedSortFiltered === "3") {
         filteredData.sort(
           (a, b) =>
-            new Date(b.Classes[0].Financial.Adult.Payable).getTime() -
-            new Date(a.Classes[0].Financial.Adult.Payable).getTime()
+            new Date(b.Classes.Financial.Adult.Payable).getTime() -
+            new Date(a.Classes.Financial.Adult.Payable).getTime()
         );
       }
 
@@ -321,10 +359,8 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
           ? "Went"
           : "Return"
       ].forEach((item) => {
-        if (
-          !cabinItemsFilterData.includes(item.Classes[0].CabinType.title.fa)
-        ) {
-          cabinItemsFilterData.push(item.Classes[0].CabinType.title.fa);
+        if (!cabinItemsFilterData.includes(item.Classes.CabinType.title.fa)) {
+          cabinItemsFilterData.push(item.Classes.CabinType.title.fa);
         }
         if (!ticketItemsFilterData.includes(item.FlightType)) {
           ticketItemsFilterData.push(item.FlightType);

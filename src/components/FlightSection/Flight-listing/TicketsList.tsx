@@ -345,10 +345,10 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
   ) => {
     if (travelRoute === "oneWay") {
       if (Array.isArray(data.Classes)) {
-        setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
+        // setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
         toggleOpenDetailsDrawer(false);
         const queryParams = createSearchparams(
-          { ...data, Classes: data.Classes[classIndex] },
+          { ...data, Classes: data.Classes },
           false
         );
         const local_id = uuidv4().substr(0, 6);
@@ -359,10 +359,10 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
       if (!selectedWentFlight) {
         if (Array.isArray(data.Classes)) {
           toggleOpenDetailsDrawer(false);
-          setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
+          // setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
           if (selectedReturnFlight) {
             const queryParams = createSearchparams(
-              { ...data, Classes: data.Classes[classIndex] },
+              { ...data, Classes: data.Classes },
               selectedReturnFlight
             );
             const local_id = uuidv4().substr(0, 6);
@@ -373,13 +373,13 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
       } else {
         if (Array.isArray(data.Classes)) {
           toggleOpenDetailsDrawer(false);
-          setSelectedReturnFlight({
-            ...data,
-            Classes: data.Classes[classIndex],
-          });
+          // setSelectedReturnFlight({
+          //   ...data,
+          //   Classes: data.Classes[classIndex],
+          // });
           const queryParams = createSearchparams(selectedWentFlight, {
             ...data,
-            Classes: data.Classes[classIndex],
+            Classes: data.Classes,
           });
           const local_id = uuidv4().substr(0, 6);
           localStorage.setItem(local_id, JSON.stringify(queryParams));
@@ -410,17 +410,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             <div className="text-text-main text-sm font-semibold">نوزاد</div>
             <div className="text-text-main text-sm font-semibold">بارمجاز</div>
             <div className="text-gray-400 text-xs">
-              {data.Classes[0].Baggage.Adult.Trunk.TotalWeight &&
-              data.Classes[0].Baggage.Adult.Trunk.Number ? (
+              {data.Classes.Baggage.Adult.Trunk.TotalWeight &&
+              data.Classes.Baggage.Adult.Trunk.Number ? (
                 <Box className="flex gap-1">
                   <span>kg</span>
                   <span className="text-xs">
-                    {`${data.Classes[0].Baggage.Adult.Trunk.TotalWeight}`}{" "}
+                    {`${data.Classes.Baggage.Adult.Trunk.TotalWeight}`}{" "}
                   </span>
                   <span>x</span>
                   <span>
                     {" "}
-                    {`${data.Classes[0].Baggage.Adult.Trunk.Number}`}
+                    {`${data.Classes.Baggage.Adult.Trunk.Number}`}
                   </span>{" "}
                 </Box>
               ) : (
@@ -428,17 +428,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               )}
             </div>
             <div className="text-gray-400 text-xs">
-              {data.Classes[0].Baggage.Child.Trunk.TotalWeight &&
-              data.Classes[0].Baggage.Child.Trunk.Number ? (
+              {data.Classes.Baggage.Child.Trunk.TotalWeight &&
+              data.Classes.Baggage.Child.Trunk.Number ? (
                 <Box className="flex gap-1">
                   <span>kg</span>
                   <span className="text-xs">
-                    {`${data.Classes[0].Baggage.Child.Trunk.TotalWeight}`}{" "}
+                    {`${data.Classes.Baggage.Child.Trunk.TotalWeight}`}{" "}
                   </span>
                   <span>x</span>
                   <span>
                     {" "}
-                    {`${data.Classes[0].Baggage.Child.Trunk.Number}`}
+                    {`${data.Classes.Baggage.Child.Trunk.Number}`}
                   </span>{" "}
                 </Box>
               ) : (
@@ -447,17 +447,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             </div>
             <div className="text-gray-400 text-xs">
               {" "}
-              {data.Classes[0].Baggage.Infant.Trunk.TotalWeight &&
-              data.Classes[0].Baggage.Infant.Trunk.Number ? (
+              {data.Classes.Baggage.Infant.Trunk.TotalWeight &&
+              data.Classes.Baggage.Infant.Trunk.Number ? (
                 <Box className="flex gap-1">
                   <span>kg</span>
                   <span className="text-xs">
-                    {`${data.Classes[0].Baggage.Infant.Trunk.TotalWeight}`}{" "}
+                    {`${data.Classes.Baggage.Infant.Trunk.TotalWeight}`}{" "}
                   </span>
                   <span>x</span>
                   <span>
                     {" "}
-                    {`${data.Classes[0].Baggage.Infant.Trunk.Number}`}
+                    {`${data.Classes.Baggage.Infant.Trunk.Number}`}
                   </span>{" "}
                 </Box>
               ) : (
@@ -468,19 +468,19 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             <div className="text-gray-400 text-xs">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes[0].Financial.Adult.Payable / 10
+                data.Classes.Financial.Adult.Payable / 10
               )}`}
             </div>
             <div className="text-gray-400 text-xs">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes[0].Financial.Child.Payable / 10
+                data.Classes.Financial.Child.Payable / 10
               )}`}
             </div>
             <div className="text-gray-400 text-xs">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes[0].Financial.Infant.Payable / 10
+                data.Classes.Financial.Infant.Payable / 10
               )}`}
             </div>
           </div>
@@ -496,7 +496,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                 کلاس کابین{" "}
               </span>
               <span className="text-gray-400 text-sm">
-                {data.Classes[0].CabinType.title.fa}
+                {data.Classes.CabinType.title.fa}
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -747,7 +747,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                   )}
                 </span>
                 <span className="p-[2px] px-2 border border-primary-main text-primary-main text-xs rounded-full">
-                  {data.Classes[0].CabinType.title.fa}
+                  {data.Classes.CabinType.title.fa}
                 </span>{" "}
                 <span className="p-[2px] px-2 border border-primary-main text-primary-main text-xs rounded-full">
                   {data.FlightType == "Charter" ? "چارتری" : "سیستمی"}
@@ -767,12 +767,12 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             >
               {Array.isArray(data.Classes) &&
                 formatInputWithCommas(
-                  data.Classes[0].Financial.Adult.Payable / 10
+                  data.Classes.Financial.Adult.Payable / 10
                 )}
               {/* امکان رزرو وجود ندارد */}
             </Button>
             <span className="text-xs font-semibold text-gray-400">
-              {data.Classes[0].AvailableSeat} صندلی باقی مانده
+              {data.Classes.AvailableSeat} صندلی باقی مانده
             </span>
           </div>
 
@@ -809,17 +809,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               بارمجاز
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
-              {data.Classes[0].Baggage.Adult.Trunk.TotalWeight &&
-              data.Classes[0].Baggage.Adult.Trunk.Number ? (
+              {data.Classes.Baggage.Adult.Trunk.TotalWeight &&
+              data.Classes.Baggage.Adult.Trunk.Number ? (
                 <Box className="flex gap-1">
                   <span>kg</span>
                   <span className="text-xs">
-                    {`${data.Classes[0].Baggage.Adult.Trunk.TotalWeight}`}{" "}
+                    {`${data.Classes.Baggage.Adult.Trunk.TotalWeight}`}{" "}
                   </span>
                   <span>x</span>
                   <span>
                     {" "}
-                    {`${data.Classes[0].Baggage.Adult.Trunk.Number}`}
+                    {`${data.Classes.Baggage.Adult.Trunk.Number}`}
                   </span>{" "}
                 </Box>
               ) : (
@@ -827,17 +827,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               )}
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
-              {data.Classes[0].Baggage.Child.Trunk.TotalWeight &&
-              data.Classes[0].Baggage.Child.Trunk.Number ? (
+              {data.Classes.Baggage.Child.Trunk.TotalWeight &&
+              data.Classes.Baggage.Child.Trunk.Number ? (
                 <Box className="flex gap-1">
                   <span>kg</span>
                   <span className="text-xs">
-                    {`${data.Classes[0].Baggage.Child.Trunk.TotalWeight}`}{" "}
+                    {`${data.Classes.Baggage.Child.Trunk.TotalWeight}`}{" "}
                   </span>
                   <span>x</span>
                   <span>
                     {" "}
-                    {`${data.Classes[0].Baggage.Child.Trunk.Number}`}
+                    {`${data.Classes.Baggage.Child.Trunk.Number}`}
                   </span>{" "}
                 </Box>
               ) : (
@@ -846,17 +846,17 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
-              {data.Classes[0].Baggage.Infant.Trunk.TotalWeight &&
-              data.Classes[0].Baggage.Infant.Trunk.Number ? (
+              {data.Classes.Baggage.Infant.Trunk.TotalWeight &&
+              data.Classes.Baggage.Infant.Trunk.Number ? (
                 <Box className="flex gap-1">
                   <span>kg</span>
                   <span className="text-xs">
-                    {`${data.Classes[0].Baggage.Infant.Trunk.TotalWeight}`}{" "}
+                    {`${data.Classes.Baggage.Infant.Trunk.TotalWeight}`}{" "}
                   </span>
                   <span>x</span>
                   <span>
                     {" "}
-                    {`${data.Classes[0].Baggage.Infant.Trunk.Number}`}
+                    {`${data.Classes.Baggage.Infant.Trunk.Number}`}
                   </span>{" "}
                 </Box>
               ) : (
@@ -869,19 +869,19 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes[0].Financial.Adult.Payable / 10
+                data.Classes.Financial.Adult.Payable / 10
               )}`}
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes[0].Financial.Child.Payable / 10
+                data.Classes.Financial.Child.Payable / 10
               )}`}
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes[0].Financial.Infant.Payable / 10
+                data.Classes.Financial.Infant.Payable / 10
               )}`}
             </div>
           </div>
@@ -897,7 +897,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                 کلاس کابین{" "}
               </span>
               <span className="text-gray-400 text-sm">
-                {data.Classes[0].CabinType.title.fa}
+                {data.Classes.CabinType.title.fa}
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -1093,7 +1093,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               <span className="text-primary-main text-sm font-semibold">
                 {Array.isArray(data.Classes) &&
                   formatInputWithCommas(
-                    data.Classes[0].Financial.Adult.Payable / 10
+                    data.Classes.Financial.Adult.Payable / 10
                   )}
               </span>
             </div>
@@ -1150,7 +1150,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             <div className="col-span-3 flex flex-col items-start justify-center gap-3">
               <div className="flex items-center justify-start gap-2">
                 <span className="p-[2px] px-2 border border-text-main text-text-main text-xs rounded-full">
-                  {data.Classes[0].CabinType.title.fa}
+                  {data.Classes.CabinType.title.fa}
                 </span>
                 <span className="p-[2px] px-2 border border-text-main text-text-main text-xs rounded-full">
                   {data.FlightType == "Charter" ? "چارتری" : "سیستمی"}
@@ -1181,12 +1181,12 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
           </div>
           <div className="p-2 flex items-center justify-between">
             <span className="text-gray-400 text-[10px] font-semibold">
-              {data.Classes[0].AvailableSeat} صندلی باقی مانده
+              {data.Classes.AvailableSeat} صندلی باقی مانده
             </span>
             <span className="text-sm text-primary-main font-semibold">
               {Array.isArray(data.Classes) &&
                 formatInputWithCommas(
-                  data.Classes[0].Financial.Adult.Payable / 10
+                  data.Classes.Financial.Adult.Payable / 10
                 )}
             </span>
           </div>
