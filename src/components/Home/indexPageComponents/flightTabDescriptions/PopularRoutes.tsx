@@ -168,7 +168,7 @@ const PopularRoutesOnDesktop = () => {
                 <div className="border-dashed border-t border-divider my-2 mx-4"></div>
                 <div className="flex justify-between items-center text-sm font-semibold text-text-main">
                   <span>کمترین قیمت:</span>
-                  <span>{ticket.price.toLocaleString()} تومان</span>
+                  <span>... تومان</span>
                 </div>
               </div>
             ))}
@@ -363,7 +363,7 @@ const PopularRoutesOnMobile = () => {
                 <div className="border-dashed border-t border-divider my-2 mx-4"></div>
                 <div className="flex justify-between items-center text-sm font-semibold text-text-main">
                   <span>کمترین قیمت:</span>
-                  <span>{ticket.price.toLocaleString()} تومان</span>
+                  <span>... تومان</span>
                 </div>
               </div>
             ))}

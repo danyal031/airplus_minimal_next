@@ -39,6 +39,7 @@ import { useGlobalContext } from "@/context/store";
 import useLogOut from "@/hooks/useLogOut";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ConfigDataType } from "@/DataTypes/globalTypes";
 
 export default function AvatarDropdown({ className = "" }: Props) {
   // initial states
@@ -48,13 +49,16 @@ export default function AvatarDropdown({ className = "" }: Props) {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  // const [open, setOpen] = useState(false);
+  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
+    null
+  );
   const theme = useTheme();
-
-  // const toggleMenu = () => {
-  //   setOpen((prev) => !prev);
-  // };
   const [anchorEl, setAnchorEl] = useState(null);
+
+  // handle initial value
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
 
   const toggleMenu = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -92,17 +96,18 @@ export default function AvatarDropdown({ className = "" }: Props) {
           }}
         >
           <Button
-            fullWidth
+            // fullWidth
             onClick={toggleMenu}
             variant="contained"
             color="primary"
             size="medium"
-            className={`flex items-center justify-between rounded-lg ${
-              open && "rounded-b-none"
-            }`}
+            className="rounded-lg"
+            // className={`flex items-center justify-between rounded-lg ${
+            //   open && "rounded-b-none"
+            // }`}
           >
             حساب کاربری
-            {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            {/* {open ? <ExpandLessIcon /> : <ExpandMoreIcon />} */}
           </Button>
 
           <Popover
@@ -113,16 +118,16 @@ export default function AvatarDropdown({ className = "" }: Props) {
               vertical: "bottom",
               horizontal: "left",
             }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
+            // transformOrigin={{
+            //   vertical: "top",
+            //   horizontal: "left",
+            // }}
             PaperProps={{
               style: {
-                width: "200px",
+                //   width: "200px",
                 borderRadius: "8px",
-                borderTopLeftRadius: "0px",
-                borderTopRightRadius: "0px",
+                //   borderTopLeftRadius: "0px",
+                //   borderTopRightRadius: "0px",
                 overflow: "hidden",
               },
             }}
@@ -130,7 +135,7 @@ export default function AvatarDropdown({ className = "" }: Props) {
             <List
               component="nav"
               disablePadding
-              className="border-x border-primary-main"
+              // className="border-x border-primary-main"
             >
               <ListItemButton
                 className="cursor-pointer"
@@ -139,7 +144,7 @@ export default function AvatarDropdown({ className = "" }: Props) {
                 }}
               >
                 <ListItemText
-                  primary="کاربر ایرپلاس"
+                  primary={`کاربر ${config?.brand.fa}`}
                   primaryTypographyProps={{
                     style: {
                       fontWeight: "bold",
@@ -150,36 +155,12 @@ export default function AvatarDropdown({ className = "" }: Props) {
               </ListItemButton>
               <Divider variant="fullWidth" />
               <ListItemButton
-                className="opacity-30"
-                // onClick={() => {
-                //   router.push("/credit-card");
-                // }}
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push("/profile/orders");
+                }}
               >
-                <ListItemText
-                  // primaryTypographyProps={{
-                  //   style: {
-                  //     fontWeight: "bold",
-                  //     color: theme.palette.primary.main,
-                  //   },
-                  // }}
-                  primary="کارت اعتباری"
-                />
-              </ListItemButton>
-              <Divider variant="fullWidth" />
-              <ListItemButton className="opacity-30">
                 <ListItemText primary="سفرها" />
-              </ListItemButton>
-              <Divider variant="fullWidth" />
-              <ListItemButton className="opacity-30">
-                <ListItemText primary="نشان‌ها" />
-              </ListItemButton>
-              <Divider variant="fullWidth" />
-              <ListItemButton className="opacity-30">
-                <ListItemText primary="پیام‌ها" />
-              </ListItemButton>
-              <Divider variant="fullWidth" />
-              <ListItemButton className="opacity-30">
-                <ListItemText primary="درخواست پشتیبانی" />
               </ListItemButton>
               <Divider variant="fullWidth" />
               <Button

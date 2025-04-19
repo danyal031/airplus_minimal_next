@@ -24,10 +24,6 @@ const ServicesOnDesktop = () => {
     setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
   }, []);
 
-  const handleChangeTab = (newValue: string) => {
-    setTabValue(newValue);
-  };
-
   const renderTourismTourSection = () => {
     const tourismTours = [
       {
@@ -121,10 +117,7 @@ const ServicesOnDesktop = () => {
             return (
               <span
                 key={service.id}
-                onClick={() => handleChangeTab(service.id)}
-                className={`col-span-2 w-full hover:cursor-pointer flex items-center justify-center font-semibold h-12 rounded-tab-up ${
-                  isActive ? "bg-primary-main text-paper" : "text-text-main"
-                }`}
+                className={`col-span-2 w-full hover:cursor-pointer flex items-center justify-center font-semibold h-12 rounded-tab-up text-text-main hover:bg-primary-main hover:text-paper`}
               >
                 {service.label}
               </span>
@@ -143,7 +136,7 @@ const ServicesOnDesktop = () => {
             خدمات {config?.brand.fa}
           </span>
         </div>
-        <div className="col-span-12">{renderTypeOfServices()}</div>
+        {/* <div className="col-span-12">{renderTypeOfServices()}</div> */}
         <div className="col-span-12">{renderServiceContent()}</div>
       </div>
     </>
@@ -242,7 +235,7 @@ const ServicesOnMobile = () => {
             خدمات {config?.brand.fa}
           </span>
         </div>
-        <div className="">{renderTypeOfServices()}</div>
+        {/* <div className="">{renderTypeOfServices()}</div> */}
         <div className="">{renderServiceContent()}</div>
       </div>
     </>

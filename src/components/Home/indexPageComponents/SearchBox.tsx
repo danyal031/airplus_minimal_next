@@ -87,14 +87,15 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
       { id: "2", label: "هتل و اقامتگاه", active: false },
-      { id: "3", label: "اتوبوس", active: false },
-      { id: "4", label: "تور", active: false },
-      { id: "5", label: "قطار", active: false },
+      { id: "3", label: "پرواز و اقامتگاه", active: false },
+      // { id: "3", label: "اتوبوس", active: false },
+      // { id: "4", label: "تور", active: false },
+      // { id: "5", label: "قطار", active: false },
     ];
 
     return (
       <div
-        className={`grid grid-cols-10 gap-0 bg-primary-main rounded-tab-down w-4/5 p-0 ${
+        className={`grid grid-cols-3 gap-0 bg-primary-main rounded-tab-down w-4/5 p-0 ${
           tabValueSearchBox === "1" ? "border-r-paper" : "border-r-primary-main"
         } ${
           tabValueSearchBox === "5" ? "border-l-paper" : "border-l-primary-main"
@@ -113,7 +114,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
               }}
               className={`text-paper hover:cursor-pointer ${
                 isActive ? "rounded-tab-down" : ""
-              } col-span-2 flex items-center justify-center font-semibold h-12 ${
+              } col-span-1 flex items-center justify-center font-semibold h-12 ${
                 tabValueSearchBox === "1"
                   ? "border-r-0 rounded-r-none"
                   : tabValueSearchBox === "5"
@@ -197,14 +198,15 @@ const SearchBoxOnMobile: FC<SearchBoxOnMobileProps> = ({ config }) => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
       { id: "2", label: "اقامتگاه", active: false },
-      { id: "3", label: "اتوبوس", active: false },
-      { id: "4", label: "تور", active: false },
-      { id: "5", label: "قطار", active: false },
+      { id: "3", label: "پرواز و اقامتگاه", active: false },
+      // { id: "3", label: "اتوبوس", active: false },
+      // { id: "4", label: "تور", active: false },
+      // { id: "5", label: "قطار", active: false },
     ];
     return (
       <>
         <div
-          className={`grid grid-cols-5 gap-0 bg-primary-main w-full p-0 ${
+          className={`grid grid-cols-3 gap-0 bg-primary-main w-full p-0 ${
             tabValueSearchBox === "1" ? "" : ""
           } ${
             tabValueSearchBox === "5"
