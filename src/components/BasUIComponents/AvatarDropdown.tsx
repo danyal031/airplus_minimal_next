@@ -46,9 +46,6 @@ export default function AvatarDropdown({ className = "" }: Props) {
   const { userData } = useGlobalContext().userContext;
   const { setOpenLoginDialog, openLoginDialog } =
     useGlobalContext().loginContext;
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
   const [config, setConfig] = React.useState<null | null | ConfigDataType>(
     null
   );
@@ -70,7 +67,7 @@ export default function AvatarDropdown({ className = "" }: Props) {
   const router = useRouter();
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+    setAnchorEl(null);
   };
 
   const { handleLogout } = useLogOut();
