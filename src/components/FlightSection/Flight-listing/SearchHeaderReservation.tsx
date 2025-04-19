@@ -42,15 +42,16 @@ const SearchHeaderReservation = () => {
   const renderTab = () => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
-      { id: "2", label: "هتل و اقامتگاه", active: false },
-      { id: "3", label: "اتوبوس", active: false },
-      { id: "4", label: "تور", active: false },
-      { id: "5", label: "قطار", active: false },
+      { id: "2", label: "اقامتگاه", active: false },
+      { id: "3", label: "پرواز و اقامتگاه", active: false },
+      // { id: "3", label: "اتوبوس", active: false },
+      // { id: "4", label: "تور", active: false },
+      // { id: "5", label: "قطار", active: false },
     ];
     return (
       <>
         <div
-          className={`grid grid-cols-10 gap-0 bg-transparent rounded-tab-down w-4/5 p-0 `}
+          className={`grid grid-cols-3 gap-0 bg-transparent rounded-tab-down w-4/5 p-0 `}
         >
           {tabs.map((tab, index) => {
             // const isEven = index % 2 === 0;
@@ -71,7 +72,7 @@ const SearchHeaderReservation = () => {
                     : showSummarySearch
                     ? "bg-paper text-primary-main rounded-tab-down"
                     : ""
-                } col-span-2 flex items-center justify-center font-semibold h-12`}
+                } col-span-1 flex items-center justify-center font-semibold h-12`}
               >
                 {tab.label}
               </span>
@@ -217,33 +218,39 @@ const SearchHeaderReservation = () => {
   // for mobile
   const renderTabOnMobile = () => {
     const tabs = [
-      { id: "1", label: "پرواز" },
-      { id: "2", label: "اقامتگاه" },
-      { id: "3", label: "اتوبوس" },
-      { id: "4", label: "تور" },
-      { id: "5", label: "قطار" },
+      { id: "1", label: "پرواز", active: true },
+      { id: "2", label: "اقامتگاه", active: false },
+      { id: "3", label: "پرواز و اقامتگاه", active: false },
+      // { id: "3", label: "اتوبوس" },
+      // { id: "4", label: "تور" },
+      // { id: "5", label: "قطار" },
     ];
     return (
       <>
         {" "}
         <div
-          className={`grid grid-cols-5 gap-0 bg-paper w-full p-0 ${
+          className={`grid grid-cols-3 gap-0 bg-paper w-full p-0 ${
             tabValue === "1" ? "" : ""
           } ${tabValue === "5" ? "border-l-paper" : "border-l-primary-main"}`}
         >
           {tabs.map((tab, index) => {
             // const isEven = index % 2 === 0;
             const isActive = tabValue === tab.id;
+
             return (
               <span
                 key={tab.id}
-                onClick={() => handleChangeTab(tab.id)}
+                onClick={() => {
+                  if (tab.active) {
+                    handleChangeTab(tab.id);
+                  }
+                }}
                 className={`text-paper text-xs rounded-tab-down-sm hover:cursor-pointer px-5 truncate flex-shrink-0 ${
                   isActive ? "" : ""
                 } flex items-center justify-center font-semibold h-10 ${
                   tabValue === "1"
                     ? "border-r-0 rounded-r-none"
-                    : tabValue === "5"
+                    : tabValue === "3"
                     ? "border-l-0 rounded-l-none"
                     : ""
                 }  ${
@@ -262,7 +269,7 @@ const SearchHeaderReservation = () => {
   };
 
   const renderSummerySearchOnMobile = () => {
-    const drawerContent = <>{renderForm()}</>;
+    const drawerContent = renderForm();
     return (
       <>
         <div className="bg-primary-main p-2 flex items-center justify-between">
