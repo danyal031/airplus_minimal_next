@@ -54,7 +54,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useMask } from "@react-input/mask";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import { getPreviousPassengers } from "@/global-files/axioses";
+import { getCountryList, getPreviousPassengers } from "@/global-files/axioses";
 import { PreviousPassengerDataType } from "@/DataTypes/previousPassengerTypes";
 
 interface PassengerInformationProps {
@@ -110,6 +110,8 @@ const PassengerInformation = forwardRef<
     const dateRefOnMobile = useMask(vMask?.date_yyyy_mm_dd);
     const passExRefOnDesktop = useMask(vMask?.date_yyyy_mm_dd);
     const passExRefOnMobile = useMask(vMask?.date_yyyy_mm_dd);
+    const [openCitizenShip, setOpenCitizenShip] = useState<boolean>(false);
+    const [citizenshipList, setCitizenshipList] = useState<any[]>([]);
 
     //for validation
     const schema = yup.object().shape({
@@ -178,6 +180,10 @@ const PassengerInformation = forwardRef<
       passExValidation: item.pass_code
         ? yup.string().matches(vReg?.date_yyyy_mm_dd, "").required()
         : yup.string().notRequired(),
+      // citizenshipValidation: yup
+      //   .object()
+      //   .required("ملیت باید انتخاب شود")
+      //   .typeError("ملیت باید انتخاب شود"),
     });
 
     const defaultValues = {
@@ -207,6 +213,16 @@ const PassengerInformation = forwardRef<
         return isValid;
       },
     }));
+
+    useEffect(() => {
+      if (openCitizenShip) {
+        getCountryList({ action: "citizenship", route: "1" }).then(
+          (response: any) => {
+            setCitizenshipList(response?.data?.titles as any);
+          }
+        );
+      }
+    }, [openCitizenShip]);
 
     // handle change open passenger form
     const togglePassengerForm = () => {
@@ -459,6 +475,50 @@ const PassengerInformation = forwardRef<
                   />
                 )}
               </div>
+              {/* <Controller
+                control={control}
+                name="citizenshipValidation"
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    value={
+                      citizenshipList.find((c) => c.id === field.value?.id) ||
+                      null
+                    }
+                    disableClearable
+                    size="small"
+                    className="col-span-3"
+                    disablePortal
+                    open={openCitizenShip}
+                    onOpen={() => {
+                      setOpenCitizenShip(true);
+                    }}
+                    onClose={() => {
+                      setOpenCitizenShip(false);
+                    }}
+                    onChange={(e, value: any) => {
+                      if (value) {
+                        field.onChange(e);
+
+                        handleOnChange(
+                          { target: { value: value } },
+                          item.id,
+                          "citizenship"
+                        );
+                      }
+                    }}
+                    options={citizenshipList.filter((c) => c.id !== 118)}
+                    getOptionLabel={(option: any) => option?.title?.fa || ""}
+                    renderInput={(params) => (
+                      <TextField
+                        error={!!errors.citizenshipValidation}
+                        label="ملیت"
+                        {...params}
+                      />
+                    )}
+                  />
+                )}
+              /> */}
             </>
           )}
           {tabFormValue === "1" && (
@@ -1037,7 +1097,7 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
     id: passenger.id,
     image: null,
     sex: passenger.gender,
-    citizenship: defaultCitizenship,
+    citizenship: null,
     name_fa: passenger.fullname.first_name.fa,
     lastname_fa: passenger.fullname.last_name.fa,
     name_en: passenger.fullname.first_name.en,
@@ -1049,16 +1109,16 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
     birthday: passenger.birth,
     email: passenger.email,
     mobile: passenger.mobile,
-    country: {
-      id: 118,
-      title: {
-        fa: "ایران",
-        en: "Iran",
-      },
-      details: {
-        iso: "IR",
-      },
-    },
+    // country: {
+    //   id: 118,
+    //   title: {
+    //     fa: "ایران",
+    //     en: "Iran",
+    //   },
+    //   details: {
+    //     iso: "IR",
+    //   },
+    // },
     province: null,
     city: null,
     postal_code: "",

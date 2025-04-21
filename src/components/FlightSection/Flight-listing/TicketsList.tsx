@@ -344,47 +344,38 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
     classIndex: number = 0
   ) => {
     if (travelRoute === "oneWay") {
-      if (Array.isArray(data.Classes)) {
-        // setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
-        toggleOpenDetailsDrawer(false);
-        const queryParams = createSearchparams(
-          { ...data, Classes: data.Classes },
-          false
-        );
-        const local_id = uuidv4().substr(0, 6);
-        localStorage.setItem(local_id, JSON.stringify(queryParams));
-        router.push(`/flight/checkout?factor=${local_id}` as Route);
-      }
+      setSelectedWentFlight(data);
+      toggleOpenDetailsDrawer(false);
+      const queryParams = createSearchparams(
+        { ...data, Classes: data.Classes },
+        false
+      );
+      const local_id = uuidv4().substr(0, 6);
+      localStorage.setItem(local_id, JSON.stringify(queryParams));
+      router.push(`/flight/checkout?factor=${local_id}` as Route);
     } else {
       if (!selectedWentFlight) {
-        if (Array.isArray(data.Classes)) {
-          toggleOpenDetailsDrawer(false);
-          // setSelectedWentFlight({ ...data, Classes: data.Classes[classIndex] });
-          if (selectedReturnFlight) {
-            const queryParams = createSearchparams(
-              { ...data, Classes: data.Classes },
-              selectedReturnFlight
-            );
-            const local_id = uuidv4().substr(0, 6);
-            localStorage.setItem(local_id, JSON.stringify(queryParams));
-            router.push(`/flight/checkout?factor=${local_id}` as Route);
-          }
-        }
-      } else {
-        if (Array.isArray(data.Classes)) {
-          toggleOpenDetailsDrawer(false);
-          // setSelectedReturnFlight({
-          //   ...data,
-          //   Classes: data.Classes[classIndex],
-          // });
-          const queryParams = createSearchparams(selectedWentFlight, {
-            ...data,
-            Classes: data.Classes,
-          });
+        toggleOpenDetailsDrawer(false);
+        setSelectedWentFlight(data);
+        if (selectedReturnFlight) {
+          const queryParams = createSearchparams(
+            { ...data, Classes: data.Classes },
+            selectedReturnFlight
+          );
           const local_id = uuidv4().substr(0, 6);
           localStorage.setItem(local_id, JSON.stringify(queryParams));
           router.push(`/flight/checkout?factor=${local_id}` as Route);
         }
+      } else {
+        toggleOpenDetailsDrawer(false);
+        setSelectedReturnFlight(data);
+        const queryParams = createSearchparams(selectedWentFlight, {
+          ...data,
+          Classes: data.Classes,
+        });
+        const local_id = uuidv4().substr(0, 6);
+        localStorage.setItem(local_id, JSON.stringify(queryParams));
+        router.push(`/flight/checkout?factor=${local_id}` as Route);
       }
     }
   };
@@ -765,10 +756,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               size="small"
               className="rounded-lg min-w-28 text-sm"
             >
-              {Array.isArray(data.Classes) &&
-                formatInputWithCommas(
-                  data.Classes.Financial.Adult.Payable / 10
-                )}
+              {formatInputWithCommas(data.Classes.Financial.Adult.Payable / 10)}
               {/* امکان رزرو وجود ندارد */}
             </Button>
             <span className="text-xs font-semibold text-gray-400">
@@ -1091,10 +1079,9 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             <div className="flex items-center justify-between">
               <span className="text-sm text-text-main">مجموع قیمت</span>
               <span className="text-primary-main text-sm font-semibold">
-                {Array.isArray(data.Classes) &&
-                  formatInputWithCommas(
-                    data.Classes.Financial.Adult.Payable / 10
-                  )}
+                {formatInputWithCommas(
+                  data.Classes.Financial.Adult.Payable / 10
+                )}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -1184,10 +1171,7 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               {data.Classes.AvailableSeat} صندلی باقی مانده
             </span>
             <span className="text-sm text-primary-main font-semibold">
-              {Array.isArray(data.Classes) &&
-                formatInputWithCommas(
-                  data.Classes.Financial.Adult.Payable / 10
-                )}
+              {formatInputWithCommas(data.Classes.Financial.Adult.Payable / 10)}
             </span>
           </div>
         </div>

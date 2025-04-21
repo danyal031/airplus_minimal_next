@@ -105,7 +105,7 @@ export const handleStoreLotteryJson = async (data: any) => {
   //   "Bearer " + localStorage.getItem("access_token");
   return new Promise((resolve, reject) => {
     customAxios
-      .post(process.env.NEXT_PUBLIC_BASE_URL_2 + "/trade/store" + "", data)
+      .post("/trade/store", data)
       .then((response) => {
         // Handle successful response here
         console.log("response", response.data);
@@ -309,10 +309,10 @@ export const handleStoreFlightJson = (data: any) => {
   //   "Bearer " + localStorage.getItem("access_token");
   return new Promise((resolve, reject) => {
     customAxios
-      .post(process.env.NEXT_PUBLIC_BASE_URL_2 + "/trade/store", data)
+      .post("/trade/store", data)
       .then((response) => {
         // Handle successful response here
-        console.log("response", response.data);
+        console.log("response", response);
         resolve(response.data);
       })
       .catch((error) => {

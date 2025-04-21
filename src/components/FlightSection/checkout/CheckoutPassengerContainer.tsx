@@ -5,6 +5,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { v4 as uuidv4 } from "uuid";
 import { useGlobalContext } from "@/context/store";
 import {
+  ConfigDataType,
   defaultPassengerInformation,
   UserInformationDataType,
 } from "@/DataTypes/globalTypes";
@@ -42,8 +43,16 @@ const CheckoutPassengerContainer = () => {
   const { setOpenLoginDialog } = useGlobalContext().loginContext;
   const [openPaymentDetails, setOpenPaymentDetails] = useState<boolean>(false);
   const router = useRouter();
+  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
+    null
+  );
 
   const childRef = useRef<any>([]);
+
+  // handle initial value
+  useEffect(() => {
+    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
+  }, []);
 
   // render header container
   const renderHeaderContainer = () => {
@@ -645,7 +654,7 @@ const CheckoutPassengerContainer = () => {
                 .reduce((acc: any, ticket: any) => acc + ticket.sell, 0)
                 .toString()
             ),
-            return: "mehromah24.com/services/shopping/" + id,
+            return: `${config?.communicational.site}/services/shopping/` + id,
           },
         },
         sum_sell_price: parseInt(
@@ -673,55 +682,64 @@ const CheckoutPassengerContainer = () => {
       });
       //
       if (allValid) {
-        // setShowProgress(true);
-        // lockFlight({
-        //   data: jsonData.data.map((element: any) => {
-        //     const passengerType = element.passenger.birthday;
-        //     const passengers = {
-        //       Adult: 0,
-        //       Child: 0,
-        //       Infant: 0,
-        //     };
-        //     if (calculateAgeCategory(passengerType) === "ADU") {
-        //       passengers.Adult += 1;
-        //     } else if (calculateAgeCategory(passengerType) === "CHI") {
-        //       passengers.Child += 1;
-        //     } else if (calculateAgeCategory(passengerType) === "INF") {
-        //       passengers.Infant += 1;
-        //     }
-        //     return {
-        //       ...element.online,
-        //       Classes: {
-        //         ...element.online.Classes,
-        //         Passengers: passengers,
-        //       },
-        //     };
-        //   }),
-        // })
-        //   .then((res: any) => {
-        //     console.log(res.status);
-        //     if (res.status) {
-        //       // handleStoreFlightJson(jsonData)
-        //       //   .then((res: any) => {
-        //       //     setShowProgress(false);
-        //       //     if (res.status) {
-        //       //       jsonData["type"] = "flight";
-        //       //       localStorage.setItem(id, JSON.stringify(jsonData));
-        //       //       router.replace(res.return);
-        //       //     } else {
-        //       //       handleAlertDetails(res.message, "error");
-        //       //     }
-        //       //   })
-        //       //   .catch((err) => {
-        //       //     setShowProgress(false);
-        //       //   });
-        //       console.log(true);
-        //     } else {
-        //       handleAlertDetails(res.message, "error");
-        //       console.log(111, res);
-        //     }
-        //   })
-        //   .catch((err) => {});
+        setShowProgress(true);
+        lockFlight({
+          data: jsonData.data.map((element: any) => {
+            const passengerType = element.passenger.birthday;
+            const passengers = {
+              Adult: 0,
+              Child: 0,
+              Infant: 0,
+            };
+            if (calculateAgeCategory(passengerType) === "ADU") {
+              passengers.Adult += 1;
+            } else if (calculateAgeCategory(passengerType) === "CHI") {
+              passengers.Child += 1;
+            } else if (calculateAgeCategory(passengerType) === "INF") {
+              passengers.Infant += 1;
+            }
+            return {
+              ...element.online,
+              Classes: {
+                ...element.online.Classes,
+                Passengers: passengers,
+              },
+            };
+          }),
+        })
+          .then((lockRes: any) => {
+            console.log(lockRes.status);
+            if (lockRes.status) {
+              jsonData.data = jsonData.data.map((element: any) => {
+                return {
+                  ...element,
+                  online: {
+                    ...element.online,
+                    Lock: lockRes,
+                  },
+                };
+              });
+              handleStoreFlightJson(jsonData)
+                .then((res: any) => {
+                  setShowProgress(false);
+
+                  jsonData["type"] = "flight";
+
+                  localStorage.setItem(id, JSON.stringify(jsonData));
+                  router.replace(res.payload.payment_link);
+
+                  // handleAlertDetails(res.message, "error");
+                })
+                .catch((err) => {
+                  setShowProgress(false);
+                });
+
+              console.log(true);
+            } else {
+              handleAlertDetails(lockRes.message, "error");
+            }
+          })
+          .catch((err) => {});
 
         console.log("تمام فیلدها معتبر هستند");
       }

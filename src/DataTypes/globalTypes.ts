@@ -193,16 +193,16 @@ export const defaultPassengerInformation: UserInformationDataType = {
   marital_status: "0",
   mobile: "",
   phone: "",
-  country: {
-    id: 118,
-    title: {
-      fa: "ایران",
-      en: "Iran",
-    },
-    details: {
-      iso: "IR",
-    },
-  },
+  // country: {
+  //   id: 118,
+  //   title: {
+  //     fa: "ایران",
+  //     en: "Iran",
+  //   },
+  //   details: {
+  //     iso: "IR",
+  //   },
+  // },
   province: null,
   city: null,
   postal_code: "",
