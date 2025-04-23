@@ -180,10 +180,6 @@ const PassengerInformation = forwardRef<
       passExValidation: item.pass_code
         ? yup.string().matches(vReg?.date_yyyy_mm_dd, "").required()
         : yup.string().notRequired(),
-      // citizenshipValidation: yup
-      //   .object()
-      //   .required("ملیت باید انتخاب شود")
-      //   .typeError("ملیت باید انتخاب شود"),
     });
 
     const defaultValues = {
@@ -475,50 +471,32 @@ const PassengerInformation = forwardRef<
                   />
                 )}
               </div>
-              {/* <Controller
-                control={control}
-                name="citizenshipValidation"
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    value={
-                      citizenshipList.find((c) => c.id === field.value?.id) ||
-                      null
-                    }
-                    disableClearable
-                    size="small"
-                    className="col-span-3"
-                    disablePortal
-                    open={openCitizenShip}
-                    onOpen={() => {
-                      setOpenCitizenShip(true);
-                    }}
-                    onClose={() => {
-                      setOpenCitizenShip(false);
-                    }}
-                    onChange={(e, value: any) => {
-                      if (value) {
-                        field.onChange(e);
-
-                        handleOnChange(
-                          { target: { value: value } },
-                          item.id,
-                          "citizenship"
-                        );
-                      }
-                    }}
-                    options={citizenshipList.filter((c) => c.id !== 118)}
-                    getOptionLabel={(option: any) => option?.title?.fa || ""}
-                    renderInput={(params) => (
-                      <TextField
-                        error={!!errors.citizenshipValidation}
-                        label="ملیت"
-                        {...params}
-                      />
-                    )}
-                  />
-                )}
-              /> */}
+              <Autocomplete
+                defaultValue={defaultValues.citizenshipValidation}
+                disableClearable
+                size="small"
+                className="col-span-3"
+                disablePortal
+                open={openCitizenShip}
+                onOpen={() => {
+                  setOpenCitizenShip(true);
+                }}
+                onClose={() => {
+                  setOpenCitizenShip(false);
+                }}
+                onChange={(e, value: any) => {
+                  if (value) {
+                    handleOnChange(
+                      { target: { value: value } },
+                      item.id,
+                      "citizenship"
+                    );
+                  }
+                }}
+                options={citizenshipList}
+                getOptionLabel={(option: any) => option?.title?.fa || ""}
+                renderInput={(params) => <TextField label="ملیت" {...params} />}
+              />
             </>
           )}
           {tabFormValue === "1" && (
