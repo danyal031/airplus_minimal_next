@@ -112,7 +112,8 @@ const PassengerInformation = forwardRef<
     const passExRefOnMobile = useMask(vMask?.date_yyyy_mm_dd);
     const [openCitizenShip, setOpenCitizenShip] = useState<boolean>(false);
     const [citizenshipList, setCitizenshipList] = useState<any[]>([]);
-
+    const [selectedCitizenship, setSelectedCitizenship] =
+      useState<any>(defaultCitizenship);
     //for validation
     const schema = yup.object().shape({
       nameFaValidation: yup.string().required("نام فارسی انتخاب نشده است"),
@@ -180,6 +181,7 @@ const PassengerInformation = forwardRef<
       passExValidation: item.pass_code
         ? yup.string().matches(vReg?.date_yyyy_mm_dd, "").required()
         : yup.string().notRequired(),
+      citizenshipValidation: yup.string().required(),
     });
 
     const defaultValues = {
@@ -471,31 +473,46 @@ const PassengerInformation = forwardRef<
                   />
                 )}
               </div>
-              <Autocomplete
-                defaultValue={defaultValues.citizenshipValidation}
-                disableClearable
-                size="small"
-                className="col-span-3"
-                disablePortal
-                open={openCitizenShip}
-                onOpen={() => {
-                  setOpenCitizenShip(true);
-                }}
-                onClose={() => {
-                  setOpenCitizenShip(false);
-                }}
-                onChange={(e, value: any) => {
-                  if (value) {
-                    handleOnChange(
-                      { target: { value: value } },
-                      item.id,
-                      "citizenship"
-                    );
-                  }
-                }}
-                options={citizenshipList}
-                getOptionLabel={(option: any) => option?.title?.fa || ""}
-                renderInput={(params) => <TextField label="ملیت" {...params} />}
+              <Controller
+                control={control}
+                name="citizenshipValidation"
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    value={selectedCitizenship}
+                    disableClearable
+                    size="small"
+                    className="col-span-3"
+                    disablePortal
+                    open={openCitizenShip}
+                    onOpen={() => {
+                      setOpenCitizenShip(true);
+                    }}
+                    onClose={() => {
+                      setOpenCitizenShip(false);
+                    }}
+                    onChange={(e, value: any) => {
+                      if (value) {
+                        field.onChange(value.title.fa);
+                        setSelectedCitizenship(value);
+                        handleOnChange(
+                          { target: { value: value } },
+                          item.id,
+                          "citizenship"
+                        );
+                      }
+                    }}
+                    options={citizenshipList}
+                    getOptionLabel={(option: any) => option?.title?.fa || ""}
+                    renderInput={(params) => (
+                      <TextField
+                        error={!!errors.citizenshipValidation}
+                        label="ملیت"
+                        {...params}
+                      />
+                    )}
+                  />
+                )}
               />
             </>
           )}
@@ -1075,7 +1092,7 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
     id: passenger.id,
     image: null,
     sex: passenger.gender,
-    citizenship: null,
+    citizenship: defaultCitizenship,
     name_fa: passenger.fullname.first_name.fa,
     lastname_fa: passenger.fullname.last_name.fa,
     name_en: passenger.fullname.first_name.en,
