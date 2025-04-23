@@ -97,6 +97,24 @@ const CheckoutPassengerContainer = () => {
             <Tooltip title="افزودن مسافر">
               <IconButton
                 onClick={() => {
+                  const wentCapacity =
+                    selectedWentFlight?.Classes?.AvailableSeat;
+                  const returnCapacity =
+                    selectedReturnFlight?.Classes?.AvailableSeat;
+                  console.log("capacity", wentCapacity, returnCapacity);
+
+                  const isRoundTrip = selectedReturnFlight ? true : false;
+                  const maxPassengers = isRoundTrip
+                    ? Math.min(wentCapacity ?? 0, returnCapacity ?? 0)
+                    : wentCapacity ?? 0;
+                  if (flightPassengers.length >= maxPassengers) {
+                    handleAlertDetails(
+                      "ظرفیت پر شده است و امکان افزودن مسافر جدید وجود ندارد.",
+                      "warning"
+                    );
+                    return;
+                  }
+
                   handleAddPassenger();
                 }}
               >
@@ -504,22 +522,6 @@ const CheckoutPassengerContainer = () => {
 
   // for handle add passengers
   const handleAddPassenger = () => {
-    const wentCapacity = selectedWentFlight?.Classes?.AvailableSeat;
-    const returnCapacity = selectedReturnFlight?.Classes?.AvailableSeat;
-    console.log("capacity", wentCapacity, returnCapacity);
-
-    const isRoundTrip = selectedReturnFlight ? true : false;
-    const maxPassengers = isRoundTrip
-      ? Math.min(wentCapacity ?? 0, returnCapacity ?? 0)
-      : wentCapacity ?? 0;
-
-    if (flightPassengers.length >= maxPassengers) {
-      handleAlertDetails(
-        "ظرفیت پر شده است و امکان افزودن مسافر جدید وجود ندارد.",
-        "warning"
-      );
-      return;
-    }
     const newPassenger: UserInformationDataType = {
       ...defaultPassengerInformation,
       id: uuidv4(),
