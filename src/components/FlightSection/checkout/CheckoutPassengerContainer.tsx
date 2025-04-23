@@ -115,7 +115,7 @@ const CheckoutPassengerContainer = () => {
   const renderPurchaseConfirmation = () => {
     // went
     const adultsWentTicketsPrice =
-      selectedWentFlight && !Array.isArray(selectedWentFlight.Classes)
+      selectedWentFlight && selectedWentFlight.Classes
         ? (flightPassengers.filter(
             (element) =>
               calculateAgeCategory(
@@ -126,7 +126,7 @@ const CheckoutPassengerContainer = () => {
           10
         : 0;
     const childWentTicketsPrice =
-      selectedWentFlight && !Array.isArray(selectedWentFlight.Classes)
+      selectedWentFlight && selectedWentFlight.Classes
         ? (flightPassengers.filter(
             (element) =>
               calculateAgeCategory(
@@ -137,7 +137,7 @@ const CheckoutPassengerContainer = () => {
           10
         : 0;
     const infantWentTicketsPrice =
-      selectedWentFlight && !Array.isArray(selectedWentFlight.Classes)
+      selectedWentFlight && selectedWentFlight.Classes
         ? (flightPassengers.filter(
             (element) =>
               calculateAgeCategory(
@@ -150,7 +150,7 @@ const CheckoutPassengerContainer = () => {
 
     // return
     const adultsReturnTicketsPrice =
-      selectedReturnFlight && !Array.isArray(selectedReturnFlight.Classes)
+      selectedReturnFlight && selectedReturnFlight.Classes
         ? (flightPassengers.filter(
             (element) =>
               calculateAgeCategory(
@@ -161,7 +161,7 @@ const CheckoutPassengerContainer = () => {
           10
         : 0;
     const childReturnTicketsPrice =
-      selectedReturnFlight && !Array.isArray(selectedReturnFlight.Classes)
+      selectedReturnFlight && selectedReturnFlight.Classes
         ? (flightPassengers.filter(
             (element) =>
               calculateAgeCategory(
@@ -172,7 +172,7 @@ const CheckoutPassengerContainer = () => {
           10
         : 0;
     const infantReturnTicketsPrice =
-      selectedReturnFlight && !Array.isArray(selectedReturnFlight.Classes)
+      selectedReturnFlight && selectedReturnFlight.Classes
         ? (flightPassengers.filter(
             (element) =>
               calculateAgeCategory(
@@ -504,6 +504,22 @@ const CheckoutPassengerContainer = () => {
 
   // for handle add passengers
   const handleAddPassenger = () => {
+    const wentCapacity = selectedWentFlight?.Classes?.AvailableSeat;
+    const returnCapacity = selectedReturnFlight?.Classes?.AvailableSeat;
+    console.log("capacity", wentCapacity, returnCapacity);
+
+    const isRoundTrip = selectedReturnFlight ? true : false;
+    const maxPassengers = isRoundTrip
+      ? Math.min(wentCapacity ?? 0, returnCapacity ?? 0)
+      : wentCapacity ?? 0;
+
+    if (flightPassengers.length >= maxPassengers) {
+      handleAlertDetails(
+        "ظرفیت پر شده است و امکان افزودن مسافر جدید وجود ندارد.",
+        "warning"
+      );
+      return;
+    }
     const newPassenger: UserInformationDataType = {
       ...defaultPassengerInformation,
       id: uuidv4(),
