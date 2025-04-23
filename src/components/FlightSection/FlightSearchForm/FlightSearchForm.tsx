@@ -87,6 +87,7 @@ const FlightSearchForm = () => {
     return (
       <>
         <Button
+          disabled
           onClick={() => {
             handleClickSubmit();
           }}
@@ -132,6 +133,7 @@ const FlightSearchForm = () => {
     return (
       <>
         <Button
+          disabled
           onClick={() => {
             handleClickSubmit();
           }}
