@@ -17,15 +17,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AvatarDropdown from "./AvatarDropdown";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
+import { useGlobalContext } from "@/context/store";
 
 const ResponsiveAppBar = () => {
   // initial states
-  const [config, setConfig] = React.useState<null | ConfigDataType>(null);
-
-  // handle initial value
-  useEffect(() => {
-    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
-  }, []);
+  const { config } = useGlobalContext().global;
 
   const router = useRouter();
 

@@ -1,4 +1,5 @@
 "use client";
+import { useGlobalContext } from "@/context/store";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
 import React, { useEffect } from "react";
 
@@ -15,13 +16,8 @@ export default FlightDescription;
 
 const FlightDescriptionOnDesktop = () => {
   // initial states
-  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
-    null
-  );
-  // handle initial value
-  useEffect(() => {
-    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
-  }, []);
+  const { config } = useGlobalContext().global;
+
   const renderAboutFlightTickets = () => {
     return (
       <>

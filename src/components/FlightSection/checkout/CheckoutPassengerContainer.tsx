@@ -39,20 +39,12 @@ const CheckoutPassengerContainer = () => {
   } = useGlobalContext().flightContext.searchContext;
   const { userData } = useGlobalContext().userContext;
   const { handleAlertDetails } = useShowAlert();
-  const { setShowProgress } = useGlobalContext().global;
+  const { setShowProgress, config } = useGlobalContext().global;
   const { setOpenLoginDialog } = useGlobalContext().loginContext;
   const [openPaymentDetails, setOpenPaymentDetails] = useState<boolean>(false);
   const router = useRouter();
-  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
-    null
-  );
 
   const childRef = useRef<any>([]);
-
-  // handle initial value
-  useEffect(() => {
-    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
-  }, []);
 
   // render header container
   const renderHeaderContainer = () => {

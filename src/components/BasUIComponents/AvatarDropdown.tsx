@@ -46,16 +46,9 @@ export default function AvatarDropdown({ className = "" }: Props) {
   const { userData } = useGlobalContext().userContext;
   const { setOpenLoginDialog, openLoginDialog } =
     useGlobalContext().loginContext;
-  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
-    null
-  );
+  const { config } = useGlobalContext().global;
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
-
-  // handle initial value
-  useEffect(() => {
-    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
-  }, []);
 
   const toggleMenu = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);

@@ -28,21 +28,17 @@ import { ConfigDataType } from "@/DataTypes/globalTypes";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import dynamic from "next/dynamic";
+import { useGlobalContext } from "@/context/store";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 const ResponsiveFooter = () => {
   // initial states
-  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
-    null
-  );
+
   const [value, setValue] = React.useState(0);
   const [openTabId, setOpenTabId] = useState<null | string>(null);
+  const { config } = useGlobalContext().global;
 
   const theme = useTheme();
 
-  // handle initial value
-  useEffect(() => {
-    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
-  }, []);
   const renderSlogans = () => {
     const slogans = [
       {

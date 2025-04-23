@@ -1,16 +1,12 @@
 "use client";
+import { useGlobalContext } from "@/context/store";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
 import { Paper, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
   // initial states
-  const [config, setConfig] = useState<null | null | ConfigDataType>(null);
-
-  // handle initial value
-  useEffect(() => {
-    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
-  }, []);
+  const { config } = useGlobalContext().global;
 
   // handle render Ways of communication
   const renderWaysCommunication = () => {

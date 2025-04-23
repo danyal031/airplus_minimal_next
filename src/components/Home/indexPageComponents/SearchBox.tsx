@@ -20,13 +20,8 @@ import { ConfigDataType } from "@/DataTypes/globalTypes";
 
 const SearchBox = () => {
   // initial states
-  const [config, setConfig] = useState<null | null | ConfigDataType>(null);
   const { setAirports } = useGlobalContext().flightContext.searchContext;
-
-  // handle initial value
-  useEffect(() => {
-    setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
-  }, []);
+  const { config } = useGlobalContext().global;
 
   return (
     <>
