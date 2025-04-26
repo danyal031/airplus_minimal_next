@@ -247,8 +247,10 @@ const ResidenceFrequentlyQuestions = () => {
       {/* <div className="col-span-12 flex items-center justify-center">
         <span className="text-text-main text-lg font-bold">سوالات متداول</span>
       </div> */}
-      <div className="col-span-5">{renderAboutTicketsSection()}</div>
-      <div className="col-span-7">{renderQuestions()}</div>
+      <div className="md:col-span-5 col-span-12">
+        {renderAboutTicketsSection()}
+      </div>
+      <div className="md:col-span-7 col-span-12">{renderQuestions()}</div>
     </div>
   );
 };

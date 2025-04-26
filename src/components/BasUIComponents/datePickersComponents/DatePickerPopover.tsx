@@ -714,7 +714,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                     getMonth(selectedDate.clone().add(1, "months")),
                   ]);
                 }}
-                key={item}
+                key={index}
                 className={`text-text-main text-sm flex items-center justify-center cursor-pointer ${
                   currentMonths[0].month - 1 === index
                     ? "font-bold"

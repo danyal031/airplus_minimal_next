@@ -139,7 +139,7 @@ const AccommodationSearchForm = () => {
     setLoading(true);
     recommendedAccommodations(value)
       .then((res: any) => {
-        console.log(777, res);
+        console.log(res);
 
         if (res.status) {
           const result: any = [];
