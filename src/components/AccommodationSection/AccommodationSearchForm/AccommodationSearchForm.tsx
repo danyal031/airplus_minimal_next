@@ -202,8 +202,6 @@ const AccommodationSearchForm = () => {
           value={accommodationDestination}
           onInputChange={(event, value) => {
             if (value.trim().length > 1 || value.trim().length === 0) {
-              console.log("4544444444");
-
               fetchAccommodations(value);
             }
           }}
@@ -419,6 +417,7 @@ const AccommodationSearchForm = () => {
     );
   };
 
+  // for desktop
   const renderAccommodationSearchFormOnDesktop = () => {
     return (
       <>

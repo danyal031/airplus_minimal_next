@@ -60,9 +60,9 @@ const ResidenceFrequentlyQuestions = () => {
             سوالات متداول
           </span>
           <div className="max-h-[490px] overflow-y-auto grid grid-cols-1 gap-3 p-5">
-            {questions.map((question) => (
+            {questions.map((question, index) => (
               <div
-                key={question.id}
+                key={index}
                 className={`${
                   openQuestionId === question.id
                     ? "border border-primary-main"

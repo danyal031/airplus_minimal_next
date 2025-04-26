@@ -134,8 +134,6 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
         return <FlightSearchForm />;
       case "2":
         return <AccommodationSearchForm />;
-      default:
-        return renderComingSoon();
     }
     // if (config?.office_id === 1001) {
     //   switch (tabValueSearchBox) {

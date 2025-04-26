@@ -503,7 +503,9 @@ const PassengerInformation = forwardRef<
                       }
                     }}
                     options={citizenshipList}
-                    getOptionLabel={(option: any) => option?.title?.fa || ""}
+                    getOptionLabel={(option: any) =>
+                      option?.nationality?.fa || ""
+                    }
                     renderInput={(params) => (
                       <TextField
                         error={!!errors.citizenshipValidation}

@@ -350,34 +350,19 @@ export const recommendedAccommodations = (data: string) => {
   });
 };
 
-export const getAccommodationsList = (
-  value: number | string,
-  checkin_date: string,
-  checkout_date: string,
-  type: string,
-  adult_capacity: number,
-  child_capacity: number,
-  page: number
-) => {
+export const getAccommodationsList = (props: any) => {
   // axios.defaults.headers.common["Domain"] = window.location.hostname;
 
   return new Promise((resolve, reject) => {
     customAxios
-      .get(
-        ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env.NEXT_PUBLIC_ACCOMMODATIONS_LIST_ENDPOINT) as string,
-        {
-          params: {
-            value: value,
-            checkin_date: convertToGregorian(checkin_date),
-            checkout_date: convertToGregorian(checkout_date),
-            type: type,
-            adult_capacity: adult_capacity,
-            child_capacity: child_capacity,
-            page: page,
-          },
-        }
-      )
+      .get(process.env.NEXT_PUBLIC_ACCOMMODATIONS_LIST_ENDPOINT as string, {
+        signal: props.signal,
+        params: {
+          ...props.json,
+          filters: props.filters,
+          paginate: props.paginate,
+        },
+      })
       .then((response) => {
         // Handle successful response here
         console.log("accommodation_list response: ", response.data);
@@ -391,23 +376,13 @@ export const getAccommodationsList = (
   });
 };
 
-export const getMinPrice = (
-  checkin_date: string,
-  checkout_date: string,
-  accommodationId: number[]
-) => {
+export const getMinPrice = (json: any) => {
   return new Promise((resolve, reject) => {
     customAxios
       .get(
-        ((process.env.NEXT_PUBLIC_BASE_URL_2 as string) +
-          process.env
-            .NEXT_PUBLIC_GET_MIN_PRICE_ACCOMMODATION_ENDPOINT) as string,
+        process.env.NEXT_PUBLIC_GET_MIN_PRICE_ACCOMMODATION_ENDPOINT as string,
         {
-          params: {
-            checkin_date: convertToGregorian(checkin_date),
-            checkout_date: convertToGregorian(checkout_date),
-            accommodations: accommodationId,
-          },
+          params: json,
         }
       )
       .then((response) => {
