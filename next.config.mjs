@@ -9,6 +9,11 @@ const nextConfig = {
   images: {
     domains: ["storage.service01.ir", "images.pexels.com"],
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
