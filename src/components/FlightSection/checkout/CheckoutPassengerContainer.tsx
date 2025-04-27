@@ -731,7 +731,7 @@ const CheckoutPassengerContainer = () => {
               });
               handleStoreFlightJson(jsonData)
                 .then((res: any) => {
-                  setShowProgress(false);
+                  // setShowProgress(false);
 
                   jsonData["type"] = "flight";
 
@@ -745,11 +745,11 @@ const CheckoutPassengerContainer = () => {
                 });
 
               console.log(true);
-            } else {
-              handleAlertDetails(lockRes.message, "error");
             }
           })
-          .catch((err) => {});
+          .catch((err) => {
+            handleAlertDetails(err.response.data.error.message, "error");
+          });
 
         console.log("تمام فیلدها معتبر هستند");
       } else {

@@ -5,7 +5,7 @@ export const useShowAlert = () => {
   const handleAlertDetails = (
     message = "",
     type: "info" | "success" | "error" | "warning" = "info",
-    duration = 6000
+    duration = 3500
   ) => {
     setShowAlertDetails({
       alertMessage: message,

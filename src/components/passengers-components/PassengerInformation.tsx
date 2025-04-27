@@ -114,6 +114,8 @@ const PassengerInformation = forwardRef<
     const [citizenshipList, setCitizenshipList] = useState<any[]>([]);
     const [selectedCitizenship, setSelectedCitizenship] =
       useState<any>(defaultCitizenship);
+    const isFirstRender = useRef(true);
+
     //for validation
     const schema = yup.object().shape({
       nameFaValidation: yup.string().required("نام فارسی انتخاب نشده است"),
@@ -191,7 +193,7 @@ const PassengerInformation = forwardRef<
       lastNameEnValidation: item.lastname_en,
       nationalCodeValidation: item.national_code,
       birthdayValidation: applyMask("date", item.birthday as string),
-      citizenshipValidation: item.citizenship,
+      citizenshipValidation: item.citizenship.title.fa,
       sexValidation: item.sex,
       mobileValidation: item.mobile,
       passportCodeValidation: item.pass_code,
@@ -250,6 +252,15 @@ const PassengerInformation = forwardRef<
       localRef.current = newValue;
       setTabFormValue(newValue);
     };
+
+    useEffect(() => {
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+
+      trigger();
+    }, [tabFormValue]);
 
     // handle open Previous passengers list dialog
     const handleOpenPreviousPassengers = () => {

@@ -24,6 +24,10 @@ export const defaultCitizenship: any = {
     fa: "ایرانی",
     en: "Iranian",
   },
+  nationality: {
+    fa: "ایرانی",
+    en: "Iranian",
+  },
 };
 export interface AlertDetailsDataType {
   alertMessage: string;
