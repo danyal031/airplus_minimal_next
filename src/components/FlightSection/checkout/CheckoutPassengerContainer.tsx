@@ -752,6 +752,8 @@ const CheckoutPassengerContainer = () => {
           .catch((err) => {});
 
         console.log("تمام فیلدها معتبر هستند");
+      } else {
+        handleAlertDetails("فیلد های خواسته شده را پر کنید.", "warning");
       }
       console.log("jsonData: ", jsonData);
       console.log("passengertickets: ", flightPassengersTickets);

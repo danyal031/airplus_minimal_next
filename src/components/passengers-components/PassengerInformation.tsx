@@ -503,7 +503,9 @@ const PassengerInformation = forwardRef<
                       }
                     }}
                     options={citizenshipList}
-                    getOptionLabel={(option: any) => option?.title?.fa || ""}
+                    getOptionLabel={(option: any) =>
+                      option?.nationality?.fa || ""
+                    }
                     renderInput={(params) => (
                       <TextField
                         error={!!errors.citizenshipValidation}
@@ -1027,12 +1029,13 @@ const PassengerInformation = forwardRef<
       <>
         {passengerInformationContainerOnDesktop()}
         {passengerInformationContainerOnMobile()}
-
-        <PreviousPassengersDialog
-          passengers={item}
-          onClose={handleClosePreviousPassengers}
-          open={openPreviousPassengersList}
-        />
+        {openPreviousPassengersList && (
+          <PreviousPassengersDialog
+            passengers={item}
+            onClose={handleClosePreviousPassengers}
+            open={openPreviousPassengersList}
+          />
+        )}
       </>
     );
   }
@@ -1092,7 +1095,7 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
     id: passenger.id,
     image: null,
     sex: passenger.gender,
-    citizenship: defaultCitizenship,
+    citizenship: passenger.identity.nationality,
     name_fa: passenger.fullname.first_name.fa,
     lastname_fa: passenger.fullname.last_name.fa,
     name_en: passenger.fullname.first_name.en,
@@ -1104,16 +1107,6 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
     birthday: passenger.birth,
     email: passenger.email,
     mobile: passenger.mobile,
-    // country: {
-    //   id: 118,
-    //   title: {
-    //     fa: "ایران",
-    //     en: "Iran",
-    //   },
-    //   details: {
-    //     iso: "IR",
-    //   },
-    // },
     province: null,
     city: null,
     postal_code: "",
