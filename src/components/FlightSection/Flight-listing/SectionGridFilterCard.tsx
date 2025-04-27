@@ -16,20 +16,16 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { getOnlineFlightSearch } from "@/global-files/axioses";
+import { getAirports, getOnlineFlightSearch } from "@/global-files/axioses";
 import {
   convertPersianToEnglishNumbers,
   formatDateWithSlash,
 } from "@/global-files/function";
-interface SectionGridFilterCardProps {
-  airports: AirportDataType[] | [];
-}
-const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
-  airports,
-}) => {
+
+const SectionGridFilterCard = () => {
   // initial states
+  const [airportsLoading, setAirportsLoading] = useState(true);
   const {
-    setAirports,
     isInitialSearchDone,
     setFilteredSearchFlightResponseData,
     setOrigin,
@@ -48,6 +44,8 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
     travelRoute,
     selectedWentFlight,
     ticketLoading,
+    setAirports,
+    airports,
   } = useGlobalContext().flightContext.searchContext;
   const {
     flightFilter,
@@ -62,10 +60,18 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
 
   // handle initial value
   useEffect(() => {
-    setAirports(airports);
+    getAirports()
+      .then((res: any) => {
+        console.log("res", res);
+        if (res.status) {
+          setAirports(res.data.titles);
+          setAirportsLoading(false);
+        }
+      })
+      .catch((err) => {});
   }, []);
+
   const paramsValidation = (searchParams: ReadonlyURLSearchParams) => {
-    console.log("airport listing: ", airports);
     let dateRegex: RegExp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/i;
     let departureCheck = dateRegex.test(
       convertPersianToEnglishNumbers(
@@ -153,14 +159,14 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
       });
   };
   useEffect(() => {
-    if (!isInitialSearchDone) {
+    if (!isInitialSearchDone && !airportsLoading) {
       if (paramsValidation(searchParams)) {
         handleSearch();
       } else {
         router.push("/");
       }
     }
-  }, [searchParams]);
+  }, [searchParams, airportsLoading]);
 
   // handle search  by status request
   const handleSearchByStatusRequest = () => {

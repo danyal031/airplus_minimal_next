@@ -1,6 +1,4 @@
 import SearchHeaderReservationContainer from "@/components/global/search/SearchHeaderReservationContainer";
-import { AirportDataType } from "@/DataTypes/flight/flightTicket";
-import { getAirportsInServer } from "@/global-files/fetches";
 import React, { FC } from "react";
 
 export interface ListingLayoutProps {

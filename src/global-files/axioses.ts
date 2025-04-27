@@ -261,7 +261,7 @@ export const getOnlineFlightSearch = (props: onlineFlightSearchInputType) => {
 export const getAirports = () => {
   return new Promise((resolve, reject) => {
     customAxios
-      .get(process.env.NEXT_PUBLIC_BASE_URL_2 + "/base/data", {
+      .get("/base/data", {
         params: {
           action: "airports",
           route: 1,

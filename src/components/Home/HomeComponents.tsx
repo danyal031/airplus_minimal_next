@@ -1,10 +1,9 @@
 "use client";
 import React, { FC, lazy, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getAirportsInServer } from "@/global-files/fetches";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
-import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
 import { useGlobalContext } from "@/context/store";
+import { getAirports } from "@/global-files/axioses";
 // for lazy loading
 const SearchBox = lazy(() => import("./indexPageComponents/SearchBox"));
 const Services = lazy(() => import("./indexPageComponents/Services"));
@@ -12,17 +11,21 @@ const TabDescriptionsComponent = lazy(
   () => import("./indexPageComponents/TabDescriptionsComponent")
 );
 
-interface HomeComponentsProps {
-  airports: AirportDataType[] | [];
-}
-
-const HomeComponents: FC<HomeComponentsProps> = ({ airports }) => {
+const HomeComponents = () => {
   // initial states
   const { setAirports } = useGlobalContext().flightContext.searchContext;
 
-  // handle initial states
+  // handle initial value
   useEffect(() => {
-    setAirports(airports);
+    getAirports()
+      .then((res: any) => {
+        console.log("res", res);
+        if (res.status) {
+          setAirports(res.data.titles);
+          // setAirportsLoading(false);
+        }
+      })
+      .catch((err) => {});
   }, []);
 
   // base animation for each component
