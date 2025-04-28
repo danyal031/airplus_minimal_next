@@ -23,9 +23,9 @@ const App = ({ children }: { children: React.ReactNode }) => {
   // useEffect(() => {
   //   const owner = localStorage.getItem("owner");
 
-  //   if (process.env.NODE_ENV === "production" && owner) {
-  //     console.log = function () {};
-  //   }
+  if (process.env.NODE_ENV === "production") {
+    console.log = function () {};
+  }
   // }, []);
 
   // initial states
