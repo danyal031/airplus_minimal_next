@@ -46,6 +46,8 @@ const SectionGridFilterCard = () => {
     ticketLoading,
     setAirports,
     airports,
+    setFromDate,
+    setToDate,
   } = useGlobalContext().flightContext.searchContext;
   const {
     flightFilter,
@@ -106,6 +108,7 @@ const SectionGridFilterCard = () => {
     setDestination(
       airports.find((a) => a.iata === searchParams.get("destination"))
     );
+    setFromDate(searchParams.get("departure_date"));
     if (
       searchParams.get("returning_date") !== "false" &&
       searchParams.get("returning_date")
@@ -189,6 +192,7 @@ const SectionGridFilterCard = () => {
       setDestination(
         airports.find((a) => a.iata === searchParams.get("destination"))
       );
+      setFromDate(searchParams.get("departure_date"));
 
       if (
         searchParams.get("returning_date") !== "false" &&

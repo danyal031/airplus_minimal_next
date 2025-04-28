@@ -6,6 +6,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useShowAlert } from "@/hooks/useShowAlert";
 import ReactApexChart from "react-apexcharts";
 import ClearIcon from "@mui/icons-material/Clear";
+import moment from "jalali-moment";
+import { useGlobalContext } from "@/context/store";
 const PriceRateBox = () => {
   // initial states
   const [isOpenPriceRangeChart, setIsOpenPriceRangeChart] = useState(false);
@@ -13,6 +15,7 @@ const PriceRateBox = () => {
     useState(false);
   const [openChartDrawer, setOpenChartDrawer] = useState<boolean>(false);
   const [chartTabValue, setChartTabValue] = useState<string>("1");
+  const { fromDate } = useGlobalContext().flightContext.searchContext;
   const theme = useTheme();
 
   // for handle change open chart drawer
@@ -115,7 +118,7 @@ const PriceRateBox = () => {
         <div className="border-t-2 border-main p-3 grid grid-cols-1 gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-primary-main text-base">helpix logo</span>
+              {/* <span className="text-primary-main text-base">helpix logo</span> */}
               <span className="text-text-main text-sm font-semibold">
                 قیمت‌ها در حال حاضر برای جستجوی شما ارزان هستند.{" "}
               </span>
@@ -264,7 +267,7 @@ const PriceRateBox = () => {
         <div className="border-t-2 border-main p-3 grid grid-cols-1 gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-primary-main text-base">helpix logo</span>
+              {/* <span className="text-primary-main text-base">helpix logo</span> */}
               <span className="text-text-main text-sm font-semibold">
                 روند تغییرات قیمت بلیت سفر به بوشهر
               </span>
@@ -298,33 +301,29 @@ const PriceRateBox = () => {
   };
 
   const renderDailyPrice = () => {
-    const dates = [
-      { id: 1, label: "یکشنبه", price: 1000 },
-      { id: 2, label: "دوشنبه", price: 1200 },
-      { id: 3, label: "سه‌شنبه", price: 1100 },
-      { id: 4, label: "چهارشنبه", price: 1300 },
-      { id: 5, label: "پنجشنبه", price: 1400 },
-      { id: 6, label: "جمعه", price: 1500 },
-      { id: 7, label: "شنبه", price: 1600 },
-      { id: 8, label: "پنجشنبه", price: 1600 },
-      { id: 9, label: "پنجشنبه", price: 1600 },
-      { id: 10, label: "شنبه", price: 1600 },
-      { id: 11, label: "شنبه", price: 1600 },
-      { id: 12, label: "پنجشنبه", price: 1600 },
-      { id: 13, label: "شنبه", price: 1600 },
-      { id: 14, label: "پنجشنبه", price: 1600 },
-      { id: 15, label: "شنبه", price: 1600 },
-    ];
+    const today = moment().locale("fa");
+
+    const dates = Array.from({ length: 30 }, (_, i) => {
+      const day = today.clone().add(i, "days");
+      return {
+        id: i + 1,
+        dayMonth: `${day.format("DD")} ${day.format("MMMM")}`,
+        price: Math.floor(1000 + Math.random() * 1000),
+      };
+    });
+
     return (
       <>
         <div className="border-b-2 border-main p-2 overflow-x-auto flex items-center justify-start gap-2">
           {dates.map((date) => (
             <div
               key={date.id}
-              className="min-w-24 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-2"
+              className="min-w-24 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-0"
             >
-              <span className="font-semibold text-sm">{date.label}</span>
-              <span className="text-gray-400 text-xs">{date.price}</span>
+              <span className="text-xs font-semibold">{date.dayMonth}</span>{" "}
+              <span className="text-text-main text-base font-semibold">
+                ...
+              </span>{" "}
             </div>
           ))}
         </div>
@@ -527,7 +526,7 @@ const PriceRateBox = () => {
           <div className="blur-sm grid grid-cols-1 gap-10">
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-center gap-2">
-                <span className="text-primary-main text-base">helpix logo</span>
+                {/* <span className="text-primary-main text-base">helpix logo</span> */}
                 <span className="text-text-main text-sm font-semibold textju">
                   قیمت‌ها در حال حاضر برای جستجوی شما ارزان هستند.{" "}
                 </span>
@@ -677,7 +676,7 @@ const PriceRateBox = () => {
           <div className="blur-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-center gap-2">
-                <span className="text-primary-main text-base">helpix logo</span>
+                {/* <span className="text-primary-main text-base">helpix logo</span> */}
                 <span className="text-text-main text-sm font-semibold">
                   روند تغییرات قیمت بلیت سفر به بوشهر
                 </span>

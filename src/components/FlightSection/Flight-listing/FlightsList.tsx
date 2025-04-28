@@ -22,9 +22,9 @@ const FlightsList = () => {
             <SelectedFlightsPanel />{" "}
           </div>
         )}
-      {/* <div className="w-full">
+      <div className="w-full">
         <PriceRateBox />
-      </div> */}
+      </div>
       {ticketLoading ? (
         <div className="flex flex-col gap-y-2 w-full">
           {Array.from({ length: 10 }).map((_, index) => (

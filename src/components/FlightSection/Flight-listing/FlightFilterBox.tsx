@@ -33,9 +33,9 @@ const FlightFilterBox = () => {
     useGlobalContext().flightContext.flightFilterContext;
 
   const [openTimeToMove, setOpenTimeToMove] = useState<boolean>(true);
-  const [openTicketType, setOpenTicketType] = useState<boolean>(false);
+  const [openTicketType, setOpenTicketType] = useState<boolean>(true);
   const [openAirlines, setOpenAirlines] = useState<boolean>(true);
-  const [openFlightClass, setOpenFlightClass] = useState<boolean>(false);
+  const [openFlightClass, setOpenFlightClass] = useState<boolean>(true);
   const [selectedTimeRange, setSelectedTimeRange] = useState<number | null>(
     null
   );
@@ -453,8 +453,8 @@ const FlightFilterBox = () => {
           {renderSummeryFilterData()}
           {renderTimeToMove()}
           {renderAirlines()}
-          {renderTicketType()}
           {renderFlightClass()}
+          {renderTicketType()}
         </div>
       </>
     );

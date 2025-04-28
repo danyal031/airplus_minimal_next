@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import { useGlobalContext } from "@/context/store";
 import { getAirports } from "@/global-files/axioses";
+import Link from "next/link";
 // for lazy loading
 const SearchBox = lazy(() => import("./indexPageComponents/SearchBox"));
 const Services = lazy(() => import("./indexPageComponents/Services"));

@@ -21,6 +21,7 @@ const FlightPaymentStatus = ({
   const [helperText, setHelperText] = useState("درحال برسی...");
   const [statusCode, setStatusCode] = useState(0);
   const [slug, setSlug] = useState("");
+  const [serial, setSerial] = useState("");
   const router = useRouter();
   // handle get payment status
   const handleGetPaymentStatus = async () => {
@@ -42,6 +43,7 @@ const FlightPaymentStatus = ({
           setStatusCode(3);
           setHelperText("خرید شما با موفقیت انجام شد.");
           setSlug(res.data.payload.reference.slug);
+          setSerial(res.data.payload.reference.serial);
         }
       }
     } catch (error: any) {
@@ -95,15 +97,28 @@ const FlightPaymentStatus = ({
             جزئیات بلیت ها
           </span>
           {statusCode === 3 && (
-            <Button
-              onClick={() => {
-                router.replace(`https://mmah.ir/f/${slug}`);
-              }}
-              variant="outlined"
-              size="medium"
-            >
-              جزئیات بلیت و واچر
-            </Button>
+            <div className="flex items-center justify-center gap-1">
+              <Button
+                onClick={() => {
+                  window.open(`https://mmah.ir/f/${slug}`);
+                }}
+                variant="outlined"
+                size="medium"
+              >
+                جزئیات بلیت و واچر
+              </Button>
+              <Button
+                onClick={() => {
+                  window.open(
+                    `https://erp.mehromah24.com/preview/contract/fa/${serial}`
+                  );
+                }}
+                variant="outlined"
+                size="medium"
+              >
+                مشاهده متن قرارداد{" "}
+              </Button>
+            </div>
           )}
         </div>
         {jsonData.data.map((item: any, index: number) => (
