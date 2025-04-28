@@ -119,25 +119,6 @@ export const handleStoreLotteryJson = async (data: any) => {
   });
 };
 
-export const getPaymentStatus = async (refId: string) => {
-  return new Promise((resolve, reject) => {
-    customAxios
-      .get(process.env.NEXT_PUBLIC_BASE_URL_2 + "/gateway/details", {
-        params: { serial_id: refId },
-      })
-      .then((response) => {
-        // Handle successful response here
-        console.log("response", response.data);
-        resolve(response.data);
-      })
-      .catch((error) => {
-        // Handle error here
-        console.log("error", error);
-        reject(error);
-      });
-  });
-};
-
 export const submitDiscountCode = async (data: any) => {
   console.log("discount: ", data);
 
@@ -666,6 +647,26 @@ export const getPreviousPassengers = () => {
       .catch((error) => {
         // Handle error here
         console.log("getPreviousPassengers error: ", error);
+        reject(error);
+      });
+  });
+};
+
+// get payment status
+export const getPaymentStatus = (refId: string) => {
+  return new Promise((resolve, reject) => {
+    customAxios
+      .get(process.env.NEXT_PUBLIC_PAYMENT_STATUS_ENDPOINT as string, {
+        params: { ref_id: refId },
+      })
+      .then((response) => {
+        // Handle successful response here
+        console.log("get status payment response: ", response);
+        resolve(response);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("get status payment error: ", error);
         reject(error);
       });
   });

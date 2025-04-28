@@ -45,21 +45,25 @@ const ResponsiveFooter = () => {
         id: 1,
         cover: onlineReserve,
         label: "رزرو 100 درصد آنلاین",
+        className: "",
       },
       {
         id: 2,
         cover: warrantyLottie,
         label: "گارانتی کمترین قیمت",
+        className: "",
       },
       {
         id: 3,
         cover: supportLottie,
         label: "پشتیبانی 7/24",
+        className: "",
       },
       {
         id: 4,
         cover: helpixLottie,
         label: "هوش مصنوعی Helpix",
+        className: "",
       },
     ];
     return (
@@ -214,7 +218,7 @@ const ResponsiveFooter = () => {
           <span className="text-base font-bold text-text-main">
             خدمات مشتریان
           </span>
-          <div className="flex flex-col items-center justify-start gap-3">
+          <div className="flex flex-col items-start justify-start gap-3">
             {customerServicesOptions.map((item, index) => {
               return (
                 <Link
@@ -239,7 +243,7 @@ const ResponsiveFooter = () => {
           <span className="text-base font-bold text-text-main">
             {config?.brand.fa}{" "}
           </span>
-          <div className="flex flex-col items-center justify-start gap-3">
+          <div className="flex flex-col items-start justify-start gap-3">
             {complementaryInfoOptions.map((item, index) => {
               return (
                 <Link
@@ -275,6 +279,7 @@ const ResponsiveFooter = () => {
                     ایمیل یا شماره موبایل خود را وارد کنید
                   </span>{" "}
                   <TextField
+                    disabled
                     className="h-fit w-5/6"
                     size="small"
                     sx={{
