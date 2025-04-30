@@ -1346,7 +1346,12 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ({
           <span className="text-paper text-sm font-semibold">
             لیست مسافران سابق
           </span>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            onClick={() => {
+              onClose();
+            }}
+          >
             <ClearIcon className="text-paper" />
           </IconButton>
         </div>
