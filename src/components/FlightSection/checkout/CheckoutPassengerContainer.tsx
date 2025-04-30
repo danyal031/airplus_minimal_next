@@ -43,7 +43,6 @@ const CheckoutPassengerContainer = () => {
   const { setOpenLoginDialog } = useGlobalContext().loginContext;
   const [openPaymentDetails, setOpenPaymentDetails] = useState<boolean>(false);
   const router = useRouter();
-
   const childRef = useRef<any>([]);
 
   // render header container

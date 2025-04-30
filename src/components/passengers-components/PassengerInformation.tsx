@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Drawer,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -56,6 +57,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { getCountryList, getPreviousPassengers } from "@/global-files/axioses";
 import { PreviousPassengerDataType } from "@/DataTypes/previousPassengerTypes";
+import ClearIcon from "@mui/icons-material/Clear";
 
 interface PassengerInformationProps {
   index: number;
@@ -95,6 +97,8 @@ const PassengerInformation = forwardRef<
     ref
   ) => {
     // initial states
+    const [openPreviousPassengersDrawer, setOpenPreviousPassengersDrawer] =
+      useState<boolean>(false);
     const { selectedWentFlight, selectedReturnFlight } =
       useGlobalContext().flightContext.searchContext;
     const { userData } = useGlobalContext().userContext;
@@ -223,6 +227,20 @@ const PassengerInformation = forwardRef<
         );
       }
     }, [openCitizenShip]);
+
+    // handle open Previous passengers list dialog
+    const handleOpenPreviousPassengersDrawer = () => {
+      if (userData === null) {
+        setOpenLoginDialog(true);
+      } else {
+        setOpenPreviousPassengersDrawer(true);
+      }
+    };
+
+    // handle close Previous passengers list dialog
+    const handleClosePreviousPassengersDrawer = () => {
+      setOpenPreviousPassengersDrawer(false);
+    };
 
     // handle change open passenger form
     const togglePassengerForm = () => {
@@ -719,7 +737,9 @@ const PassengerInformation = forwardRef<
             </div>
             <div className="flex items-center justify-center gap-0">
               <Tooltip title="انتخاب مسافران سابق">
-                <IconButton onClick={handleOpenPreviousPassengers}>
+                <IconButton
+                  onClick={() => handleOpenPreviousPassengersDrawer(true)}
+                >
                   <PersonSearchIcon />
                 </IconButton>
               </Tooltip>
@@ -985,6 +1005,7 @@ const PassengerInformation = forwardRef<
           />
         </div>
       );
+
       return (
         <>
           <div className="p-2 md:hidden">
@@ -1031,7 +1052,14 @@ const PassengerInformation = forwardRef<
                 </div>
               )}
             </div>
-          </div>
+          </div>{" "}
+          {openPreviousPassengersDrawer && (
+            <PreviousPassengersDrawer
+              onClose={handleClosePreviousPassengersDrawer}
+              open={openPreviousPassengersDrawer}
+              passengers={item}
+            />
+          )}
         </>
       );
     };
@@ -1233,5 +1261,188 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
         </Button>
       </DialogActions>
     </Dialog>
+  );
+};
+
+interface PreviousPassengersDrawerProps {
+  open: boolean;
+  onClose: () => void;
+  passengers: UserInformationDataType;
+}
+const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ({
+  onClose,
+  open,
+  passengers,
+}) => {
+  // initila state
+  const [previousPassengersList, setPreviousPassengersList] = useState<
+    PreviousPassengerDataType[] | []
+  >([]);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
+  const [selectPreviousPassenger, setSelectPreviousPassenger] =
+    useState<PreviousPassengerDataType | null>(null);
+  const { flightPassengers, setFlightPassengers } =
+    useGlobalContext().flightContext.searchContext;
+
+  // handle get previous passengers list
+  const handleGetPreviousPassengersList = () => {
+    getPreviousPassengers()
+      .then((res: any) => {
+        setShowLoading(false);
+        setPreviousPassengersList(res.items);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    handleGetPreviousPassengersList();
+  }, []);
+
+  const mapToFlightPassenger = (
+    passenger: PreviousPassengerDataType
+  ): UserInformationDataType => ({
+    id: passenger.id,
+    image: null,
+    sex: passenger.gender,
+    citizenship: passenger.identity.nationality,
+    name_fa: passenger.fullname.first_name.fa,
+    lastname_fa: passenger.fullname.last_name.fa,
+    name_en: passenger.fullname.first_name.en,
+    lastname_en: passenger.fullname.last_name.en,
+    national_code: passenger.identity.id,
+    pass_code: passenger.passport.id,
+    pass_ex: passenger.passport.expire_at,
+    passport_image: null,
+    birthday: passenger.birth,
+    email: passenger.email,
+    mobile: passenger.mobile,
+    province: null,
+    city: null,
+    postal_code: "",
+    address: "",
+    birthCity: "",
+  });
+  const handleChangePassengerInfo = () => {
+    const mappedPassenger = selectPreviousPassenger
+      ? mapToFlightPassenger(selectPreviousPassenger)
+      : null;
+
+    if (!mappedPassenger) return;
+
+    setFlightPassengers(() => {
+      const newPassengers = flightPassengers.map((element) =>
+        element.id === passengers.id ? mappedPassenger : element
+      );
+      return newPassengers;
+    });
+  };
+
+  const drawerContent = (
+    <>
+      <div className="flex flex-col items-center justify-start gap-6 h-full relative">
+        <div className="p-3 w-full bg-primary-main h-14 flex items-center justify-between">
+          <span className="text-paper text-sm font-semibold">
+            لیست مسافران سابق
+          </span>
+          <IconButton size="small">
+            <ClearIcon className="text-paper" />
+          </IconButton>
+        </div>
+        <div className="w-full px-5 grid grid-cols-1 gap-6">
+          <TextField size="medium" label="جستجو" />
+          <div className="grid grid-cols-1 gap-3">
+            {showLoading ? (
+              <div className="flex items-center justify-center text-text-main font-semibold">
+                درحال دریافت اطلاعات مسافران...
+              </div>
+            ) : previousPassengersList.length > 0 ? (
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                {previousPassengersList.map((previousPassenger) => {
+                  return (
+                    <div
+                      key={previousPassenger.id}
+                      className="w-full text-text-main flex items-center justify-start gap-4 bg-paper py-1 px-2 rounded-2xl border border-divider"
+                    >
+                      <Radio
+                        size="small"
+                        checked={
+                          selectPreviousPassenger?.id === previousPassenger.id
+                        }
+                        onChange={() => {
+                          setSelectPreviousPassenger(previousPassenger);
+                        }}
+                      />
+                      <div className="flex items-center justify-start">
+                        <Tooltip
+                          placement="top"
+                          title={`${previousPassenger.fullname.first_name.fa} ${previousPassenger.fullname.last_name.fa}`}
+                        >
+                          <span className="truncate font-semibold">
+                            {previousPassenger.fullname.first_name.fa}{" "}
+                            {previousPassenger.fullname.last_name.fa}
+                          </span>
+                        </Tooltip>
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <span>
+                          {previousPassenger.identity.id
+                            ? previousPassenger.identity.id
+                            : previousPassenger.passport.id
+                            ? previousPassenger.passport.id
+                            : "-"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <span>
+                          {previousPassenger.birth
+                            ? applyMask("date", previousPassenger.birth)
+                            : "-"}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center text-text-main font-semibold">
+                مسافری جهت نمایش موجود نیست{" "}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="absolute bottom-0 w-full bg-paper h-16 flex items-center justify-center py-3 px-7">
+          <Button
+            onClick={() => {
+              handleChangePassengerInfo();
+              onClose();
+            }}
+            className="rounded-lg w-full"
+            variant="contained"
+            size="large"
+          >
+            افزودن مسافر
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+
+  return (
+    <Drawer
+      anchor={"right"}
+      PaperProps={{
+        sx: {
+          width: "100%",
+          backgroundColor: "#EFEFEF",
+          position: "relative",
+        },
+      }}
+      open={open}
+      onClose={onClose}
+    >
+      {drawerContent}
+    </Drawer>
   );
 };
