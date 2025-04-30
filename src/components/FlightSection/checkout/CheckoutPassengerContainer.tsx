@@ -461,6 +461,7 @@ const CheckoutPassengerContainer = () => {
               بازگشت
             </Button>
             <Button
+              onClick={handleSendFlightData}
               className="rounded-lg"
               variant="contained"
               size="medium"
