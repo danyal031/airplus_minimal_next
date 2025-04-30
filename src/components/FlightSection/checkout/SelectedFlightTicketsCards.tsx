@@ -16,6 +16,7 @@ import React, { useEffect } from "react";
 import leftArrow from "/public/assets/images/flightSection/left-arrow.svg";
 import { motion } from "framer-motion";
 import { Route } from "next";
+import { Toman } from "@/components/icons/IconToman";
 const SelectedFlightTicketsCards = () => {
   // initial states
   const {
@@ -116,12 +117,12 @@ const SelectedFlightTicketsCards = () => {
       <>
         {selectedWentFlight && !Array.isArray(selectedWentFlight.Classes) && (
           <motion.div
-            className="h-40 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-4"
+            className="h-40 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-3"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="col-span-3 border-l border-dashed border-divider px-2 flex flex-col items-center justify-start gap-3">
+            <div className="col-span-2 border-l border-dashed border-divider px-2 flex flex-col items-center justify-start gap-3">
               <div className="flex items-center justify-center gap-0">
                 <span className="rounded-tab-up-sm h-9 flex items-center justify-center text-paper truncate bg-primary-main">
                   بلیت رفت
@@ -211,8 +212,9 @@ const SelectedFlightTicketsCards = () => {
                       }
                       )
                     </span>
-                    <span className="text-xs text-gray-400 font-semibold">
-                      {formatInputWithCommas(adultsWentTicketsPrice)}
+                    <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                      {formatInputWithCommas(adultsWentTicketsPrice)}{" "}
+                      <Toman height={14} width={14} className="text-gray-400" />
                     </span>
                   </div>
                 )}
@@ -238,8 +240,9 @@ const SelectedFlightTicketsCards = () => {
                       }
                       )
                     </span>
-                    <span className="text-xs text-gray-400 font-semibold">
-                      {formatInputWithCommas(childWentTicketsPrice)}
+                    <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                      {formatInputWithCommas(childWentTicketsPrice)}{" "}
+                      <Toman height={14} width={14} className="text-gray-400" />
                     </span>
                   </div>
                 )}
@@ -265,19 +268,21 @@ const SelectedFlightTicketsCards = () => {
                       }
                       )
                     </span>
-                    <span className="text-xs text-gray-400 font-semibold">
+                    <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
                       {formatInputWithCommas(infantWentTicketsPrice)}
+                      <Toman height={14} width={14} className="text-gray-400" />
                     </span>
                   </div>
                 )}
                 <div className="text-primary-main font-semibold text-xs flex items-center justify-between">
                   <span className="">مجموع</span>
-                  <span className="">
+                  <span className="flex items-center justify-center">
                     {formatInputWithCommas(
                       adultsWentTicketsPrice +
                         childWentTicketsPrice +
                         infantWentTicketsPrice
-                    )}
+                    )}{" "}
+                    <Toman height={14} width={14} />
                   </span>
                 </div>
               </div>
@@ -328,12 +333,12 @@ const SelectedFlightTicketsCards = () => {
         {selectedReturnFlight &&
           !Array.isArray(selectedReturnFlight.Classes) && (
             <motion.div
-              className="h-40 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-4"
+              className="h-40 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-3"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="col-span-3 border-l border-dashed border-divider px-2 flex flex-col items-center justify-start gap-3">
+              <div className="col-span-2 border-l border-dashed border-divider px-2 flex flex-col items-center justify-start gap-3">
                 <div className="flex items-center justify-center gap-0">
                   <span className="rounded-tab-up-sm h-9 flex items-center justify-center text-paper truncate bg-primary-main">
                     بلیت برگشت
@@ -423,8 +428,13 @@ const SelectedFlightTicketsCards = () => {
                         }
                         )
                       </span>
-                      <span className="text-xs text-gray-400 font-semibold">
+                      <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
                         {formatInputWithCommas(adultsReturnTicketsPrice)}
+                        <Toman
+                          height={14}
+                          width={14}
+                          className="text-gray-400"
+                        />
                       </span>
                     </div>
                   )}
@@ -450,8 +460,13 @@ const SelectedFlightTicketsCards = () => {
                         }
                         )
                       </span>
-                      <span className="text-xs text-gray-400 font-semibold">
+                      <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
                         {formatInputWithCommas(childReturnTicketsPrice)}
+                        <Toman
+                          height={14}
+                          width={14}
+                          className="text-gray-400"
+                        />
                       </span>
                     </div>
                   )}
@@ -477,19 +492,25 @@ const SelectedFlightTicketsCards = () => {
                         }
                         )
                       </span>
-                      <span className="text-xs text-gray-400 font-semibold">
+                      <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
                         {formatInputWithCommas(infantReturnTicketsPrice)}
+                        <Toman
+                          height={14}
+                          width={14}
+                          className="text-gray-400"
+                        />
                       </span>
                     </div>
                   )}
                   <div className="text-primary-main font-semibold text-xs flex items-center justify-between">
                     <span className="">مجموع</span>
-                    <span className="">
+                    <span className="flex items-center justify-center">
                       {formatInputWithCommas(
                         adultsReturnTicketsPrice +
                           childReturnTicketsPrice +
                           infantReturnTicketsPrice
-                      )}
+                      )}{" "}
+                      <Toman height={14} width={14} className="text-gray-400" />
                     </span>
                   </div>
                 </div>

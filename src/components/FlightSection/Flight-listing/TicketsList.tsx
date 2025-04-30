@@ -28,6 +28,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Route } from "next";
 import ClearIcon from "@mui/icons-material/Clear";
+import { Toman } from "@/components/icons/IconToman";
 const TicketsList = () => {
   // initial states
   const [filterTabValue, setFilterTabValue] = useState<string>("1");
@@ -456,23 +457,25 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               )}
             </div>
             <div className="text-text-main text-sm font-semibold">قیمت</div>
-            <div className="text-gray-400 text-xs">
-              {" "}
+            <div className="text-gray-400 text-xs flex items-center justify-center">
               {` ${formatInputWithCommas(
                 data.Classes.Financial.Adult.Payable / 10
               )}`}
+              <Toman height={15} width={15} className="text-gray-400" />
             </div>
-            <div className="text-gray-400 text-xs">
+            <div className="text-gray-400 text-xs flex items-center justify-center">
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.Financial.Child.Payable / 10
-              )}`}
+              )}`}{" "}
+              <Toman height={15} width={15} className="text-gray-400" />
             </div>
-            <div className="text-gray-400 text-xs">
+            <div className="text-gray-400 text-xs flex items-center justify-center">
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.Financial.Infant.Payable / 10
-              )}`}
+              )}`}{" "}
+              <Toman height={15} width={15} className="text-gray-400" />
             </div>
           </div>
           <div className="p-2 col-span-1 grid grid-cols-1 gap-3">
@@ -760,11 +763,16 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               className="rounded-lg min-w-28 text-sm"
             >
               {!data.Classes.AvailableSeat ||
-              data.Classes.Financial.Adult.Payable === 0
-                ? "تکمیل ظرفیت"
-                : formatInputWithCommas(
+              data.Classes.Financial.Adult.Payable === 0 ? (
+                "تکمیل ظرفیت"
+              ) : (
+                <>
+                  {formatInputWithCommas(
                     data.Classes.Financial.Adult.Payable / 10
                   )}
+                  <Toman />
+                </>
+              )}
             </Button>
             {data.Classes.AvailableSeat &&
               data.Classes.Financial.Adult.Payable !== 0 && (
@@ -867,19 +875,22 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.Financial.Adult.Payable / 10
-              )}`}
+              )}`}{" "}
+              <Toman height={15} width={15} className="text-gray-400" />
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.Financial.Child.Payable / 10
-              )}`}
+              )}`}{" "}
+              <Toman height={15} width={15} className="text-gray-400" />
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.Financial.Infant.Payable / 10
-              )}`}
+              )}`}{" "}
+              <Toman height={15} width={15} className="text-gray-400" />
             </div>
           </div>
           <div className="p-6 grid grid-cols-2 gap-8">
@@ -1093,10 +1104,11 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                   تکمیل ظرفیت
                 </span>
               ) : (
-                <span className="text-primary-main text-sm font-semibold">
+                <span className="text-primary-main text-sm font-semibold flex items-center justify-center">
                   {formatInputWithCommas(
                     data.Classes.Financial.Adult.Payable / 10
-                  )}
+                  )}{" "}
+                  <Toman height={15} width={15} className="" />
                 </span>
               )}
             </div>
@@ -1199,10 +1211,11 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                 تکمیل ظرفیت
               </span>
             ) : (
-              <span className="text-sm text-primary-main font-semibold">
+              <span className="text-sm text-primary-main font-semibold flex items-center justify-center">
                 {formatInputWithCommas(
                   data.Classes.Financial.Adult.Payable / 10
-                )}
+                )}{" "}
+                <Toman height={15} width={15} className="" />
               </span>
             )}
           </div>

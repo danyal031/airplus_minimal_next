@@ -23,6 +23,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Route } from "next";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { debounce } from "lodash";
+import { Toman } from "@/components/icons/IconToman";
 const CheckoutPassengerContainer = () => {
   // initial states
   const {
@@ -200,13 +201,14 @@ const CheckoutPassengerContainer = () => {
             کرده‌اید.
           </span>
           <div className="flex items-center justify-center gap-3">
-            <span className="text-base font-semibold text-text-main">
+            <span className="text-base font-semibold text-text-main flex items-center justify-center">
               {formatInputWithCommas(
                 flightPassengersTickets.reduce(
                   (acc: any, ticket: any) => acc + ticket.sell,
                   0
                 ) / 10
               )}
+              <Toman height={14} width={14} className="text-text-main" />
             </span>
             <Button
               onClick={handleSendFlightData}
@@ -247,13 +249,14 @@ const CheckoutPassengerContainer = () => {
                 )}
               </IconButton>
             </div>
-            <span className="text-primary-main text-sm font-semibold">
+            <span className="text-primary-main text-sm font-semibold flex items-center justify-center">
               {formatInputWithCommas(
                 flightPassengersTickets.reduce(
                   (acc: any, ticket: any) => acc + ticket.sell,
                   0
                 ) / 10
-              )}
+              )}{" "}
+              <Toman height={14} width={14} className="text-primary-main" />
             </span>
           </div>
           {openPaymentDetails && (
@@ -264,12 +267,13 @@ const CheckoutPassengerContainer = () => {
                   {selectedWentFlight?.Destination.Iata.title_fa}
                 </span>
                 <div className="h-px bg-divider flex-1"></div>
-                <span className="text-primary-main text-xs">
+                <span className="text-primary-main text-xs flex items-center justify-center">
                   {formatInputWithCommas(
                     adultsWentTicketsPrice +
                       childWentTicketsPrice +
                       infantWentTicketsPrice
                   )}
+                  <Toman height={14} width={14} className="text-primary-main" />
                 </span>
               </div>
               {flightPassengers.find(
@@ -293,8 +297,13 @@ const CheckoutPassengerContainer = () => {
                     }{" "}
                     بزرگسال
                   </span>
-                  <span className="text-primary-main text-xs">
-                    {formatInputWithCommas(adultsWentTicketsPrice)}
+                  <span className="text-primary-main text-xs flex items-center justify-centers">
+                    {formatInputWithCommas(adultsWentTicketsPrice)}{" "}
+                    <Toman
+                      height={14}
+                      width={14}
+                      className="text-primary-main"
+                    />
                   </span>
                 </div>
               )}{" "}
@@ -319,8 +328,13 @@ const CheckoutPassengerContainer = () => {
                     }{" "}
                     کودک
                   </span>
-                  <span className="text-primary-main text-xs">
+                  <span className="text-primary-main text-xs flex items-center justify-center">
                     {formatInputWithCommas(childWentTicketsPrice)}
+                    <Toman
+                      height={14}
+                      width={14}
+                      className="text-primary-main"
+                    />
                   </span>
                 </div>
               )}
@@ -345,8 +359,13 @@ const CheckoutPassengerContainer = () => {
                     }{" "}
                     نوزاد
                   </span>
-                  <span className="text-primary-main text-xs">
+                  <span className="text-primary-main text-xs flex items-center justify-center">
                     {formatInputWithCommas(infantWentTicketsPrice)}
+                    <Toman
+                      height={14}
+                      width={14}
+                      className="text-primary-main"
+                    />
                   </span>
                 </div>
               )}
@@ -388,8 +407,13 @@ const CheckoutPassengerContainer = () => {
                           }{" "}
                           بزرگسال
                         </span>
-                        <span className="text-primary-main text-xs">
+                        <span className="text-primary-main text-xs flex items-center justify-center">
                           {formatInputWithCommas(adultsReturnTicketsPrice)}
+                          <Toman
+                            height={14}
+                            width={14}
+                            className="text-primary-main"
+                          />
                         </span>
                       </div>
                     )}
@@ -414,8 +438,13 @@ const CheckoutPassengerContainer = () => {
                           }{" "}
                           کودک
                         </span>
-                        <span className="text-primary-main text-xs">
+                        <span className="text-primary-main text-xs flex items-center justify-center">
                           {formatInputWithCommas(childReturnTicketsPrice)}
+                          <Toman
+                            height={14}
+                            width={14}
+                            className="text-primary-main"
+                          />
                         </span>
                       </div>
                     )}
@@ -440,8 +469,13 @@ const CheckoutPassengerContainer = () => {
                           }{" "}
                           نوزاد
                         </span>
-                        <span className="text-primary-main text-xs">
-                          {formatInputWithCommas(infantReturnTicketsPrice)}
+                        <span className="text-primary-main text-xs flex items-center justify-center">
+                          {formatInputWithCommas(infantReturnTicketsPrice)}{" "}
+                          <Toman
+                            height={14}
+                            width={14}
+                            className="text-primary-main"
+                          />
                         </span>
                       </div>
                     )}{" "}
