@@ -22,7 +22,7 @@ const PaymentStatusPage = ({ params }: ShoppingCardPaymentStatusParamsType) => {
     // lottery: <LotteryPaymentStatus params={params} />,
   };
   return (
-    <div className="my-24 container">
+    <div className="my-12 md:my-24 container">
       {paymentStatusComponents[type as keyof typeof paymentStatusComponents]}
     </div>
   );
