@@ -48,6 +48,7 @@ const SectionGridFilterCard = () => {
     airports,
     setFromDate,
     setToDate,
+    setSearchInActiveFlights,
   } = useGlobalContext().flightContext.searchContext;
   const {
     flightFilter,
@@ -146,13 +147,42 @@ const SectionGridFilterCard = () => {
           }))
         );
 
-        const finalData = {
-          Went: wentNewData,
-          Return: returnNewData,
+        // filter active flights
+        const activeWentFlights = wentNewData.filter(
+          (item: FlightTicketDataType) =>
+            item.Classes.AvailableSeat &&
+            item.Classes.Financial.Adult.Payable !== 0
+        );
+        const activeReturnFlights = returnNewData.filter(
+          (item: FlightTicketDataType) =>
+            item.Classes.AvailableSeat &&
+            item.Classes.Financial.Adult.Payable !== 0
+        );
+
+        // for Inactive flights
+        const inactiveWentFlights = wentNewData.filter(
+          (item: FlightTicketDataType) =>
+            !item.Classes.AvailableSeat ||
+            item.Classes.Financial.Adult.Payable === 0
+        );
+        const inactiveReturnFlights = returnNewData.filter(
+          (item: FlightTicketDataType) =>
+            !item.Classes.AvailableSeat ||
+            item.Classes.Financial.Adult.Payable === 0
+        );
+
+        const finalActiveData = {
+          Went: activeWentFlights,
+          Return: activeReturnFlights,
         };
 
-        setSearchFlightResponseData(finalData);
-        setFilteredSearchFlightResponseData(finalData);
+        const finalInactiveData = {
+          Went: inactiveWentFlights,
+          Return: inactiveReturnFlights,
+        };
+        setSearchInActiveFlights(finalInactiveData);
+        setSearchFlightResponseData(finalActiveData);
+        setFilteredSearchFlightResponseData(finalActiveData);
         setIsInitialSearchDone(true);
         setChangeStatusRequest(false);
         setTicketLoading(false);
@@ -230,13 +260,43 @@ const SectionGridFilterCard = () => {
             }))
           );
 
-          const finalData = {
-            Went: wentNewData,
-            Return: returnNewData,
+          // filter active flights
+          const activeWentFlights = wentNewData.filter(
+            (item: FlightTicketDataType) =>
+              item.Classes.AvailableSeat &&
+              item.Classes.Financial.Adult.Payable !== 0
+          );
+          const activeReturnFlights = returnNewData.filter(
+            (item: FlightTicketDataType) =>
+              item.Classes.AvailableSeat &&
+              item.Classes.Financial.Adult.Payable !== 0
+          );
+
+          // for Inactive flights
+          const inactiveWentFlights = wentNewData.filter(
+            (item: FlightTicketDataType) =>
+              !item.Classes.AvailableSeat ||
+              item.Classes.Financial.Adult.Payable === 0
+          );
+          const inactiveReturnFlights = returnNewData.filter(
+            (item: FlightTicketDataType) =>
+              !item.Classes.AvailableSeat ||
+              item.Classes.Financial.Adult.Payable === 0
+          );
+
+          const finalActiveData = {
+            Went: activeWentFlights,
+            Return: activeReturnFlights,
           };
 
-          setSearchFlightResponseData(finalData);
-          setFilteredSearchFlightResponseData(finalData);
+          const finalInactiveData = {
+            Went: inactiveWentFlights,
+            Return: inactiveReturnFlights,
+          };
+
+          setSearchInActiveFlights(finalInactiveData);
+          setSearchFlightResponseData(finalActiveData);
+          setFilteredSearchFlightResponseData(finalActiveData);
           setIsInitialSearchDone(true);
           setChangeStatusRequest(false);
           setTicketLoading(false);

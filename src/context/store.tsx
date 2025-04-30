@@ -88,6 +88,10 @@ interface ContextProps {
       setChangeStatusRequest: Dispatch<SetStateAction<boolean>>;
       isInitialSearchDone: boolean;
       setIsInitialSearchDone: Dispatch<SetStateAction<boolean>>;
+      searchInActiveFlights: FlightResponseDataType | null;
+      setSearchInActiveFlights: Dispatch<
+        SetStateAction<FlightResponseDataType | null>
+      >;
       searchFlightResponseData: FlightResponseDataType | null;
       setSearchFlightResponseData: Dispatch<
         SetStateAction<FlightResponseDataType | null>
@@ -210,6 +214,8 @@ const GlobalContext = createContext<ContextProps>({
       setChangeStatusRequest: () => {},
       isInitialSearchDone: false,
       setIsInitialSearchDone: () => {},
+      searchInActiveFlights: null,
+      setSearchInActiveFlights: () => {},
       searchFlightResponseData: null,
       setSearchFlightResponseData: () => {},
       filteredSearchFlightResponseData: null,
@@ -321,6 +327,8 @@ export const GlobalContextProvider = ({
     filteredSearchFlightResponseData,
     setFilteredSearchFlightResponseData,
   ] = useState<FlightResponseDataType | null>(null);
+  const [searchInActiveFlights, setSearchInActiveFlights] =
+    useState<FlightResponseDataType | null>(null);
   const [searchFlightResponseData, setSearchFlightResponseData] =
     useState<FlightResponseDataType | null>(null);
   const [isInitialSearchDone, setIsInitialSearchDone] =
@@ -423,6 +431,8 @@ export const GlobalContextProvider = ({
                 setChangeStatusRequest,
                 isInitialSearchDone,
                 setIsInitialSearchDone,
+                searchInActiveFlights,
+                setSearchInActiveFlights,
                 searchFlightResponseData,
                 setSearchFlightResponseData,
                 filteredSearchFlightResponseData,

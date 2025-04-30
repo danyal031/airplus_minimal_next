@@ -307,20 +307,28 @@ const PriceRateBox = () => {
       const day = today.clone().add(i, "days");
       return {
         id: i + 1,
-        dayMonth: `${day.format("DD")} ${day.format("MMMM")}`,
+        dayMonth: day.locale("fa"),
         price: Math.floor(1000 + Math.random() * 1000),
       };
     });
 
     return (
       <>
-        <div className="border-b-2 border-main p-2 overflow-x-auto flex items-center justify-start gap-2">
+        <div className="border-b-2 p-2 overflow-x-auto flex items-center justify-start gap-2">
           {dates.map((date) => (
             <div
               key={date.id}
-              className="min-w-24 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-0"
+              className={`${
+                fromDate === date.dayMonth.format("YYYY-MM-DD")
+                  ? "border-primary-main"
+                  : "border-main"
+              } min-w-24 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-0`}
             >
-              <span className="text-xs font-semibold">{date.dayMonth}</span>{" "}
+              <span className="text-xs font-semibold">
+                {`${date.dayMonth.format("DD")} ${date.dayMonth.format(
+                  "MMMM"
+                )}`}
+              </span>{" "}
               <span className="text-text-main text-base font-semibold">
                 ...
               </span>{" "}
