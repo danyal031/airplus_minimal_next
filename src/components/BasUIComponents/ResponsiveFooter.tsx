@@ -360,7 +360,17 @@ const ResponsiveFooter = () => {
           {/*  */}
           <div className="grid grid-cols-1 gap-4 p-5 pb-2">
             <span className="text-2xl text-text-main font-bold flex items-center justify-start pr-7">
-              Airplus
+              <Image
+                src={
+                  (process.env.NEXT_PUBLIC_MEDIA_URL_1 as string) +
+                  "/media/branches/" +
+                  config?.design.logo
+                }
+                alt="logo"
+                width={100}
+                height={100}
+                className="cursor-pointer"
+              />
             </span>
             <div className="grid grid-cols-1 gap-3">
               <span className="text-sm font-bold text-text-main text-justify leading-7">

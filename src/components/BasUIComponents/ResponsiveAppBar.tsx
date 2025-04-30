@@ -91,8 +91,21 @@ const ResponsiveAppBar = () => {
             maxWidth="xl"
             className="flex items-center justify-between min-h-11"
           >
-            <span className="text-base font-bold">Airplus</span>
-            <span className="text-sm font-semibold">Helpix</span>
+            <span className="text-base font-bold">
+              {" "}
+              <Image
+                src={
+                  (process.env.NEXT_PUBLIC_MEDIA_URL_1 as string) +
+                  "/media/branches/" +
+                  config?.design.logo
+                }
+                alt="logo"
+                width={70}
+                height={70}
+                className="cursor-pointer"
+              />
+            </span>
+            {/* <span className="text-sm font-semibold">{config?.brand.fa}</span> */}
           </Container>
         </AppBar>
       </>
