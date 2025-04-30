@@ -748,7 +748,10 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
           </div>
           <div className="p-2 col-span-1 border-dashed border-r-2 border-paper flex flex-col items-center justify-center gap-2">
             <Button
-              // disabled
+              disabled={
+                !data.Classes.AvailableSeat ||
+                data.Classes.Financial.Adult.Payable === 0
+              }
               onClick={() => {
                 handleChooseTicket(data, 0);
               }}
@@ -756,14 +759,20 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               size="small"
               className="rounded-lg min-w-28 text-sm"
             >
-              {formatInputWithCommas(data.Classes.Financial.Adult.Payable / 10)}
-              {/* امکان رزرو وجود ندارد */}
+              {!data.Classes.AvailableSeat ||
+              data.Classes.Financial.Adult.Payable === 0
+                ? "تکمیل ظرفیت"
+                : formatInputWithCommas(
+                    data.Classes.Financial.Adult.Payable / 10
+                  )}
             </Button>
-            <span className="text-xs font-semibold text-gray-400">
-              {data.Classes.AvailableSeat} صندلی باقی مانده
-            </span>
+            {data.Classes.AvailableSeat &&
+              data.Classes.Financial.Adult.Payable !== 0 && (
+                <span className="text-xs font-semibold text-gray-400">
+                  {data.Classes.AvailableSeat} صندلی باقی مانده
+                </span>
+              )}
           </div>
-
           {showDetails && (
             <div className="bg-paper rounded-lg p-4 col-span-4">
               {renderDetails()}
@@ -1078,11 +1087,18 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
           <div className="py-4 px-3 bg-paper grid grid-cols-1 gap-4 fixed bottom-0 w-full">
             <div className="flex items-center justify-between">
               <span className="text-sm text-text-main">مجموع قیمت</span>
-              <span className="text-primary-main text-sm font-semibold">
-                {formatInputWithCommas(
-                  data.Classes.Financial.Adult.Payable / 10
-                )}
-              </span>
+              {!data.Classes.AvailableSeat ||
+              data.Classes.Financial.Adult.Payable === 0 ? (
+                <span className="text-xs text-gray-400 font-semibold">
+                  تکمیل ظرفیت
+                </span>
+              ) : (
+                <span className="text-primary-main text-sm font-semibold">
+                  {formatInputWithCommas(
+                    data.Classes.Financial.Adult.Payable / 10
+                  )}
+                </span>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-2">
               <Button
@@ -1102,10 +1118,12 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
                 variant="contained"
                 size="medium"
                 color="primary"
-                // disabled
+                disabled={
+                  !data.Classes.AvailableSeat ||
+                  data.Classes.Financial.Adult.Payable === 0
+                }
               >
                 انتخاب بلیت وادامه
-                {/* امکان رزرو وجود ندارد */}
               </Button>
             </div>
           </div>
@@ -1167,12 +1185,26 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
             </div>
           </div>
           <div className="p-2 flex items-center justify-between">
-            <span className="text-gray-400 text-[10px] font-semibold">
-              {data.Classes.AvailableSeat} صندلی باقی مانده
-            </span>
-            <span className="text-sm text-primary-main font-semibold">
-              {formatInputWithCommas(data.Classes.Financial.Adult.Payable / 10)}
-            </span>
+            {data.Classes.AvailableSeat &&
+            data.Classes.Financial.Adult.Payable !== 0 ? (
+              <span className="text-gray-400 text-[10px] font-semibold">
+                {data.Classes.AvailableSeat} صندلی باقی مانده
+              </span>
+            ) : (
+              <span></span>
+            )}
+            {!data.Classes.AvailableSeat ||
+            data.Classes.Financial.Adult.Payable === 0 ? (
+              <span className="text-xs text-gray-400 font-semibold">
+                تکمیل ظرفیت
+              </span>
+            ) : (
+              <span className="text-sm text-primary-main font-semibold">
+                {formatInputWithCommas(
+                  data.Classes.Financial.Adult.Payable / 10
+                )}
+              </span>
+            )}
           </div>
         </div>
         <Drawer
