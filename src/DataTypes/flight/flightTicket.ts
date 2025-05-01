@@ -32,8 +32,10 @@ export type onlineFlightSearchInputType = {
 
 //? flight ticket type
 export interface FlightResponseDataType {
-  Went: FlightTicketDataType[];
-  Return: FlightTicketDataType[];
+  activeWent: FlightTicketDataType[][];
+  activeReturn: FlightTicketDataType[][];
+  inactiveWent: FlightTicketDataType[];
+  inactiveReturn: FlightTicketDataType[];
 }
 export interface FlightTicketDataType {
   Service: string;
