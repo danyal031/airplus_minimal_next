@@ -63,7 +63,7 @@ const MagHeader: FC<MagHeaderProps> = ({
           <div className="flex items-center justify-center gap-2">
             <SearchIcon fontSize="medium" color="primary" />
             <Button className="rounded-lg" variant="contained" size="small">
-              بازگشت به ایرپلاس
+              بازگشت به صفحه اصلی{" "}
             </Button>
           </div>
           <Popover
@@ -100,7 +100,7 @@ const MagHeader: FC<MagHeaderProps> = ({
           <div className="flex items-center justify-center gap-2">
             <SearchIcon fontSize="medium" color="primary" />
             <Button className="rounded-lg" variant="contained" size="small">
-              بازگشت به ایرپلاس
+              بازگشت به صفحه اصلی{" "}
             </Button>
           </div>
         </div>
