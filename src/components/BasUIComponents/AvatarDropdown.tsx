@@ -134,7 +134,11 @@ export default function AvatarDropdown({ className = "" }: Props) {
                 }}
               >
                 <ListItemText
-                  primary={`کاربر ${config?.brand.fa}`}
+                  primary={
+                    userData.data.first_name_fa
+                      ? `${userData.data.first_name_fa} ${userData.data.last_name_fa}`
+                      : userData.data.mobile
+                  }
                   primaryTypographyProps={{
                     style: {
                       fontWeight: "bold",
