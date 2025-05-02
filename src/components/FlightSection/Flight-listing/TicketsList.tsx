@@ -29,6 +29,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Route } from "next";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Toman } from "@/components/icons/IconToman";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 const TicketsList = () => {
   // initial states
   const [filterTabValue, setFilterTabValue] = useState<string>("1");
@@ -115,39 +117,73 @@ const TicketsList = () => {
             </div>
             <div className="grid grid-cols-1 gap-3">
               {travelRoute === "oneWay"
-                ? filteredSearchFlightResponseData?.Went.map((item, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                      animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                      transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                    >
-                      <TicketCard key={index} data={item} index={index} />
-                    </motion.div>
-                  ))
+                ? filteredSearchFlightResponseData?.activeWent.map(
+                    (itemGroup, index) => {
+                      const hasExtraContent = itemGroup.length > 1;
+                      const item = itemGroup[0];
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard
+                            key={index}
+                            data={item}
+                            index={index}
+                            itemGroup={itemGroup}
+                            hasExtraContent={hasExtraContent}
+                          />
+                        </motion.div>
+                      );
+                    }
+                  )
                 : !selectedWentFlight
-                ? filteredSearchFlightResponseData?.Went.map((item, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                      animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                      transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                    >
-                      <TicketCard key={index} data={item} index={index} />
-                    </motion.div>
-                  ))
-                : filteredSearchFlightResponseData?.Return.map(
-                    (item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    )
-                  )}{" "}
+                ? filteredSearchFlightResponseData?.activeWent.map(
+                    (itemGroup, index) => {
+                      const hasExtraContent = itemGroup.length > 1;
+                      const item = itemGroup[0];
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard
+                            key={index}
+                            data={item}
+                            index={index}
+                            itemGroup={itemGroup}
+                            hasExtraContent={hasExtraContent}
+                          />
+                        </motion.div>
+                      );
+                    }
+                  )
+                : filteredSearchFlightResponseData?.activeReturn.map(
+                    (itemGroup, index) => {
+                      const hasExtraContent = itemGroup.length > 1;
+                      const item = itemGroup[0];
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard
+                            key={index}
+                            data={item}
+                            index={index}
+                            itemGroup={itemGroup}
+                            hasExtraContent={hasExtraContent}
+                          />
+                        </motion.div>
+                      );
+                    }
+                  )}
               <div className="grid grid-cols-1 gap-3">
                 <div className="flex items-center justify-start">
                   <span className="text-text-main font-semibold text-base">
@@ -155,37 +191,43 @@ const TicketsList = () => {
                   </span>
                 </div>
                 {travelRoute === "oneWay"
-                  ? searchInActiveFlights?.Went.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    ))
+                  ? filteredSearchFlightResponseData?.inactiveWent.map(
+                      (item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard key={index} data={item} index={index} />
+                        </motion.div>
+                      )
+                    )
                   : !selectedWentFlight
-                  ? searchInActiveFlights?.Went.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    ))
-                  : searchInActiveFlights?.Return.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    ))}
+                  ? filteredSearchFlightResponseData?.inactiveWent.map(
+                      (item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard key={index} data={item} index={index} />
+                        </motion.div>
+                      )
+                    )
+                  : filteredSearchFlightResponseData?.inactiveReturn.map(
+                      (item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard key={index} data={item} index={index} />
+                        </motion.div>
+                      )
+                    )}
               </div>
             </div>
           </div>
@@ -265,38 +307,72 @@ const TicketsList = () => {
           <div className="bg-paper rounded-xl p-3">
             <div className="grid grid-cols-1 gap-3">
               {travelRoute === "oneWay"
-                ? filteredSearchFlightResponseData?.Went.map((item, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                      animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                      transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                    >
-                      <TicketCard key={index} data={item} index={index} />
-                    </motion.div>
-                  ))
+                ? filteredSearchFlightResponseData?.activeWent.map(
+                    (itemGroup, index) => {
+                      const hasExtraContent = itemGroup.length > 1;
+                      const item = itemGroup[0];
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard
+                            key={index}
+                            data={item}
+                            index={index}
+                            itemGroup={itemGroup}
+                            hasExtraContent={hasExtraContent}
+                          />
+                        </motion.div>
+                      );
+                    }
+                  )
                 : !selectedWentFlight
-                ? filteredSearchFlightResponseData?.Went.map((item, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                      animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                      transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                    >
-                      <TicketCard key={index} data={item} index={index} />
-                    </motion.div>
-                  ))
-                : filteredSearchFlightResponseData?.Return.map(
-                    (item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    )
+                ? filteredSearchFlightResponseData?.activeWent.map(
+                    (itemGroup, index) => {
+                      const hasExtraContent = itemGroup.length > 1;
+                      const item = itemGroup[0];
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard
+                            key={index}
+                            data={item}
+                            index={index}
+                            itemGroup={itemGroup}
+                            hasExtraContent={hasExtraContent}
+                          />
+                        </motion.div>
+                      );
+                    }
+                  )
+                : filteredSearchFlightResponseData?.activeReturn.map(
+                    (itemGroup, index) => {
+                      const hasExtraContent = itemGroup.length > 1;
+                      const item = itemGroup[0];
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard
+                            key={index}
+                            data={item}
+                            index={index}
+                            itemGroup={itemGroup}
+                            hasExtraContent={hasExtraContent}
+                          />
+                        </motion.div>
+                      );
+                    }
                   )}{" "}
               <div className="grid grid-cols-1 gap-3">
                 <div className="flex items-center justify-start">
@@ -305,37 +381,43 @@ const TicketsList = () => {
                   </span>
                 </div>
                 {travelRoute === "oneWay"
-                  ? searchInActiveFlights?.Went.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    ))
+                  ? filteredSearchFlightResponseData?.inactiveWent.map(
+                      (item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard key={index} data={item} index={index} />
+                        </motion.div>
+                      )
+                    )
                   : !selectedWentFlight
-                  ? searchInActiveFlights?.Went.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    ))
-                  : searchInActiveFlights?.Return.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                      >
-                        <TicketCard key={index} data={item} index={index} />
-                      </motion.div>
-                    ))}
+                  ? filteredSearchFlightResponseData?.inactiveWent.map(
+                      (item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard key={index} data={item} index={index} />
+                        </motion.div>
+                      )
+                    )
+                  : filteredSearchFlightResponseData?.inactiveReturn.map(
+                      (item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                        >
+                          <TicketCard key={index} data={item} index={index} />
+                        </motion.div>
+                      )
+                    )}
               </div>
             </div>
           </div>
@@ -371,9 +453,17 @@ export default TicketsList;
 export interface TicketCardProps {
   data: FlightTicketDataType;
   index: number;
+  hasExtraContent?: boolean;
+  itemGroup?: FlightTicketDataType[];
 }
-const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
+const TicketCard: FC<TicketCardProps> = ({
+  data,
+  index,
+  hasExtraContent,
+  itemGroup = [],
+}) => {
   // initial states
+  const [expandMoreTicket, setExpandMoreTicket] = useState<boolean>(false);
   const [ticketTabValue, setTicketTabValue] = useState<"details" | "rules">(
     "details"
   );
@@ -389,6 +479,11 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
   } = useGlobalContext().flightContext.searchContext;
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // handle toggle expand more ticket
+  const toggleExpandMoreTicket = () => {
+    setExpandMoreTicket(!expandMoreTicket);
+  };
 
   // handle toggle ticket tab value
   const toggleTicketTabValue = (newValue: "details" | "rules") => {
@@ -821,37 +916,87 @@ const TicketCard: FC<TicketCardProps> = ({ data, index }) => {
               </div>
             </div>
           </div>
-          <div className="p-2 col-span-1 border-dashed border-r-2 border-paper flex flex-col items-center justify-center gap-2">
-            <Button
-              disabled={
-                !data.Classes.AvailableSeat ||
-                data.Classes.Financial.Adult.Payable === 0
-              }
-              onClick={() => {
-                handleChooseTicket(data, 0);
-              }}
-              variant="contained"
-              size="small"
-              className="rounded-lg min-w-28 text-sm"
-            >
-              {!data.Classes.AvailableSeat ||
-              data.Classes.Financial.Adult.Payable === 0 ? (
-                "تکمیل ظرفیت"
-              ) : (
-                <>
-                  {formatInputWithCommas(
-                    data.Classes.Financial.Adult.Payable / 10
+          <div className="p-2 col-span-1 border-dashed border-r-2 border-paper flex items-center justify-center">
+            <div className="flex items-start justify-center gap-2">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <Button
+                    disabled={
+                      !data.Classes.AvailableSeat ||
+                      data.Classes.Financial.Adult.Payable === 0
+                    }
+                    onClick={() => {
+                      handleChooseTicket(data, 0);
+                    }}
+                    variant="contained"
+                    size="small"
+                    className="rounded-lg min-w-28 text-sm"
+                  >
+                    {!data.Classes.AvailableSeat ||
+                    data.Classes.Financial.Adult.Payable === 0 ? (
+                      "تکمیل ظرفیت"
+                    ) : (
+                      <>
+                        {formatInputWithCommas(
+                          data.Classes.Financial.Adult.Payable / 10
+                        )}
+                        <Toman />
+                      </>
+                    )}
+                  </Button>{" "}
+                  {data.Classes.AvailableSeat &&
+                    data.Classes.Financial.Adult.Payable !== 0 && (
+                      <span className="text-xs font-semibold text-gray-400">
+                        {data.Classes.AvailableSeat} صندلی باقی مانده
+                      </span>
+                    )}{" "}
+                </div>{" "}
+                {expandMoreTicket &&
+                  itemGroup.slice(1).map((subItem, subIndex) => (
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <Button
+                        disabled={
+                          !subItem.Classes.AvailableSeat ||
+                          subItem.Classes.Financial.Adult.Payable === 0
+                        }
+                        onClick={() => {
+                          handleChooseTicket(subItem, 0);
+                        }}
+                        variant="contained"
+                        size="small"
+                        className="rounded-lg min-w-28 text-sm"
+                      >
+                        {!subItem.Classes.AvailableSeat ||
+                        subItem.Classes.Financial.Adult.Payable === 0 ? (
+                          "تکمیل ظرفیت"
+                        ) : (
+                          <>
+                            {formatInputWithCommas(
+                              subItem.Classes.Financial.Adult.Payable / 10
+                            )}
+                            <Toman />
+                          </>
+                        )}
+                      </Button>{" "}
+                      {subItem.Classes.AvailableSeat &&
+                        subItem.Classes.Financial.Adult.Payable !== 0 && (
+                          <span className="text-xs font-semibold text-gray-400">
+                            {subItem.Classes.AvailableSeat} صندلی باقی مانده
+                          </span>
+                        )}{" "}
+                    </div>
+                  ))}
+              </div>
+              {hasExtraContent && (
+                <IconButton onClick={toggleExpandMoreTicket} size="small">
+                  {expandMoreTicket ? (
+                    <KeyboardArrowUpIcon fontSize="small" />
+                  ) : (
+                    <KeyboardArrowDownIcon fontSize="small" />
                   )}
-                  <Toman />
-                </>
+                </IconButton>
               )}
-            </Button>
-            {data.Classes.AvailableSeat &&
-              data.Classes.Financial.Adult.Payable !== 0 && (
-                <span className="text-xs font-semibold text-gray-400">
-                  {data.Classes.AvailableSeat} صندلی باقی مانده
-                </span>
-              )}
+            </div>
           </div>
           {showDetails && (
             <div className="bg-paper rounded-lg p-4 col-span-4">

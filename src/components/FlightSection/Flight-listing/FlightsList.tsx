@@ -16,8 +16,8 @@ const FlightsList = () => {
     <div className="flex flex-col items-start justify-start gap-3">
       {searchParams.get("returning_date") !== "false" &&
         filteredSearchFlightResponseData &&
-        filteredSearchFlightResponseData?.Return.length > 0 &&
-        filteredSearchFlightResponseData?.Went.length > 0 && (
+        filteredSearchFlightResponseData?.activeReturn.length > 0 &&
+        filteredSearchFlightResponseData?.activeWent.length > 0 && (
           <div className="w-full">
             <SelectedFlightsPanel />{" "}
           </div>
