@@ -58,6 +58,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { getCountryList, getPreviousPassengers } from "@/global-files/axioses";
 import { PreviousPassengerDataType } from "@/DataTypes/previousPassengerTypes";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useShowAlert } from "@/hooks/useShowAlert";
 
 interface PassengerInformationProps {
   index: number;
@@ -1101,6 +1102,7 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
     useState<PreviousPassengerDataType | null>(null);
   const { flightPassengers, setFlightPassengers } =
     useGlobalContext().flightContext.searchContext;
+  const { handleAlertDetails } = useShowAlert();
 
   // handle get previous passengers list
   const handleGetPreviousPassengersList = () => {
@@ -1111,6 +1113,8 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
       })
       .catch((err) => {
         console.log(err);
+        handleAlertDetails("خطا در دریافت اطلاعات", "error");
+        onClose();
       });
   };
 
@@ -1283,6 +1287,7 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ({
     useState<PreviousPassengerDataType | null>(null);
   const { flightPassengers, setFlightPassengers } =
     useGlobalContext().flightContext.searchContext;
+  const { handleAlertDetails } = useShowAlert();
 
   // handle get previous passengers list
   const handleGetPreviousPassengersList = () => {
@@ -1292,7 +1297,9 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ({
         setPreviousPassengersList(res.items);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("err", err);
+        handleAlertDetails("خطا در دریافت اطلاعات", "error");
+        onClose();
       });
   };
 

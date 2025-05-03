@@ -132,7 +132,8 @@ const CheckoutPassengerContainer = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "ADU"
           ).length *
-            (selectedWentFlight.Classes.Financial.Adult.Payable ?? 0)) /
+            (selectedWentFlight.Classes.BaseData.Financial.Adult.Markup.final ??
+              0)) /
           10
         : 0;
     const childWentTicketsPrice =
@@ -143,7 +144,8 @@ const CheckoutPassengerContainer = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "CHI"
           ).length *
-            (selectedWentFlight.Classes.Financial.Child.Payable ?? 0)) /
+            (selectedWentFlight.Classes.BaseData.Financial.Child.Markup.final ??
+              0)) /
           10
         : 0;
     const infantWentTicketsPrice =
@@ -154,7 +156,8 @@ const CheckoutPassengerContainer = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "INF"
           ).length *
-            (selectedWentFlight.Classes.Financial.Infant.Payable ?? 0)) /
+            (selectedWentFlight.Classes.BaseData.Financial.Infant.Markup
+              .final ?? 0)) /
           10
         : 0;
 
@@ -167,7 +170,8 @@ const CheckoutPassengerContainer = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "ADU"
           ).length *
-            (selectedReturnFlight.Classes.Financial.Adult.Payable ?? 0)) /
+            (selectedReturnFlight.Classes.BaseData.Financial.Adult.Markup
+              .final ?? 0)) /
           10
         : 0;
     const childReturnTicketsPrice =
@@ -178,7 +182,8 @@ const CheckoutPassengerContainer = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "CHI"
           ).length *
-            (selectedReturnFlight.Classes.Financial.Child.Payable ?? 0)) /
+            (selectedReturnFlight.Classes.BaseData.Financial.Child.Markup
+              .final ?? 0)) /
           10
         : 0;
     const infantReturnTicketsPrice =
@@ -189,7 +194,8 @@ const CheckoutPassengerContainer = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "INF"
           ).length *
-            (selectedReturnFlight.Classes.Financial.Infant.Payable ?? 0)) /
+            (selectedReturnFlight.Classes.BaseData.Financial.Infant.Markup
+              .final ?? 0)) /
           10
         : 0;
 
@@ -599,12 +605,15 @@ const CheckoutPassengerContainer = () => {
                 calculateAgeCategory(
                   applyMask("date", passenger.birthday as string)
                 ) === "INF"
-                  ? selectedWentFlight.Classes.Financial.Infant.Payable
+                  ? selectedWentFlight.Classes.BaseData.Financial.Infant.Markup
+                      .final
                   : calculateAgeCategory(
                       applyMask("date", passenger.birthday as string)
                     ) === "CHI"
-                  ? selectedWentFlight.Classes.Financial.Child.Payable
-                  : selectedWentFlight.Classes.Financial.Adult.Payable,
+                  ? selectedWentFlight.Classes.BaseData.Financial.Child.Markup
+                      .final
+                  : selectedWentFlight.Classes.BaseData.Financial.Adult.Markup
+                      .final,
               buy:
                 calculateAgeCategory(
                   applyMask("date", passenger.birthday as string)
@@ -613,7 +622,7 @@ const CheckoutPassengerContainer = () => {
                   : calculateAgeCategory(
                       applyMask("date", passenger.birthday as string)
                     ) === "CHI"
-                  ? selectedWentFlight.Classes.BaseData.Financial.Child?.Payable
+                  ? selectedWentFlight.Classes.BaseData.Financial.Child.Payable
                   : selectedWentFlight.Classes.BaseData.Financial.Adult.Payable,
               validated: true,
               has_credit: true,
@@ -644,25 +653,28 @@ const CheckoutPassengerContainer = () => {
                 calculateAgeCategory(
                   applyMask("date", passenger.birthday as string)
                 ) === "INF"
-                  ? selectedReturnFlight.Classes.Financial.Infant.Payable
+                  ? selectedReturnFlight.Classes.BaseData.Financial.Infant
+                      .Markup.final
                   : calculateAgeCategory(
                       applyMask("date", passenger.birthday as string)
                     ) === "CHI"
-                  ? selectedReturnFlight.Classes.Financial.Child.Payable
-                  : selectedReturnFlight.Classes.Financial.Adult.Payable,
+                  ? selectedReturnFlight.Classes.BaseData.Financial.Child.Markup
+                      .final
+                  : selectedReturnFlight.Classes.BaseData.Financial.Adult.Markup
+                      .final,
               buy:
                 calculateAgeCategory(
                   applyMask("date", passenger.birthday as string)
                 ) === "INF"
                   ? selectedReturnFlight.Classes.BaseData.Financial.Infant
-                      ?.Payable
+                      .Payable
                   : calculateAgeCategory(
                       applyMask("date", passenger.birthday as string)
                     ) === "CHI"
                   ? selectedReturnFlight.Classes.BaseData.Financial.Child
-                      ?.Payable
+                      .Payable
                   : selectedReturnFlight.Classes.BaseData.Financial.Adult
-                      ?.Payable,
+                      .Payable,
               validated: true,
               has_credit: true,
               provider: "",

@@ -626,21 +626,21 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="text-text-main text-sm font-semibold">قیمت</div>
             <div className="text-gray-400 text-xs flex items-center justify-center">
               {` ${formatInputWithCommas(
-                data.Classes.Financial.Adult.Payable / 10
+                data.Classes.BaseData.Financial.Adult.Markup.final / 10
               )}`}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
             <div className="text-gray-400 text-xs flex items-center justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes.Financial.Child.Payable / 10
+                data.Classes.BaseData.Financial.Child.Markup.final / 10
               )}`}{" "}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
             <div className="text-gray-400 text-xs flex items-center justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes.Financial.Infant.Payable / 10
+                data.Classes.BaseData.Financial.Infant.Markup.final / 10
               )}`}{" "}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
@@ -923,7 +923,7 @@ const TicketCard: FC<TicketCardProps> = ({
                   <Button
                     disabled={
                       !data.Classes.AvailableSeat ||
-                      data.Classes.Financial.Adult.Payable === 0
+                      data.Classes.BaseData.Financial.Adult.Markup.final === 0
                     }
                     onClick={() => {
                       handleChooseTicket(data, 0);
@@ -933,19 +933,21 @@ const TicketCard: FC<TicketCardProps> = ({
                     className="rounded-lg min-w-28 text-sm"
                   >
                     {!data.Classes.AvailableSeat ||
-                    data.Classes.Financial.Adult.Payable === 0 ? (
+                    data.Classes.BaseData.Financial.Adult.Markup.final === 0 ? (
                       "تکمیل ظرفیت"
                     ) : (
                       <>
                         {formatInputWithCommas(
-                          data.Classes.Financial.Adult.Payable / 10
+                          data.Classes.BaseData.Financial.Adult.Markup.final /
+                            10
                         )}
                         <Toman />
                       </>
                     )}
                   </Button>{" "}
                   {data.Classes.AvailableSeat &&
-                    data.Classes.Financial.Adult.Payable !== 0 && (
+                    data.Classes.BaseData.Financial.Adult.Markup.final !==
+                      0 && (
                       <span className="text-xs font-semibold text-gray-400">
                         {data.Classes.AvailableSeat} صندلی باقی مانده
                       </span>
@@ -957,7 +959,8 @@ const TicketCard: FC<TicketCardProps> = ({
                       <Button
                         disabled={
                           !subItem.Classes.AvailableSeat ||
-                          subItem.Classes.Financial.Adult.Payable === 0
+                          subItem.Classes.BaseData.Financial.Adult.Markup
+                            .final === 0
                         }
                         onClick={() => {
                           handleChooseTicket(subItem, 0);
@@ -967,19 +970,22 @@ const TicketCard: FC<TicketCardProps> = ({
                         className="rounded-lg min-w-28 text-sm"
                       >
                         {!subItem.Classes.AvailableSeat ||
-                        subItem.Classes.Financial.Adult.Payable === 0 ? (
+                        subItem.Classes.BaseData.Financial.Adult.Markup
+                          .final === 0 ? (
                           "تکمیل ظرفیت"
                         ) : (
                           <>
                             {formatInputWithCommas(
-                              subItem.Classes.Financial.Adult.Payable / 10
+                              subItem.Classes.BaseData.Financial.Adult.Markup
+                                .final / 10
                             )}
                             <Toman />
                           </>
                         )}
                       </Button>{" "}
                       {subItem.Classes.AvailableSeat &&
-                        subItem.Classes.Financial.Adult.Payable !== 0 && (
+                        subItem.Classes.BaseData.Financial.Adult.Markup
+                          .final !== 0 && (
                           <span className="text-xs font-semibold text-gray-400">
                             {subItem.Classes.AvailableSeat} صندلی باقی مانده
                           </span>
@@ -1091,21 +1097,21 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes.Financial.Adult.Payable / 10
+                data.Classes.BaseData.Financial.Adult.Markup.final / 10
               )}`}{" "}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes.Financial.Child.Payable / 10
+                data.Classes.BaseData.Financial.Child.Markup.final / 10
               )}`}{" "}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
-                data.Classes.Financial.Infant.Payable / 10
+                data.Classes.BaseData.Financial.Infant.Markup.final / 10
               )}`}{" "}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
@@ -1316,14 +1322,14 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-sm text-text-main">مجموع قیمت</span>
               {!data.Classes.AvailableSeat ||
-              data.Classes.Financial.Adult.Payable === 0 ? (
+              data.Classes.BaseData.Financial.Adult.Markup.final === 0 ? (
                 <span className="text-xs text-gray-400 font-semibold">
                   تکمیل ظرفیت
                 </span>
               ) : (
                 <span className="text-primary-main text-sm font-semibold flex items-center justify-center">
                   {formatInputWithCommas(
-                    data.Classes.Financial.Adult.Payable / 10
+                    data.Classes.BaseData.Financial.Adult.Markup.final / 10
                   )}{" "}
                   <Toman height={15} width={15} className="" />
                 </span>
@@ -1349,7 +1355,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 color="primary"
                 disabled={
                   !data.Classes.AvailableSeat ||
-                  data.Classes.Financial.Adult.Payable === 0
+                  data.Classes.BaseData.Financial.Adult.Markup.final === 0
                 }
               >
                 انتخاب بلیت وادامه
@@ -1415,7 +1421,7 @@ const TicketCard: FC<TicketCardProps> = ({
           </div>
           <div className="p-2 flex items-center justify-between">
             {data.Classes.AvailableSeat &&
-            data.Classes.Financial.Adult.Payable !== 0 ? (
+            data.Classes.BaseData.Financial.Adult.Markup.final !== 0 ? (
               <span className="text-gray-400 text-[10px] font-semibold">
                 {data.Classes.AvailableSeat} صندلی باقی مانده
               </span>
@@ -1423,14 +1429,14 @@ const TicketCard: FC<TicketCardProps> = ({
               <span></span>
             )}
             {!data.Classes.AvailableSeat ||
-            data.Classes.Financial.Adult.Payable === 0 ? (
+            data.Classes.BaseData.Financial.Adult.Markup.final === 0 ? (
               <span className="text-xs text-gray-400 font-semibold">
                 تکمیل ظرفیت
               </span>
             ) : (
               <span className="text-sm text-primary-main font-semibold flex items-center justify-center">
                 {formatInputWithCommas(
-                  data.Classes.Financial.Adult.Payable / 10
+                  data.Classes.BaseData.Financial.Adult.Markup.final / 10
                 )}{" "}
                 <Toman height={15} width={15} className="" />
               </span>

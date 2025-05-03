@@ -17,6 +17,7 @@ import leftArrow from "/public/assets/images/flightSection/left-arrow.svg";
 import { motion } from "framer-motion";
 import { Route } from "next";
 import { Toman } from "@/components/icons/IconToman";
+
 const SelectedFlightTicketsCards = () => {
   // initial states
   const {
@@ -87,7 +88,8 @@ const SelectedFlightTicketsCards = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "ADU"
           ).length *
-            (selectedWentFlight.Classes.Financial.Adult.Payable ?? 0)) /
+            (selectedWentFlight.Classes.BaseData.Financial.Adult.Markup.final ??
+              0)) /
           10
         : 0;
     const childWentTicketsPrice =
@@ -98,7 +100,8 @@ const SelectedFlightTicketsCards = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "CHI"
           ).length *
-            (selectedWentFlight.Classes.Financial.Child.Payable ?? 0)) /
+            (selectedWentFlight.Classes.BaseData.Financial.Child.Markup.final ??
+              0)) /
           10
         : 0;
     const infantWentTicketsPrice =
@@ -109,7 +112,8 @@ const SelectedFlightTicketsCards = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "INF"
           ).length *
-            (selectedWentFlight.Classes.Financial.Infant.Payable ?? 0)) /
+            (selectedWentFlight.Classes.BaseData.Financial.Infant.Markup
+              .final ?? 0)) /
           10
         : 0;
 
@@ -302,7 +306,8 @@ const SelectedFlightTicketsCards = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "ADU"
           ).length *
-            (selectedReturnFlight.Classes.Financial.Adult.Payable ?? 0)) /
+            (selectedReturnFlight.Classes.BaseData.Financial.Adult.Markup
+              .final ?? 0)) /
           10
         : 0;
     const childReturnTicketsPrice =
@@ -313,7 +318,8 @@ const SelectedFlightTicketsCards = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "CHI"
           ).length *
-            (selectedReturnFlight.Classes.Financial.Child.Payable ?? 0)) /
+            (selectedReturnFlight.Classes.BaseData.Financial.Child.Markup
+              .final ?? 0)) /
           10
         : 0;
     const infantReturnTicketsPrice =
@@ -324,7 +330,8 @@ const SelectedFlightTicketsCards = () => {
                 applyMask("date", element.birthday?.toString() as string)
               ) === "INF"
           ).length *
-            (selectedReturnFlight.Classes.Financial.Infant.Payable ?? 0)) /
+            (selectedReturnFlight.Classes.BaseData.Financial.Infant.Markup
+              .final ?? 0)) /
           10
         : 0;
 

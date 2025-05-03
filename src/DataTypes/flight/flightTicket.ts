@@ -113,7 +113,7 @@ interface Infant {
   TotalFare: number;
   Payable: number;
   Commission: Commission3;
-  Markup?: number;
+  Markup: Markup;
 }
 
 interface Commission3 {
@@ -128,7 +128,7 @@ interface Child {
   TotalFare: number;
   Payable: number;
   Commission: Commission2;
-  Markup?: number;
+  Markup: Markup;
 }
 
 interface Commission2 {
@@ -140,10 +140,16 @@ interface Commission2 {
 interface Adult {
   BaseFare: number;
   Tax: boolean | number;
-  Markup: number;
+  Markup: Markup;
   TotalFare: number;
   Payable: number;
   Commission: Commission;
+}
+
+export interface Markup {
+  percent: number;
+  price: number;
+  final: number;
 }
 
 interface Commission {

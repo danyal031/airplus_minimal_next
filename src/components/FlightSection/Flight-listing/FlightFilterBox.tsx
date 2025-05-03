@@ -141,10 +141,10 @@ const FlightFilterBox = () => {
           <span className="text-text-main font-semibold cursor-pointer">
             تعداد نتایج:{" "}
             {travelRoute === "oneWay"
-              ? filteredSearchFlightResponseData?.Went.length
+              ? filteredSearchFlightResponseData?.activeWent.length
               : !selectedWentFlight
-              ? filteredSearchFlightResponseData?.Went.length
-              : filteredSearchFlightResponseData?.Return.length}{" "}
+              ? filteredSearchFlightResponseData?.activeWent.length
+              : filteredSearchFlightResponseData?.activeReturn.length}{" "}
           </span>
           <span
             onClick={resetFilters}
