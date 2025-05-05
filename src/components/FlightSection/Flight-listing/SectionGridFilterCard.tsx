@@ -161,6 +161,7 @@ const SectionGridFilterCard = () => {
       searchParams.get("returning_date") !== "false" &&
       searchParams.get("returning_date")
     ) {
+      setToDate(searchParams.get("returning_date"));
       setTravelRoute("roundTrip");
     } else {
       setTravelRoute("oneWay");
@@ -211,6 +212,7 @@ const SectionGridFilterCard = () => {
         setChangeStatusRequest(false);
       });
   };
+
   useEffect(() => {
     if (!isInitialSearchDone && !airportsLoading) {
       if (paramsValidation(searchParams)) {
@@ -224,6 +226,7 @@ const SectionGridFilterCard = () => {
   useEffect(() => {
     console.log("searchFlightResponseData", searchFlightResponseData);
   }, [searchFlightResponseData]);
+
   // handle search  by status request
   const handleSearchByStatusRequest = () => {
     const originMatch = searchParams.get("origin") === origin?.iata;
@@ -252,6 +255,7 @@ const SectionGridFilterCard = () => {
         searchParams.get("returning_date")
       ) {
         setTravelRoute("roundTrip");
+        setToDate(searchParams.get("returning_date"));
       } else {
         setTravelRoute("oneWay");
       }

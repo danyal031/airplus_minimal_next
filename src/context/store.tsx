@@ -116,6 +116,8 @@ interface ContextProps {
       setFlightPassengersTickets: Dispatch<SetStateAction<any[]>>;
       openFlightFilterDrawer: boolean;
       setOpenFlightFilterDrawer: Dispatch<SetStateAction<boolean>>;
+      flightTab: number;
+      setFlightTab: Dispatch<SetStateAction<number>>;
     };
     flightFilterContext: {
       flightFilter: any;
@@ -230,6 +232,8 @@ const GlobalContext = createContext<ContextProps>({
       setFlightPassengersTickets: () => {},
       openFlightFilterDrawer: false,
       setOpenFlightFilterDrawer: () => {},
+      flightTab: 1,
+      setFlightTab: () => {},
     },
     flightFilterContext: {
       flightFilter: {
@@ -347,6 +351,7 @@ export const GlobalContextProvider = ({
   const [destination, setDestination] = useState<AirportDataType | undefined>(
     undefined
   );
+  const [flightTab, setFlightTab] = useState<number>(1);
   // search Accommodation
   const [accommodationFromDate, setAccommodationFromDate] = useState<
     string | null
@@ -447,6 +452,8 @@ export const GlobalContextProvider = ({
                 setFlightPassengersTickets,
                 openFlightFilterDrawer,
                 setOpenFlightFilterDrawer,
+                flightTab,
+                setFlightTab,
               },
               flightFilterContext: {
                 flightFilter,

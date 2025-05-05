@@ -110,9 +110,16 @@ export function convertToPersianDate(input: string): string {
 export function convertToPersianShortDate(input: string): string {
   if (!input) return input;
 
-  const isoInput = input.replace(" ", "T");
+  let date: Date;
 
-  const date = new Date(isoInput);
+  const jMoment = moment(input, ["jYYYY/jMM/jDD", "jYYYY-jMM-jDD"], true);
+
+  if (jMoment.isValid()) {
+    date = jMoment.toDate();
+  } else {
+    const isoInput = input.replace(" ", "T");
+    date = new Date(isoInput);
+  }
 
   const formatter = new Intl.DateTimeFormat("fa-IR-u-nu-latn", {
     weekday: "long",

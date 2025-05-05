@@ -9,12 +9,14 @@ import { FlightCardSkelton } from "@/components/Skelton-Components/FlightSection
 
 const FlightsList = () => {
   // initial states
-  const { filteredSearchFlightResponseData, ticketLoading } =
+  const { filteredSearchFlightResponseData, ticketLoading, travelRoute } =
     useGlobalContext().flightContext.searchContext;
-  const searchParams = useSearchParams();
   return (
     <div className="flex flex-col items-start justify-start gap-3">
-      {searchParams.get("returning_date") !== "false" &&
+      <div className="w-full">
+        <PriceRateBox />
+      </div>
+      {travelRoute === "roundTrip" &&
         filteredSearchFlightResponseData &&
         filteredSearchFlightResponseData?.activeReturn.length > 0 &&
         filteredSearchFlightResponseData?.activeWent.length > 0 && (
@@ -22,9 +24,6 @@ const FlightsList = () => {
             <SelectedFlightsPanel />{" "}
           </div>
         )}
-      <div className="w-full">
-        <PriceRateBox />
-      </div>
       {ticketLoading ? (
         <div className="flex flex-col gap-y-2 w-full">
           {Array.from({ length: 10 }).map((_, index) => (

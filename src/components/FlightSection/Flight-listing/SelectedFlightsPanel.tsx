@@ -17,18 +17,55 @@ const SelectedFlightsPanel = () => {
     selectedReturnFlight,
     setSelectedWentFlight,
     setSelectedReturnFlight,
+    flightTab,
+    setFlightTab,
+    fromDate,
+    toDate,
+    origin,
+    destination,
   } = useGlobalContext().flightContext.searchContext;
 
+  // handle toggle flight list tab
+  const handleToggleFlightTab = (newValue: number) => {
+    setFlightTab(newValue);
+  };
   const handleChangeWentTicket = () => {
     setSelectedWentFlight(null);
   };
   const handleChangeReturnTicket = () => {
     setSelectedReturnFlight(null);
   };
+  console.log("todate", toDate);
 
   return (
-    <div className="grid grid-cols-2 gap-3">
-      {selectedWentFlight && (
+    <div className="grid grid-cols-2 gap-2 rounded-2xl border-2 border-paper p-1">
+      <div
+        onClick={() => handleToggleFlightTab(1)}
+        className={`rounded-xl text-text-main p-3 flex flex-col items-start justify-center gap-4 border ${
+          flightTab === 1 ? "bg-paper" : "bg-main"
+        } ${flightTab === 1 ? "border-primary-main" : "border-main"}`}
+      >
+        <span className="text-base font-semibold">بلیت رفت</span>
+        <span className="text-xs font-semibold">
+          {convertToPersianShortDate(fromDate as string)} | {origin?.title_fa} -{" "}
+          {destination?.title_fa}
+        </span>
+      </div>
+      <div
+        onClick={() => handleToggleFlightTab(2)}
+        className={`rounded-xl text-text-main p-3 flex flex-col items-start justify-center gap-4 border ${
+          flightTab === 2 ? "bg-paper" : "bg-main"
+        } ${flightTab === 2 ? "border-primary-main" : "border-main"}`}
+      >
+        <span className="text-base font-semibold text-text-main">
+          بلیت برگشت
+        </span>
+        <span className="text-xs font-semibold">
+          {convertToPersianShortDate(toDate as string)} |{" "}
+          {destination?.title_fa} - {origin?.title_fa}
+        </span>
+      </div>
+      {/* {selectedWentFlight && (
         <motion.div
           className="col-span-2 md:col-span-1 h-32 md:h-36 border-2 border-primary-main rounded-xl bg-paper grid grid-cols-4"
           initial={{ opacity: 0, scale: 0.5 }}
@@ -212,7 +249,7 @@ const SelectedFlightsPanel = () => {
             بلیت برگشت{" "}
           </span>{" "}
         </motion.div>
-      )}
+      )} */}
     </div>
   );
 };
