@@ -61,6 +61,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
       console.log("themeKey", themeKey);
 
       const selectedTheme = themes[themeKey];
+      // const selectedTheme = themes["minimal-light-2"];
 
       // change `CSS Variables`
       document.documentElement.style.setProperty(

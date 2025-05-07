@@ -3,11 +3,15 @@ import { Drawer, IconButton, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useShowAlert } from "@/hooks/useShowAlert";
-import ReactApexChart from "react-apexcharts";
+// import ReactApexChart from "react-apexcharts";
 import ClearIcon from "@mui/icons-material/Clear";
 import moment from "jalali-moment";
 import { useGlobalContext } from "@/context/store";
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
+
 const PriceRateBox = () => {
   // initial states
   const [isOpenPriceRangeChart, setIsOpenPriceRangeChart] = useState(false);

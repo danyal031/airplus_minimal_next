@@ -50,6 +50,8 @@ const SectionGridFilterCard = () => {
     setFromDate,
     setToDate,
     setSearchInActiveFlights,
+    setFlightTab,
+    flightTab,
   } = useGlobalContext().flightContext.searchContext;
   const {
     flightFilter,
@@ -216,6 +218,7 @@ const SectionGridFilterCard = () => {
   useEffect(() => {
     if (!isInitialSearchDone && !airportsLoading) {
       if (paramsValidation(searchParams)) {
+        setFlightTab(1);
         handleSearch();
       } else {
         router.push("/");
@@ -259,6 +262,7 @@ const SectionGridFilterCard = () => {
       } else {
         setTravelRoute("oneWay");
       }
+      setFlightTab(1);
       getOnlineFlightSearch({
         origin: searchParams.get("origin"),
         destination: searchParams.get("destination"),
@@ -315,11 +319,7 @@ const SectionGridFilterCard = () => {
     if (searchFlightResponseData) {
       let filteredData =
         searchFlightResponseData[
-          travelRoute === "oneWay"
-            ? "activeWent"
-            : !selectedWentFlight
-            ? "activeWent"
-            : "activeReturn"
+          flightTab === 1 ? "activeWent" : "activeReturn"
         ];
 
       // handle cabin type
@@ -384,14 +384,7 @@ const SectionGridFilterCard = () => {
       }
 
       // handle set new filtered data
-      travelRoute === "oneWay"
-        ? setFilteredSearchFlightResponseData((pre) => ({
-            activeWent: filteredData ?? [],
-            activeReturn: pre?.activeReturn ?? [],
-            inactiveWent: pre?.inactiveWent ?? [],
-            inactiveReturn: pre?.inactiveReturn ?? [],
-          }))
-        : !selectedWentFlight
+      flightTab === 1
         ? setFilteredSearchFlightResponseData((pre) => ({
             activeWent: filteredData ?? [],
             activeReturn: pre?.activeReturn ?? [],
@@ -410,7 +403,7 @@ const SectionGridFilterCard = () => {
     flightSelectedSortFiltered,
     searchFlightResponseData,
     travelRoute,
-    selectedWentFlight,
+    flightTab,
   ]);
 
   const handleResetFilteredItems = () => {
@@ -426,11 +419,7 @@ const SectionGridFilterCard = () => {
       const ticketItemsFilterData: string[] = [];
       const airlineItemsFilterData: Airline[] = [];
       searchFlightResponseData[
-        travelRoute == "oneWay"
-          ? "activeWent"
-          : !selectedWentFlight
-          ? "activeWent"
-          : "activeReturn"
+        flightTab === 1 ? "activeWent" : "activeReturn"
       ].forEach((item) => {
         if (
           !cabinItemsFilterData.includes(item[0].Classes.CabinType.title.fa)
@@ -451,7 +440,7 @@ const SectionGridFilterCard = () => {
       });
       console.log("exist cabin's type", cabinItemsFilterData);
     }
-  }, [searchFlightResponseData, travelRoute, selectedWentFlight]);
+  }, [searchFlightResponseData, travelRoute, flightTab]);
 
   return (
     <div className="grid grid-cols-12 gap-4">

@@ -217,18 +217,29 @@ interface Remarks {
   DateReturn?: boolean;
 }
 
+// handle air line types
+interface Logo {
+  small: string;
+  large: string;
+}
+
+interface Media {
+  logo: Logo;
+}
+
 export interface Airline {
   id: number;
   iata: string;
   icao: string;
   logo: string;
+  media: Media;
   title: string;
   title_fa: string;
   country: Country;
   priority: number;
   status: number;
 }
-
+// end air line types
 interface Aircraft {
   iata: string;
 }

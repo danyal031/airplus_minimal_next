@@ -8,7 +8,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -230,7 +230,7 @@ const TicketsList = () => {
                       );
                     }
                   )} */}
-              <div className="grid grid-cols-1 gap-3">
+              <div className="grid grid-cols-1 gap-3 mt-12">
                 {flightTab === 1 &&
                 filteredSearchFlightResponseData?.inactiveWent &&
                 filteredSearchFlightResponseData?.inactiveWent.length > 0 ? (
@@ -652,6 +652,8 @@ const TicketCard: FC<TicketCardProps> = ({
     setSelectedWentFlight,
     setSelectedReturnFlight,
     travelRoute,
+    setFlightTab,
+    flightTab,
   } = useGlobalContext().flightContext.searchContext;
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -698,14 +700,11 @@ const TicketCard: FC<TicketCardProps> = ({
       localStorage.setItem(local_id, JSON.stringify(queryParams));
       router.push(`/flight/checkout?factor=${local_id}` as Route);
     } else {
-      if (!selectedWentFlight) {
+      if (flightTab === 1) {
         toggleOpenDetailsDrawer(false);
         setSelectedWentFlight(data);
         if (selectedReturnFlight) {
-          const queryParams = createSearchparams(
-            { ...data, Classes: data.Classes },
-            selectedReturnFlight
-          );
+          const queryParams = createSearchparams(data, selectedReturnFlight);
           const local_id = uuidv4().substr(0, 6);
           localStorage.setItem(local_id, JSON.stringify(queryParams));
           router.push(`/flight/checkout?factor=${local_id}` as Route);
@@ -713,16 +712,18 @@ const TicketCard: FC<TicketCardProps> = ({
       } else {
         toggleOpenDetailsDrawer(false);
         setSelectedReturnFlight(data);
-        const queryParams = createSearchparams(selectedWentFlight, {
-          ...data,
-          Classes: data.Classes,
-        });
-        const local_id = uuidv4().substr(0, 6);
-        localStorage.setItem(local_id, JSON.stringify(queryParams));
-        router.push(`/flight/checkout?factor=${local_id}` as Route);
+        if (selectedWentFlight) {
+          const queryParams = createSearchparams(selectedWentFlight, data);
+          const local_id = uuidv4().substr(0, 6);
+          localStorage.setItem(local_id, JSON.stringify(queryParams));
+          router.push(`/flight/checkout?factor=${local_id}` as Route);
+        }
       }
     }
   };
+
+  // handle move to checkout page
+  // useEffect(() => {}, [selectedWentFlight, selectedReturnFlight]);
 
   // handle change show details
   const handleChangeShowDetails = () => {
@@ -1030,7 +1031,7 @@ const TicketCard: FC<TicketCardProps> = ({
               <div className="p-1 flex flex-col items-center justify-center gap-1">
                 <span className="flex-shrink-0">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${data.Airline.logo}`}
+                    src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}${data.Airline.media.logo.small}`}
                     width={38}
                     height={40}
                     className="w-10"
@@ -1279,16 +1280,16 @@ const TicketCard: FC<TicketCardProps> = ({
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
-              {` ${formatInputWithCommas(
+              {/* {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Child.Markup.final / 10
-              )}`}{" "}
+              )}`}{" "} */}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
             <div className="text-gray-400 text-xs flex justify-center">
               {" "}
-              {` ${formatInputWithCommas(
+              {/* {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Infant.Markup.final / 10
-              )}`}{" "}
+              )}`}{" "} */}
               <Toman height={15} width={15} className="text-gray-400" />
             </div>
           </div>
@@ -1553,7 +1554,7 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="col-span-1 flex flex-col items-center justify-center gap-1">
               <span className="flex-shrink-0">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}/media/airlines/${data.Airline.logo}`}
+                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL_1}${data.Airline.media.logo.small}`}
                   width={30}
                   height={30}
                   alt="air-logo"

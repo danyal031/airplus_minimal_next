@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   alpha,
@@ -28,6 +28,7 @@ const FlightFilterBox = () => {
     filteredSearchFlightResponseData,
     travelRoute,
     selectedWentFlight,
+    flightTab,
   } = useGlobalContext().flightContext.searchContext;
   const { setFlightFilter, flightFilteredItemsData } =
     useGlobalContext().flightContext.flightFilterContext;
@@ -62,6 +63,10 @@ const FlightFilterBox = () => {
       cabinType: [],
     });
   };
+
+  useEffect(() => {
+    resetFilters();
+  }, [flightTab]);
 
   // handle change cabin type
   const handleChangeCabinType = (newValue: string) => {
@@ -140,9 +145,7 @@ const FlightFilterBox = () => {
         <div className="bg-paper p-2 rounded-xl flex items-center justify-between w-full text-sm">
           <span className="text-text-main font-semibold cursor-pointer">
             تعداد نتایج:{" "}
-            {travelRoute === "oneWay"
-              ? filteredSearchFlightResponseData?.activeWent.length
-              : !selectedWentFlight
+            {flightTab === 1
               ? filteredSearchFlightResponseData?.activeWent.length
               : filteredSearchFlightResponseData?.activeReturn.length}{" "}
           </span>
