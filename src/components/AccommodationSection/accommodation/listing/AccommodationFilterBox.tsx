@@ -8,11 +8,9 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
-import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
-import LightModeIcon from "@mui/icons-material/LightMode";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import VillaIcon from "@mui/icons-material/Villa";
 import HomeIcon from "@mui/icons-material/Home";

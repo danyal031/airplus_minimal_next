@@ -1,14 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import {
-  alpha,
-  Button,
-  Checkbox,
-  Drawer,
-  IconButton,
-  useTheme,
-} from "@mui/material";
+import { Button, Checkbox, Drawer, IconButton, useTheme } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { styled } from "@mui/material/styles";

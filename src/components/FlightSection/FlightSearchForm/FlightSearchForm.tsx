@@ -1,6 +1,5 @@
 "use client";
 import {
-  Autocomplete,
   Box,
   Button,
   Drawer,
@@ -9,7 +8,7 @@ import {
   TextField,
   useTheme,
 } from "@mui/material";
-import React, { FC, useEffect, useImperativeHandle, useState } from "react";
+import React, { FC, useState } from "react";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -19,7 +18,6 @@ import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import HistoryIcon from "@mui/icons-material/History";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/navigation";

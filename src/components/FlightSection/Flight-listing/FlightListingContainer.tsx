@@ -1,7 +1,6 @@
 "use client";
-import React, { FC, Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import SectionGridFilterCard from "./SectionGridFilterCard";
-import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 
 const FlightListingContainer = () => {
   return (

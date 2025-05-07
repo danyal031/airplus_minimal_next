@@ -8,8 +8,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import React, { Suspense, useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import React, { useEffect, useState } from "react";
 import AccommodationFilterBox from "./AccommodationFilterBox";
 import AccommodationsList from "./AccommodationsList";
 

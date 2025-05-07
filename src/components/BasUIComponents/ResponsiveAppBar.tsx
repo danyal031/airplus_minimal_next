@@ -1,22 +1,10 @@
 "use client";
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Divider,
-  IconButton,
-  Menu,
-  TextField,
-  Toolbar,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
+import { AppBar, Container, Toolbar } from "@mui/material";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AvatarDropdown from "./AvatarDropdown";
-import { ConfigDataType } from "@/DataTypes/globalTypes";
 import { useGlobalContext } from "@/context/store";
 
 const ResponsiveAppBar = () => {

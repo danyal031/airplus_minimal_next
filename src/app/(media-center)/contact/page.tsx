@@ -1,8 +1,7 @@
 "use client";
 import { useGlobalContext } from "@/context/store";
-import { ConfigDataType } from "@/DataTypes/globalTypes";
 import { Paper, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const page = () => {
   // initial states

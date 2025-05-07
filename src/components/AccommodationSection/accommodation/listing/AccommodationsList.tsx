@@ -2,7 +2,7 @@
 import { useGlobalContext } from "@/context/store";
 import React, { FC, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { Checkbox, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppsIcon from "@mui/icons-material/Apps";
 import { motion } from "framer-motion";

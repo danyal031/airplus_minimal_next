@@ -1,10 +1,9 @@
 "use client";
-import React, { FC } from "react";
+import React from "react";
 import PriceRateBox from "./PriceRateBox";
 import TicketsList from "./TicketsList";
 import SelectedFlightsPanel from "./SelectedFlightsPanel";
 import { useGlobalContext } from "@/context/store";
-import { useSearchParams } from "next/navigation";
 import { FlightCardSkelton } from "@/components/Skelton-Components/FlightSection/FlightCard/FlightCardSkelton";
 
 const FlightsList = () => {

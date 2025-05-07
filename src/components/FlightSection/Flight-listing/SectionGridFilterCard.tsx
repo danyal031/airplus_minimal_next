@@ -1,13 +1,10 @@
 "use client";
-import React, { FC, Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import FlightFilterBox from "./FlightFilterBox";
 import FlightsList from "./FlightsList";
 import {
   Airline,
-  AirportDataType,
   Class,
-  FilteredItemsDataDataType,
-  FlightResponseDataType,
   FlightTicketDataType,
 } from "@/DataTypes/flight/flightTicket";
 import { useGlobalContext } from "@/context/store";
@@ -21,7 +18,6 @@ import {
   convertPersianToEnglishNumbers,
   formatDateWithSlash,
 } from "@/global-files/function";
-import { v4 as uuidv4 } from "uuid";
 
 const SectionGridFilterCard = () => {
   // initial states

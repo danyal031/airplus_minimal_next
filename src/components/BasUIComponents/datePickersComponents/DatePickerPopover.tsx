@@ -2,18 +2,11 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
   Drawer,
   IconButton,
   InputAdornment,
   Popover,
   TextField,
-  Typography,
   useMediaQuery,
 } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
@@ -21,11 +14,8 @@ import moment from "jalali-moment";
 import {
   applyMask,
   convertPersianToEnglishNumbers,
-  formatInputWithCommas,
   removeMask,
 } from "@/global-files/function";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ClearIcon from "@mui/icons-material/Clear";
 import { TypeDropOffLocationType } from "@/DataTypes/flight/flightTicket";
 import AddIcon from "@mui/icons-material/Add";

@@ -1,45 +1,21 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-import Link from "next/link";
+import React, { useState } from "react";
 import {
-  Avatar,
-  Box,
   Button,
-  Collapse,
-  IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemText,
-  Menu,
-  MenuItem,
   Popover,
-  Switch,
-  Tooltip,
-  Typography,
   useTheme,
 } from "@mui/material";
 interface Props {
   className?: string;
 }
 import Divider from "@mui/material/Divider";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { LoginDialog } from "../Login/LoginDialog";
-import SportsMotorsportsIcon from "@mui/icons-material/SportsMotorsports";
-import SportsHandballIcon from "@mui/icons-material/SportsHandball";
-import FaceIcon from "@mui/icons-material/Face";
 import { useRouter } from "next/navigation";
-import PaymentsIcon from "@mui/icons-material/Payments";
-import PeopleIcon from "@mui/icons-material/People";
 import { useGlobalContext } from "@/context/store";
 import useLogOut from "@/hooks/useLogOut";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ConfigDataType } from "@/DataTypes/globalTypes";
 
 export default function AvatarDropdown({ className = "" }: Props) {
   // initial states

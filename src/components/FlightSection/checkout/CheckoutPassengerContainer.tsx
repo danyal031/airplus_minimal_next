@@ -5,7 +5,6 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { v4 as uuidv4 } from "uuid";
 import { useGlobalContext } from "@/context/store";
 import {
-  ConfigDataType,
   defaultPassengerInformation,
   UserInformationDataType,
 } from "@/DataTypes/globalTypes";

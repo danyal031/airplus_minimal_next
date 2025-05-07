@@ -5,7 +5,6 @@ import {
   applyMask,
   calculateAgeCategory,
   convertPersianToEnglishNumbers,
-  convertToPersianDate,
   convertToPersianShortDate,
   formatInputWithCommas,
 } from "@/global-files/function";

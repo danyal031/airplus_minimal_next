@@ -1,15 +1,12 @@
 "use client";
 import { useGlobalContext } from "@/context/store";
 import React from "react";
-import { motion } from "framer-motion";
 import { Button } from "@mui/material";
 import {
-  convertToPersianDate,
   convertToPersianShortDate,
   formatInputWithCommas,
 } from "@/global-files/function";
 import Image from "next/image";
-import leftArrow from "/public/assets/images/flightSection/left-arrow.svg";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Toman } from "@/components/icons/IconToman";
 

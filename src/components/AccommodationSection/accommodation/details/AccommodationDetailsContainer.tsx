@@ -8,7 +8,6 @@ import {
 import {
   Button,
   Card,
-  CardActions,
   CardContent,
   Chip,
   Dialog,
@@ -53,7 +52,7 @@ import {
   defaultPassengerInformation,
 } from "@/DataTypes/globalTypes";
 import Map from "@/components/global/map/Map";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const AccommodationDetailsContainer = () => {
   // initial states
@@ -71,7 +70,6 @@ const AccommodationDetailsContainer = () => {
     setAccommodationPassengersCapacity,
     accommodationPassengersCapacity,
     setRoomsDetails,
-    roomsDetails,
   } = useGlobalContext().accommodationContext.accommodationSearch;
 
   // handle clear selected rooms

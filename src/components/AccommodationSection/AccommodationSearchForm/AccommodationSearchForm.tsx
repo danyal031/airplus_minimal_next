@@ -12,14 +12,13 @@ import {
   Tooltip,
 } from "@mui/material";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BusinessRoundedIcon from "@mui/icons-material/BusinessRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { recommendedAccommodations } from "@/global-files/axioses";
 import { debounce } from "lodash";
 import { styled, lighten, darken } from "@mui/system";
 import SearchAccommodationsProgress from "@/components/Skelton-Components/AccommodationSection/SearchAccommodationsProgress";
-import axios from "axios";
 import DatePickerComponent from "@/components/BasUIComponents/datePickersComponents/DatePickerComponent";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";

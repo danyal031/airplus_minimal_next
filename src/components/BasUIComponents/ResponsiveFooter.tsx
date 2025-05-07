@@ -1,30 +1,17 @@
 "use client";
-import {
-  BottomNavigation,
-  Box,
-  Collapse,
-  Divider,
-  IconButton,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import { Collapse, IconButton, TextField, useTheme } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import TtyIcon from "@mui/icons-material/Tty";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import AttachmentIcon from "@mui/icons-material/Attachment";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import warrantyLottie from "../../../public/assets/lottie/warranty.json";
 import supportLottie from "../../../public/assets/lottie/support.json";
 import onlineReserve from "../../../public/assets/lottie/onlineReserve.json";
 import helpixLottie from "../../../public/assets/lottie/Helpix.json";
 // import Lottie from "lottie-react";
-import { ConfigDataType } from "@/DataTypes/globalTypes";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import dynamic from "next/dynamic";

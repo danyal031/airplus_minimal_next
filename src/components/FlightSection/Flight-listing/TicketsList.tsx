@@ -8,13 +8,11 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import React, { FC, useEffect, useState } from "react";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import React, { FC, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import leftArrow from "/public/assets/images/flightSection/left-arrow.svg";
 import Image from "next/image";
-import airplaneDownArrow from "../../../../public/assets/images/flightSection/airplane-down-arrow.svg";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
 import { useGlobalContext } from "@/context/store";
 import { motion } from "framer-motion";
@@ -29,7 +27,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Route } from "next";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Toman } from "@/components/icons/IconToman";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const TicketsList = () => {
   // initial states
