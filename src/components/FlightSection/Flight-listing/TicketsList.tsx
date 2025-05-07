@@ -114,8 +114,9 @@ const TicketsList = () => {
               {renderFilterTab()}
             </div>
             <div className="grid grid-cols-1 gap-3">
-              {flightTab === 1
-                ? filteredSearchFlightResponseData?.activeWent.map(
+              {flightTab === 1 ? (
+                filteredSearchFlightResponseData?.activeWent.length > 0 ? (
+                  filteredSearchFlightResponseData?.activeWent.map(
                     (itemGroup, index) => {
                       const hasExtraContent = itemGroup.length > 1;
                       const item = itemGroup[0];
@@ -137,96 +138,43 @@ const TicketsList = () => {
                       );
                     }
                   )
-                : filteredSearchFlightResponseData?.activeReturn.map(
-                    (itemGroup, index) => {
-                      const hasExtraContent = itemGroup.length > 1;
-                      const item = itemGroup[0];
-                      return (
-                        <motion.div
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <span className="text-base font-semibold text-text-main">
+                      پرواز رفتی جهت نمایش موجود نیست
+                    </span>
+                  </div>
+                )
+              ) : filteredSearchFlightResponseData?.activeReturn.length > 0 ? (
+                filteredSearchFlightResponseData?.activeReturn.map(
+                  (itemGroup, index) => {
+                    const hasExtraContent = itemGroup.length > 1;
+                    const item = itemGroup[0];
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                      >
+                        <TicketCard
                           key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard
-                            key={index}
-                            data={item}
-                            index={index}
-                            itemGroup={itemGroup}
-                            hasExtraContent={hasExtraContent}
-                          />
-                        </motion.div>
-                      );
-                    }
-                  )}
-              {/* {travelRoute === "oneWay"
-                ? filteredSearchFlightResponseData?.activeWent.map(
-                    (itemGroup, index) => {
-                      const hasExtraContent = itemGroup.length > 1;
-                      const item = itemGroup[0];
-                      return (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard
-                            key={index}
-                            data={item}
-                            index={index}
-                            itemGroup={itemGroup}
-                            hasExtraContent={hasExtraContent}
-                          />
-                        </motion.div>
-                      );
-                    }
-                  )
-                : !selectedWentFlight
-                ? filteredSearchFlightResponseData?.activeWent.map(
-                    (itemGroup, index) => {
-                      const hasExtraContent = itemGroup.length > 1;
-                      const item = itemGroup[0];
-                      return (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard
-                            key={index}
-                            data={item}
-                            index={index}
-                            itemGroup={itemGroup}
-                            hasExtraContent={hasExtraContent}
-                          />
-                        </motion.div>
-                      );
-                    }
-                  )
-                : filteredSearchFlightResponseData?.activeReturn.map(
-                    (itemGroup, index) => {
-                      const hasExtraContent = itemGroup.length > 1;
-                      const item = itemGroup[0];
-                      return (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard
-                            key={index}
-                            data={item}
-                            index={index}
-                            itemGroup={itemGroup}
-                            hasExtraContent={hasExtraContent}
-                          />
-                        </motion.div>
-                      );
-                    }
-                  )} */}
+                          data={item}
+                          index={index}
+                          itemGroup={itemGroup}
+                          hasExtraContent={hasExtraContent}
+                        />
+                      </motion.div>
+                    );
+                  }
+                )
+              ) : (
+                <div className="flex items-center justify-center">
+                  <span className="text-base font-semibold text-text-main">
+                    پرواز برگشتی جهت نمایش موجود نیست
+                  </span>
+                </div>
+              )}
               <div className="grid grid-cols-1 gap-3 mt-12">
                 {flightTab === 1 &&
                 filteredSearchFlightResponseData?.inactiveWent &&
@@ -275,44 +223,6 @@ const TicketsList = () => {
                     </>
                   )
                 )}
-                {/* {travelRoute === "oneWay"
-                  ? filteredSearchFlightResponseData?.inactiveWent.map(
-                      (item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard key={index} data={item} index={index} />
-                        </motion.div>
-                      )
-                    )
-                  : !selectedWentFlight
-                  ? filteredSearchFlightResponseData?.inactiveWent.map(
-                      (item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard key={index} data={item} index={index} />
-                        </motion.div>
-                      )
-                    )
-                  : filteredSearchFlightResponseData?.inactiveReturn.map(
-                      (item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard key={index} data={item} index={index} />
-                        </motion.div>
-                      )
-                    )} */}
               </div>
             </div>
           </div>

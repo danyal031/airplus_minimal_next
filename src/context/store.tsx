@@ -210,7 +210,7 @@ const GlobalContext = createContext<ContextProps>({
       setDestination: () => {},
       airports: [],
       setAirports: () => {},
-      ticketLoading: false,
+      ticketLoading: true,
       setTicketLoading: () => {},
       changeStatusRequest: false,
       setChangeStatusRequest: () => {},
@@ -339,7 +339,7 @@ export const GlobalContextProvider = ({
     useState<boolean>(false);
   const [changeStatusRequest, setChangeStatusRequest] =
     useState<boolean>(false);
-  const [ticketLoading, setTicketLoading] = useState<boolean>(false);
+  const [ticketLoading, setTicketLoading] = useState<boolean>(true);
   const [airports, setAirports] = useState<AirportDataType[] | []>([]);
   const [dropOffLocationType, setDropOffLocationType] =
     useState<TypeDropOffLocationType>("oneWay");
