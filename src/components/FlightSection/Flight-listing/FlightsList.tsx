@@ -8,7 +8,7 @@ import { FlightCardSkelton } from "@/components/Skelton-Components/FlightSection
 
 const FlightsList = () => {
   // initial states
-  const { filteredSearchFlightResponseData, ticketLoading, travelRoute } =
+  const { ticketLoading, travelRoute } =
     useGlobalContext().flightContext.searchContext;
   return (
     <div className="flex flex-col items-start justify-start gap-3">
