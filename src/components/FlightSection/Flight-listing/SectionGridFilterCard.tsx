@@ -18,6 +18,54 @@ import {
   convertPersianToEnglishNumbers,
   formatDateWithSlash,
 } from "@/global-files/function";
+import moment from "jalali-moment";
+import { useGlobalActions } from "@/context/actionStore";
+
+export const groupActiveFlightsByKey = (
+  flights: FlightTicketDataType[]
+): FlightTicketDataType[][] => {
+  const groupedMap: Record<string, FlightTicketDataType[]> = {};
+
+  flights.forEach((item) => {
+    const key = `${item.Origin.Iata.iata}|${item.Destination.Iata.iata}|${item.Airline.iata}|${item.FlightNumber}|${item.DepartureDateTime}`;
+    if (!groupedMap[key]) {
+      groupedMap[key] = [];
+    }
+    groupedMap[key].push(item);
+  });
+
+  return Object.values(groupedMap);
+};
+
+export const processFlights = (flights: any[]) => {
+  const active: FlightTicketDataType[] = [];
+  const inactiveMap = new Map<string, FlightTicketDataType>();
+
+  flights.forEach((item) => {
+    item.Classes.forEach((classItem: Class) => {
+      const merged: FlightTicketDataType = {
+        ...item,
+        Classes: classItem,
+      };
+      const isAvailable = classItem.AvailableSeat;
+      const isPayable = classItem.Financial.Adult.Payable !== 0;
+
+      if (isAvailable && isPayable) {
+        active.push(merged);
+      } else {
+        const key = `${item.Origin.Iata.iata}|${item.Destination.Iata.iata}|${item.Airline.iata}|${item.FlightNumber}|${item.DepartureDateTime}`;
+        if (!inactiveMap.has(key)) {
+          inactiveMap.set(key, merged);
+        }
+      }
+    });
+  });
+
+  return {
+    active,
+    inactive: Array.from(inactiveMap.values()),
+  };
+};
 
 const SectionGridFilterCard = () => {
   // initial states
@@ -56,7 +104,7 @@ const SectionGridFilterCard = () => {
     setFlightFilteredItemsData,
     setSelectedAirlineFiltered,
   } = useGlobalContext().flightContext.flightFilterContext;
-
+  const { handleFlightSearch } = useGlobalActions().flightActions;
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -74,18 +122,19 @@ const SectionGridFilterCard = () => {
   }, []);
 
   const paramsValidation = (searchParams: ReadonlyURLSearchParams) => {
-    let dateRegex: RegExp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/i;
-    let departureCheck = dateRegex.test(
-      convertPersianToEnglishNumbers(
-        searchParams.get("departure_date") as string
-      )
-    );
-    let returnCheck =
-      dateRegex.test(
-        convertPersianToEnglishNumbers(
-          searchParams.get("returning_date") as string
-        )
-      ) || (searchParams.get("returning_date") as string) === "false";
+    // let dateRegex: RegExp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/i;
+    // let departureCheck = dateRegex.test(
+    //   convertPersianToEnglishNumbers(
+    //     searchParams.get("departure_date") as string
+    //   )
+    // );
+    // let returnCheck =
+    //   dateRegex.test(
+    //     convertPersianToEnglishNumbers(
+    //       searchParams.get("returning_date") as string
+    //     )
+    //   ) || (searchParams.get("returning_date") as string) === "false";
+
     let originCheck = !!airports.find(
       (a) => a.iata === searchParams.get("origin")
     );
@@ -93,222 +142,208 @@ const SectionGridFilterCard = () => {
       (a) => a.iata === searchParams.get("destination")
     );
     console.log({
-      departureCheck,
-      returnCheck,
+      // departureCheck,
+      // returnCheck,
       originCheck,
       destinationCheck,
     });
-    return departureCheck && returnCheck && originCheck && destinationCheck;
-  };
-
-  const groupActiveFlightsByKey = (
-    flights: FlightTicketDataType[]
-  ): FlightTicketDataType[][] => {
-    const groupedMap: Record<string, FlightTicketDataType[]> = {};
-
-    flights.forEach((item) => {
-      const key = `${item.Origin.Iata.iata}|${item.Destination.Iata.iata}|${item.Airline.iata}|${item.FlightNumber}|${item.DepartureDateTime}`;
-      if (!groupedMap[key]) {
-        groupedMap[key] = [];
-      }
-      groupedMap[key].push(item);
-    });
-
-    return Object.values(groupedMap);
-  };
-
-  const processFlights = (flights: any[]) => {
-    const active: FlightTicketDataType[] = [];
-    const inactiveMap = new Map<string, FlightTicketDataType>();
-
-    flights.forEach((item) => {
-      item.Classes.forEach((classItem: Class) => {
-        const merged: FlightTicketDataType = {
-          ...item,
-          Classes: classItem,
-        };
-        const isAvailable = classItem.AvailableSeat;
-        const isPayable = classItem.Financial.Adult.Payable !== 0;
-
-        if (isAvailable && isPayable) {
-          active.push(merged);
-        } else {
-          const key = `${item.Origin.Iata.iata}|${item.Destination.Iata.iata}|${item.Airline.iata}|${item.FlightNumber}|${item.DepartureDateTime}`;
-          if (!inactiveMap.has(key)) {
-            inactiveMap.set(key, merged);
-          }
-        }
-      });
-    });
-
-    return {
-      active,
-      inactive: Array.from(inactiveMap.values()),
-    };
+    // return departureCheck && returnCheck && originCheck && destinationCheck;
+    return originCheck && destinationCheck;
   };
 
   // handle search
-  const handleSearch = () => {
-    setFilteredSearchFlightResponseData(null);
-    setOrigin(airports.find((a) => a.iata === searchParams.get("origin")));
-    setDestination(
-      airports.find((a) => a.iata === searchParams.get("destination"))
-    );
-    setFromDate(searchParams.get("departure_date"));
-    if (
-      searchParams.get("returning_date") !== "false" &&
-      searchParams.get("returning_date")
-    ) {
-      setToDate(searchParams.get("returning_date"));
-      setTravelRoute("roundTrip");
-    } else {
-      setTravelRoute("oneWay");
-    }
-    setTicketLoading(true);
-    getOnlineFlightSearch({
-      origin: searchParams.get("origin"),
-      destination: searchParams.get("destination"),
-      departure_date:
-        searchParams.get("departure_date") !== "false"
-          ? formatDateWithSlash(searchParams.get("departure_date") as string)
-          : false,
-      returning_date:
-        searchParams.get("returning_date") !== "false"
-          ? formatDateWithSlash(searchParams.get("returning_date") as string)
-          : false,
-    })
-      .then((response: any) => {
-        console.log("flight search response:", response);
+  // const handleSearch = ({
+  //   origin,
+  //   destination,
+  //   departure_date,
+  //   returning_date,
+  // }: {
+  //   origin: string;
+  //   destination: string;
+  //   departure_date: string;
+  //   returning_date: string | false;
+  // }) => {
+  //   setFilteredSearchFlightResponseData(null);
+  //   setTicketLoading(true);
+  //   setSearching(false);
+  //   getOnlineFlightSearch({
+  //     origin,
+  //     destination,
+  //     departure_date,
+  //     returning_date,
+  //   })
+  //     .then((response: any) => {
+  //       console.log("flight search response:", response);
 
-        const wentResult = processFlights(response.data.Went);
-        const returnResult = processFlights(response.data.Return);
+  //       setSearching(true);
 
-        const groupedWent = groupActiveFlightsByKey(wentResult.active);
-        const groupedReturn = groupActiveFlightsByKey(returnResult.active);
+  //       setOrigin(response.search.origin);
+  //       setDestination(response.search.destination);
+  //       setFromDate(response.search.departure_date);
+  //       if (response.search.returning_date) {
+  //         setToDate(response.search.returning_date);
+  //         setTravelRoute("roundTrip");
+  //       } else {
+  //         setToDate(null);
+  //         setTravelRoute("oneWay");
+  //       }
 
-        console.log("groupedWent", groupedWent);
+  //       const wentResult = processFlights(response.data.Went);
+  //       const returnResult = processFlights(response.data.Return);
 
-        setSearchFlightResponseData({
-          activeWent: groupedWent,
-          activeReturn: groupedReturn,
-          inactiveWent: wentResult.inactive,
-          inactiveReturn: returnResult.inactive,
-        });
+  //       const groupedWent = groupActiveFlightsByKey(wentResult.active);
+  //       const groupedReturn = groupActiveFlightsByKey(returnResult.active);
 
-        setFilteredSearchFlightResponseData({
-          activeWent: groupedWent,
-          activeReturn: groupedReturn,
-          inactiveWent: wentResult.inactive,
-          inactiveReturn: returnResult.inactive,
-        });
+  //       console.log("groupedWent", groupedWent);
 
-        setIsInitialSearchDone(true);
-        setChangeStatusRequest(false);
-        setTicketLoading(false);
-      })
-      .catch(() => {
-        setChangeStatusRequest(false);
-      });
-  };
+  //       setSearchFlightResponseData({
+  //         activeWent: groupedWent,
+  //         activeReturn: groupedReturn,
+  //         inactiveWent: wentResult.inactive,
+  //         inactiveReturn: returnResult.inactive,
+  //       });
+
+  //       setFilteredSearchFlightResponseData({
+  //         activeWent: groupedWent,
+  //         activeReturn: groupedReturn,
+  //         inactiveWent: wentResult.inactive,
+  //         inactiveReturn: returnResult.inactive,
+  //       });
+
+  //       setTicketLoading(false);
+  //     })
+  //     .catch(() => {
+  //       setSearching(true);
+  //     });
+  // };
 
   useEffect(() => {
-    if (!isInitialSearchDone && !airportsLoading) {
-      if (paramsValidation(searchParams)) {
-        setFlightTab(1);
-        handleSearch();
-      } else {
-        router.push("/");
-      }
-    }
-  }, [searchParams, airportsLoading]);
+    // if (paramsValidation(searchParams)) {
+    const origin = searchParams.get("origin") as string;
+    const destination = searchParams.get("destination") as string;
+
+    const departureParam = searchParams.get("departure_date");
+    const returningParam = searchParams.get("returning_date");
+
+    const departure_date = departureParam
+      ? formatDateWithSlash(departureParam)
+      : moment().add(1, "day").format("jYYYY/jMM/jDD");
+
+    const returning_date =
+      departureParam && returningParam && returningParam !== "false"
+        ? formatDateWithSlash(returningParam)
+        : false;
+
+    handleFlightSearch({
+      origin,
+      destination,
+      departure_date,
+      returning_date,
+    });
+    // } else {
+    // router.push("/");
+    // console.log("not valid");
+    // }
+  }, []);
+
+  // useEffect(() => {
+  //   if (!isInitialSearchDone && !airportsLoading) {
+  //     if (paramsValidation(searchParams)) {
+  //       setFlightTab(1);
+  //       handleSearch();
+  //     } else {
+  //       router.push("/");
+  //     }
+  //   }
+  // }, [searchParams, airportsLoading]);
 
   useEffect(() => {
     console.log("searchFlightResponseData", searchFlightResponseData);
   }, [searchFlightResponseData]);
 
   // handle search  by status request
-  const handleSearchByStatusRequest = () => {
-    const originMatch = searchParams.get("origin") === origin?.iata;
-    const destinationMatch =
-      searchParams.get("destination") === destination?.iata;
-    const departureDateMatch =
-      searchParams.get("departure_date") === fromDate?.toString();
-    const returningDateMatch =
-      searchParams.get("returning_date") === (toDate?.toString() || "false");
-    if (
-      !isInitialSearchDone &&
-      originMatch &&
-      destinationMatch &&
-      departureDateMatch &&
-      returningDateMatch
-    ) {
-      setFilteredSearchFlightResponseData(null);
-      setOrigin(airports.find((a) => a.iata === searchParams.get("origin")));
-      setDestination(
-        airports.find((a) => a.iata === searchParams.get("destination"))
-      );
-      setFromDate(searchParams.get("departure_date"));
+  // const handleSearchByStatusRequest = () => {
+  //   const originMatch = searchParams.get("origin") === origin?.iata;
+  //   const destinationMatch =
+  //     searchParams.get("destination") === destination?.iata;
+  //   const departureDateMatch =
+  //     searchParams.get("departure_date") === fromDate?.toString();
+  //   const returningDateMatch =
+  //     searchParams.get("returning_date") === (toDate?.toString() || "false");
+  //   if (
+  //     !isInitialSearchDone &&
+  //     originMatch &&
+  //     destinationMatch &&
+  //     departureDateMatch &&
+  //     returningDateMatch
+  //   ) {
+  //     setFilteredSearchFlightResponseData(null);
+  //     setOrigin(airports.find((a) => a.iata === searchParams.get("origin")));
+  //     setDestination(
+  //       airports.find((a) => a.iata === searchParams.get("destination"))
+  //     );
+  //     setFromDate(searchParams.get("departure_date"));
 
-      if (
-        searchParams.get("returning_date") !== "false" &&
-        searchParams.get("returning_date")
-      ) {
-        setTravelRoute("roundTrip");
-        setToDate(searchParams.get("returning_date"));
-      } else {
-        setTravelRoute("oneWay");
-      }
-      setFlightTab(1);
-      getOnlineFlightSearch({
-        origin: searchParams.get("origin"),
-        destination: searchParams.get("destination"),
-        departure_date:
-          searchParams.get("departure_date") !== "false"
-            ? formatDateWithSlash(searchParams.get("departure_date") as string)
-            : false,
-        returning_date:
-          searchParams.get("returning_date") !== "false"
-            ? formatDateWithSlash(searchParams.get("returning_date") as string)
-            : false,
-      })
-        .then((response: any) => {
-          console.log("flight search response:", response);
+  //     if (
+  //       searchParams.get("returning_date") !== "false" &&
+  //       searchParams.get("returning_date")
+  //     ) {
+  //       setTravelRoute("roundTrip");
+  //       setToDate(searchParams.get("returning_date"));
+  //     } else {
+  //       setTravelRoute("oneWay");
+  //     }
+  //     setFlightTab(1);
+  //     getOnlineFlightSearch({
+  //       origin: searchParams.get("origin"),
+  //       destination: searchParams.get("destination"),
+  //       departure_date:
+  //         searchParams.get("departure_date") !== "false"
+  //           ? formatDateWithSlash(searchParams.get("departure_date") as string)
+  //           : false,
+  //       returning_date:
+  //         searchParams.get("returning_date") !== "false"
+  //           ? formatDateWithSlash(searchParams.get("returning_date") as string)
+  //           : false,
+  //     })
+  //       .then((response: any) => {
+  //         console.log("flight search response:", response);
 
-          const wentResult = processFlights(response.data.Went);
-          const returnResult = processFlights(response.data.Return);
+  //         const wentResult = processFlights(response.data.Went);
+  //         const returnResult = processFlights(response.data.Return);
 
-          const groupedWent = groupActiveFlightsByKey(wentResult.active);
-          const groupedReturn = groupActiveFlightsByKey(returnResult.active);
+  //         const groupedWent = groupActiveFlightsByKey(wentResult.active);
+  //         const groupedReturn = groupActiveFlightsByKey(returnResult.active);
 
-          console.log("groupedWent", groupedWent);
+  //         console.log("groupedWent", groupedWent);
 
-          setSearchFlightResponseData({
-            activeWent: groupedWent,
-            activeReturn: groupedReturn,
-            inactiveWent: wentResult.inactive,
-            inactiveReturn: returnResult.inactive,
-          });
+  //         setSearchFlightResponseData({
+  //           activeWent: groupedWent,
+  //           activeReturn: groupedReturn,
+  //           inactiveWent: wentResult.inactive,
+  //           inactiveReturn: returnResult.inactive,
+  //         });
 
-          setFilteredSearchFlightResponseData({
-            activeWent: groupedWent,
-            activeReturn: groupedReturn,
-            inactiveWent: wentResult.inactive,
-            inactiveReturn: returnResult.inactive,
-          });
+  //         setFilteredSearchFlightResponseData({
+  //           activeWent: groupedWent,
+  //           activeReturn: groupedReturn,
+  //           inactiveWent: wentResult.inactive,
+  //           inactiveReturn: returnResult.inactive,
+  //         });
 
-          setIsInitialSearchDone(true);
-          setChangeStatusRequest(false);
-          setTicketLoading(false);
-        })
-        .catch(() => {
-          setChangeStatusRequest(false);
-        });
-    }
-  };
+  //         setIsInitialSearchDone(true);
+  //         setChangeStatusRequest(false);
+  //         setTicketLoading(false);
+  //       })
+  //       .catch(() => {
+  //         setChangeStatusRequest(false);
+  //       });
+  //   }
+  // };
 
-  useEffect(() => {
-    handleSearchByStatusRequest();
-  }, [changeStatusRequest]);
+  // useEffect(() => {
+  //   handleSearchByStatusRequest();
+  // }, [changeStatusRequest]);
 
   // handle filters
   useEffect(() => {

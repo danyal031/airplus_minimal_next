@@ -21,8 +21,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/navigation";
-import { convertPersianToEnglishNumbers } from "@/global-files/function";
+import {
+  applyMask,
+  convertPersianToEnglishNumbers,
+  formatDateWithDash,
+  formatDateWithSlash,
+} from "@/global-files/function";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useGlobalActions } from "@/context/actionStore";
 
 const FlightSearchForm = () => {
   // initial states
@@ -39,12 +45,12 @@ const FlightSearchForm = () => {
     dropOffLocationType,
     setIsInitialSearchDone,
   } = useGlobalContext().flightContext.searchContext;
+  const { handleFlightSearch } = useGlobalActions().flightActions;
+
   // handle navigate
   const router = useRouter();
 
   const handleTransfer = () => {
-    setTicketLoading(true);
-
     router.push(
       `/listing/flights?origin=${origin?.iata}&destination=${
         destination?.iata
@@ -57,15 +63,15 @@ const FlightSearchForm = () => {
   };
 
   const handleClickSubmit = (submit = false) => {
-    // if (refFlightSearch.current) {
-    // refFlightSearch.current ? refFlightSearch.current.handleTrigger() : "";
-    // if (refFlightSearch.current.getIsValid()) {
-    handleTransfer();
-    setTravelRoute(dropOffLocationType);
-    setChangeStatusRequest(true);
-    setIsInitialSearchDone(false);
-    // }
-    // }
+    if (origin && destination && fromDate) {
+      handleTransfer();
+      handleFlightSearch({
+        origin: origin?.iata as string,
+        destination: destination?.iata as string,
+        departure_date: formatDateWithSlash(fromDate as string),
+        returning_date: toDate ? formatDateWithSlash(toDate) : false,
+      });
+    }
   };
   const renderDatePicker = () => {
     return (

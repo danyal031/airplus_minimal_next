@@ -38,6 +38,7 @@ import ErrorBoundaryComponent from "@/components/global/error-boundary/ErrorBoun
 import { ErrorBoundary } from "react-error-boundary";
 import App from "@/components/layouts/App";
 import { ReCaptchaProvider } from "next-recaptcha-v3";
+import { GlobalActionsProvider, useGlobalActions } from "./actionStore";
 
 // import { FallbackProps } from "react-error-boundary";
 // const App = dynamic(() => import("@/components/layouts/App"), {
@@ -118,6 +119,8 @@ interface ContextProps {
       setOpenFlightFilterDrawer: Dispatch<SetStateAction<boolean>>;
       flightTab: number;
       setFlightTab: Dispatch<SetStateAction<number>>;
+      allowToSearchFlight: boolean;
+      setAllowToSearchFlight: Dispatch<SetStateAction<boolean>>;
     };
     flightFilterContext: {
       flightFilter: any;
@@ -234,6 +237,8 @@ const GlobalContext = createContext<ContextProps>({
       setOpenFlightFilterDrawer: () => {},
       flightTab: 1,
       setFlightTab: () => {},
+      allowToSearchFlight: false,
+      setAllowToSearchFlight: () => {},
     },
     flightFilterContext: {
       flightFilter: {
@@ -289,6 +294,7 @@ interface GlobalContextProviderProps {
 export const GlobalContextProvider = ({
   children,
 }: GlobalContextProviderProps) => {
+  // action context
   // login
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
@@ -352,6 +358,8 @@ export const GlobalContextProvider = ({
     undefined
   );
   const [flightTab, setFlightTab] = useState<number>(1);
+  const [allowToSearchFlight, setAllowToSearchFlight] =
+    useState<boolean>(false);
   // search Accommodation
   const [accommodationFromDate, setAccommodationFromDate] = useState<
     string | null
@@ -454,6 +462,8 @@ export const GlobalContextProvider = ({
                 setOpenFlightFilterDrawer,
                 flightTab,
                 setFlightTab,
+                allowToSearchFlight,
+                setAllowToSearchFlight,
               },
               flightFilterContext: {
                 flightFilter,
@@ -496,11 +506,13 @@ export const GlobalContextProvider = ({
             },
           }}
         >
-          <ReCaptchaProvider
-            reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-          >
-            <App>{children}</App>
-          </ReCaptchaProvider>
+          <GlobalActionsProvider>
+            <ReCaptchaProvider
+              reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+            >
+              <App>{children}</App>
+            </ReCaptchaProvider>
+          </GlobalActionsProvider>
         </GlobalContext.Provider>
       </ErrorBoundary>
     </>

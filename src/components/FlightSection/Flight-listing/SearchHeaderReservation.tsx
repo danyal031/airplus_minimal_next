@@ -10,7 +10,7 @@ import AccommodationSearchForm from "@/components/AccommodationSection/Accommoda
 
 const SearchHeaderReservation = () => {
   // initial states
-  const { origin, destination } =
+  const { origin, destination, fromDate, toDate } =
     useGlobalContext().flightContext.searchContext;
   const [showSummarySearch, setShowSummarySearch] = useState<boolean>(true);
   const [tabValue, setTabValue] = useState<string>("1");
@@ -110,12 +110,10 @@ const SearchHeaderReservation = () => {
             </span>{" "}
           </div>
           <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
-            <span className={`text-paper font-semibold`}>
-              رفت: {searchParams.get("departure_date")}
-            </span>{" "}
-            {searchParams.get("returning_date") !== "false" && (
+            <span className={`text-paper font-semibold`}>رفت: {fromDate}</span>{" "}
+            {toDate && (
               <span className={`text-paper font-semibold`}>
-                برگشت: {searchParams.get("returning_date")}
+                برگشت: {toDate}
               </span>
             )}
           </div>
