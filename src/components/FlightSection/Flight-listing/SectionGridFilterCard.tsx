@@ -71,31 +71,13 @@ const SectionGridFilterCard = () => {
   // initial states
   const [airportsLoading, setAirportsLoading] = useState(true);
   const {
-    isInitialSearchDone,
     setFilteredSearchFlightResponseData,
-    setOrigin,
-    setDestination,
-    setTravelRoute,
-    setTicketLoading,
-    setSearchFlightResponseData,
-    setChangeStatusRequest,
-    setIsInitialSearchDone,
-    changeStatusRequest,
-    origin,
-    destination,
-    fromDate,
-    toDate,
     searchFlightResponseData,
     travelRoute,
-    selectedWentFlight,
-    ticketLoading,
     setAirports,
     airports,
-    setFromDate,
-    setToDate,
-    setSearchInActiveFlights,
-    setFlightTab,
     flightTab,
+    isFlightSearching,
   } = useGlobalContext().flightContext.searchContext;
   const {
     flightFilter,
@@ -233,13 +215,15 @@ const SectionGridFilterCard = () => {
       departureParam && returningParam && returningParam !== "false"
         ? formatDateWithSlash(returningParam)
         : false;
+    if (!isFlightSearching) {
+      handleFlightSearch({
+        origin,
+        destination,
+        departure_date,
+        returning_date,
+      });
+    }
 
-    handleFlightSearch({
-      origin,
-      destination,
-      departure_date,
-      returning_date,
-    });
     // } else {
     // router.push("/");
     // console.log("not valid");

@@ -39,11 +39,7 @@ const FlightSearchForm = () => {
     setToDate,
     origin,
     destination,
-    setTicketLoading,
-    setTravelRoute,
-    setChangeStatusRequest,
-    dropOffLocationType,
-    setIsInitialSearchDone,
+    isFlightSearching,
   } = useGlobalContext().flightContext.searchContext;
   const { handleFlightSearch } = useGlobalActions().flightActions;
 
@@ -63,7 +59,7 @@ const FlightSearchForm = () => {
   };
 
   const handleClickSubmit = (submit = false) => {
-    if (origin && destination && fromDate) {
+    if (origin && destination && fromDate && !isFlightSearching) {
       handleTransfer();
       handleFlightSearch({
         origin: origin?.iata as string,
