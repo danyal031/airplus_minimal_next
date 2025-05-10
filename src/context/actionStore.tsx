@@ -41,9 +41,9 @@ export const GlobalActionsProvider = ({
     setToDate,
     setTravelRoute,
     setSearchFlightResponseData,
+    setIsFlightSearching,
   } = useGlobalContext().flightContext.searchContext;
   //   initial states
-  const [searching, setSearching] = useState<boolean>(false);
 
   const handleFlightSearch = ({
     origin,
@@ -58,7 +58,7 @@ export const GlobalActionsProvider = ({
   }) => {
     setFilteredSearchFlightResponseData(null);
     setTicketLoading(true);
-    setSearching(true);
+    setIsFlightSearching(true);
     getOnlineFlightSearch({
       origin,
       destination,
@@ -112,7 +112,7 @@ export const GlobalActionsProvider = ({
       })
       .catch(() => {})
       .finally(() => {
-        setSearching(false);
+        setIsFlightSearching(false);
       });
   };
 

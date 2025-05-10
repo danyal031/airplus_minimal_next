@@ -121,6 +121,8 @@ interface ContextProps {
       setFlightTab: Dispatch<SetStateAction<number>>;
       allowToSearchFlight: boolean;
       setAllowToSearchFlight: Dispatch<SetStateAction<boolean>>;
+      isFlightSearching: boolean;
+      setIsFlightSearching: Dispatch<SetStateAction<boolean>>;
     };
     flightFilterContext: {
       flightFilter: any;
@@ -239,6 +241,8 @@ const GlobalContext = createContext<ContextProps>({
       setFlightTab: () => {},
       allowToSearchFlight: false,
       setAllowToSearchFlight: () => {},
+      isFlightSearching: false,
+      setIsFlightSearching: () => {},
     },
     flightFilterContext: {
       flightFilter: {
@@ -360,6 +364,7 @@ export const GlobalContextProvider = ({
   const [flightTab, setFlightTab] = useState<number>(1);
   const [allowToSearchFlight, setAllowToSearchFlight] =
     useState<boolean>(false);
+  const [isFlightSearching, setIsFlightSearching] = useState<boolean>(false);
   // search Accommodation
   const [accommodationFromDate, setAccommodationFromDate] = useState<
     string | null
@@ -464,6 +469,8 @@ export const GlobalContextProvider = ({
                 setFlightTab,
                 allowToSearchFlight,
                 setAllowToSearchFlight,
+                isFlightSearching,
+                setIsFlightSearching,
               },
               flightFilterContext: {
                 flightFilter,
