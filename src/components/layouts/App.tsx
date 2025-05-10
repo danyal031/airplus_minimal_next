@@ -17,14 +17,23 @@ import ProgressLoading from "../BasUIComponents/ProgressLoading";
 import { LoginDialog } from "../Login/LoginDialog";
 import { usePathname } from "next/navigation";
 import { LogoutListener } from "../LogoutListener";
+import Cookies from "universal-cookie";
+
 // import Loading from "./loading";
 
 const App = ({ children }: { children: React.ReactNode }) => {
   // useEffect(() => {
   //   const owner = localStorage.getItem("owner");
 
+  // if (process.env.NODE_ENV === "production") {
+  //   console.log = function () {};
+  // }
   if (process.env.NODE_ENV === "production") {
-    console.log = function () {};
+    const cookies = new Cookies();
+    const devKey = cookies.get("developer");
+    if (devKey !== "dadeh724!@#") {
+      console.log = function () {};
+    }
   }
   // }, []);
 
