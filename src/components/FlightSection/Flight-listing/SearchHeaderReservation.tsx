@@ -283,11 +283,11 @@ const SearchHeaderReservation = () => {
             </span>{" "}
             <div className="flex items-center justify-center gap-3 text-xs">
               <span className={`text-paper font-light opacity-50`}>
-                رفت: {searchParams.get("departure_date")}
+                رفت: {formatDateWithSlash(fromDate as string)}
               </span>{" "}
-              {searchParams.get("returning_date") !== "false" && (
+              {toDate && (
                 <span className={`text-paper font-light opacity-50`}>
-                  برگشت: {searchParams.get("returning_date")}
+                  برگشت: {formatDateWithSlash(toDate as string)}
                 </span>
               )}
             </div>

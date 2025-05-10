@@ -108,18 +108,17 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
   );
 
   useEffect(() => {
+    console.log("Selected days:", firstSelectedDay, secondSelectedDay);
+
     if (firstSelectedDay) {
       setFromDate(applyMask("date", firstSelectedDay));
     }
     if (secondSelectedDay) {
       setToDate(applyMask("date", secondSelectedDay));
-    } else {
-      setToDate(null);
     }
-  }, [firstSelectedDay, secondSelectedDay]);
-
-  useEffect(() => {
-    console.log("Selected days:", firstSelectedDay, secondSelectedDay);
+    // else {
+    //   setToDate(null);
+    // }
   }, [firstSelectedDay, secondSelectedDay]);
 
   const changeMonth = (direction: string) => {
@@ -299,21 +298,6 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                 id="outlined-basic"
                 variant="outlined"
                 value={toDate ? toDate : ""}
-                // onClick={(e: any) => {
-                //   if (forcedReturn) {
-                //     setOpenDatePickerPopover(true);
-                //     setAnchorEl(e.currentTarget);
-                //   } else {
-                //     if (dropOffLocationType === "oneWay") {
-                //       setDropOffLocationType("roundTrip");
-                //       setOpenDatePickerPopover(true);
-                //       setAnchorEl(e.currentTarget);
-                //     } else {
-                //       setOpenDatePickerPopover(true);
-                //       setAnchorEl(e.currentTarget);
-                //     }
-                //   }
-                // }}
                 InputProps={{
                   readOnly: true,
                   sx: {
