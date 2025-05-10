@@ -445,7 +445,7 @@ const FlightFilterBox = () => {
   const renderFilterContainerOnDesktop = () => {
     return (
       <>
-        <div className="hidden md:flex flex-col items-center justify-start gap-2">
+        <div className="hidden md:flex flex-col items-center justify-start gap-2 sticky top-44">
           {renderSummeryFilterData()}
           {renderTimeToMove()}
           {renderAirlines()}
