@@ -157,7 +157,7 @@ const SearchHeaderReservation = () => {
           flightSummerySearch()
         ) : (
           <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
-            loading...
+            درحال بارگذاری...{" "}
           </div>
         );
       case "2":
@@ -329,7 +329,7 @@ const SearchHeaderReservation = () => {
             renderSummerySearchOnMobile()
           ) : (
             <div className="flex items-center justify-center text-black">
-              loading...
+              درحال بارگذاری...
             </div>
           )}
         </div>
