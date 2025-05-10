@@ -292,11 +292,14 @@ const PriceRateBox = () => {
               </span>
             </div>
             <div className="flex items-center justify-center gap-3">
-              <span className="text-text-main text-sm font-semibold">
+              {/* <span className="text-text-main text-sm font-semibold">
                 مدت سفر
               </span>
               <span className="text-text-main text-sm font-semibold">
-                8 روز
+                ... روز
+              </span> */}
+              <span className="text-text-main text-sm font-semibold">
+                مدت سفر ... روز
               </span>
             </div>
           </div>
