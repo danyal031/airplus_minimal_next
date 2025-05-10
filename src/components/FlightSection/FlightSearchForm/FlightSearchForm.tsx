@@ -48,7 +48,7 @@ const FlightSearchForm = () => {
 
   const handleTransfer = () => {
     router.push(
-      `/listing/flights?origin=${origin?.iata}&destination=${
+      `/search/flights?origin=${origin?.iata}&destination=${
         destination?.iata
       }&departure_date=${convertPersianToEnglishNumbers(
         fromDate as string

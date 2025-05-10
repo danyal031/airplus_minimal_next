@@ -342,7 +342,7 @@ const PriceRateBox = () => {
         "returning_date",
         returning ? convertPersianToEnglishNumbers(returning) : "false"
       );
-      router.push(`/listing/flights?${searchParams.toString()}`);
+      router.push(`/search/flights?${searchParams.toString()}`);
     };
 
     // handle change flight search date

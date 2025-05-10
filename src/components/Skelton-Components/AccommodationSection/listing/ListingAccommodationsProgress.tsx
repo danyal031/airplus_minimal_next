@@ -1,7 +1,6 @@
 import React from "react";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
-import { Divider, Skeleton } from "@mui/material";
-import Lottie from "lottie-react";
+import { Skeleton } from "@mui/material";
 const ListingAccommodationsProgress = () => {
   const progressLength = Array.from(Array(4));
   const renderOnDesktop = () => {
