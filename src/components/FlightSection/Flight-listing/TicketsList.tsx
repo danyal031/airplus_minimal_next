@@ -98,12 +98,7 @@ const TicketsList = () => {
   const renderOnDesktop = () => {
     return (
       <>
-        <div className="hidden md:grid grid-cols-1 gap-2">
-          <div className="flex items-center justify-start">
-            <span className="text-text-main text-base font-semibold">
-              لطفا بلیت خود را انتخاب کنید.
-            </span>
-          </div>
+        <div className="hidden md:grid grid-cols-1 gap-16">
           <div className="bg-paper rounded-xl px-5 pb-3 grid grid-cols-1 gap-3">
             <div className="flex items-center justify-start gap-3">
               <div className="flex items-center justify-center gap-1">
@@ -179,17 +174,42 @@ const TicketsList = () => {
                   </span>
                 </div>
               )}
-              <div className="grid grid-cols-1 gap-3 mt-12">
-                {flightTab === 1 &&
-                filteredSearchFlightResponseData?.inactiveWent &&
-                filteredSearchFlightResponseData?.inactiveWent.length > 0 ? (
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-2">
+            <div className="flex items-center justify-start">
+              <span className="text-text-main font-semibold text-base">
+                پرواز های غیرفعال
+              </span>
+            </div>{" "}
+            <div className="bg-paper rounded-xl px-5 py-3 grid grid-cols-1 gap-3">
+              {flightTab === 1 &&
+              filteredSearchFlightResponseData?.inactiveWent &&
+              filteredSearchFlightResponseData?.inactiveWent.length > 0 ? (
+                <>
+                  {filteredSearchFlightResponseData?.inactiveWent.map(
+                    (item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                      >
+                        <TicketCard key={index} data={item} index={index} />
+                      </motion.div>
+                    )
+                  )}
+                </>
+              ) : (
+                filteredSearchFlightResponseData?.inactiveReturn &&
+                filteredSearchFlightResponseData?.inactiveReturn.length > 0 && (
                   <>
                     <div className="flex items-center justify-start">
                       <span className="text-text-main font-semibold text-base">
                         پرواز های غیرفعال
                       </span>
                     </div>
-                    {filteredSearchFlightResponseData?.inactiveWent.map(
+                    {filteredSearchFlightResponseData?.inactiveReturn.map(
                       (item, index) => (
                         <motion.div
                           key={index}
@@ -202,32 +222,8 @@ const TicketsList = () => {
                       )
                     )}
                   </>
-                ) : (
-                  filteredSearchFlightResponseData?.inactiveReturn &&
-                  filteredSearchFlightResponseData?.inactiveReturn.length >
-                    0 && (
-                    <>
-                      <div className="flex items-center justify-start">
-                        <span className="text-text-main font-semibold text-base">
-                          پرواز های غیرفعال
-                        </span>
-                      </div>
-                      {filteredSearchFlightResponseData?.inactiveReturn.map(
-                        (item, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                            animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                            transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                          >
-                            <TicketCard key={index} data={item} index={index} />
-                          </motion.div>
-                        )
-                      )}
-                    </>
-                  )
-                )}
-              </div>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -283,28 +279,28 @@ const TicketsList = () => {
     );
     return (
       <>
-        <div className="md:hidden grid grid-cols-1 gap-2">
-          <div className="flex items-center justify-between">
-            <span className="text-text-main text-base font-semibold">
-              لطفا بلیت خود را انتخاب کنید.
-            </span>
-            <div className="flex items-center justify-center gap-2">
-              <span
-                onClick={() => setOpenFlightFilterDrawer(true)}
-                className="py-1 px-2 bg-paper text-primary-main rounded-lg"
-              >
-                فیلترها
+        <div className="md:hidden grid grid-cols-1 gap-14">
+          <div className="grid grid-cols-1 gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-text-main text-base font-semibold">
+                لطفا بلیت خود را انتخاب کنید.
               </span>
-              <span
-                onClick={() => toggleOpenSortingDrawer(true)}
-                className="py-1 px-2 bg-paper text-primary-main rounded-lg"
-              >
-                مرتب سازی
-              </span>
+              <div className="flex items-center justify-center gap-2">
+                <span
+                  onClick={() => setOpenFlightFilterDrawer(true)}
+                  className="py-1 px-2 bg-paper text-primary-main rounded-lg"
+                >
+                  فیلترها
+                </span>
+                <span
+                  onClick={() => toggleOpenSortingDrawer(true)}
+                  className="py-1 px-2 bg-paper text-primary-main rounded-lg"
+                >
+                  مرتب سازی
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="bg-paper rounded-xl p-3">
-            <div className="grid grid-cols-1 gap-3">
+            <div className="bg-paper rounded-xl p-3 grid grid-cols-1 gap-3">
               {flightTab === 1 ? (
                 Array.isArray(filteredSearchFlightResponseData?.activeWent) &&
                 filteredSearchFlightResponseData?.activeWent.length > 0 ? (
@@ -370,51 +366,53 @@ const TicketsList = () => {
                   </span>
                 </div>
               )}
-              <div className="grid grid-cols-1 gap-3">
-                {flightTab === 1 &&
-                filteredSearchFlightResponseData?.inactiveWent &&
-                filteredSearchFlightResponseData?.inactiveWent.length > 0 ? (
-                  <>
-                    <div className="flex items-center justify-start">
-                      <span className="text-text-main font-semibold text-base">
-                        پرواز های غیرفعال
-                      </span>
-                    </div>
-                    {filteredSearchFlightResponseData?.inactiveWent.map(
-                      (item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard key={index} data={item} index={index} />
-                        </motion.div>
-                      )
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-center justify-start">
-                      <span className="text-text-main font-semibold text-base">
-                        پرواز های غیرفعال
-                      </span>
-                    </div>
-                    {filteredSearchFlightResponseData?.inactiveReturn.map(
-                      (item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                          animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                          transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
-                        >
-                          <TicketCard key={index} data={item} index={index} />
-                        </motion.div>
-                      )
-                    )}
-                  </>
-                )}
-              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-2">
+            <div className="flex items-center justify-start">
+              <span className="text-text-main font-semibold text-base">
+                پرواز های غیرفعال
+              </span>
+            </div>
+            <div className="bg-paper rounded-xl p-3 grid grid-cols-1 gap-3">
+              {flightTab === 1 &&
+              filteredSearchFlightResponseData?.inactiveWent &&
+              filteredSearchFlightResponseData?.inactiveWent.length > 0 ? (
+                <>
+                  {filteredSearchFlightResponseData?.inactiveWent.map(
+                    (item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                      >
+                        <TicketCard key={index} data={item} index={index} />
+                      </motion.div>
+                    )
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-start">
+                    <span className="text-text-main font-semibold text-base">
+                      پرواز های غیرفعال
+                    </span>
+                  </div>
+                  {filteredSearchFlightResponseData?.inactiveReturn.map(
+                    (item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
+                        animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
+                        transition={{ duration: 0.5, delay: index * 0.1 }} // Animation duration and delay for each item
+                      >
+                        <TicketCard key={index} data={item} index={index} />
+                      </motion.div>
+                    )
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
