@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import FlightSearchForm from "../FlightSearchForm/FlightSearchForm";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
+import { formatDateWithSlash } from "@/global-files/function";
 
 const SearchHeaderReservation = () => {
   // initial states
@@ -110,10 +111,12 @@ const SearchHeaderReservation = () => {
             </span>{" "}
           </div>
           <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
-            <span className={`text-paper font-semibold`}>رفت: {fromDate}</span>{" "}
+            <span className={`text-paper font-semibold`}>
+              رفت: {formatDateWithSlash(fromDate as string)}
+            </span>{" "}
             {toDate && (
               <span className={`text-paper font-semibold`}>
-                برگشت: {toDate}
+                برگشت: {formatDateWithSlash(toDate as string)}
               </span>
             )}
           </div>

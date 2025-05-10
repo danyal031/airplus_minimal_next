@@ -8,6 +8,12 @@ import ClearIcon from "@mui/icons-material/Clear";
 import moment from "jalali-moment";
 import { useGlobalContext } from "@/context/store";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import {
+  convertPersianToEnglishNumbers,
+  formatDateWithSlash,
+} from "@/global-files/function";
+import { useGlobalActions } from "@/context/actionStore";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -19,8 +25,17 @@ const PriceRateBox = () => {
     useState(false);
   const [openChartDrawer, setOpenChartDrawer] = useState<boolean>(false);
   const [chartTabValue, setChartTabValue] = useState<string>("1");
-  const { fromDate } = useGlobalContext().flightContext.searchContext;
+  const {
+    fromDate,
+    toDate,
+    travelRoute,
+    isFlightSearching,
+    origin,
+    destination,
+  } = useGlobalContext().flightContext.searchContext;
+  const { handleFlightSearch } = useGlobalActions().flightActions;
   const theme = useTheme();
+  const router = useRouter();
 
   // for handle change open chart drawer
   const handleOpenChartDrawer = (type: string) => {
@@ -311,33 +326,92 @@ const PriceRateBox = () => {
       const day = today.clone().add(i, "days");
       return {
         id: i + 1,
-        dayMonth: day.locale("fa"),
+        dayMoment: day,
+        dayFormatted: day.format("jYYYY-jMM-jDD"),
         price: Math.floor(1000 + Math.random() * 1000),
       };
     });
 
+    const updateURLParams = (departure: string, returning: string | false) => {
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set(
+        "departure_date",
+        convertPersianToEnglishNumbers(departure)
+      );
+      searchParams.set(
+        "returning_date",
+        returning ? convertPersianToEnglishNumbers(returning) : "false"
+      );
+      router.push(`/listing/flights?${searchParams.toString()}`);
+    };
+
+    // handle change flight search date
+    const handleDateChange = (selectedDate: string) => {
+      if (!isFlightSearching && origin && destination) {
+        const newDeparture = moment.from(selectedDate, "fa", "jYYYY-jMM-jDD");
+
+        if (travelRoute === "oneWay") {
+          const formatted = newDeparture.format("jYYYY-jMM-jDD");
+          handleFlightSearch({
+            origin: origin.iata,
+            destination: destination.iata,
+            departure_date: formatDateWithSlash(formatted),
+            returning_date: false,
+          });
+          updateURLParams(formatted, false);
+        } else {
+          const oldDeparture = moment.from(
+            fromDate as string,
+            "fa",
+            "jYYYY-jMM-jDD"
+          );
+          const oldReturn = moment.from(
+            toDate as string,
+            "fa",
+            "jYYYY-jMM-jDD"
+          );
+
+          const newReturn = oldReturn
+            .clone()
+            .add(newDeparture.diff(oldDeparture, "days"), "days");
+          const formattedDeparture = newDeparture.format("jYYYY-jMM-jDD");
+          const formattedReturn = newReturn.format("jYYYY-jMM-jDD");
+
+          handleFlightSearch({
+            origin: origin.iata,
+            destination: destination.iata,
+            departure_date: formatDateWithSlash(formattedDeparture),
+            returning_date: formatDateWithSlash(formattedReturn),
+          });
+          updateURLParams(formattedDeparture, formattedReturn);
+        }
+      }
+    };
     return (
       <>
         <div className="border-b-2 p-2 overflow-x-auto flex items-center justify-start gap-2">
-          {dates.map((date) => (
-            <div
-              key={date.id}
-              className={`${
-                fromDate === date.dayMonth.format("YYYY-MM-DD")
-                  ? "border-primary-main"
-                  : "border-main"
-              } min-w-24 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-0`}
-            >
-              <span className="text-xs font-semibold">
-                {`${date.dayMonth.format("DD")} ${date.dayMonth.format(
-                  "MMMM"
-                )}`}
-              </span>{" "}
-              <span className="text-text-main text-base font-semibold">
-                ...
-              </span>{" "}
-            </div>
-          ))}
+          {dates.map((date) => {
+            return (
+              <div
+                key={date.id}
+                onClick={() => handleDateChange(date.dayFormatted)}
+                className={`${
+                  fromDate === date.dayFormatted
+                    ? "border-primary-main"
+                    : "border-main"
+                } min-w-24 text-text-main hover:text-primary-main cursor-pointer rounded-lg border hover:border-primary-main border-divider p-1 flex flex-col items-center justify-center gap-0`}
+              >
+                <span className="text-xs font-semibold">
+                  {`${date.dayMoment.format("DD")} ${date.dayMoment.format(
+                    "MMMM"
+                  )}`}
+                </span>
+                <span className="text-text-main text-base font-semibold">
+                  ...
+                </span>
+              </div>
+            );
+          })}
         </div>
       </>
     );
