@@ -35,6 +35,10 @@ const SelectedFlightTicketsCards = () => {
   const factorNumber = searchParams.get("factor");
   //   handle initial selection of selected tickets
   useEffect(() => {
+    const returningDate = JSON.parse(
+      localStorage.getItem(searchParams.get("factor") as string) as string
+    ).returningDate;
+
     setSelectedWentFlight(
       JSON.parse(localStorage.getItem(factorNumber as string) as string)
         .wentTicket as FlightTicketDataType
@@ -49,11 +53,10 @@ const SelectedFlightTicketsCards = () => {
         localStorage.getItem(searchParams.get("factor") as string) as string
       ).departureDate
     );
-    setToDate(
-      JSON.parse(
-        localStorage.getItem(searchParams.get("factor") as string) as string
-      ).returningDate
-    );
+    if (returningDate !== "false") {
+      setToDate(returningDate);
+    }
+
     console.log(localStorage.getItem(factorNumber as string));
   }, [searchParams]);
 
