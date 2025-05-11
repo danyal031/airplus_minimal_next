@@ -585,7 +585,7 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
         {filteredData.length > 0 && (
           <div className="grid grid-cols-1 gap-2">
             <div className="bg-main flex items-center justify-start rounded-lg p-1 px-2">
-              <span className="font-semibold text-xs text-gray-400">
+              <span className="font-semibold text-xs text-text-subText">
                 نتایج{" "}
               </span>
             </div>
@@ -593,7 +593,7 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
               {filteredData.map((item: AirportDataType) => (
                 <div
                   key={item.id}
-                  className="w-full flex items-center justify-start gap-1 py-1 px-2 text-gray-500 hover:text-primary-main cursor-pointer"
+                  className="w-full flex items-center justify-start gap-1 py-1 px-2 text-text-subText hover:text-primary-main cursor-pointer"
                   onClick={() => {
                     handleClickSelectItem(item);
                   }}
@@ -610,7 +610,7 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
         )}{" "}
         <div className="grid grid-cols-1 gap-2">
           <div className="bg-main flex items-center justify-start rounded-lg p-1 px-2">
-            <span className="font-semibold text-xs text-gray-400">
+            <span className="font-semibold text-xs text-text-subText">
               شهرهای پرتردد{" "}
             </span>
           </div>
@@ -621,7 +621,7 @@ const RoundWayPopover: FC<RoundWayPopoverProps> = ({
                 onClick={() => {
                   handleClickSelectItem(item);
                 }}
-                className="text-gray-500 hover:text-primary-main cursor-pointer w-full flex items-center justify-start gap-1 py-1 px-2"
+                className="text-text-subText hover:text-primary-main cursor-pointer w-full flex items-center justify-start gap-1 py-1 px-2"
               >
                 <LocationOnIcon className="text-sm" />
                 <span className="text-xs font-bold truncate">
@@ -773,13 +773,15 @@ const DrawerMobile: FC<DrawerMobileProps> = ({
       {filteredData.length > 0 && (
         <div className="grid grid-cols-1 gap-2">
           <div className="bg-main flex items-center justify-start p-1 px-2">
-            <span className="font-semibold text-xs text-gray-400">نتایج </span>
+            <span className="font-semibold text-xs text-text-subText">
+              نتایج{" "}
+            </span>
           </div>
           <div className="flex flex-col items-start justify-start gap-2">
             {filteredData.map((item: AirportDataType) => (
               <div
                 key={item.id}
-                className="w-full flex items-center justify-start gap-1 py-1 px-2 text-gray-500 hover:text-primary-main cursor-pointer"
+                className="w-full flex items-center justify-start gap-1 py-1 px-2 text-text-subText hover:text-primary-main cursor-pointer"
                 onClick={() => {
                   handleClickSelectItem(item);
                 }}
@@ -796,7 +798,7 @@ const DrawerMobile: FC<DrawerMobileProps> = ({
       )}{" "}
       <div className="grid grid-cols-1 gap-2">
         <div className="bg-main flex items-center justify-start p-1 px-2">
-          <span className="font-semibold text-xs text-gray-400">
+          <span className="font-semibold text-xs text-text-subText">
             شهرهای پرتردد{" "}
           </span>
         </div>

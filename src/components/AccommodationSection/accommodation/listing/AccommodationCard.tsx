@@ -285,14 +285,14 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
               )}
               {data.media.length > 1 && (
                 <>
-                  <div className="absolute top-1/2 left-2 transform -translate-y-1/2 z-[2] bg-gray-500 bg-opacity-55 rounded-full flex items-center justify-center">
+                  <div className="absolute top-1/2 left-2 transform -translate-y-1/2 z-[2] bg-text-subText bg-opacity-55 rounded-full flex items-center justify-center">
                     <ChevronLeftOutlinedIcon
                       fontSize="medium"
                       className="hover:cursor-pointer text-neutral-200"
                       onClick={handleNext}
                     />
                   </div>
-                  <div className="absolute top-1/2 right-2 transform -translate-y-1/2 z-[2] bg-gray-500 bg-opacity-55 rounded-full flex items-center justify-center">
+                  <div className="absolute top-1/2 right-2 transform -translate-y-1/2 z-[2] bg-text-subText bg-opacity-55 rounded-full flex items-center justify-center">
                     <KeyboardArrowRightOutlinedIcon
                       fontSize="medium"
                       className="hover:cursor-pointer text-neutral-200"
@@ -365,7 +365,7 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
               onClick={() => {
                 toggleQuickReserve();
               }}
-              className="cursor-pointer rounded-tab-down-sm w-4/5 bg-paper text-gray-400 text-sm font-semibold h-9 flex items-center justify-center gap-1"
+              className="cursor-pointer rounded-tab-down-sm w-4/5 bg-paper text-text-subText text-sm font-semibold h-9 flex items-center justify-center gap-1"
             >
               رزرو فوری
               {isQuickReserveOpen ? (

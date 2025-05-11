@@ -323,7 +323,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                             >
                               <ClearIcon
                                 fontSize="small"
-                                className="text-gray-500"
+                                className="text-text-subText"
                               />
                             </IconButton>
                           </InputAdornment>
@@ -343,7 +343,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                               >
                                 <ClearIcon
                                   fontSize="small"
-                                  className="text-gray-500"
+                                  className="text-text-subText"
                                 />
                               </IconButton>
                             ) : (
@@ -356,7 +356,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                               >
                                 <AddIcon
                                   fontSize="small"
-                                  className="text-gray-500"
+                                  className="text-text-subText"
                                 />
                               </IconButton>
                             )}
@@ -629,7 +629,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                           >
                             <ClearIcon
                               fontSize="small"
-                              className="text-gray-500"
+                              className="text-text-subText"
                             />
                           </IconButton>
                         </InputAdornment>
@@ -649,7 +649,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                             >
                               <ClearIcon
                                 fontSize="small"
-                                className="text-gray-500"
+                                className="text-text-subText"
                               />
                             </IconButton>
                           ) : (
@@ -662,7 +662,7 @@ const DatePickerPopover: FC<DatePickerPopoverDataType> = ({
                             >
                               <AddIcon
                                 fontSize="small"
-                                className="text-gray-500"
+                                className="text-text-subText"
                               />
                             </IconButton>
                           )}
@@ -811,5 +811,5 @@ const monthNames = [
 ];
 
 const disableInputClass =
-  "py-2 border flex justify-center items-center bg-gray-100 text-gray-500 cursor-pointer hover:bg-gray-200 hover:text-gray-700 transition-colors duration-200 md:rounded-l-md shadow-md hover:shadow-lg";
-const enableInputClass = `py-2 border md:border-l-0 flex justify-center items-center bg-white text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors duration-200 md:rounded-r-md shadow-md hover:shadow-lg`;
+  "py-2 border flex justify-center items-center bg-gray-100 text-text-subText cursor-pointer hover:bg-gray-200 hover:text-text-subText transition-colors duration-200 md:rounded-l-md shadow-md hover:shadow-lg";
+const enableInputClass = `py-2 border md:border-l-0 flex justify-center items-center bg-white text-text-subText cursor-pointer hover:bg-gray-100 transition-colors duration-200 md:rounded-r-md shadow-md hover:shadow-lg`;

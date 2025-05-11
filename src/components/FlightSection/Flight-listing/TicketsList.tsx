@@ -82,7 +82,7 @@ const TicketsList = () => {
                 className={`truncate col-span-2 text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${
                   isActive
                     ? "bg-main text-primary-main"
-                    : "bg-paper text-gray-400"
+                    : "bg-paper text-text-subText"
                 }`}
               >
                 {tab.label}
@@ -563,7 +563,7 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="text-text-main text-sm font-semibold">کودک</div>
             <div className="text-text-main text-sm font-semibold">نوزاد</div>
             <div className="text-text-main text-sm font-semibold">بارمجاز</div>
-            <div className="text-gray-400 text-xs">
+            <div className="text-text-subText text-xs">
               {data.Classes.Baggage.Adult.Trunk.TotalWeight &&
               data.Classes.Baggage.Adult.Trunk.Number ? (
                 <Box className="flex gap-1">
@@ -581,7 +581,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 <span className="text-xs">نامشخص</span>
               )}
             </div>
-            <div className="text-gray-400 text-xs">
+            <div className="text-text-subText text-xs">
               {data.Classes.Baggage.Child.Trunk.TotalWeight &&
               data.Classes.Baggage.Child.Trunk.Number ? (
                 <Box className="flex gap-1">
@@ -599,7 +599,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 <span className="text-xs">نامشخص</span>
               )}
             </div>
-            <div className="text-gray-400 text-xs">
+            <div className="text-text-subText text-xs">
               {" "}
               {data.Classes.Baggage.Infant.Trunk.TotalWeight &&
               data.Classes.Baggage.Infant.Trunk.Number ? (
@@ -619,25 +619,25 @@ const TicketCard: FC<TicketCardProps> = ({
               )}
             </div>
             <div className="text-text-main text-sm font-semibold">قیمت</div>
-            <div className="text-gray-400 text-xs flex items-center justify-center">
+            <div className="text-text-subText text-xs flex items-center justify-center">
               {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Adult.Markup.final / 10
               )}`}
-              <Toman height={15} width={15} className="text-gray-400" />
+              <Toman height={15} width={15} className="text-text-subText" />
             </div>
-            <div className="text-gray-400 text-xs flex items-center justify-center">
+            <div className="text-text-subText text-xs flex items-center justify-center">
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Child.Markup.final / 10
               )}`}{" "}
-              <Toman height={15} width={15} className="text-gray-400" />
+              <Toman height={15} width={15} className="text-text-subText" />
             </div>
-            <div className="text-gray-400 text-xs flex items-center justify-center">
+            <div className="text-text-subText text-xs flex items-center justify-center">
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Infant.Markup.final / 10
               )}`}{" "}
-              <Toman height={15} width={15} className="text-gray-400" />
+              <Toman height={15} width={15} className="text-text-subText" />
             </div>
           </div>
           <div className="p-2 col-span-1 grid grid-cols-1 gap-3">
@@ -645,13 +645,15 @@ const TicketCard: FC<TicketCardProps> = ({
               <span className="text-text-main text-sm font-semibold">
                 شماره پرواز
               </span>
-              <span className="text-gray-400 text-sm">{data.FlightNumber}</span>
+              <span className="text-text-subText text-sm">
+                {data.FlightNumber}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-text-main text-sm font-semibold">
                 کلاس کابین{" "}
               </span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-text-subText text-sm">
                 {data.Classes.CabinType.title.fa}
               </span>
             </div>
@@ -659,7 +661,7 @@ const TicketCard: FC<TicketCardProps> = ({
               <span className="text-text-main text-sm font-semibold">
                 نوع پرواز{" "}
               </span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-text-subText text-sm">
                 {data.FlightType == "Charter" ? "چارتری" : "سیستمی"}
               </span>
             </div>
@@ -667,7 +669,7 @@ const TicketCard: FC<TicketCardProps> = ({
               <span className="text-text-main text-sm font-semibold">
                 مدل هواپیما{" "}
               </span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-text-subText text-sm">
                 {data.Aircraft.iata}
               </span>
             </div>
@@ -754,7 +756,7 @@ const TicketCard: FC<TicketCardProps> = ({
             فرودگاه {data.Origin.Iata.title_fa} {`(${data.Origin.Iata.iata})`}
           </span>
           <div className="grid grid-cols-1">
-            <span className="text-gray-400 text-xs font-semibold">
+            <span className="text-text-subText text-xs font-semibold">
               {convertToPersianDate(data.DepartureDateTime)}
             </span>
             <div className="flex items-center justify-start gap-2">
@@ -766,7 +768,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 /> */}
               <div className="min-h-20 border-2 border-main border-dashed"></div>
               {data.ArrivalDateTime && (
-                <span className="text-xs text-gray-400 border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
+                <span className="text-xs text-text-subText border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
                   <AccessAlarmIcon className="text-sm" />
                   {
                     calculateTimeDistance(
@@ -802,7 +804,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 // </span>
               )}
             </div>
-            <span className="text-gray-400 text-xs font-semibold">
+            <span className="text-text-subText text-xs font-semibold">
               {data.ArrivalDateTime &&
                 convertToPersianDate(data.ArrivalDateTime)}{" "}
             </span>
@@ -893,7 +895,7 @@ const TicketCard: FC<TicketCardProps> = ({
               <div className="flex items-center justify-start gap-2 w-full">
                 <span
                   onClick={handleChangeShowDetails}
-                  className={`text-gray-400 hover:cursor-pointer rounded-tab-down-sm bg-paper flex items-center justify-center gap-1 font-semibold h-9 text-xs px-5`}
+                  className={`text-text-subText hover:cursor-pointer rounded-tab-down-sm bg-paper flex items-center justify-center gap-1 font-semibold h-9 text-xs px-5`}
                 >
                   جزئیات بلیت{" "}
                   {showDetails ? (
@@ -943,7 +945,7 @@ const TicketCard: FC<TicketCardProps> = ({
                   {data.Classes.AvailableSeat &&
                     data.Classes.BaseData.Financial.Adult.Markup.final !==
                       0 && (
-                      <span className="text-xs font-semibold text-gray-400">
+                      <span className="text-xs font-semibold text-text-subText">
                         {data.Classes.AvailableSeat} صندلی باقی مانده
                       </span>
                     )}{" "}
@@ -981,7 +983,7 @@ const TicketCard: FC<TicketCardProps> = ({
                       {subItem.Classes.AvailableSeat &&
                         subItem.Classes.BaseData.Financial.Adult.Markup
                           .final !== 0 && (
-                          <span className="text-xs font-semibold text-gray-400">
+                          <span className="text-xs font-semibold text-text-subText">
                             {subItem.Classes.AvailableSeat} صندلی باقی مانده
                           </span>
                         )}{" "}
@@ -1031,7 +1033,7 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="text-text-main text-sm font-semibold flex justify-center">
               بارمجاز
             </div>
-            <div className="text-gray-400 text-xs flex justify-center">
+            <div className="text-text-subText text-xs flex justify-center">
               {data.Classes.Baggage.Adult.Trunk.TotalWeight &&
               data.Classes.Baggage.Adult.Trunk.Number ? (
                 <Box className="flex gap-1">
@@ -1049,7 +1051,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 <span className="text-xs">نامشخص</span>
               )}
             </div>
-            <div className="text-gray-400 text-xs flex justify-center">
+            <div className="text-text-subText text-xs flex justify-center">
               {data.Classes.Baggage.Child.Trunk.TotalWeight &&
               data.Classes.Baggage.Child.Trunk.Number ? (
                 <Box className="flex gap-1">
@@ -1067,7 +1069,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 <span className="text-xs">نامشخص</span>
               )}
             </div>
-            <div className="text-gray-400 text-xs flex justify-center">
+            <div className="text-text-subText text-xs flex justify-center">
               {" "}
               {data.Classes.Baggage.Infant.Trunk.TotalWeight &&
               data.Classes.Baggage.Infant.Trunk.Number ? (
@@ -1089,26 +1091,26 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="text-text-main text-sm font-semibold flex justify-center">
               قیمت
             </div>
-            <div className="text-gray-400 text-xs flex justify-center">
+            <div className="text-text-subText text-xs flex justify-center">
               {" "}
               {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Adult.Markup.final / 10
               )}`}{" "}
-              <Toman height={15} width={15} className="text-gray-400" />
+              <Toman height={15} width={15} className="text-text-subText" />
             </div>
-            <div className="text-gray-400 text-xs flex justify-center">
+            <div className="text-text-subText text-xs flex justify-center">
               {" "}
               {/* {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Child.Markup.final / 10
               )}`}{" "} */}
-              <Toman height={15} width={15} className="text-gray-400" />
+              <Toman height={15} width={15} className="text-text-subText" />
             </div>
-            <div className="text-gray-400 text-xs flex justify-center">
+            <div className="text-text-subText text-xs flex justify-center">
               {" "}
               {/* {` ${formatInputWithCommas(
                 data.Classes.BaseData.Financial.Infant.Markup.final / 10
               )}`}{" "} */}
-              <Toman height={15} width={15} className="text-gray-400" />
+              <Toman height={15} width={15} className="text-text-subText" />
             </div>
           </div>
           <div className="p-6 grid grid-cols-2 gap-8">
@@ -1116,13 +1118,15 @@ const TicketCard: FC<TicketCardProps> = ({
               <span className="text-text-main text-sm font-semibold">
                 شماره پرواز
               </span>
-              <span className="text-gray-400 text-sm">{data.FlightNumber}</span>
+              <span className="text-text-subText text-sm">
+                {data.FlightNumber}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-text-main text-sm font-semibold">
                 کلاس کابین{" "}
               </span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-text-subText text-sm">
                 {data.Classes.CabinType.title.fa}
               </span>
             </div>
@@ -1130,7 +1134,7 @@ const TicketCard: FC<TicketCardProps> = ({
               <span className="text-text-main text-sm font-semibold">
                 نوع پرواز{" "}
               </span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-text-subText text-sm">
                 {data.FlightType == "Charter" ? "چارتری" : "سیستمی"}
               </span>
             </div>
@@ -1138,7 +1142,7 @@ const TicketCard: FC<TicketCardProps> = ({
               <span className="text-text-main text-sm font-semibold">
                 مدل هواپیما{" "}
               </span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-text-subText text-sm">
                 {data.Aircraft.iata}
               </span>
             </div>
@@ -1228,7 +1232,7 @@ const TicketCard: FC<TicketCardProps> = ({
               فرودگاه {data.Origin.Iata.title_fa} {`(${data.Origin.Iata.iata})`}
             </span>
             <div className="grid grid-cols-1">
-              <span className="text-gray-400 text-xs font-semibold">
+              <span className="text-text-subText text-xs font-semibold">
                 {convertToPersianDate(data.DepartureDateTime)}
               </span>
               <div className="flex items-center justify-start gap-2">
@@ -1240,7 +1244,7 @@ const TicketCard: FC<TicketCardProps> = ({
                 /> */}
                 <div className="min-h-20 border-2 border-main border-dashed"></div>
                 {data.ArrivalDateTime && (
-                  <span className="text-xs text-gray-400 border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
+                  <span className="text-xs text-text-subText border border-divider rounded-full p-1 px-2 flex items-center justify-center gap-1">
                     <AccessAlarmIcon className="text-sm" />
                     {
                       calculateTimeDistance(
@@ -1276,7 +1280,7 @@ const TicketCard: FC<TicketCardProps> = ({
                   // </span>
                 )}
               </div>
-              <span className="text-gray-400 text-xs font-semibold">
+              <span className="text-text-subText text-xs font-semibold">
                 {data.ArrivalDateTime &&
                   convertToPersianDate(data.ArrivalDateTime)}{" "}
               </span>
@@ -1318,7 +1322,7 @@ const TicketCard: FC<TicketCardProps> = ({
               <span className="text-sm text-text-main">مجموع قیمت</span>
               {!data.Classes.AvailableSeat ||
               data.Classes.BaseData.Financial.Adult.Markup.final === 0 ? (
-                <span className="text-xs text-gray-400 font-semibold">
+                <span className="text-xs text-text-subText font-semibold">
                   تکمیل ظرفیت
                 </span>
               ) : (
@@ -1417,7 +1421,7 @@ const TicketCard: FC<TicketCardProps> = ({
           <div className="p-2 flex items-center justify-between">
             {data.Classes.AvailableSeat &&
             data.Classes.BaseData.Financial.Adult.Markup.final !== 0 ? (
-              <span className="text-gray-400 text-[10px] font-semibold">
+              <span className="text-text-subText text-[10px] font-semibold">
                 {data.Classes.AvailableSeat} صندلی باقی مانده
               </span>
             ) : (
@@ -1425,7 +1429,7 @@ const TicketCard: FC<TicketCardProps> = ({
             )}
             {!data.Classes.AvailableSeat ||
             data.Classes.BaseData.Financial.Adult.Markup.final === 0 ? (
-              <span className="text-xs text-gray-400 font-semibold">
+              <span className="text-xs text-text-subText font-semibold">
                 تکمیل ظرفیت
               </span>
             ) : (

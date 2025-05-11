@@ -72,7 +72,7 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
                 className={`truncate col-span-2 text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${
                   isActive
                     ? "bg-main text-primary-main"
-                    : "bg-paper text-gray-400"
+                    : "bg-paper text-text-subText"
                 }`}
               >
                 {tab.label}
@@ -178,7 +178,7 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
       <>
         <div className="hidden md:grid grid-cols-1 gap-2">
           <div className="flex items-center justify-start">
-            <span className="text-gray-400 text-base flex items-center justify-center gap-0">
+            <span className="text-text-subText text-base flex items-center justify-center gap-0">
               <span>رزرو</span>
               <KeyboardArrowLeftIcon fontSize="small" />
               <span>هتل</span>

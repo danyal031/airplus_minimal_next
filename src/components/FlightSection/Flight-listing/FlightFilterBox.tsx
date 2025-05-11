@@ -214,7 +214,7 @@ const FlightFilterBox = () => {
                   className={`${
                     selectedTimeRange === item.id &&
                     "bg-primary-main text-paper"
-                  } bg-main text-gray-400 p-1 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-px`}
+                  } bg-main text-text-subText p-1 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-px`}
                 >
                   {item.icon}
                   <span className="font-semibold text-xs">{item.label}</span>
@@ -366,7 +366,7 @@ const FlightFilterBox = () => {
                             width={30}
                             height={30}
                           />
-                          <span className="text-sm text-gray-400">
+                          <span className="text-sm text-text-subText">
                             {item.title_fa}
                           </span>
                         </div>

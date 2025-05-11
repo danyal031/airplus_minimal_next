@@ -417,14 +417,14 @@ const AccommodationDetailsOnDesktop: FC<AccommodationDetailsOnDesktopProps> = ({
                 </SwiperSlide>
               )
             )}
-            <div className="absolute top-1/2 left-2 transform -translate-y-1/2 z-[2] bg-gray-500 bg-opacity-55 rounded-full flex items-center justify-center">
+            <div className="absolute top-1/2 left-2 transform -translate-y-1/2 z-[2] bg-text-subText bg-opacity-55 rounded-full flex items-center justify-center">
               <ChevronLeftOutlinedIcon
                 fontSize="large"
                 className="hover:cursor-pointer text-neutral-200"
                 onClick={handleNext}
               />
             </div>
-            <div className="absolute top-1/2 right-2 transform -translate-y-1/2 z-[2] bg-gray-500 bg-opacity-55 rounded-full flex items-center justify-center">
+            <div className="absolute top-1/2 right-2 transform -translate-y-1/2 z-[2] bg-text-subText bg-opacity-55 rounded-full flex items-center justify-center">
               <KeyboardArrowRightOutlinedIcon
                 fontSize="large"
                 className="hover:cursor-pointer text-neutral-200"

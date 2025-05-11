@@ -288,7 +288,7 @@ const CheckoutPassengerContainer = () => {
                   ) === "ADU"
               ) && (
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400 font-semibold">
+                  <span className="text-xs text-text-subText font-semibold">
                     {
                       flightPassengers.filter(
                         (element) =>
@@ -319,7 +319,7 @@ const CheckoutPassengerContainer = () => {
                   ) === "CHI"
               ) && (
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400 font-semibold">
+                  <span className="text-xs text-text-subText font-semibold">
                     {
                       flightPassengers.filter(
                         (element) =>
@@ -350,7 +350,7 @@ const CheckoutPassengerContainer = () => {
                   ) === "INF"
               ) && (
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400 font-semibold">
+                  <span className="text-xs text-text-subText font-semibold">
                     {
                       flightPassengers.filter(
                         (element) =>
@@ -398,7 +398,7 @@ const CheckoutPassengerContainer = () => {
                         ) === "ADU"
                     ) && (
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400 font-semibold">
+                        <span className="text-xs text-text-subText font-semibold">
                           {
                             flightPassengers.filter(
                               (element) =>
@@ -429,7 +429,7 @@ const CheckoutPassengerContainer = () => {
                         ) === "CHI"
                     ) && (
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400 font-semibold">
+                        <span className="text-xs text-text-subText font-semibold">
                           {
                             flightPassengers.filter(
                               (element) =>
@@ -460,7 +460,7 @@ const CheckoutPassengerContainer = () => {
                         ) === "INF"
                     ) && (
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400 font-semibold">
+                        <span className="text-xs text-text-subText font-semibold">
                           {
                             flightPassengers.filter(
                               (element) =>

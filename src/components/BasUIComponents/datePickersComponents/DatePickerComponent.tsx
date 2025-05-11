@@ -122,7 +122,10 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
                           setToDate(null);
                         }}
                       >
-                        <ClearIcon fontSize="small" className="text-gray-500" />
+                        <ClearIcon
+                          fontSize="small"
+                          className="text-text-subText"
+                        />
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -141,7 +144,7 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
                         >
                           <ClearIcon
                             fontSize="small"
-                            className="text-gray-500"
+                            className="text-text-subText"
                           />
                         </IconButton>
                       ) : (
@@ -151,7 +154,10 @@ const DatePickerComponent: FC<FlightDateRangeInputProps> = ({
                             setDropOffLocationType("roundTrip");
                           }}
                         >
-                          <AddIcon fontSize="small" className="text-gray-500" />
+                          <AddIcon
+                            fontSize="small"
+                            className="text-text-subText"
+                          />
                         </IconButton>
                       )}
                     </InputAdornment>

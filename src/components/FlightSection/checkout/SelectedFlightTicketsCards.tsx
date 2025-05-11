@@ -200,7 +200,7 @@ const SelectedFlightTicketsCards = () => {
                     ) === "ADU"
                 ) && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-400 font-semibold">
+                    <span className="text-sm text-text-subText font-semibold">
                       بزرگسال(
                       {
                         flightPassengers.filter(
@@ -215,9 +215,13 @@ const SelectedFlightTicketsCards = () => {
                       }
                       )
                     </span>
-                    <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                    <span className="text-xs text-text-subText font-semibold flex items-center justify-center">
                       {formatInputWithCommas(adultsWentTicketsPrice)}{" "}
-                      <Toman height={14} width={14} className="text-gray-400" />
+                      <Toman
+                        height={14}
+                        width={14}
+                        className="text-text-subText"
+                      />
                     </span>
                   </div>
                 )}
@@ -228,7 +232,7 @@ const SelectedFlightTicketsCards = () => {
                     ) === "CHI"
                 ) && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-400 font-semibold">
+                    <span className="text-sm text-text-subText font-semibold">
                       کودک(
                       {
                         flightPassengers.filter(
@@ -243,9 +247,13 @@ const SelectedFlightTicketsCards = () => {
                       }
                       )
                     </span>
-                    <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                    <span className="text-xs text-text-subText font-semibold flex items-center justify-center">
                       {formatInputWithCommas(childWentTicketsPrice)}{" "}
-                      <Toman height={14} width={14} className="text-gray-400" />
+                      <Toman
+                        height={14}
+                        width={14}
+                        className="text-text-subText"
+                      />
                     </span>
                   </div>
                 )}
@@ -256,7 +264,7 @@ const SelectedFlightTicketsCards = () => {
                     ) === "INF"
                 ) && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-400 font-semibold">
+                    <span className="text-sm text-text-subText font-semibold">
                       نوزاد(
                       {
                         flightPassengers.filter(
@@ -271,9 +279,13 @@ const SelectedFlightTicketsCards = () => {
                       }
                       )
                     </span>
-                    <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                    <span className="text-xs text-text-subText font-semibold flex items-center justify-center">
                       {formatInputWithCommas(infantWentTicketsPrice)}
-                      <Toman height={14} width={14} className="text-gray-400" />
+                      <Toman
+                        height={14}
+                        width={14}
+                        className="text-text-subText"
+                      />
                     </span>
                   </div>
                 )}
@@ -419,7 +431,7 @@ const SelectedFlightTicketsCards = () => {
                       ) === "ADU"
                   ) && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400 font-semibold">
+                      <span className="text-sm text-text-subText font-semibold">
                         بزرگسال(
                         {
                           flightPassengers.filter(
@@ -434,12 +446,12 @@ const SelectedFlightTicketsCards = () => {
                         }
                         )
                       </span>
-                      <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                      <span className="text-xs text-text-subText font-semibold flex items-center justify-center">
                         {formatInputWithCommas(adultsReturnTicketsPrice)}
                         <Toman
                           height={14}
                           width={14}
-                          className="text-gray-400"
+                          className="text-text-subText"
                         />
                       </span>
                     </div>
@@ -451,7 +463,7 @@ const SelectedFlightTicketsCards = () => {
                       ) === "CHI"
                   ) && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400 font-semibold">
+                      <span className="text-sm text-text-subText font-semibold">
                         کودک(
                         {
                           flightPassengers.filter(
@@ -466,12 +478,12 @@ const SelectedFlightTicketsCards = () => {
                         }
                         )
                       </span>
-                      <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                      <span className="text-xs text-text-subText font-semibold flex items-center justify-center">
                         {formatInputWithCommas(childReturnTicketsPrice)}
                         <Toman
                           height={14}
                           width={14}
-                          className="text-gray-400"
+                          className="text-text-subText"
                         />
                       </span>
                     </div>
@@ -483,7 +495,7 @@ const SelectedFlightTicketsCards = () => {
                       ) === "INF"
                   ) && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400 font-semibold">
+                      <span className="text-sm text-text-subText font-semibold">
                         نوزاد(
                         {
                           flightPassengers.filter(
@@ -498,12 +510,12 @@ const SelectedFlightTicketsCards = () => {
                         }
                         )
                       </span>
-                      <span className="text-xs text-gray-400 font-semibold flex items-center justify-center">
+                      <span className="text-xs text-text-subText font-semibold flex items-center justify-center">
                         {formatInputWithCommas(infantReturnTicketsPrice)}
                         <Toman
                           height={14}
                           width={14}
-                          className="text-gray-400"
+                          className="text-text-subText"
                         />
                       </span>
                     </div>
@@ -516,7 +528,11 @@ const SelectedFlightTicketsCards = () => {
                           childReturnTicketsPrice +
                           infantReturnTicketsPrice
                       )}{" "}
-                      <Toman height={14} width={14} className="text-gray-400" />
+                      <Toman
+                        height={14}
+                        width={14}
+                        className="text-text-subText"
+                      />
                     </span>
                   </div>
                 </div>

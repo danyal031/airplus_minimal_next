@@ -196,7 +196,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
                 {/* {isLoading && <ProgressLoading />} */}
               </>
             ) : (
-              <div className="h-screen w-full bg-gray-400 flex items-center justify-center">
+              <div className="h-screen w-full bg-text-subText flex items-center justify-center">
                 <ProgressLoading />
               </div>
             )}{" "}
