@@ -206,6 +206,9 @@ const OrderCard: FC<OrderCardProps> = ({ order }) => {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <Button
+              onClick={() => {
+                window.open(`https://mmah.ir/f/${order.details?.slug}`);
+              }}
               size="small"
               variant="outlined"
               className="rounded-lg"
