@@ -9,7 +9,7 @@ export const minimal_light_1 = {
   },
   text: {
     main: "#31020E",
-    subText: "#A21441",
+    subText: "#C1B2B6",
   },
   divider: "#D4D4D4",
 };

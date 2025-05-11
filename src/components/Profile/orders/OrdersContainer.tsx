@@ -3,10 +3,21 @@ import OrderListProgress from "@/components/Skelton-Components/profile/orderList
 import { OrderDataType } from "@/DataTypes/orders/orderTypes";
 import { getOrderList } from "@/global-files/axioses";
 import { formatInputWithCommas } from "@/global-files/function";
-import { Button, Chip, Divider, TextField } from "@mui/material";
+import {
+  Button,
+  Chip,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { FC, useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import LuggageIcon from "@mui/icons-material/Luggage";
+
 const OrdersContainer = () => {
   // initial states
   const [orderList, setOrderList] = useState<OrderDataType[] | []>([]);
@@ -165,6 +176,18 @@ interface OrderCardProps {
   order: OrderDataType;
 }
 const OrderCard: FC<OrderCardProps> = ({ order }) => {
+  // initial states
+  const [openDetailsDialog, setOpenDetailsDialog] = useState<boolean>(false);
+
+  // handle open details dialog
+  const handleOpenDetailsDialog = () => {
+    setOpenDetailsDialog(true);
+  };
+  // handle close details dialog
+  const handleCloseDetailsDialog = () => {
+    setOpenDetailsDialog(false);
+  };
+
   return (
     <>
       <div className="p-3 border border-divider grid grid-cols-1 gap-2 min-h-48 rounded-md">
@@ -217,6 +240,7 @@ const OrderCard: FC<OrderCardProps> = ({ order }) => {
               نمایش
             </Button>
             <Button
+              onClick={handleOpenDetailsDialog}
               size="small"
               variant="contained"
               className="rounded-lg bg-divider shadow-none text-text-main"
@@ -226,6 +250,138 @@ const OrderCard: FC<OrderCardProps> = ({ order }) => {
           </div>
         </div>
       </div>
+      {openDetailsDialog && (
+        <OrderDetailsDialog
+          order={order}
+          onClose={handleCloseDetailsDialog}
+          onOpen={handleOpenDetailsDialog}
+          open={openDetailsDialog}
+        />
+      )}
     </>
+  );
+};
+
+interface OrderDetailsDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onOpen: () => void;
+  order: OrderDataType;
+}
+const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
+  onClose,
+  open,
+  onOpen,
+  order,
+}) => {
+  return (
+    <Dialog onClose={onClose} open={open} maxWidth={"md"} fullWidth={true}>
+      <DialogTitle className="flex items-center justify-between py-3 px-5">
+        <span className="text-text-main text-base font-semibold">
+          جزئیات بلیت{" "}
+        </span>
+        <IconButton onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent className="grid grid-cols-3 gap-2">
+        <div className="p-3 border border-divider rounded-xl flex flex-col items-start justify-between gap-6">
+          <span className="text-text-main text-sm font-semibold">
+            اطلاعات سرپرست
+          </span>
+          <div className="w-full grid grid-cols-1 gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">
+                نام و نام خانوادگی
+              </span>
+              <span className="text-text-main text-sm">
+                {order.details?.leader.title_fa}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">نام لاتین</span>
+              <span className="text-text-main text-sm">
+                {order.details?.leader.title_en}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">شماره تماس</span>
+              <span className="text-text-main text-sm">
+                {order.details?.leader.mobile}
+              </span>
+            </div>
+          </div>
+        </div>{" "}
+        <div className="p-3 border border-divider rounded-xl flex flex-col items-start justify-between gap-6">
+          <span className="text-text-main text-sm font-semibold">
+            مشخصات سفر{" "}
+          </span>
+          <div className="w-full grid grid-cols-1 gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">تاریخ </span>
+              <span className="text-text-main text-sm">... </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">شماره سفارش</span>
+              <span className="text-text-main text-sm">
+                {order.details?.serial_id}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">نوع سفر</span>
+              <span className="text-text-main text-sm">... </span>
+            </div>
+          </div>
+        </div>{" "}
+        <div className="p-3 border border-divider rounded-xl flex flex-col items-start justify-between gap-6">
+          <span className="text-text-main text-sm font-semibold">کارشناس</span>
+          <div className="w-full grid grid-cols-1 gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">جنسیت </span>
+              <span className="text-text-main text-sm">
+                {order.details?.operator.sex === "male" ? "مرد" : "زن"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-text-subText text-xs">نام</span>
+              <span className="text-text-main text-sm">
+                {order.details?.operator.title}
+              </span>
+            </div>
+          </div>
+        </div>{" "}
+        <div className="col-span-3 p-3 border border-divider rounded-xl grid grid-cols-1 gap-5">
+          <span className="text-text-main text-sm font-semibold">
+            اطلاعات مالی
+          </span>
+          <div className="grid grid-cols-6 gap-3">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span className="text-text-subText text-xs">قیمت خرید</span>
+              <span className="text-text-main text-sm">...</span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span className="text-text-subText text-xs">جریمه</span>
+              <span className="text-text-main text-sm">...</span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span className="text-text-subText text-xs">برگشتی</span>
+              <span className="text-text-main text-sm">...</span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span className="text-text-subText text-xs">پرداختی</span>
+              <span className="text-text-main text-sm">...</span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span className="text-text-subText text-xs">مانده پرداختی</span>
+              <span className="text-text-main text-sm">...</span>
+            </div>{" "}
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span className="text-text-subText text-xs">تخفیف</span>
+              <span className="text-text-main text-sm">...</span>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
