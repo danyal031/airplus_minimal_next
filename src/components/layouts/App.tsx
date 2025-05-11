@@ -22,12 +22,6 @@ import Cookies from "universal-cookie";
 // import Loading from "./loading";
 
 const App = ({ children }: { children: React.ReactNode }) => {
-  // useEffect(() => {
-  //   const owner = localStorage.getItem("owner");
-
-  // if (process.env.NODE_ENV === "production") {
-  //   console.log = function () {};
-  // }
   if (process.env.NODE_ENV === "production") {
     const cookies = new Cookies();
     const devKey = cookies.get("developer");
@@ -35,7 +29,6 @@ const App = ({ children }: { children: React.ReactNode }) => {
       console.log = function () {};
     }
   }
-  // }, []);
 
   // initial states
   // theme colors
