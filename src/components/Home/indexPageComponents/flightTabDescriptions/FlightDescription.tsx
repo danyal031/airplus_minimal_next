@@ -150,11 +150,11 @@ const FlightDescriptionOnDesktop = () => {
       {" "}
       <div
         className="hidden md:grid grid-cols-1 gap-8"
-        style={{
-          backgroundImage: `url('/assets/images/flightSection/flight-description-banner.svg')`,
-          backgroundRepeat: "no-repeat",
-          overflow: "hidden",
-        }}
+        // style={{
+        //   backgroundImage: `url('/assets/images/flightSection/flight-description-banner.svg')`,
+        //   backgroundRepeat: "no-repeat",
+        //   overflow: "hidden",
+        // }}
       >
         {renderAboutFlightTickets()}
         {renderPurchaseBenefits()}
