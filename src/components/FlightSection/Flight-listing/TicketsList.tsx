@@ -69,28 +69,26 @@ const TicketsList = () => {
       { id: "5", label: "دیرترین" },
     ];
     return (
-      <>
-        <div className="w-full grid grid-cols-10 gap-0">
-          {filtersOptions.map((tab) => {
-            const isActive = filterTabValue === tab.id;
-            return (
-              <span
-                key={tab.id}
-                onClick={() => {
-                  handleFilterTabChange(tab.id);
-                }}
-                className={`truncate col-span-2 text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${
-                  isActive
-                    ? "bg-main text-primary-main"
-                    : "bg-paper text-text-subText"
-                }`}
-              >
-                {tab.label}
-              </span>
-            );
-          })}
-        </div>
-      </>
+      <div className="flex items-center justify-start gap-2">
+        {filtersOptions.map((tab) => {
+          const isActive = filterTabValue === tab.id;
+          return (
+            <span
+              onClick={() => {
+                handleFilterTabChange(tab.id);
+              }}
+              key={tab.id}
+              className={`bg-paper py-1 px-3 rounded-lg text-sm border cursor-pointer ${
+                isActive
+                  ? "text-primary-main border-primary-main"
+                  : "text-text-subText"
+              }`}
+            >
+              {tab.label}
+            </span>
+          );
+        })}
+      </div>
     );
   };
 
@@ -99,16 +97,9 @@ const TicketsList = () => {
     return (
       <>
         <div className="hidden md:grid grid-cols-1 gap-16">
-          <div className="bg-paper rounded-xl px-5 pb-3 grid grid-cols-1 gap-3">
-            <div className="flex items-center justify-start gap-3">
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-text-main text-sm truncate font-semibold">
-                  مرتب سازی
-                </span>
-              </div>
-              {renderFilterTab()}
-            </div>
-            <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-2">
+            {renderFilterTab()}
+            <div className="grid grid-cols-1 gap-3 bg-paper px-5 py-3 rounded-xl">
               {flightTab === 1 ? (
                 Array.isArray(filteredSearchFlightResponseData?.activeWent) &&
                 filteredSearchFlightResponseData?.activeWent.length > 0 ? (
