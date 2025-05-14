@@ -165,9 +165,7 @@ const FlightDescriptionOnDesktop = () => {
 
 const FlightDescriptionOnMobile = () => {
   // initial states
-  const [config, setConfig] = React.useState<null | null | ConfigDataType>(
-    null
-  );
+  const [config, setConfig] = React.useState<null | ConfigDataType>(null);
   // handle initial value
   useEffect(() => {
     setConfig(JSON.parse(localStorage.getItem("minimal_config") as string));
