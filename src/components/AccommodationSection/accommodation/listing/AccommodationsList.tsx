@@ -20,11 +20,15 @@ interface AccommodationsListProps {
   fetchMore: boolean;
   page: number;
   fetchAccommodations: (currentPage: number) => void;
+  infiniteScrollRef: any;
+  hasMore: boolean;
 }
 const AccommodationsList: FC<AccommodationsListProps> = ({
   fetchMore,
   page,
   fetchAccommodations,
+  infiniteScrollRef,
+  hasMore,
 }) => {
   // initial states
   const [filterTabValue, setFilterTabValue] = useState<string>("1");
@@ -84,38 +88,16 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
     );
   };
 
-  // const Row: FC<ListChildComponentProps<AccommodationsListDataType[]>> = ({
-  //   index,
-  //   style,
-  //   data,
-  // }) => {
-  //   const item = data[index]; // دریافت آیتم بر اساس ایندکس
-  //   console.log("item", item);
-
-  //   return (
-  //     <div style={style}>
-  //       {item ? (
-  //         <motion.div
-  //           initial={{ y: 100, opacity: 0 }}
-  //           animate={{ y: 0, opacity: 1 }}
-  //           transition={{ duration: 0.3 }}
-  //         >
-  //           <AccommodationCard data={item} />
-  //         </motion.div>
-  //       ) : (
-  //         <div>Loading...</div>
-  //       )}
-  //     </div>
-  //   );
-  // };
   // render accommodations
   const renderAccommodations = () => {
     return (
       <>
         <InfiniteScroll
+          ref={infiniteScrollRef}
           dataLength={filteredSearchAccommodationsList.length}
-          next={() => fetchAccommodations(page)}
-          hasMore={fetchMore}
+          next={fetchData}
+          hasMore={hasMore}
+          scrollThreshold={1}
           loader={
             <div
               className={`${
@@ -125,49 +107,31 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
               <ListingAccommodationsProgress />
             </div>
           }
-          scrollableTarget="scrollableDiv"
-          className={`overflow-y-hidden grid ${
-            typeOfAccommodation === "grid" ? "grid-cols-3" : "grid-cols-1"
-          } gap-4`}
+          className="!overflow-hidden"
         >
-          {filteredSearchAccommodationsList.map((item: any, index: number) => {
-            return (
-              <motion.div
+          {hotelsList
+            .filter((elm) => elm.min_price !== 0)
+            .map((item, index) => (
+              <HotelItemCard
+                item={item}
                 key={index}
-                initial={{ y: 100, opacity: 0 }} // Initial position (below the viewport) and opacity
-                animate={{ y: 0, opacity: 1 }} // Animation to move from bottom to top and fade in
-                transition={{ duration: 0.3, delay: index * 0.1 }} // Animation duration and delay for each item
-              >
-                <AccommodationCard data={item} />
-              </motion.div>
-            );
-          })}
+                setOpenRoomsDrawer={setOpenRoomsDrawer}
+              />
+            ))}
         </InfiniteScroll>
-        {/* <InfiniteScroll
-          dataLength={filteredSearchAccommodationsList.length}
-          next={() => fetchAccommodations(page)}
-          hasMore={fetchMore}
-          loader={
-            <div className="col-span-3">
-              <ListingAccommodationsProgress />
-            </div>
-          }
-          scrollableTarget="scrollableDiv"
-          // className={`overflow-y-hidden grid ${
-          //   typeOfAccommodation === "grid" ? "grid-cols-3" : "grid-cols-1"
-          // } gap-4`}
-        >
-         
-          <List
-            height={600}
-            itemCount={filteredSearchAccommodationsList.length}
-            itemSize={200}
-            width="100%"
-            itemData={filteredSearchAccommodationsList} // ارسال کل لیست به عنوان داده
-          >
-            {Row}
-          </List>
-        </InfiniteScroll> */}
+        {!hasMore && hotelsList.length > 0 && (
+          <div>
+            {hotelsList
+              .filter((elm) => elm.min_price == 0)
+              .map((item, index) => (
+                <HotelItemCard
+                  item={item}
+                  key={index}
+                  setOpenRoomsDrawer={setOpenRoomsDrawer}
+                />
+              ))}
+          </div>
+        )}
       </>
     );
   };
@@ -223,7 +187,7 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
                   </IconButton>
                 </div>
               </div>
-              <div className="col-span-10">
+              <div className="col-span-10" ref={scrollableDivRef}>
                 {!accommodationsLoading ? (
                   filteredSearchAccommodationsList.length > 0 ? (
                     renderAccommodations()
