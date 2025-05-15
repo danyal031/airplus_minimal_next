@@ -1,5 +1,11 @@
 "use client";
-import { Collapse, IconButton, TextField, useTheme } from "@mui/material";
+import {
+  Button,
+  Collapse,
+  IconButton,
+  TextField,
+  useTheme,
+} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -22,7 +28,10 @@ const ResponsiveFooter = () => {
 
   const [value, setValue] = React.useState(0);
   const [openTabId, setOpenTabId] = useState<null | string>(null);
-  const { config } = useGlobalContext().global;
+  const { config, setShowAlertDetails } = useGlobalContext().global;
+  const { setColleagueLogin, setOpenLoginDialog } =
+    useGlobalContext().loginContext;
+  const { userData } = useGlobalContext().userContext;
 
   const theme = useTheme();
 
@@ -243,7 +252,27 @@ const ResponsiveFooter = () => {
                 </Link>
               );
             })}
-          </div>
+            <Button
+              onClick={() => {
+                if (userData) {
+                  setShowAlertDetails({
+                    alertMessage:
+                      "برای ورود به عنوان همکار ابتدا از حساب کاربری خود خارج شوید",
+                    showAlert: true,
+                    alertType: "warning",
+                  });
+                } else {
+                  setColleagueLogin(true);
+                  setOpenLoginDialog(true);
+                }
+              }}
+              variant="outlined"
+              size="small"
+              className="rounded-xl px-3"
+            >
+              ورود همکار
+            </Button>
+          </div>{" "}
         </div>
       </>
     );

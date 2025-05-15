@@ -56,6 +56,32 @@ export const getAuthSubmit = ({ passenger_id, otp }: authSubmitInputType) => {
   });
 };
 
+export const getAuthBasic = ({
+  userName,
+  password,
+}: {
+  userName: string;
+  password: string;
+}) => {
+  return new Promise((resolve, reject) => {
+    customAxios
+      .post(process.env.NEXT_PUBLIC_AUTH_BASIC_ENDPOINT as string, {
+        username: userName,
+        password,
+      })
+      .then((response) => {
+        // Handle successful response here
+        console.log("response", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        // Handle error here
+        console.log("error", error);
+        reject(error);
+      });
+  });
+};
+
 export const getCountryList = (props: baseDataDataType) => {
   console.log("sent data", props);
   return new Promise((resolve, reject) => {

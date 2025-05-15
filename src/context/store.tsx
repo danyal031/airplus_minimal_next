@@ -50,6 +50,8 @@ interface ContextProps {
   loginContext: {
     openLoginDialog: boolean;
     setOpenLoginDialog: Dispatch<SetStateAction<boolean>>;
+    colleagueLogin: boolean;
+    setColleagueLogin: Dispatch<SetStateAction<boolean>>;
   };
   userContext: {
     userId: string;
@@ -182,6 +184,8 @@ const GlobalContext = createContext<ContextProps>({
   loginContext: {
     openLoginDialog: false,
     setOpenLoginDialog: () => {},
+    colleagueLogin: false,
+    setColleagueLogin: () => {},
   },
   userContext: {
     userId: "",
@@ -303,6 +307,7 @@ export const GlobalContextProvider = ({
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
   const [userData, setUserData] = useState<UserDataType | null>(null);
+  const [colleagueLogin, setColleagueLogin] = useState<boolean>(false);
   // global
   const [showProgress, setShowProgress] = useState<boolean>(false);
   const [config, setConfig] = useState<null | ConfigDataType>(null);
@@ -414,7 +419,12 @@ export const GlobalContextProvider = ({
       <ErrorBoundary fallbackRender={fallbackRender}>
         <GlobalContext.Provider
           value={{
-            loginContext: { openLoginDialog, setOpenLoginDialog },
+            loginContext: {
+              openLoginDialog,
+              setOpenLoginDialog,
+              colleagueLogin,
+              setColleagueLogin,
+            },
             userContext: { userId, setUserId, userData, setUserData },
             global: {
               tabValueSearchBox,
