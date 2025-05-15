@@ -2,7 +2,12 @@ import AccommodationDetailsContainer from "@/components/AccommodationSection/acc
 import React from "react";
 
 const page = () => {
-  return <AccommodationDetailsContainer />;
+  // return <AccommodationDetailsContainer />;
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <span className="text-text-main font-bold">به زودی...</span>
+    </div>
+  );
 };
 
 export default page;

@@ -81,7 +81,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
   const renderTab = () => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
-      { id: "2", label: "اقامتگاه", active: false },
+      { id: "2", label: "اقامتگاه", active: true },
       { id: "3", label: "پرواز و اقامتگاه", active: false },
       // { id: "3", label: "اتوبوس", active: false },
       // { id: "4", label: "تور", active: false },
@@ -132,8 +132,8 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
     switch (tabValueSearchBox) {
       case "1":
         return <FlightSearchForm />;
-      // case "2":
-      //   return <AccommodationSearchForm />;
+      case "2":
+        return <AccommodationSearchForm />;
       default:
         return renderComingSoon();
     }
