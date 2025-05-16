@@ -2,7 +2,7 @@ import React from "react";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import { Skeleton } from "@mui/material";
 const ListingAccommodationsProgress = () => {
-  const progressLength = Array.from(Array(3));
+  const progressLength = Array.from(Array(2));
   const renderOnDesktop = () => {
     return (
       <>

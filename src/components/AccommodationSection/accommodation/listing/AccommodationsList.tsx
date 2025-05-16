@@ -1,6 +1,6 @@
 "use client";
 import { useGlobalContext } from "@/context/store";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import ListingAccommodationsProgress from "@/components/Skelton-Components/AccommodationSection/listing/ListingAccommodationsProgress";
 import AccommodationCard from "./AccommodationCard";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ProgressLoading from "@/components/BasUIComponents/ProgressLoading";
 
 // import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 // import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
@@ -22,6 +23,8 @@ interface AccommodationsListProps {
   fetchAccommodations: (currentPage: number) => void;
   infiniteScrollRef: any;
   hasMore: boolean;
+  scrollableDivRef: any;
+  showProgressLoading: boolean;
 }
 const AccommodationsList: FC<AccommodationsListProps> = ({
   fetchMore,
@@ -29,6 +32,8 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
   fetchAccommodations,
   infiniteScrollRef,
   hasMore,
+  scrollableDivRef,
+  showProgressLoading,
 }) => {
   // initial states
   const [filterTabValue, setFilterTabValue] = useState<string>("1");
@@ -87,7 +92,12 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
       </>
     );
   };
-
+  useEffect(() => {
+    console.log("filteredSearchAccommodationsList", {
+      filteredSearchAccommodationsList,
+      accommodationsLoading,
+    });
+  }, [filteredSearchAccommodationsList, accommodationsLoading]);
   // render accommodations
   const renderAccommodations = () => {
     return (
@@ -95,40 +105,34 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
         <InfiniteScroll
           ref={infiniteScrollRef}
           dataLength={filteredSearchAccommodationsList.length}
-          next={fetchData}
+          next={fetchAccommodations}
           hasMore={hasMore}
           scrollThreshold={1}
-          loader={
-            <div
-              className={`${
-                typeOfAccommodation === "grid" ? "col-span-3" : "col-span-1"
-              }`}
-            >
-              <ListingAccommodationsProgress />
-            </div>
-          }
+          loader={<ListingAccommodationsProgress />}
           className="!overflow-hidden"
         >
-          {hotelsList
+          {filteredSearchAccommodationsList
             .filter((elm) => elm.min_price !== 0)
             .map((item, index) => (
-              <HotelItemCard
-                item={item}
-                key={index}
-                setOpenRoomsDrawer={setOpenRoomsDrawer}
-              />
+              // <HotelItemCard
+              //   item={item}
+              //   key={index}
+              //   setOpenRoomsDrawer={setOpenRoomsDrawer}
+              // />
+              <AccommodationCard data={item} key={index} />
             ))}
         </InfiniteScroll>
-        {!hasMore && hotelsList.length > 0 && (
+        {!hasMore && filteredSearchAccommodationsList.length > 0 && (
           <div>
-            {hotelsList
+            {filteredSearchAccommodationsList
               .filter((elm) => elm.min_price == 0)
               .map((item, index) => (
-                <HotelItemCard
-                  item={item}
-                  key={index}
-                  setOpenRoomsDrawer={setOpenRoomsDrawer}
-                />
+                // <HotelItemCard
+                //   item={item}
+                //   key={index}
+                //   setOpenRoomsDrawer={setOpenRoomsDrawer}
+                // />
+                <AccommodationCard data={item} key={index} />
               ))}
           </div>
         )}
@@ -140,6 +144,8 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
   const renderOnDesktop = () => {
     return (
       <>
+        {showProgressLoading && <ProgressLoading />}
+
         <div className="hidden md:grid grid-cols-1 gap-2">
           <div className="flex items-center justify-start">
             <span className="text-text-subText text-base flex items-center justify-center gap-0">
@@ -163,9 +169,9 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
                   </span>
                   <IconButton
                     size="small"
-                    onClick={() => {
-                      handleTypesOfShowList("list");
-                    }}
+                    // onClick={() => {
+                    //   handleTypesOfShowList("list");
+                    // }}
                   >
                     {typeOfAccommodation === "list" ? (
                       <MenuIcon fontSize="small" color="primary" />
@@ -188,7 +194,7 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
                 </div>
               </div>
               <div className="col-span-10" ref={scrollableDivRef}>
-                {!accommodationsLoading ? (
+                {/* {!accommodationsLoading ? (
                   filteredSearchAccommodationsList.length > 0 ? (
                     renderAccommodations()
                   ) : (
@@ -200,6 +206,17 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
                   )
                 ) : (
                   <ListingAccommodationsProgress />
+                )} */}
+                {showProgressLoading ? (
+                  <ListingAccommodationsProgress />
+                ) : filteredSearchAccommodationsList.length > 0 ? (
+                  renderAccommodations()
+                ) : (
+                  <div className="flex items-center justify-center min-h-52 w-full">
+                    <span className="text-base font-semibold">
+                      هتلی جهت نمایش وجود ندارد
+                    </span>
+                  </div>
                 )}
               </div>
             </div>

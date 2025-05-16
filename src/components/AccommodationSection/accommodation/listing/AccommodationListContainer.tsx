@@ -23,6 +23,9 @@ const AccommodationListContainer = () => {
   const [hasMore, setHasMore] = useState(false);
   const controllerRef = useRef(null);
   const originalItems = useRef([]);
+  const infiniteScrollRef = useRef(null);
+  const scrollableDivRef = useRef(null);
+  const [showProgressLoading, setShowProgressLoading] = useState(true);
 
   const {
     accommodationsList,
@@ -174,6 +177,7 @@ const AccommodationListContainer = () => {
           setFilteredSearchAccommodationsList(updatedList);
           setAccommodationsLoading(false);
           originalItems.current = updatedList;
+          setShowProgressLoading(false);
           getHotelsMinPrice(
             {
               ...json,
@@ -265,6 +269,9 @@ const AccommodationListContainer = () => {
       originalItems.current = [];
       setPage(1);
       setHasMore(false);
+      setShowProgressLoading(true);
+      setFilteredSearchAccommodationsList([]);
+      setAccommodationsList([]);
       fetchAccommodations(1, true);
     } else {
       router.push("/");
@@ -283,7 +290,9 @@ const AccommodationListContainer = () => {
             page={page}
             fetchAccommodations={fetchAccommodations}
             infiniteScrollRef={infiniteScrollRef}
+            scrollableDivRef={scrollableDivRef}
             hasMore={hasMore}
+            showProgressLoading={showProgressLoading}
           />
         </div>
       </div>
