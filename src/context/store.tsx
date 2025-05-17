@@ -175,6 +175,10 @@ interface ContextProps {
       >;
       roomsDetails: RoomsDetailsDataType[] | null;
       setRoomsDetails: Dispatch<SetStateAction<RoomsDetailsDataType[] | null>>;
+      accommodationPassenger: UserInformationDataType[] | [];
+      setAccommodationPassenger: Dispatch<
+        SetStateAction<UserInformationDataType[] | []>
+      >;
     };
   };
 }
@@ -290,6 +294,8 @@ const GlobalContext = createContext<ContextProps>({
       setAdditionalDetailsAccommodation: () => {},
       roomsDetails: null,
       setRoomsDetails: () => {},
+      accommodationPassenger: [],
+      setAccommodationPassenger: () => {},
     },
   },
 });
@@ -401,6 +407,9 @@ export const GlobalContextProvider = ({
   const [roomsDetails, setRoomsDetails] = useState<
     RoomsDetailsDataType[] | null
   >(null);
+  const [accommodationPassenger, setAccommodationPassenger] = useState<
+    UserInformationDataType[] | []
+  >([]);
   //
 
   // handle error boundary
@@ -519,6 +528,8 @@ export const GlobalContextProvider = ({
                 setAdditionalDetailsAccommodation,
                 roomsDetails,
                 setRoomsDetails,
+                accommodationPassenger,
+                setAccommodationPassenger,
               },
             },
           }}

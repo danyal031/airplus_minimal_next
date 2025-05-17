@@ -40,6 +40,7 @@ const AccommodationListContainer = () => {
     accommodationToDate,
     setAccommodationDestination,
     accommodationDestination,
+    accommodationPassengersCapacity,
   } = useGlobalContext().accommodationContext.accommodationSearch;
 
   const searchParams = useSearchParams();
@@ -163,12 +164,15 @@ const AccommodationListContainer = () => {
       console.log("response***", response);
       if (response.data.Status) {
         setHasMore(response.data.Table.next_page ? true : false);
-        if (!accommodationDestination) {
-          // setSelectedDestinationHotel(
-          //   response.data.Search.city || response.data.Search.accommodation
-          // );
-          setAccommodationDestination(response.data.Search.city);
-        }
+        // setSelectedDestinationHotel(
+        //   response.data.Search.city || response.data.Search.accommodation
+        // );
+        setAccommodationDestination(response.data.Search.city);
+        setAccommodationPassengersCapacity({
+          adultCapacity: adult_capacity,
+          childCapacity: child_capacity,
+        });
+
         if (response.data.Data.length > 0) {
           const updatedList = toEmpty
             ? [...response.data.Data]
@@ -197,71 +201,6 @@ const AccommodationListContainer = () => {
         console.log("Error fetching data:", error);
       }
     }
-
-    // getAccommodationsList(
-    //   destination,
-    //   departing,
-    //   returning,
-    //   type,
-    //   adult_capacity,
-    //   child_capacity,
-    //   currentPage
-    // )
-    //   .then((res: any) => {
-    //     if (res.Status) {
-    //       console.log("Accommodations: ", res.Data);
-    //       if (res.links.next === null) {
-    //         console.log("res.links.next", res.links.next);
-    //         setFetchMore(false);
-    //       }
-
-    //       setPage((prev) => prev + 1);
-    //       setAccommodationsLoading(false);
-    //       const updatedList = [...accommodationsList, ...res.Data];
-
-    //       setAccommodationsList(updatedList);
-    //       setFilteredSearchAccommodationsList(updatedList);
-
-    //       const accommodationsIds = res.Data.map(
-    //         (item: AccommodationsListDataType) => item.id
-    //       );
-    //       console.log("accommodationsIds", accommodationsIds);
-
-    //       getMinPrice(departing, returning, accommodationsIds)
-    //         .then((response: any) => {
-    //           console.log("response33333", response);
-
-    //           if (response.Status) {
-    //             const mergedList = updatedList.map(
-    //               (element: AccommodationsListDataType) => {
-    //                 const priceItem = response.Data[element.id];
-    //                 return {
-    //                   ...element,
-    //                   min_price: priceItem ? priceItem.min_price : 0,
-    //                 };
-    //               }
-    //             );
-
-    //             console.log("Merged accommodations with prices:", mergedList);
-
-    //             setAccommodationsList(mergedList);
-    //             setFilteredSearchAccommodationsList(mergedList);
-    //           }
-    //         })
-    //         .catch((err) => {});
-    //     }
-    //   })
-    //   .catch((err) => {})
-    //   .finally(() => {
-    //     setIsFetching(false);
-    //   });
-    // setAccommodationFromDate(searchParams.get("departing"));
-    // setAccommodationToDate(searchParams.get("returning"));
-
-    // setAccommodationPassengersCapacity({
-    //   adultCapacity: adult_capacity,
-    //   childCapacity: child_capacity,
-    // });
   };
 
   useEffect(() => {

@@ -447,22 +447,32 @@
 //
 
 "use client";
-import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
+import {
+  AccommodationsListDataType,
+  RoomsDetailsDataType,
+} from "@/DataTypes/accommodation/accommodationsListTypes";
 import { Box, Button, Rating, Tooltip } from "@mui/material";
 import Image from "next/image";
-import React, { FC } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Lottie from "lottie-react";
 import loadingDot from "../../../../../public/assets/lottie/loading-dot.json";
 import { formatInputWithCommas } from "@/global-files/function";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
 
 interface AccommodationCardProps {
   data: any;
+  setOpenRoomsDialog: Dispatch<
+    SetStateAction<{ isOpen: boolean; item: AccommodationDataType | null }>
+  >;
 }
 
-const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
+const AccommodationCard: FC<AccommodationCardProps> = ({
+  data,
+  setOpenRoomsDialog,
+}) => {
   const renderItemInDesktop = () => (
     <div
       style={{
@@ -507,12 +517,12 @@ const AccommodationCard: FC<AccommodationCardProps> = ({ data }) => {
 
           <Button
             disabled={!data.min_price}
-            // onClick={() =>
-            //   props.setOpenRoomsDrawer({
-            //     isOpen: true,
-            //     item: item,
-            //   })
-            // }
+            onClick={() =>
+              setOpenRoomsDialog({
+                isOpen: true,
+                item: data,
+              })
+            }
             variant="contained"
             className="w-full"
           >

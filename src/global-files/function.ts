@@ -344,3 +344,10 @@ export function validateMelliCode(melliCode: string): boolean {
     }
   }
 }
+
+export const calculateNights = (startDate, endDate, formatInput) => {
+  const start = moment(startDate, formatInput);
+  const end = moment(endDate, formatInput);
+  let duration = end.diff(start, "days");
+  return duration;
+};
