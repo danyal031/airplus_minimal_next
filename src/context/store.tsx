@@ -181,6 +181,9 @@ interface ContextProps {
       >;
     };
   };
+  // flightAccommodationContext:{
+  //   flightAccommodationSearch: {
+  // }
 }
 
 // Create combined context
@@ -298,6 +301,11 @@ const GlobalContext = createContext<ContextProps>({
       setAccommodationPassenger: () => {},
     },
   },
+  // flightAccommodationContext: {
+  //   flightAccommodationSearch: {
+
+  //   }
+  // }
 });
 
 interface GlobalContextProviderProps {

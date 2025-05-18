@@ -28,6 +28,8 @@ const SearchHeaderReservation = () => {
         setTabValue("1");
       case "accommodations":
         setTabValue("2");
+      case "flight-accommodation":
+        setTabValue("3");
     }
   }, [path]);
 
@@ -46,7 +48,7 @@ const SearchHeaderReservation = () => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
       { id: "2", label: "اقامتگاه", active: true },
-      { id: "3", label: "پرواز و اقامتگاه", active: false },
+      { id: "3", label: "پرواز و اقامتگاه", active: true },
       // { id: "3", label: "اتوبوس", active: false },
       // { id: "4", label: "تور", active: false },
       // { id: "5", label: "قطار", active: false },
@@ -90,11 +92,11 @@ const SearchHeaderReservation = () => {
   const renderForm = () => {
     switch (tabValue) {
       case "1":
-        return <FlightSearchForm />;
+        return <FlightSearchForm type="flight" />;
       case "2":
         return <AccommodationSearchForm />;
-      default:
-        return <FlightSearchForm />;
+      case "3":
+        return <FlightSearchForm type="flight-accommodation" />;
     }
   };
 
@@ -105,12 +107,12 @@ const SearchHeaderReservation = () => {
       <>
         <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
           <div className="col-span-4 flex items-center justify-center">
-            <span className="font-semibold text-paper text-sm">
+            <div className="font-semibold text-paper text-sm">
               <span>بلیط هواپیما</span>
               <span> {origin?.title_fa} </span>
               <span> به </span>
               <span> {destination?.title_fa} </span>
-            </span>{" "}
+            </div>{" "}
           </div>
           <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
             <span className={`text-paper font-semibold`}>
@@ -134,10 +136,10 @@ const SearchHeaderReservation = () => {
         {" "}
         <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
           <div className="col-span-4 flex items-center justify-center">
-            <span className="font-semibold text-paper text-sm">
+            <div className="font-semibold text-paper text-sm">
               <span>هتل های </span>
               <span>{searchParams.get("destination")}</span>
-            </span>{" "}
+            </div>{" "}
           </div>
           <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
             <span className={`text-paper font-semibold`}>
@@ -149,6 +151,35 @@ const SearchHeaderReservation = () => {
           </div>
         </div>
       </>
+    );
+  };
+
+  const flightAccommodationSummerySearch = () => {
+    return (
+      <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
+        <div className="col-span-4 flex items-center justify-center gap-6">
+          <div className="font-semibold text-paper text-sm">
+            <span>بلیط هواپیما</span>
+            <span> {origin?.title_fa} </span>
+            <span> به </span>
+            <span> {destination?.title_fa} </span>
+          </div>{" "}
+          <div className="font-semibold text-paper text-sm">
+            <span>هتل های </span>
+            <span> {destination?.title_fa} </span>
+          </div>{" "}
+        </div>
+        <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
+          <span className={`text-paper font-semibold`}>
+            رفت: {formatDateWithSlash(fromDate as string)}
+          </span>{" "}
+          {toDate && (
+            <span className={`text-paper font-semibold`}>
+              برگشت: {formatDateWithSlash(toDate as string)}
+            </span>
+          )}
+        </div>
+      </div>
     );
   };
 
@@ -164,8 +195,14 @@ const SearchHeaderReservation = () => {
         );
       case "2":
         return accommodationSummerySearch();
-      default:
-        return "loading";
+      case "3":
+        return origin && destination ? (
+          flightAccommodationSummerySearch()
+        ) : (
+          <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
+            درحال بارگذاری...{" "}
+          </div>
+        );
     }
   };
 

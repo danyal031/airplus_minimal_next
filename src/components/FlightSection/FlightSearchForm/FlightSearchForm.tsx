@@ -30,7 +30,11 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import { useGlobalActions } from "@/context/actionStore";
 
-const FlightSearchForm = () => {
+interface FlightSearchFormProps {
+  type: "flight" | "flight-accommodation";
+}
+
+const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
   // initial states
   const {
     fromDate,
@@ -58,15 +62,44 @@ const FlightSearchForm = () => {
     );
   };
 
+  const handleFlightAccommodationTransfer = () => {
+    router.push(
+      `/search/flight-accommodation?origin=${origin?.iata}&destination=${
+        destination?.iata
+      }&accommodation=${
+        destination?.iata
+      }&departure_date=${convertPersianToEnglishNumbers(
+        fromDate as string
+      )}&returning_date=${
+        toDate ? convertPersianToEnglishNumbers(toDate as string) : false
+      }`
+    );
+  };
+
+  // search flight
+  const searchFlight = () => {
+    handleTransfer();
+    handleFlightSearch({
+      origin: origin?.iata as string,
+      destination: destination?.iata as string,
+      departure_date: formatDateWithSlash(fromDate as string),
+      returning_date: toDate ? formatDateWithSlash(toDate) : false,
+    });
+  };
+
+  const searchFlightAccommodation = () => {
+    handleFlightAccommodationTransfer();
+  };
+
+  // handle search field object
+  const searchFieldObject = {
+    flight: searchFlight,
+    "flight-accommodation": searchFlightAccommodation,
+  };
+
   const handleClickSubmit = (submit = false) => {
     if (origin && destination && fromDate && !isFlightSearching) {
-      handleTransfer();
-      handleFlightSearch({
-        origin: origin?.iata as string,
-        destination: destination?.iata as string,
-        departure_date: formatDateWithSlash(fromDate as string),
-        returning_date: toDate ? formatDateWithSlash(toDate) : false,
-      });
+      searchFieldObject[type]();
     }
   };
   const renderDatePicker = () => {
@@ -78,7 +111,7 @@ const FlightSearchForm = () => {
           toDate={toDate}
           setFromDate={setFromDate}
           setToDate={setToDate}
-          forcedReturn={false}
+          forcedReturn={type == "flight" ? false : true}
         />
       </>
     );

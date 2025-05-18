@@ -17,6 +17,7 @@ import { useGlobalContext } from "@/context/store";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
+import FlightAccommodationSearchForm from "@/components/FlightAccommodationSection/FlightAccommodationSearchForm/FlightAccommodationSearchForm";
 
 const SearchBox = () => {
   // initial states
@@ -61,19 +62,10 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
         return "flight-pattern.svg";
       case "2":
         return "residence-pattern.svg";
-      default:
+      case "3":
         return "flight-pattern.svg";
-
-      //   case "1":
-      //     return "flight-pattern.png";
-      //   case "2":
-      //     return "train-pattern.png";
-      //   case "3":
-      //     return "bus-pattern.png";
-      //   case "4":
-      //     return "tour-pattern.png";
-      //   case "5":
-      //     return "hotel-pattern.png";
+      // default:
+      //   return "flight-pattern.svg";
     }
   };
 
@@ -82,7 +74,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
       { id: "2", label: "اقامتگاه", active: true },
-      { id: "3", label: "پرواز و اقامتگاه", active: false },
+      { id: "3", label: "پرواز و اقامتگاه", active: true },
       // { id: "3", label: "اتوبوس", active: false },
       // { id: "4", label: "تور", active: false },
       // { id: "5", label: "قطار", active: false },
@@ -93,7 +85,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
         className={`grid grid-cols-3 gap-0 bg-primary-main rounded-tab-down w-4/5 p-0 ${
           tabValueSearchBox === "1" ? "border-r-paper" : "border-r-primary-main"
         } ${
-          tabValueSearchBox === "5" ? "border-l-paper" : "border-l-primary-main"
+          tabValueSearchBox === "3" ? "border-l-paper" : "border-l-primary-main"
         }`}
       >
         {tabs.map((tab, index) => {
@@ -112,7 +104,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
               } col-span-1 flex items-center justify-center font-semibold h-12 ${
                 tabValueSearchBox === "1"
                   ? "border-r-0 rounded-r-none"
-                  : tabValueSearchBox === "5"
+                  : tabValueSearchBox === "3"
                   ? "border-l-0 rounded-l-none"
                   : ""
               }  ${
@@ -131,9 +123,11 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
   const renderForm = () => {
     switch (tabValueSearchBox) {
       case "1":
-        return <FlightSearchForm />;
+        return <FlightSearchForm type="flight" />;
       case "2":
         return <AccommodationSearchForm />;
+      case "3":
+        return <FlightSearchForm type="flight-accommodation" />;
       default:
         return renderComingSoon();
     }
