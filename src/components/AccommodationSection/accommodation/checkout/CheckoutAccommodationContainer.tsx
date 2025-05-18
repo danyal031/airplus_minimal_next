@@ -9,22 +9,34 @@ import {
 import { Button } from "@mui/material";
 import { debounce } from "lodash";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+
+export interface LabelsDataTypes {
+  item_idx: number;
+  passenger_idx: number;
+  age_category: "adult" | "child";
+  idx?: number;
+}
 
 const CheckoutAccommodationContainer = () => {
   // initial states
   const { setAccommodationPassenger, accommodationPassenger } =
     useGlobalContext().accommodationContext.accommodationSearch;
+  const [labels, setLabels] = useState<LabelsDataTypes[]>([]);
+  const [onlineAccommodations, setOnlineAccommodations] = useState<
+    AccommodationDataType[]
+  >([]);
   const childRef = useRef<any>([]);
   const searchParams = useSearchParams();
+
   // handle initial accommodation passenger
   useEffect(() => {
     const factorId = searchParams.get("factor");
     const accommodations = JSON.parse(
       localStorage.getItem(factorId as string) as string
     ).data as AccommodationDataType[];
-
+    setOnlineAccommodations(accommodations);
     const newPassengers: UserInformationDataType[] = accommodations.flatMap(
       (acc: any) => {
         const { adult = 0, child = 0 } = acc.room_type.passengers;
@@ -41,7 +53,31 @@ const CheckoutAccommodationContainer = () => {
     console.log(666, accommodations);
 
     console.log("🧍‍♂️ New passengers:", newPassengers);
+
+    // handle labels
+    const tempLabel: LabelsDataTypes[] = [];
+    accommodations.forEach((item, index) => {
+      for (let i = 0; i < item?.room_type?.passengers.adult; i++) {
+        tempLabel.push({
+          item_idx: index,
+          passenger_idx: i,
+          age_category: "adult",
+        });
+      }
+      for (let i = 0; i < item?.room_type?.passengers.child; i++) {
+        tempLabel.push({
+          item_idx: index,
+          passenger_idx: i,
+          age_category: "child",
+        });
+      }
+    });
+    setLabels(tempLabel.map((i, idx) => ({ ...i, idx })));
   }, []);
+
+  useEffect(() => {
+    console.log("labels", labels);
+  }, [labels]);
 
   // handle onchange user information
   const handleChangeUserInfo = debounce(
@@ -130,6 +166,8 @@ const CheckoutAccommodationContainer = () => {
               ref={(el) => (childRef.current[index] = el)}
               index={index}
               handleOnChange={handleChangeUserInfo}
+              labels={labels}
+              online={onlineAccommodations}
             />
           )
         )}

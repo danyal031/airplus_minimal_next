@@ -1,9 +1,9 @@
 "use client";
-import
-{
+import {
   Autocomplete,
   Box,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -33,8 +33,7 @@ import React, {
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import { useGlobalContext } from "@/context/store";
-import
-{
+import {
   defaultCitizenship,
   defaultPassengerInformation,
   UserInformationDataType,
@@ -43,8 +42,7 @@ import
 } from "@/DataTypes/globalTypes";
 import { motion } from "framer-motion";
 import { Controller, useForm } from "react-hook-form";
-import
-{
+import {
   applyMask,
   calculateAgeCategory,
   removeMask,
@@ -62,9 +60,10 @@ import { getCountryList, getPreviousPassengers } from "@/global-files/axioses";
 import { PreviousPassengerDataType } from "@/DataTypes/previousPassengerTypes";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useShowAlert } from "@/hooks/useShowAlert";
+import { LabelsDataTypes } from "../AccommodationSection/accommodation/checkout/CheckoutAccommodationContainer";
+import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
 
-interface PassengerInformationProps
-{
+interface PassengerInformationProps {
   index: number;
   item: UserInformationDataType;
   passengers: UserInformationDataType[];
@@ -74,15 +73,16 @@ interface PassengerInformationProps
     field: string,
     roomId?: string
   ) => void;
-  handleRemovePassenger?: ( item: UserInformationDataType ) => void;
+  handleRemovePassenger?: (item: UserInformationDataType) => void;
   roomId?: string;
   ref?: React.Ref<any>;
   type: string;
-  setPassengers: ( passengers: UserInformationDataType[] | [] ) => void;
+  setPassengers: (passengers: UserInformationDataType[] | []) => void;
+  labels?: LabelsDataTypes[];
+  online?: AccommodationDataType[];
 }
 
-interface PassengerRef
-{
+interface PassengerRef {
   handleTrigger: () => void;
   getIsValid: () => boolean;
 }
@@ -98,77 +98,75 @@ const PassengerInformation = forwardRef<
       handleOnChange,
       roomId,
       type,
-      handleRemovePassenger = () => { },
+      handleRemovePassenger = () => {},
+      labels,
+      online,
     },
     ref
-  ) =>
-  {
+  ) => {
     // initial states
-    const [ openPreviousPassengersDrawer, setOpenPreviousPassengersDrawer ] =
-      useState<boolean>( false );
+    const [openPreviousPassengersDrawer, setOpenPreviousPassengersDrawer] =
+      useState<boolean>(false);
     const { selectedWentFlight, selectedReturnFlight } =
       useGlobalContext().flightContext.searchContext;
     const { userData } = useGlobalContext().userContext;
     const { setOpenLoginDialog } = useGlobalContext().loginContext;
-    const localRef = useRef( "1" );
-    const [ tabFormValue, setTabFormValue ] = React.useState( "1" );
-    const [ openPassengerForm, setOpenPassengerForm ] =
-      React.useState<boolean>( true );
-    const [ openPreviousPassengersList, setOpenPreviousPassengersList ] =
-      useState<boolean>( false );
+    const localRef = useRef("1");
+    const [tabFormValue, setTabFormValue] = React.useState("1");
+    const [openPassengerForm, setOpenPassengerForm] =
+      React.useState<boolean>(true);
+    const [openPreviousPassengersList, setOpenPreviousPassengersList] =
+      useState<boolean>(false);
     const theme = useTheme();
-    const dateRefOnDesktop = useMask( vMask?.date_yyyy_mm_dd );
-    const dateRefOnMobile = useMask( vMask?.date_yyyy_mm_dd );
-    const passExRefOnDesktop = useMask( vMask?.date_yyyy_mm_dd );
-    const passExRefOnMobile = useMask( vMask?.date_yyyy_mm_dd );
-    const [ openCitizenShip, setOpenCitizenShip ] = useState<boolean>( false );
-    const [ citizenshipList, setCitizenshipList ] = useState<any[]>( [] );
-    const [ selectedCitizenship, setSelectedCitizenship ] =
-      useState<any>( defaultCitizenship );
-    const isFirstRender = useRef( true );
+    const dateRefOnDesktop = useMask(vMask?.date_yyyy_mm_dd);
+    const dateRefOnMobile = useMask(vMask?.date_yyyy_mm_dd);
+    const passExRefOnDesktop = useMask(vMask?.date_yyyy_mm_dd);
+    const passExRefOnMobile = useMask(vMask?.date_yyyy_mm_dd);
+    const [openCitizenShip, setOpenCitizenShip] = useState<boolean>(false);
+    const [citizenshipList, setCitizenshipList] = useState<any[]>([]);
+    const [selectedCitizenship, setSelectedCitizenship] =
+      useState<any>(defaultCitizenship);
+    const isFirstRender = useRef(true);
 
     //for validation
-    const schema = yup.object().shape( {
-      nameFaValidation: yup.string().required( "نام فارسی انتخاب نشده است" ),
+    const schema = yup.object().shape({
+      nameFaValidation: yup.string().required("نام فارسی انتخاب نشده است"),
       lastNameFaValidation: yup
         .string()
-        .required( "نام خانوادگی فارسی انتخاب نشده است" ),
-      nameEnValidation: yup.string().required( "نام لاتین انتخاب نشده است" ),
+        .required("نام خانوادگی فارسی انتخاب نشده است"),
+      nameEnValidation: yup.string().required("نام لاتین انتخاب نشده است"),
       lastNameEnValidation: yup
         .string()
-        .required( "نام خانوادگی لاتین انتخاب نشده است" ),
+        .required("نام خانوادگی لاتین انتخاب نشده است"),
       nationalCodeValidation: yup
         .string()
-        .required( "شماره ملی معتبر انتخاب نشده است" )
-        .min( 10, "شماره ملی نباید بیشتر از 10 رقم باشد" )
-        .max( 10, "" )
-        .test( "is-valid-national-code", "شماره ملی معتبر نیست", ( value ) =>
-        {
-          return validateMelliCode( value );
-        } ),
+        .required("شماره ملی معتبر انتخاب نشده است")
+        .min(10, "شماره ملی نباید بیشتر از 10 رقم باشد")
+        .max(10, "")
+        .test("is-valid-national-code", "شماره ملی معتبر نیست", (value) => {
+          return validateMelliCode(value);
+        }),
       birthdayValidation: yup
         .string()
         .trim()
-        .matches( vReg?.date_yyyy_mm_dd, "" )
-        .test( "minYear", "سال تولد باید بعد از 1310 باشد", ( value ) =>
-        {
-          if ( !value ) return false;
-          const year = parseInt( value.split( "-" )[ 0 ], 10 );
+        .matches(vReg?.date_yyyy_mm_dd, "")
+        .test("minYear", "سال تولد باید بعد از 1310 باشد", (value) => {
+          if (!value) return false;
+          const year = parseInt(value.split("-")[0], 10);
           return year >= 1310;
-        } )
-        .test( "maxYear", "سال تولد باید حداکثر 1403 باشد", ( value ) =>
-        {
-          if ( !value ) return false;
-          const year = parseInt( value.split( "-" )[ 0 ], 10 );
+        })
+        .test("maxYear", "سال تولد باید حداکثر 1403 باشد", (value) => {
+          if (!value) return false;
+          const year = parseInt(value.split("-")[0], 10);
           return year <= 1403;
-        } )
-        .required( "تاریخ تولد وارد نشده است" ),
+        })
+        .required("تاریخ تولد وارد نشده است"),
       sexValidation: yup
         .string()
-        .test( "required", "Required", ( value ) => value != "not-chosen" ),
+        .test("required", "Required", (value) => value != "not-chosen"),
       mobileValidation:
-        calculateAgeCategory( item.birthday as string ) === "ADU"
-          ? yup.string().matches( vReg?.mobile, "" ).required()
+        calculateAgeCategory(item.birthday as string) === "ADU"
+          ? yup.string().matches(vReg?.mobile, "").required()
           : yup.string().notRequired(),
       // passportCodeValidation:
       //   type === "flight"
@@ -185,20 +183,20 @@ const PassengerInformation = forwardRef<
       passportCodeValidation:
         type === "flight"
           ? tabFormValue === "1" &&
-            ( ( selectedWentFlight &&
-              selectedWentFlight.FlightRoute === "Internal" ) ||
-              ( selectedReturnFlight &&
-                selectedReturnFlight.FlightRoute === "Internal" ) )
+            ((selectedWentFlight &&
+              selectedWentFlight.FlightRoute === "Internal") ||
+              (selectedReturnFlight &&
+                selectedReturnFlight.FlightRoute === "Internal"))
             ? yup.string().notRequired()
             : yup.string().required()
           : tabFormValue === "1"
-            ? yup.string().notRequired()
-            : yup.string().required(),
+          ? yup.string().notRequired()
+          : yup.string().required(),
       passExValidation: item.pass_code
-        ? yup.string().matches( vReg?.date_yyyy_mm_dd, "" ).required()
+        ? yup.string().matches(vReg?.date_yyyy_mm_dd, "").required()
         : yup.string().notRequired(),
       citizenshipValidation: yup.string().required(),
-    } );
+    });
 
     const defaultValues = {
       nameFaValidation: item.name_fa,
@@ -206,65 +204,55 @@ const PassengerInformation = forwardRef<
       nameEnValidation: item.name_en,
       lastNameEnValidation: item.lastname_en,
       nationalCodeValidation: item.national_code,
-      birthdayValidation: applyMask( "date", item.birthday as string ),
+      birthdayValidation: applyMask("date", item.birthday as string),
       citizenshipValidation: item.citizenship.title.fa,
       sexValidation: item.sex,
       mobileValidation: item.mobile,
       passportCodeValidation: item.pass_code,
-      passExValidation: applyMask( "date", item.pass_ex as string ),
+      passExValidation: applyMask("date", item.pass_ex as string),
     };
-    const { control, formState, trigger, setValue } = useForm( {
+    const { control, formState, trigger, setValue } = useForm({
       mode: "onChange",
       defaultValues,
-      resolver: yupResolver( schema ),
-    } );
+      resolver: yupResolver(schema),
+    });
     const { isValid, errors } = formState;
-    useImperativeHandle( ref, () => ( {
-      handleTrigger ()
-      {
+    useImperativeHandle(ref, () => ({
+      handleTrigger() {
         trigger();
       },
-      getIsValid ()
-      {
+      getIsValid() {
         return isValid;
       },
-    } ) );
+    }));
 
-    useEffect( () =>
-    {
-      if ( openCitizenShip )
-      {
-        getCountryList( { action: "citizenship", route: "1" } ).then(
-          ( response: any ) =>
-          {
-            setCitizenshipList( response?.data?.titles as any );
+    useEffect(() => {
+      if (openCitizenShip) {
+        getCountryList({ action: "citizenship", route: "1" }).then(
+          (response: any) => {
+            setCitizenshipList(response?.data?.titles as any);
           }
         );
       }
-    }, [ openCitizenShip ] );
+    }, [openCitizenShip]);
 
     // handle open Previous passengers list dialog
-    const handleOpenPreviousPassengersDrawer = () =>
-    {
-      if ( userData === null )
-      {
-        setOpenLoginDialog( true );
-      } else
-      {
-        setOpenPreviousPassengersDrawer( true );
+    const handleOpenPreviousPassengersDrawer = () => {
+      if (userData === null) {
+        setOpenLoginDialog(true);
+      } else {
+        setOpenPreviousPassengersDrawer(true);
       }
     };
 
     // handle close Previous passengers list dialog
-    const handleClosePreviousPassengersDrawer = () =>
-    {
-      setOpenPreviousPassengersDrawer( false );
+    const handleClosePreviousPassengersDrawer = () => {
+      setOpenPreviousPassengersDrawer(false);
     };
 
     // handle change open passenger form
-    const togglePassengerForm = () =>
-    {
-      setOpenPassengerForm( !openPassengerForm );
+    const togglePassengerForm = () => {
+      setOpenPassengerForm(!openPassengerForm);
     };
 
     // useEffect(() => {
@@ -286,67 +274,85 @@ const PassengerInformation = forwardRef<
     // }, [item, tabFormValue]);
 
     // handle change tab form value
-    const handleChangeTabFormValue = ( newValue: string ) =>
-    {
+    const handleChangeTabFormValue = (newValue: string) => {
       localRef.current = newValue;
-      setTabFormValue( newValue );
+      setTabFormValue(newValue);
     };
 
-    useEffect( () =>
-    {
-      if ( isFirstRender.current )
-      {
+    useEffect(() => {
+      if (isFirstRender.current) {
         isFirstRender.current = false;
         return;
       }
 
       trigger();
-    }, [ tabFormValue ] );
+    }, [tabFormValue]);
 
     // handle open Previous passengers list dialog
-    const handleOpenPreviousPassengers = () =>
-    {
-      if ( userData === null )
-      {
-        setOpenLoginDialog( true );
-      } else
-      {
-        setOpenPreviousPassengersList( true );
+    const handleOpenPreviousPassengers = () => {
+      if (userData === null) {
+        setOpenLoginDialog(true);
+      } else {
+        setOpenPreviousPassengersList(true);
       }
     };
 
     // handle close Previous passengers list dialog
-    const handleClosePreviousPassengers = () =>
-    {
-      setOpenPreviousPassengersList( false );
+    const handleClosePreviousPassengers = () => {
+      setOpenPreviousPassengersList(false);
     };
 
     // render header each passenger
-    const renderHeaderPassenger = () =>
-    {
+    const renderHeaderPassenger = () => {
       return (
         <>
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-2">
-              <span className="py-1 px-2 rounded-full border border-primary-main text-primary-main text-xs font-semibold">
-                { item.birthday
-                  ? calculateAgeCategory( item.birthday as string ) === "ADU"
-                    ? "بزرگسال"
-                    : calculateAgeCategory( item.birthday as string ) === "CHI"
+              {type === "flight" ? (
+                <span className="py-1 px-2 rounded-full border border-primary-main text-primary-main text-xs font-semibold">
+                  {item.birthday
+                    ? calculateAgeCategory(item.birthday as string) === "ADU"
+                      ? "بزرگسال"
+                      : calculateAgeCategory(item.birthday as string) === "CHI"
                       ? "کودک"
                       : "نوزاد"
-                  : "رده سنی" }
-              </span>
+                    : "رده سنی"}
+                </span>
+              ) : (
+                <div className={"flex items-center justify-start gap-2"}>
+                  <Chip
+                    color="primary"
+                    size="small"
+                    label={`اتاق ${labels[index].item_idx + 1}`}
+                  />
+
+                  <span className="font-semibold text-xs">
+                    ({online[labels[index].item_idx].room_type.title.fa})
+                  </span>
+                  <span className="font-semibold text-base">
+                    {"مسافر "}
+                    {labels[index].passenger_idx + 1}
+                  </span>
+                  <span className="font-semibold text-xs">
+                    (
+                    {labels[index].age_category === "adult"
+                      ? "بزرگسال"
+                      : "کودک"}
+                    )
+                  </span>
+                </div>
+              )}
+
               <RadioGroup
                 row
-                onChange={ ( e ) => handleChangeTabFormValue( e.target.value ) }
+                onChange={(e) => handleChangeTabFormValue(e.target.value)}
                 defaultValue="1"
               >
                 <FormControlLabel
                   value="1"
-                  control={ <Radio size="small" /> }
+                  control={<Radio size="small" />}
                   label="کارت ملی"
-                  sx={ {
+                  sx={{
                     fontBold: "bold",
                     color:
                       localRef.current === "1"
@@ -355,13 +361,13 @@ const PassengerInformation = forwardRef<
                     "& .MuiTypography-root": {
                       fontSize: "0.9rem",
                     },
-                  } }
+                  }}
                 />
                 <FormControlLabel
                   value="2"
-                  control={ <Radio size="small" /> }
+                  control={<Radio size="small" />}
                   label="پاسپورت"
-                  sx={ {
+                  sx={{
                     fontBold: "bold",
                     color:
                       localRef.current === "2"
@@ -370,157 +376,149 @@ const PassengerInformation = forwardRef<
                     "& .MuiTypography-root": {
                       fontSize: "0.9rem",
                     },
-                  } }
+                  }}
                 />
               </RadioGroup>
             </div>
             <div className="flex items-center justify-center gap-0">
               <Tooltip title="انتخاب مسافران سابق">
-                <IconButton onClick={ handleOpenPreviousPassengers }>
+                <IconButton onClick={handleOpenPreviousPassengers}>
                   <PersonSearchIcon />
                 </IconButton>
               </Tooltip>
-              { index !== 0 && type === "flight" && (
+              {index !== 0 && type === "flight" && (
                 <Tooltip title="حذف مسافر">
                   <IconButton
-                    onClick={ () =>
-                    {
-                      handleRemovePassenger( item );
-                    } }
+                    onClick={() => {
+                      handleRemovePassenger(item);
+                    }}
                   >
-                    <DeleteSweepIcon className={ `text-primary-main` } />
+                    <DeleteSweepIcon className={`text-primary-main`} />
                   </IconButton>
                 </Tooltip>
-              ) }
+              )}
             </div>
           </div>
         </>
       );
     };
 
-    useEffect( () =>
-    {
-      console.log( "localRef.current", localRef.current );
-    }, [ localRef.current ] );
+    useEffect(() => {
+      console.log("localRef.current", localRef.current);
+    }, [localRef.current]);
     // for desktop
-    const passengerInformationContainerOnDesktop = () =>
-    {
+    const passengerInformationContainerOnDesktop = () => {
       const renderFormOnDesktop = (
         <div className="hidden md:grid grid-cols-12 gap-2">
           <Controller
-            control={ control }
+            control={control}
             name="nameFaValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام"
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "name_fa", roomId );
-                } }
-                InputLabelProps={ {
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "name_fa", roomId);
+                }}
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.nameFaValidation }
+                }}
+                error={!!errors.nameFaValidation}
               />
-            ) }
+            )}
           />
           <Controller
-            control={ control }
+            control={control}
             name="lastNameFaValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام خانوادگی"
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "lastname_fa", roomId );
-                } }
-                InputLabelProps={ {
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "lastname_fa", roomId);
+                }}
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.lastNameFaValidation }
+                }}
+                error={!!errors.lastNameFaValidation}
               />
-            ) }
+            )}
           />
           <FormControl className="col-span-3">
             <InputLabel>جنسیت</InputLabel>
             <Controller
-              control={ control }
+              control={control}
               name="sexValidation"
-              render={ ( { field } ) => (
+              render={({ field }) => (
                 <Select
-                  { ...field }
+                  {...field}
                   size="small"
                   label="جنسیت"
                   // className="col-span-3"
-                  onChange={ ( e: SelectChangeEvent ) =>
-                  {
-                    field.onChange( e );
-                    handleOnChange( e, item.id, "sex", roomId );
-                  } }
-                  error={ !!errors.sexValidation }
+                  onChange={(e: SelectChangeEvent) => {
+                    field.onChange(e);
+                    handleOnChange(e, item.id, "sex", roomId);
+                  }}
+                  error={!!errors.sexValidation}
                 >
                   <MenuItem value="not-chosen">انتخاب نشده</MenuItem>
                   <MenuItem value="male">مرد</MenuItem>
                   <MenuItem value="female">زن</MenuItem>
                 </Select>
-              ) }
+              )}
             />
           </FormControl>
-          { tabFormValue === "2" && (
+          {tabFormValue === "2" && (
             <>
               <div className="grid grid-cols-2 gap-2 col-span-3">
                 <Controller
-                  control={ control }
+                  control={control}
                   name="passportCodeValidation"
-                  render={ ( { field } ) => (
+                  render={({ field }) => (
                     <TextField
-                      { ...field }
+                      {...field}
                       className="col-span-1"
                       label="شماره گذرنامه"
                       autoComplete="off"
                       size="small"
-                      onChange={ ( e ) =>
-                      {
-                        field.onChange( e );
-                        handleOnChange( e, item.id, "pass_code", roomId );
-                      } }
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleOnChange(e, item.id, "pass_code", roomId);
+                      }}
                       dir="ltr"
-                      error={ !!errors.passportCodeValidation }
+                      error={!!errors.passportCodeValidation}
                     />
-                  ) }
-                />{ " " }
-                { item.pass_code && (
+                  )}
+                />{" "}
+                {item.pass_code && (
                   <Controller
-                    control={ control }
+                    control={control}
                     name="passExValidation"
-                    render={ ( { field } ) => (
+                    render={({ field }) => (
                       <TextField
-                        { ...field }
+                        {...field}
                         label="انقضای گذرنامه"
                         autoComplete="off"
                         className="col-span-1"
                         size="small"
-                        onChange={ ( e ) =>
-                        {
-                          field.onChange( e );
+                        onChange={(e) => {
+                          field.onChange(e);
                           handleOnChange(
                             {
                               target: {
-                                value: removeMask( "date", e.target.value ),
+                                value: removeMask("date", e.target.value),
                               },
                             } as any,
 
@@ -528,208 +526,199 @@ const PassengerInformation = forwardRef<
                             "pass_ex",
                             roomId
                           );
-                        } }
+                        }}
                         placeholder="YYYY-MM-DD"
-                        inputRef={ passExRefOnDesktop }
+                        inputRef={passExRefOnDesktop}
                         dir="ltr"
-                        error={ !!errors.passExValidation }
+                        error={!!errors.passExValidation}
                       />
-                    ) }
+                    )}
                   />
-                ) }
+                )}
               </div>
               <Controller
-                control={ control }
+                control={control}
                 name="citizenshipValidation"
-                render={ ( { field } ) => (
+                render={({ field }) => (
                   <Autocomplete
-                    { ...field }
-                    value={ selectedCitizenship }
+                    {...field}
+                    value={selectedCitizenship}
                     disableClearable
                     size="small"
                     className="col-span-3"
                     disablePortal
-                    open={ openCitizenShip }
-                    onOpen={ () =>
-                    {
-                      setOpenCitizenShip( true );
-                    } }
-                    onClose={ () =>
-                    {
-                      setOpenCitizenShip( false );
-                    } }
-                    onChange={ ( e, value: any ) =>
-                    {
-                      if ( value )
-                      {
-                        field.onChange( value.title.fa );
-                        setSelectedCitizenship( value );
+                    open={openCitizenShip}
+                    onOpen={() => {
+                      setOpenCitizenShip(true);
+                    }}
+                    onClose={() => {
+                      setOpenCitizenShip(false);
+                    }}
+                    onChange={(e, value: any) => {
+                      if (value) {
+                        field.onChange(value.title.fa);
+                        setSelectedCitizenship(value);
                         handleOnChange(
                           { target: { value: value } },
                           item.id,
                           "citizenship"
                         );
                       }
-                    } }
-                    options={ citizenshipList }
-                    getOptionLabel={ ( option: any ) =>
+                    }}
+                    options={citizenshipList}
+                    getOptionLabel={(option: any) =>
                       option?.nationality?.fa || ""
                     }
-                    renderInput={ ( params ) => (
+                    renderInput={(params) => (
                       <TextField
-                        error={ !!errors.citizenshipValidation }
+                        error={!!errors.citizenshipValidation}
                         label="ملیت"
-                        { ...params }
+                        {...params}
                       />
-                    ) }
+                    )}
                   />
-                ) }
+                )}
               />
             </>
-          ) }
-          { tabFormValue === "1" && (
+          )}
+          {tabFormValue === "1" && (
             <Controller
-              control={ control }
+              control={control}
               name="nationalCodeValidation"
-              render={ ( { field, fieldState: { error } } ) => (
+              render={({ field, fieldState: { error } }) => (
                 <TextField
                   // disabled={item.citizenship.title.fa === "ایرانی" ? false : true}
                   // disabled={tabFormValue === "2" ? true : false}
-                  { ...field }
+                  {...field}
                   className="col-span-3"
                   autoComplete="off"
                   label="شماره ملی"
                   size="small"
                   dir="ltr"
-                  error={ !!errors.nationalCodeValidation }
-                  onChange={ ( e ) =>
-                  {
-                    field.onChange( e );
-                    handleOnChange( e, item.id, "national_code", roomId );
-                  } }
-                  InputLabelProps={ {
+                  error={!!errors.nationalCodeValidation}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleOnChange(e, item.id, "national_code", roomId);
+                  }}
+                  InputLabelProps={{
                     sx: {
                       fontSize: 15,
                     },
-                  } }
+                  }}
                 />
-              ) }
+              )}
             />
-          ) }
+          )}
           <Controller
-            control={ control }
+            control={control}
             name="nameEnValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام لاتین"
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "name_en", roomId );
-                } }
-                error={ !!errors.nameEnValidation }
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "name_en", roomId);
+                }}
+                error={!!errors.nameEnValidation}
                 dir="ltr"
               />
-            ) }
+            )}
           />
           <Controller
-            control={ control }
+            control={control}
             name="lastNameEnValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام خانوادگی لاتین"
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "lastname_en", roomId );
-                } }
-                InputLabelProps={ {
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "lastname_en", roomId);
+                }}
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.lastNameEnValidation }
+                }}
+                error={!!errors.lastNameEnValidation}
                 dir="ltr"
               />
-            ) }
-          />{ " " }
+            )}
+          />{" "}
           <Controller
-            control={ control }
+            control={control}
             name="birthdayValidation"
-            render={ ( { field } ) => (
+            render={({ field }) => (
               <TextField
-                { ...field }
+                {...field}
                 className="col-span-3"
                 label="تاریخ تولد"
                 autoComplete="off"
                 size="small"
-                inputRef={ dateRefOnDesktop }
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
+                inputRef={dateRefOnDesktop}
+                onChange={(e) => {
+                  field.onChange(e);
                   handleOnChange(
                     {
                       target: {
-                        value: removeMask( "date", e.target.value ),
+                        value: removeMask("date", e.target.value),
                       },
                     } as any,
                     item.id as number,
                     "birthday",
                     roomId
                   );
-                } }
+                }}
                 placeholder="YYYY-MM-DD"
                 dir="ltr"
-                InputLabelProps={ {
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.birthdayValidation }
+                }}
+                error={!!errors.birthdayValidation}
               />
-            ) }
+            )}
           />
           <Controller
-            control={ control }
+            control={control}
             name="mobileValidation"
-            render={ ( { field } ) => (
+            render={({ field }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="تلفن همراه"
                 className="col-span-3"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "mobile", roomId );
-                } }
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "mobile", roomId);
+                }}
                 dir="ltr"
-                error={ !!errors.mobileValidation }
+                error={!!errors.mobileValidation}
               />
-            ) }
+            )}
           />
         </div>
       );
       return (
         <>
-          { " " }
+          {" "}
           <div className="p-2 hidden md:grid grid-cols-1 gap-4 border-b-2 border-main">
-            { renderHeaderPassenger() }
+            {renderHeaderPassenger()}
             <motion.div
-              initial={ { opacity: 0 } }
-              animate={ { opacity: 1 } }
-              transition={ { duration: 0.5 } }
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              { renderFormOnDesktop }
+              {renderFormOnDesktop}
             </motion.div>
           </div>
         </>
@@ -738,22 +727,21 @@ const PassengerInformation = forwardRef<
 
     // for mobile
 
-    const renderHeaderPassengerOnMobile = () =>
-    {
+    const renderHeaderPassengerOnMobile = () => {
       return (
         <>
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-2">
               <RadioGroup
                 row
-                onChange={ ( e ) => handleChangeTabFormValue( e.target.value ) }
+                onChange={(e) => handleChangeTabFormValue(e.target.value)}
                 defaultValue="1"
               >
                 <FormControlLabel
                   value="1"
-                  control={ <Radio size="small" /> }
+                  control={<Radio size="small" />}
                   label="کارت ملی"
-                  sx={ {
+                  sx={{
                     fontBold: "bold",
                     color:
                       localRef.current === "1"
@@ -762,13 +750,13 @@ const PassengerInformation = forwardRef<
                     "& .MuiTypography-root": {
                       fontSize: "0.9rem",
                     },
-                  } }
+                  }}
                 />
                 <FormControlLabel
                   value="2"
-                  control={ <Radio size="small" /> }
+                  control={<Radio size="small" />}
                   label="پاسپورت"
-                  sx={ {
+                  sx={{
                     fontBold: "bold",
                     color:
                       localRef.current === "2"
@@ -777,191 +765,182 @@ const PassengerInformation = forwardRef<
                     "& .MuiTypography-root": {
                       fontSize: "0.9rem",
                     },
-                  } }
+                  }}
                 />
               </RadioGroup>
             </div>
             <div className="flex items-center justify-center gap-0">
               <Tooltip title="انتخاب مسافران سابق">
                 <IconButton
-                  onClick={ () => handleOpenPreviousPassengersDrawer( true ) }
+                  onClick={() => handleOpenPreviousPassengersDrawer(true)}
                 >
                   <PersonSearchIcon />
                 </IconButton>
               </Tooltip>
-              { index !== 0 && (
+              {index !== 0 && (
                 <Tooltip title="حذف مسافر">
                   <IconButton
-                    onClick={ () =>
-                    {
-                      handleRemovePassenger( item );
-                    } }
+                    onClick={() => {
+                      handleRemovePassenger(item);
+                    }}
                   >
-                    <DeleteSweepIcon className={ `text-primary-main` } />
+                    <DeleteSweepIcon className={`text-primary-main`} />
                   </IconButton>
                 </Tooltip>
-              ) }
+              )}
             </div>
           </div>
         </>
       );
     };
-    const passengerInformationContainerOnMobile = () =>
-    {
+    const passengerInformationContainerOnMobile = () => {
       const renderFormOnMobile = (
         <div className="md:hidden grid grid-cols-2 gap-2">
           <Controller
-            control={ control }
+            control={control}
             name="nameFaValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "name_fa", roomId );
-                } }
-                InputLabelProps={ {
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "name_fa", roomId);
+                }}
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.nameFaValidation }
+                }}
+                error={!!errors.nameFaValidation}
               />
-            ) }
+            )}
           />
           <Controller
-            control={ control }
+            control={control}
             name="lastNameFaValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام خانوادگی"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "lastname_fa", roomId );
-                } }
-                InputLabelProps={ {
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "lastname_fa", roomId);
+                }}
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.lastNameFaValidation }
+                }}
+                error={!!errors.lastNameFaValidation}
               />
-            ) }
-          />{ " " }
+            )}
+          />{" "}
           <Controller
-            control={ control }
+            control={control}
             name="nameEnValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام لاتین"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "name_en", roomId );
-                } }
-                error={ !!errors.nameEnValidation }
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "name_en", roomId);
+                }}
+                error={!!errors.nameEnValidation}
                 dir="ltr"
               />
-            ) }
+            )}
           />
           <Controller
-            control={ control }
+            control={control}
             name="lastNameEnValidation"
-            render={ ( { field, fieldState: { error } } ) => (
+            render={({ field, fieldState: { error } }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="نام خانوادگی لاتین"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "lastname_en", roomId );
-                } }
-                InputLabelProps={ {
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "lastname_en", roomId);
+                }}
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.lastNameEnValidation }
+                }}
+                error={!!errors.lastNameEnValidation}
                 dir="ltr"
               />
-            ) }
-          />{ " " }
+            )}
+          />{" "}
           <FormControl>
             <InputLabel>جنسیت</InputLabel>
             <Controller
-              control={ control }
+              control={control}
               name="sexValidation"
-              render={ ( { field } ) => (
+              render={({ field }) => (
                 <Select
-                  { ...field }
+                  {...field}
                   size="small"
                   label="جنسیت"
                   // className="col-span-3"
-                  onChange={ ( e: SelectChangeEvent ) =>
-                  {
-                    field.onChange( e );
-                    handleOnChange( e, item.id, "sex", roomId );
-                  } }
-                  error={ !!errors.sexValidation }
+                  onChange={(e: SelectChangeEvent) => {
+                    field.onChange(e);
+                    handleOnChange(e, item.id, "sex", roomId);
+                  }}
+                  error={!!errors.sexValidation}
                 >
                   <MenuItem value="not-chosen">انتخاب نشده</MenuItem>
                   <MenuItem value="male">مرد</MenuItem>
                   <MenuItem value="female">زن</MenuItem>
                 </Select>
-              ) }
+              )}
             />
           </FormControl>
-          { tabFormValue === "2" && (
+          {tabFormValue === "2" && (
             <>
               <Controller
-                control={ control }
+                control={control}
                 name="passportCodeValidation"
-                render={ ( { field } ) => (
+                render={({ field }) => (
                   <TextField
-                    { ...field }
+                    {...field}
                     label="شماره گذرنامه"
                     autoComplete="off"
                     size="small"
-                    onChange={ ( e ) =>
-                    {
-                      field.onChange( e );
-                      handleOnChange( e, item.id, "pass_code", roomId );
-                    } }
+                    onChange={(e) => {
+                      field.onChange(e);
+                      handleOnChange(e, item.id, "pass_code", roomId);
+                    }}
                     dir="ltr"
-                    error={ !!errors.passportCodeValidation }
+                    error={!!errors.passportCodeValidation}
                   />
-                ) }
+                )}
               />
-              { item.pass_code && (
+              {item.pass_code && (
                 <Controller
-                  control={ control }
+                  control={control}
                   name="passExValidation"
-                  render={ ( { field } ) => (
+                  render={({ field }) => (
                     <TextField
-                      { ...field }
+                      {...field}
                       label="انقضای گذرنامه"
                       autoComplete="off"
                       size="small"
-                      onChange={ ( e ) =>
-                      {
-                        field.onChange( e );
+                      onChange={(e) => {
+                        field.onChange(e);
                         handleOnChange(
                           {
                             target: {
-                              value: removeMask( "date", e.target.value ),
+                              value: removeMask("date", e.target.value),
                             },
                           } as any,
 
@@ -969,97 +948,94 @@ const PassengerInformation = forwardRef<
                           "pass_ex",
                           roomId
                         );
-                      } }
+                      }}
                       placeholder="YYYY-MM-DD"
-                      inputRef={ passExRefOnMobile }
+                      inputRef={passExRefOnMobile}
                       dir="ltr"
-                      error={ !!errors.passExValidation }
+                      error={!!errors.passExValidation}
                     />
-                  ) }
+                  )}
                 />
-              ) }
+              )}
             </>
-          ) }
-          { tabFormValue === "1" && (
+          )}
+          {tabFormValue === "1" && (
             <Controller
-              control={ control }
+              control={control}
               name="nationalCodeValidation"
-              render={ ( { field, fieldState: { error } } ) => (
+              render={({ field, fieldState: { error } }) => (
                 <TextField
                   // disabled={item.citizenship.title.fa === "ایرانی" ? false : true}
-                  { ...field }
+                  {...field}
                   autoComplete="off"
                   label="شماره ملی"
                   size="small"
                   dir="ltr"
-                  error={ !!errors.nationalCodeValidation }
-                  onChange={ ( e ) =>
-                  {
-                    field.onChange( e );
-                    handleOnChange( e, item.id, "national_code", roomId );
-                  } }
-                  InputLabelProps={ {
+                  error={!!errors.nationalCodeValidation}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleOnChange(e, item.id, "national_code", roomId);
+                  }}
+                  InputLabelProps={{
                     sx: {
                       fontSize: 15,
                     },
-                  } }
+                  }}
                 />
-              ) }
+              )}
             />
-          ) }
+          )}
           <Controller
-            control={ control }
+            control={control}
             name="birthdayValidation"
-            render={ ( { field } ) => (
+            render={({ field }) => (
               <TextField
-                { ...field }
-                inputRef={ dateRefOnMobile }
+                {...field}
+                inputRef={dateRefOnMobile}
                 label="تاریخ تولد"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
+                onChange={(e) => {
+                  field.onChange(e);
                   handleOnChange(
                     {
                       target: {
-                        value: removeMask( "date", e.target.value ),
+                        value: removeMask("date", e.target.value),
                       },
                     } as any,
                     item.id as number,
                     "birthday",
                     roomId
                   );
-                } }
+                }}
                 placeholder="YYYY-MM-DD"
                 dir="ltr"
-                InputLabelProps={ {
+                InputLabelProps={{
                   sx: {
                     fontSize: 15,
                   },
-                } }
-                error={ !!errors.birthdayValidation }
+                }}
+                error={!!errors.birthdayValidation}
               />
-            ) }
-          />{ " " }
+            )}
+          />{" "}
           <Controller
-            control={ control }
+            control={control}
             name="mobileValidation"
-            render={ ( { field } ) => (
+            render={({ field }) => (
               <TextField
-                { ...field }
+                {...field}
                 label="تلفن همراه"
                 autoComplete="off"
                 size="small"
-                onChange={ ( e ) =>
-                {
-                  field.onChange( e );
-                  handleOnChange( e, item.id, "mobile", roomId );
-                } }
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleOnChange(e, item.id, "mobile", roomId);
+                }}
                 dir="ltr"
-                error={ !!errors.mobileValidation }
+                error={!!errors.mobileValidation}
               />
-            ) }
+            )}
           />
         </div>
       );
@@ -1070,27 +1046,26 @@ const PassengerInformation = forwardRef<
             <div className="overflow-hidden border border-divider rounded-xl grid grid-cols-1 gap-0">
               <div className="flex items-center justify-between py-1 px-3">
                 <span className="text-sm text-text-main">
-                  مسافر { index + 1 }
+                  مسافر {index + 1}
                 </span>
                 <div className="flex items-center justify-center gap-1">
                   <span className="py-0.5 px-3 rounded-full border border-divider text-divider text-xs font-semibold">
-                    { item.birthday
-                      ? calculateAgeCategory( item.birthday as string ) === "ADU"
+                    {item.birthday
+                      ? calculateAgeCategory(item.birthday as string) === "ADU"
                         ? "بزرگسال"
-                        : calculateAgeCategory( item.birthday as string ) ===
+                        : calculateAgeCategory(item.birthday as string) ===
                           "CHI"
-                          ? "کودک"
-                          : "نوزاد"
-                      : "رده سنی" }
+                        ? "کودک"
+                        : "نوزاد"
+                      : "رده سنی"}
                   </span>
                   <IconButton
-                    onClick={ () =>
-                    {
+                    onClick={() => {
                       togglePassengerForm();
-                    } }
+                    }}
                     size="small"
                   >
-                    { openPassengerForm ? (
+                    {openPassengerForm ? (
                       <KeyboardArrowUpIcon
                         fontSize="small"
                         className="text-divider"
@@ -1100,40 +1075,42 @@ const PassengerInformation = forwardRef<
                         fontSize="small"
                         className="text-divider"
                       />
-                    ) }
+                    )}
                   </IconButton>
                 </div>
               </div>
-              { openPassengerForm && (
+              {openPassengerForm && (
                 <div className="border-t border-divider grid grid-cols-1 gap-4 p-3">
-                  { renderHeaderPassengerOnMobile() }
-                  { renderFormOnMobile }
+                  {renderHeaderPassengerOnMobile()}
+                  {renderFormOnMobile}
                 </div>
-              ) }
+              )}
             </div>
-          </div>{ " " }
-          { openPreviousPassengersDrawer && (
+          </div>{" "}
+          {openPreviousPassengersDrawer && (
             <PreviousPassengersDrawer
-              onClose={ handleClosePreviousPassengersDrawer }
-              open={ openPreviousPassengersDrawer }
-              passengers={ item }
+              onClose={handleClosePreviousPassengersDrawer}
+              open={openPreviousPassengersDrawer}
+              passengers={item}
+              action={type}
             />
-          ) }
+          )}
         </>
       );
     };
 
     return (
       <>
-        { passengerInformationContainerOnDesktop() }
-        { passengerInformationContainerOnMobile() }
-        { openPreviousPassengersList && (
+        {passengerInformationContainerOnDesktop()}
+        {passengerInformationContainerOnMobile()}
+        {openPreviousPassengersList && (
           <PreviousPassengersDialog
-            passengers={ item }
-            onClose={ handleClosePreviousPassengers }
-            open={ openPreviousPassengersList }
+            passengers={item}
+            onClose={handleClosePreviousPassengers}
+            open={openPreviousPassengersList}
+            action={type}
           />
-        ) }
+        )}
       </>
     );
   }
@@ -1141,50 +1118,48 @@ const PassengerInformation = forwardRef<
 
 export default PassengerInformation;
 
-interface PreviousPassengersDialogProps
-{
+interface PreviousPassengersDialogProps {
   open: boolean;
   onClose: () => void;
   passengers: UserInformationDataType;
+  action: string;
 }
-const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ( {
+const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ({
   open,
   onClose,
   passengers,
-} ) =>
-{
+  action,
+}) => {
   // initila state
-  const [ previousPassengersList, setPreviousPassengersList ] = useState<
+  const [previousPassengersList, setPreviousPassengersList] = useState<
     PreviousPassengerDataType[] | []
-  >( [] );
-  const [ showLoading, setShowLoading ] = useState<boolean>( true );
-  const [ selectPreviousPassenger, setSelectPreviousPassenger ] =
-    useState<PreviousPassengerDataType | null>( null );
+  >([]);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
+  const [selectPreviousPassenger, setSelectPreviousPassenger] =
+    useState<PreviousPassengerDataType | null>(null);
   const { flightPassengers, setFlightPassengers } =
     useGlobalContext().flightContext.searchContext;
+  const { accommodationPassenger, setAccommodationPassenger } =
+    useGlobalContext().accommodationContext.accommodationSearch;
   const { handleAlertDetails } = useShowAlert();
 
   // handle get previous passengers list
-  const handleGetPreviousPassengersList = () =>
-  {
+  const handleGetPreviousPassengersList = () => {
     getPreviousPassengers()
-      .then( ( res: any ) =>
-      {
-        setShowLoading( false );
-        setPreviousPassengersList( res.items );
-      } )
-      .catch( ( err ) =>
-      {
-        console.log( err );
-        handleAlertDetails( "خطا در دریافت اطلاعات", "error" );
+      .then((res: any) => {
+        setShowLoading(false);
+        setPreviousPassengersList(res.items);
+      })
+      .catch((err) => {
+        console.log(err);
+        handleAlertDetails("خطا در دریافت اطلاعات", "error");
         onClose();
-      } );
+      });
   };
 
-  useEffect( () =>
-  {
+  useEffect(() => {
     handleGetPreviousPassengersList();
-  }, [] );
+  }, []);
 
   // handle chnage passenger info in flight passengers
   // const handleChangePassengerInfo = () => {
@@ -1198,7 +1173,7 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ( {
 
   const mapToFlightPassenger = (
     passenger: PreviousPassengerDataType
-  ): UserInformationDataType => ( {
+  ): UserInformationDataType => ({
     id: passenger.id,
     image: null,
     sex: passenger.gender,
@@ -1219,49 +1194,55 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ( {
     postal_code: "",
     address: "",
     birthCity: "",
-  } );
+  });
 
-  const handleChangePassengerInfo = () =>
-  {
+  const handleChangePassengerInfo = () => {
     const mappedPassenger = selectPreviousPassenger
-      ? mapToFlightPassenger( selectPreviousPassenger )
+      ? mapToFlightPassenger(selectPreviousPassenger)
       : null;
 
-    if ( !mappedPassenger ) return;
+    if (!mappedPassenger) return;
 
-    setFlightPassengers( () =>
-    {
-      const newPassengers = flightPassengers.map( ( element ) =>
-        element.id === passengers.id ? mappedPassenger : element
-      );
-      return newPassengers;
-    } );
+    if (action === "flight") {
+      setFlightPassengers(() => {
+        const newPassengers = flightPassengers.map((element) =>
+          element.id === passengers.id ? mappedPassenger : element
+        );
+        return newPassengers;
+      });
+    } else {
+      setAccommodationPassenger(() => {
+        const newPassengers = accommodationPassenger.map((element) =>
+          element.id === passengers.id ? mappedPassenger : element
+        );
+        return newPassengers;
+      });
+    }
   };
 
   return (
-    <Dialog onClose={ onClose } open={ open } maxWidth={ "sm" } fullWidth={ true }>
+    <Dialog onClose={onClose} open={open} maxWidth={"sm"} fullWidth={true}>
       <DialogTitle className="flex items-center justify-between py-3 px-6">
         <span className="text-text-main text-base font-semibold">
           لیست مسافران قبلی
         </span>
-        <IconButton onClick={ onClose }>
+        <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
       <DialogContent className="pt-2 px-6">
         <div className="grid grid-cols-1 gap-4">
           <TextField size="medium" label="جستجو" />
-          { showLoading ? (
+          {showLoading ? (
             <div className="flex items-center justify-center text-text-main font-semibold">
               درحال دریافت اطلاعات مسافران...
             </div>
           ) : previousPassengersList.length > 0 ? (
             <div className="w-full flex flex-col items-start justify-center gap-2">
-              { previousPassengersList.map( ( previousPassenger ) =>
-              {
+              {previousPassengersList.map((previousPassenger) => {
                 return (
                   <div
-                    key={ previousPassenger.id }
+                    key={previousPassenger.id}
                     className="w-full font-semibold text-text-main grid grid-cols-5 gap-2 bg-main py-1 px-2 rounded-2xl border border-divider"
                   >
                     <div className="flex items-center justify-center">
@@ -1270,64 +1251,62 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ( {
                         checked={
                           selectPreviousPassenger?.id === previousPassenger.id
                         }
-                        onChange={ () =>
-                        {
-                          setSelectPreviousPassenger( previousPassenger );
-                        } }
+                        onChange={() => {
+                          setSelectPreviousPassenger(previousPassenger);
+                        }}
                       />
                     </div>
                     <div className="flex items-center justify-start">
                       <Tooltip
                         placement="top"
-                        title={ `${ previousPassenger.fullname.first_name.fa } ${ previousPassenger.fullname.last_name.fa }` }
+                        title={`${previousPassenger.fullname.first_name.fa} ${previousPassenger.fullname.last_name.fa}`}
                       >
                         <span className="truncate">
-                          { previousPassenger.fullname.first_name.fa }{ " " }
-                          { previousPassenger.fullname.last_name.fa }
+                          {previousPassenger.fullname.first_name.fa}{" "}
+                          {previousPassenger.fullname.last_name.fa}
                         </span>
                       </Tooltip>
                     </div>
                     <div className="flex items-center justify-center">
                       <span>
-                        { previousPassenger.gender === "male" ? "مرد" : "زن" }
+                        {previousPassenger.gender === "male" ? "مرد" : "زن"}
                       </span>
                     </div>
                     <div className="flex items-center justify-center">
                       <span>
-                        { previousPassenger.identity.id
+                        {previousPassenger.identity.id
                           ? previousPassenger.identity.id
                           : previousPassenger.passport.id
-                            ? previousPassenger.passport.id
-                            : "-" }
+                          ? previousPassenger.passport.id
+                          : "-"}
                       </span>
                     </div>
                     <div className="flex items-center justify-center">
                       <span>
-                        { previousPassenger.birth
-                          ? applyMask( "date", previousPassenger.birth )
-                          : "-" }
+                        {previousPassenger.birth
+                          ? applyMask("date", previousPassenger.birth)
+                          : "-"}
                       </span>
                     </div>
                   </div>
                 );
-              } ) }
+              })}
             </div>
           ) : (
             <div className="flex items-center justify-center text-text-main font-semibold">
-              مسافری جهت نمایش موجود نیست{ " " }
+              مسافری جهت نمایش موجود نیست{" "}
             </div>
-          ) }
+          )}
         </div>
       </DialogContent>
       <DialogActions className="p-6">
         <Button
           variant="contained"
           size="medium"
-          onClick={ () =>
-          {
+          onClick={() => {
             handleChangePassengerInfo();
             onClose();
-          } }
+          }}
           className="rounded-lg "
         >
           افزودن مسافر
@@ -1337,54 +1316,52 @@ const PreviousPassengersDialog: FC<PreviousPassengersDialogProps> = ( {
   );
 };
 
-interface PreviousPassengersDrawerProps
-{
+interface PreviousPassengersDrawerProps {
   open: boolean;
   onClose: () => void;
   passengers: UserInformationDataType;
+  action: string;
 }
-const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ( {
+const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ({
   onClose,
   open,
   passengers,
-} ) =>
-{
+  action,
+}) => {
   // initila state
-  const [ previousPassengersList, setPreviousPassengersList ] = useState<
+  const [previousPassengersList, setPreviousPassengersList] = useState<
     PreviousPassengerDataType[] | []
-  >( [] );
-  const [ showLoading, setShowLoading ] = useState<boolean>( true );
-  const [ selectPreviousPassenger, setSelectPreviousPassenger ] =
-    useState<PreviousPassengerDataType | null>( null );
+  >([]);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
+  const [selectPreviousPassenger, setSelectPreviousPassenger] =
+    useState<PreviousPassengerDataType | null>(null);
   const { flightPassengers, setFlightPassengers } =
     useGlobalContext().flightContext.searchContext;
+  const { setAccommodationPassenger, accommodationPassenger } =
+    useGlobalContext().accommodationContext.accommodationSearch;
   const { handleAlertDetails } = useShowAlert();
 
   // handle get previous passengers list
-  const handleGetPreviousPassengersList = () =>
-  {
+  const handleGetPreviousPassengersList = () => {
     getPreviousPassengers()
-      .then( ( res: any ) =>
-      {
-        setShowLoading( false );
-        setPreviousPassengersList( res.items );
-      } )
-      .catch( ( err ) =>
-      {
-        console.log( "err", err );
-        handleAlertDetails( "خطا در دریافت اطلاعات", "error" );
+      .then((res: any) => {
+        setShowLoading(false);
+        setPreviousPassengersList(res.items);
+      })
+      .catch((err) => {
+        console.log("err", err);
+        handleAlertDetails("خطا در دریافت اطلاعات", "error");
         onClose();
-      } );
+      });
   };
 
-  useEffect( () =>
-  {
+  useEffect(() => {
     handleGetPreviousPassengersList();
-  }, [] );
+  }, []);
 
   const mapToFlightPassenger = (
     passenger: PreviousPassengerDataType
-  ): UserInformationDataType => ( {
+  ): UserInformationDataType => ({
     id: passenger.id,
     image: null,
     sex: passenger.gender,
@@ -1405,22 +1382,29 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ( {
     postal_code: "",
     address: "",
     birthCity: "",
-  } );
-  const handleChangePassengerInfo = () =>
-  {
+  });
+  const handleChangePassengerInfo = () => {
     const mappedPassenger = selectPreviousPassenger
-      ? mapToFlightPassenger( selectPreviousPassenger )
+      ? mapToFlightPassenger(selectPreviousPassenger)
       : null;
 
-    if ( !mappedPassenger ) return;
+    if (!mappedPassenger) return;
 
-    setFlightPassengers( () =>
-    {
-      const newPassengers = flightPassengers.map( ( element ) =>
-        element.id === passengers.id ? mappedPassenger : element
-      );
-      return newPassengers;
-    } );
+    if (action === "flight") {
+      setFlightPassengers(() => {
+        const newPassengers = flightPassengers.map((element) =>
+          element.id === passengers.id ? mappedPassenger : element
+        );
+        return newPassengers;
+      });
+    } else {
+      setAccommodationPassenger(() => {
+        const newPassengers = accommodationPassenger.map((element) =>
+          element.id === passengers.id ? mappedPassenger : element
+        );
+        return newPassengers;
+      });
+    }
   };
 
   const drawerContent = (
@@ -1432,10 +1416,9 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ( {
           </span>
           <IconButton
             size="small"
-            onClick={ () =>
-            {
+            onClick={() => {
               onClose();
-            } }
+            }}
           >
             <ClearIcon className="text-paper" />
           </IconButton>
@@ -1443,17 +1426,16 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ( {
         <div className="w-full px-5 grid grid-cols-1 gap-6">
           <TextField size="medium" label="جستجو" />
           <div className="grid grid-cols-1 gap-3">
-            { showLoading ? (
+            {showLoading ? (
               <div className="flex items-center justify-center text-text-main font-semibold">
                 درحال دریافت اطلاعات مسافران...
               </div>
             ) : previousPassengersList.length > 0 ? (
               <div className="w-full flex flex-col items-start justify-center gap-2">
-                { previousPassengersList.map( ( previousPassenger ) =>
-                {
+                {previousPassengersList.map((previousPassenger) => {
                   return (
                     <div
-                      key={ previousPassenger.id }
+                      key={previousPassenger.id}
                       className="w-full text-text-main flex items-center justify-start gap-4 bg-paper py-1 px-2 rounded-2xl border border-divider"
                     >
                       <Radio
@@ -1461,56 +1443,54 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ( {
                         checked={
                           selectPreviousPassenger?.id === previousPassenger.id
                         }
-                        onChange={ () =>
-                        {
-                          setSelectPreviousPassenger( previousPassenger );
-                        } }
+                        onChange={() => {
+                          setSelectPreviousPassenger(previousPassenger);
+                        }}
                       />
                       <div className="flex items-center justify-start">
                         <Tooltip
                           placement="top"
-                          title={ `${ previousPassenger.fullname.first_name.fa } ${ previousPassenger.fullname.last_name.fa }` }
+                          title={`${previousPassenger.fullname.first_name.fa} ${previousPassenger.fullname.last_name.fa}`}
                         >
                           <span className="truncate font-semibold">
-                            { previousPassenger.fullname.first_name.fa }{ " " }
-                            { previousPassenger.fullname.last_name.fa }
+                            {previousPassenger.fullname.first_name.fa}{" "}
+                            {previousPassenger.fullname.last_name.fa}
                           </span>
                         </Tooltip>
                       </div>
                       <div className="flex items-center justify-center">
                         <span>
-                          { previousPassenger.identity.id
+                          {previousPassenger.identity.id
                             ? previousPassenger.identity.id
                             : previousPassenger.passport.id
-                              ? previousPassenger.passport.id
-                              : "-" }
+                            ? previousPassenger.passport.id
+                            : "-"}
                         </span>
                       </div>
                       <div className="flex items-center justify-center">
                         <span>
-                          { previousPassenger.birth
-                            ? applyMask( "date", previousPassenger.birth )
-                            : "-" }
+                          {previousPassenger.birth
+                            ? applyMask("date", previousPassenger.birth)
+                            : "-"}
                         </span>
                       </div>
                     </div>
                   );
-                } ) }
+                })}
               </div>
             ) : (
               <div className="flex items-center justify-center text-text-main font-semibold">
-                مسافری جهت نمایش موجود نیست{ " " }
+                مسافری جهت نمایش موجود نیست{" "}
               </div>
-            ) }
+            )}
           </div>
         </div>
         <div className="absolute bottom-0 w-full bg-paper h-16 flex items-center justify-center py-3 px-7">
           <Button
-            onClick={ () =>
-            {
+            onClick={() => {
               handleChangePassengerInfo();
               onClose();
-            } }
+            }}
             className="rounded-lg w-full"
             variant="contained"
             size="large"
@@ -1524,18 +1504,18 @@ const PreviousPassengersDrawer: FC<PreviousPassengersDrawerProps> = ( {
 
   return (
     <Drawer
-      anchor={ "right" }
-      PaperProps={ {
+      anchor={"right"}
+      PaperProps={{
         sx: {
           width: "100%",
           backgroundColor: "#EFEFEF",
           position: "relative",
         },
-      } }
-      open={ open }
-      onClose={ onClose }
+      }}
+      open={open}
+      onClose={onClose}
     >
-      { drawerContent }
+      {drawerContent}
     </Drawer>
   );
 };
