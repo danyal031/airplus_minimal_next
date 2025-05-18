@@ -2,8 +2,7 @@
 import PassengerInformation from "@/components/passengers-components/PassengerInformation";
 import { useGlobalContext } from "@/context/store";
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
-import
-{
+import {
   defaultPassengerInformation,
   UserInformationDataType,
 } from "@/DataTypes/globalTypes";
@@ -13,68 +12,59 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const CheckoutAccommodationContainer = () =>
-{
+const CheckoutAccommodationContainer = () => {
   // initial states
   const { setAccommodationPassenger, accommodationPassenger } =
     useGlobalContext().accommodationContext.accommodationSearch;
-  const childRef = useRef<any>( [] );
+  const childRef = useRef<any>([]);
   const searchParams = useSearchParams();
   // handle initial accommodation passenger
-  useEffect( () =>
-  {
-
-    const factorId = searchParams.get( "factor" );
+  useEffect(() => {
+    const factorId = searchParams.get("factor");
     const accommodations = JSON.parse(
-      localStorage.getItem( factorId as string ) as string
+      localStorage.getItem(factorId as string) as string
     ).data as AccommodationDataType[];
 
+    const newPassengers: UserInformationDataType[] = accommodations.flatMap(
+      (acc: any) => {
+        const { adult = 0, child = 0 } = acc.room_type.passengers;
+        const totalPassengers = adult + child;
 
-    const newPassengers: UserInformationDataType[] = accommodations.flatMap( ( acc: any ) =>
-    {
-      const { adult = 0, child = 0 } = acc.room_type.passengers;
-      const totalPassengers = adult + child;
+        return Array.from({ length: totalPassengers }).map(() => ({
+          ...defaultPassengerInformation,
+          id: uuidv4(),
+        }));
+      }
+    );
 
-      return Array.from( { length: totalPassengers } ).map( () => ( {
-        ...defaultPassengerInformation,
-        id: uuidv4(),
-      } ) );
-    } );
+    setAccommodationPassenger(newPassengers);
+    console.log(666, accommodations);
 
-    setAccommodationPassenger( newPassengers );
-    console.log( 666, accommodations );
-
-    console.log( "🧍‍♂️ New passengers:", newPassengers );
-
-  }, [] );
-
-
+    console.log("🧍‍♂️ New passengers:", newPassengers);
+  }, []);
 
   // handle onchange user information
   const handleChangeUserInfo = debounce(
-    ( e: React.ChangeEvent<HTMLInputElement>, id: number, field: string ) =>
-    {
-      const updatedUserInfo = accommodationPassenger.map( ( pass: any, i: number ) =>
-      {
-        if ( pass.id === id )
-        {
-          return { ...pass, [ field ]: e.target.value };
+    (e: React.ChangeEvent<HTMLInputElement>, id: number, field: string) => {
+      const updatedUserInfo = accommodationPassenger.map(
+        (pass: any, i: number) => {
+          if (pass.id === id) {
+            return { ...pass, [field]: e.target.value };
+          }
+          return pass;
         }
-        return pass;
-      } );
-      setAccommodationPassenger( updatedUserInfo );
+      );
+      setAccommodationPassenger(updatedUserInfo);
     },
     200
   );
 
-  useEffect( () =>
-  {
-    console.log( "accommodationPassenger", accommodationPassenger );
-  }, [ accommodationPassenger ] )
+  useEffect(() => {
+    console.log("accommodationPassenger", accommodationPassenger);
+  }, [accommodationPassenger]);
 
   // render header container
-  const renderHeaderContainer = () =>
-  {
+  const renderHeaderContainer = () => {
     return (
       <div className="md:border-b-2 border-main p-2 flex items-center justify-start">
         <div className="flex items-center justify-center gap-1">
@@ -86,8 +76,7 @@ const CheckoutAccommodationContainer = () =>
     );
   };
 
-  const renderPurchaseConfirmation = () =>
-  {
+  const renderPurchaseConfirmation = () => {
     const renderOnDesktop = (
       <div className="p-5 hidden md:flex items-center justify-between bg-paper rounded-xl">
         <span className="text-text-main text-sm font-semibold">
@@ -120,38 +109,45 @@ const CheckoutAccommodationContainer = () =>
 
     return (
       <>
-        <div className="px-4 md:px-0">{ renderOnDesktop }</div>
-        {/* { renderOnMobile } */ }
+        <div className="px-4 md:px-0">{renderOnDesktop}</div>
+        {/* { renderOnMobile } */}
       </>
     );
   };
 
   // render passenger list
-  const renderPassengerList = () =>
-  {
-    return <>{
-      accommodationPassenger.map( ( item: UserInformationDataType, index: number ) =>
-        <PassengerInformation
-          key={ item.id }
-          item={ item }
-          type="accommodation"
-          passengers={ accommodationPassenger }
-          setPassengers={ setAccommodationPassenger }
-          ref={ ( el ) => ( childRef.current[ index ] = el ) }
-          index={ index }
-          handleOnChange={ handleChangeUserInfo }
-        /> ) }</>
-  }
+  const renderPassengerList = () => {
+    return (
+      <>
+        {accommodationPassenger.map(
+          (item: UserInformationDataType, index: number) => (
+            <PassengerInformation
+              key={item.id}
+              item={item}
+              type="accommodation"
+              passengers={accommodationPassenger}
+              setPassengers={setAccommodationPassenger}
+              ref={(el) => (childRef.current[index] = el)}
+              index={index}
+              handleOnChange={handleChangeUserInfo}
+            />
+          )
+        )}
+      </>
+    );
+  };
 
-  return <div className="grid grid-cols-1 gap-5">
-    <div className="px-4 md:px-0">
-      <div className="bg-paper rounded-xl grid grid-cols-1 gap-0">
-        { renderHeaderContainer() }
-        { renderPassengerList() }
+  return (
+    <div className="grid grid-cols-1 gap-5">
+      <div className="px-4 md:px-0">
+        <div className="bg-paper rounded-xl grid grid-cols-1 gap-0">
+          {renderHeaderContainer()}
+          {renderPassengerList()}
+        </div>
       </div>
+      {renderPurchaseConfirmation()}
     </div>
-    { renderPurchaseConfirmation() }
-  </div>
+  );
 };
 
 export default CheckoutAccommodationContainer;
