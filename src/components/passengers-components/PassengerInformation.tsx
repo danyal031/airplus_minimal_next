@@ -319,28 +319,31 @@ const PassengerInformation = forwardRef<
                     : "رده سنی"}
                 </span>
               ) : (
-                <div className={"flex items-center justify-start gap-2"}>
-                  <Chip
-                    color="primary"
-                    size="small"
-                    label={`اتاق ${labels[index].item_idx + 1}`}
-                  />
+                labels &&
+                labels[index] && (
+                  <div className={"flex items-center justify-start gap-2"}>
+                    <Chip
+                      color="primary"
+                      size="small"
+                      label={`اتاق ${labels[index].item_idx + 1}`}
+                    />
 
-                  <span className="font-semibold text-xs">
-                    ({online[labels[index].item_idx].room_type.title.fa})
-                  </span>
-                  <span className="font-semibold text-base">
-                    {"مسافر "}
-                    {labels[index].passenger_idx + 1}
-                  </span>
-                  <span className="font-semibold text-xs">
-                    (
-                    {labels[index].age_category === "adult"
-                      ? "بزرگسال"
-                      : "کودک"}
-                    )
-                  </span>
-                </div>
+                    <span className="font-semibold text-xs">
+                      ({online[labels[index].item_idx].room_type.title.fa})
+                    </span>
+                    <span className="font-semibold text-base">
+                      {"مسافر "}
+                      {labels[index].passenger_idx + 1}
+                    </span>
+                    <span className="font-semibold text-xs">
+                      (
+                      {labels[index].age_category === "adult"
+                        ? "بزرگسال"
+                        : "کودک"}
+                      )
+                    </span>
+                  </div>
+                )
               )}
 
               <RadioGroup

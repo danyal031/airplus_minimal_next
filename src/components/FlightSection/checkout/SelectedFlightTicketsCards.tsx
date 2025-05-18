@@ -70,9 +70,9 @@ const SelectedFlightTicketsCards = () => {
     const returnDate = toDate as string;
 
     router.push(
-      `/search/flights?origin=${originIata}&destination=${destinationIata}&departure_date=${convertPersianToEnglishNumbers(
+      `/search/flights?origin=${originIata}&destination=${destinationIata}&departing=${convertPersianToEnglishNumbers(
         departureDate
-      )}&returning_date=${
+      )}&returning=${
         returnDate
           ? convertPersianToEnglishNumbers(returnDate as string)
           : false

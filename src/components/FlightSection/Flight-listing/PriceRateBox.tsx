@@ -337,12 +337,9 @@ const PriceRateBox = () => {
 
     const updateURLParams = (departure: string, returning: string | false) => {
       const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set("departing", convertPersianToEnglishNumbers(departure));
       searchParams.set(
-        "departure_date",
-        convertPersianToEnglishNumbers(departure)
-      );
-      searchParams.set(
-        "returning_date",
+        "returning",
         returning ? convertPersianToEnglishNumbers(returning) : "false"
       );
       router.push(`/search/flights?${searchParams.toString()}`);

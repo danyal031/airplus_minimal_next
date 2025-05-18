@@ -6,7 +6,7 @@ const AccommodationPageContainer = () => {
   return (
     <>
       <Suspense>
-        <AccommodationListContainer />
+        <AccommodationListContainer action="accommodation" />
       </Suspense>
     </>
   );

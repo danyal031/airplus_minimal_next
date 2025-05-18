@@ -8,14 +8,20 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import AccommodationFilterBox from "./AccommodationFilterBox";
 import AccommodationsList from "./AccommodationsList";
 import moment from "jalali-moment";
 import axios from "axios";
 import customAxios from "@/utils/customAxios";
 
-const AccommodationListContainer = () => {
+interface AccommodationListContainerProps {
+  action: "accommodation" | "flight-accommodation";
+}
+
+const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
+  action,
+}) => {
   // initial states
   const [page, setPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false); // Prevent duplicate requests
@@ -65,8 +71,13 @@ const AccommodationListContainer = () => {
     );
 
     let destinationCheck =
-      searchParams.get("destination") !== "null" &&
-      searchParams.get("destination")
+      action === "accommodation"
+        ? searchParams.get("destination") !== "null" &&
+          searchParams.get("destination")
+          ? true
+          : false
+        : searchParams.get("accommodation") &&
+          searchParams.get("accommodation") !== "null"
         ? true
         : false;
 
@@ -108,10 +119,13 @@ const AccommodationListContainer = () => {
   };
 
   const fetchAccommodations = async (pageValue = page, toEmpty = false) => {
-    const destination = searchParams.get("destination") as number | string;
+    const destination =
+      action === "accommodation"
+        ? (searchParams.get("destination") as number | string)
+        : (searchParams.get("accommodation") as number | string);
     const departing = searchParams.get("departing") as string;
     const returning = searchParams.get("returning") as string;
-    const type = "city";
+    const type = action === "flight-accommodation" ? "iata" : "city";
     const adult_capacity = Number(searchParams.get("adultCapacity"));
     const child_capacity = Number(searchParams.get("childCapacity"));
 
@@ -214,6 +228,10 @@ const AccommodationListContainer = () => {
       fetchAccommodations(1, true);
     } else {
       router.push("/");
+      console.log(
+        "searchParamsValidation",
+        searchParamsValidation(searchParams)
+      );
     }
   }, [searchParams]);
 

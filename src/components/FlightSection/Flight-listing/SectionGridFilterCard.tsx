@@ -107,15 +107,15 @@ const SectionGridFilterCard = () => {
     // let dateRegex: RegExp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/i;
     // let departureCheck = dateRegex.test(
     //   convertPersianToEnglishNumbers(
-    //     searchParams.get("departure_date") as string
+    //     searchParams.get("departing") as string
     //   )
     // );
     // let returnCheck =
     //   dateRegex.test(
     //     convertPersianToEnglishNumbers(
-    //       searchParams.get("returning_date") as string
+    //       searchParams.get("returning") as string
     //     )
-    //   ) || (searchParams.get("returning_date") as string) === "false";
+    //   ) || (searchParams.get("returning") as string) === "false";
 
     let originCheck = !!airports.find(
       (a) => a.iata === searchParams.get("origin")
@@ -138,8 +138,8 @@ const SectionGridFilterCard = () => {
     const origin = searchParams.get("origin") as string;
     const destination = searchParams.get("destination") as string;
 
-    const departureParam = searchParams.get("departure_date");
-    const returningParam = searchParams.get("returning_date");
+    const departureParam = searchParams.get("departing");
+    const returningParam = searchParams.get("departing");
 
     const departure_date = departureParam
       ? formatDateWithSlash(departureParam)

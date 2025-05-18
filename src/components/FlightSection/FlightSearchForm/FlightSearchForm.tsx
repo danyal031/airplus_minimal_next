@@ -29,6 +29,8 @@ import {
 } from "@/global-files/function";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useGlobalActions } from "@/context/actionStore";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 
 interface FlightSearchFormProps {
   type: "flight" | "flight-accommodation";
@@ -46,6 +48,14 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     isFlightSearching,
   } = useGlobalContext().flightContext.searchContext;
   const { handleFlightSearch } = useGlobalActions().flightActions;
+  const {
+    accommodationPassengersCapacity,
+    setAccommodationPassengersCapacity,
+  } = useGlobalContext().accommodationContext.accommodationSearch;
+  // popOver state
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openPassengerCapacityPopover, setOpenPassengerCapacityPopover] =
+    useState<boolean>(false);
 
   // handle navigate
   const router = useRouter();
@@ -54,9 +64,9 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     router.push(
       `/search/flights?origin=${origin?.iata}&destination=${
         destination?.iata
-      }&departure_date=${convertPersianToEnglishNumbers(
+      }&departing=${convertPersianToEnglishNumbers(
         fromDate as string
-      )}&returning_date=${
+      )}&returning=${
         toDate ? convertPersianToEnglishNumbers(toDate as string) : false
       }`
     );
@@ -68,11 +78,13 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
         destination?.iata
       }&accommodation=${
         destination?.iata
-      }&departure_date=${convertPersianToEnglishNumbers(
+      }&departing=${convertPersianToEnglishNumbers(
         fromDate as string
-      )}&returning_date=${
+      )}&returning=${
         toDate ? convertPersianToEnglishNumbers(toDate as string) : false
-      }`
+      }&adultCapacity=${
+        accommodationPassengersCapacity.adultCapacity
+      }&childCapacity=${accommodationPassengersCapacity.childCapacity}`
     );
   };
 
@@ -134,21 +146,212 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     );
   };
 
-  // for render flight search form in desktop
-  const renderSearchFormOnDesktop = () => {
-    return (
+  // handle add passenger
+  const handleAddPassenger = (action: string) => {
+    // setHotelPassengers((prev) => [...prev, defaultPassengerInformation]);
+
+    switch (action) {
+      case "adult":
+        setAccommodationPassengersCapacity((pre) => {
+          if (pre.adultCapacity < 10) {
+            return { ...pre, adultCapacity: pre.adultCapacity + 1 };
+          } else {
+            return pre;
+          }
+        });
+        // setAdultCapacity((prev) => (prev < 10 ? prev + 1 : prev));
+        break;
+      case "child":
+        setAccommodationPassengersCapacity((pre) => {
+          if (pre.childCapacity < 5) {
+            return { ...pre, childCapacity: pre.childCapacity + 1 };
+          } else {
+            return pre;
+          }
+        });
+        // setChildCapacity((prev) => (prev < 5 ? prev + 1 : prev));
+        break;
+      default:
+        break;
+    }
+  };
+
+  // handle decrease passenger
+  const handleDecreasePassenger = (action: string) => {
+    // setHotelPassengers((prev) => prev.slice(0, prev.length - 1));
+    switch (action) {
+      case "adult":
+        setAccommodationPassengersCapacity((pre) => {
+          if (pre.adultCapacity > 0) {
+            return { ...pre, adultCapacity: pre.adultCapacity - 1 };
+          } else {
+            return pre;
+          }
+        });
+        // setAdultCapacity((prev) => (prev > 1 ? prev - 1 : prev));
+        break;
+      case "child":
+        setAccommodationPassengersCapacity((pre) => {
+          if (pre.childCapacity > 0) {
+            return { ...pre, childCapacity: pre.childCapacity - 1 };
+          } else {
+            return pre;
+          }
+        });
+        // setChildCapacity((prev) => (prev > 0 ? prev - 1 : prev));
+        break;
+      default:
+        break;
+    }
+  };
+
+  // handle close passenger capacity popover
+  const handleClosePassengerCapacityPopover = () => {
+    setOpenPassengerCapacityPopover(false);
+  };
+
+  // render passenger capacity
+  const renderPassengerInput = () => {
+    const popoverContent = (
       <>
-        <div className="bg-paper w-full rounded-xl p-5 hidden md:block">
-          <div className="grid grid-cols-12 gap-5">
-            <div className="col-span-6">
-              <RoundWayInput />
+        <div className="grid grid-cols-1 gap-2">
+          <TextField
+            InputProps={{
+              readOnly: true,
+            }}
+            value={`${accommodationPassengersCapacity.adultCapacity} بزرگسال،${accommodationPassengersCapacity.childCapacity} کودک`}
+            size="small"
+            label="مسافران"
+          />
+          <div className="flex flex-col items-center justify-start gap-2">
+            <div className="flex items-center justify-between gap-5 w-full">
+              <span className="text-sm text-text-main font-semibold">
+                بزرگسال (12 سال به بالا)
+              </span>
+              <div className="flex items-center gap-2">
+                <IconButton
+                  onClick={() => handleAddPassenger("adult")}
+                  disabled={accommodationPassengersCapacity.adultCapacity >= 10}
+                  color="primary"
+                  size="small"
+                >
+                  <AddIcon fontSize="small" />
+                </IconButton>
+                <span className="text-sm text-text-main min-w-[2ch]">
+                  {accommodationPassengersCapacity.adultCapacity}
+                </span>
+                <IconButton
+                  onClick={() => handleDecreasePassenger("adult")}
+                  disabled={accommodationPassengersCapacity.adultCapacity <= 1}
+                  size="small"
+                  color="primary"
+                >
+                  <RemoveIcon fontSize="small" />
+                </IconButton>
+              </div>
             </div>
-            <div className="col-span-4">{renderDatePicker()}</div>
-            <div className="col-span-2">{renderConfirmButton()}</div>
+            <div className="flex items-center justify-between gap-5 w-full">
+              <span className="text-sm text-text-main font-semibold">
+                کودک (2 تا 12 سال){" "}
+              </span>
+              <div className="flex items-center gap-2">
+                <IconButton
+                  onClick={() => handleAddPassenger("child")}
+                  disabled={accommodationPassengersCapacity.childCapacity >= 4}
+                  color="primary"
+                  size="small"
+                >
+                  <AddIcon fontSize="small" />
+                </IconButton>
+                <span className="text-text-main text-sm min-w-[2ch]">
+                  {accommodationPassengersCapacity.childCapacity}
+                </span>
+                <IconButton
+                  onClick={() => handleDecreasePassenger("child")}
+                  disabled={accommodationPassengersCapacity.childCapacity <= 0}
+                  color="primary"
+                  size="small"
+                >
+                  <RemoveIcon fontSize="small" />
+                </IconButton>
+              </div>
+            </div>{" "}
           </div>
         </div>
       </>
     );
+    return (
+      <>
+        <Popover
+          anchorEl={anchorEl}
+          onClose={handleClosePassengerCapacityPopover}
+          open={openPassengerCapacityPopover}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          sx={{
+            marginTop: "-4px",
+            "& .MuiPopover-paper": {
+              // width: anchorWidth,
+              maxHeight: "420px",
+            },
+          }}
+          classes={{
+            paper: "p-2 border-2 border-primary-main rounded-xl",
+          }}
+        >
+          {popoverContent}
+        </Popover>
+        <TextField
+          InputProps={{
+            readOnly: true,
+          }}
+          value={`${accommodationPassengersCapacity.adultCapacity} بزرگسال،${accommodationPassengersCapacity.childCapacity} کودک`}
+          size="small"
+          label="تعداد مسافر"
+          onClick={(e: any) => {
+            setAnchorEl(e.currentTarget);
+            setOpenPassengerCapacityPopover(true);
+          }}
+        />
+      </>
+    );
+  };
+
+  // for render flight search form in desktop
+  const renderSearchFormOnDesktop = () => {
+    const flightSearchForm = (
+      <div className="bg-paper w-full rounded-xl p-5 hidden md:block">
+        <div className="grid grid-cols-12 gap-5">
+          <div className="col-span-6">
+            <RoundWayInput />
+          </div>
+          <div className="col-span-4">{renderDatePicker()}</div>
+          <div className="col-span-2">{renderConfirmButton()}</div>
+        </div>
+      </div>
+    );
+
+    const flightAccommodationSearchForm = (
+      <div className="bg-paper w-full rounded-xl p-5 hidden md:block">
+        <div className="grid grid-cols-12 gap-5">
+          <div className="col-span-5">
+            <RoundWayInput />
+          </div>
+          <div className="col-span-2">{renderPassengerInput()}</div>
+          <div className="col-span-3">{renderDatePicker()}</div>
+          <div className="col-span-2">{renderConfirmButton()}</div>
+        </div>
+      </div>
+    );
+
+    const formFieldObject = {
+      flight: flightSearchForm,
+      "flight-accommodation": flightAccommodationSearchForm,
+    };
+
+    return <>{formFieldObject[type]}</>;
   };
 
   // const renderDatePickerOnMobile = () => {

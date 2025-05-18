@@ -26,11 +26,15 @@ const SearchHeaderReservation = () => {
     switch (pathName) {
       case "flights":
         setTabValue("1");
+        break;
       case "accommodations":
         setTabValue("2");
+        break;
       case "flight-accommodation":
         setTabValue("3");
+        break;
     }
+    console.log("pat55555hName", pathName);
   }, [path]);
 
   // handle toggle open search drawer

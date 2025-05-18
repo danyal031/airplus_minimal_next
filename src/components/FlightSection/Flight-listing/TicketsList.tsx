@@ -490,8 +490,8 @@ const TicketCard: FC<TicketCardProps> = ({
     return {
       wentTicket: wentTicket,
       returnTicket: returnTicket,
-      departureDate: searchParams.get("departure_date"),
-      returningDate: searchParams.get("returning_date"),
+      departureDate: searchParams.get("departing"),
+      returningDate: searchParams.get("returning"),
     };
   };
   const handleChooseTicket = (
