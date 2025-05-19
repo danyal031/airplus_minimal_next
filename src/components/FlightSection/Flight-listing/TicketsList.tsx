@@ -464,6 +464,14 @@ const TicketCard: FC<TicketCardProps> = ({
     setFlightTab,
     flightTab,
   } = useGlobalContext().flightContext.searchContext;
+  const { addedRooms } =
+    useGlobalContext().accommodationContext.accommodationSearch;
+  const { searchType, setShowAlertDetails } = useGlobalContext().global;
+  const {
+    capacitySelectedAccommodation,
+    setWentFlightCapacity,
+    setReturnFlightCapacity,
+  } = useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -494,10 +502,9 @@ const TicketCard: FC<TicketCardProps> = ({
       returningDate: searchParams.get("returning"),
     };
   };
-  const handleChooseTicket = (
-    data: FlightTicketDataType,
-    classIndex: number = 0
-  ) => {
+
+  // handle flight choose ticket
+  const handleFlightChooseTicket = (data: FlightTicketDataType) => {
     if (travelRoute === "oneWay") {
       setSelectedWentFlight(data);
       toggleOpenDetailsDrawer(false);
@@ -529,6 +536,69 @@ const TicketCard: FC<TicketCardProps> = ({
         }
       }
     }
+  };
+
+  // handle flight accommodation choose ticket
+  const handleFlightAccommodationChooseTicket = (
+    data: FlightTicketDataType
+  ) => {
+    if (addedRooms.length > 0) {
+      if (data.Classes.AvailableSeat >= capacitySelectedAccommodation) {
+        if (flightTab === 1) {
+          setWentFlightCapacity(data.Classes.AvailableSeat);
+          toggleOpenDetailsDrawer(false);
+          setSelectedWentFlight(data);
+          if (selectedReturnFlight) {
+            const queryParams = createSearchparams(data, selectedReturnFlight);
+            const local_id = uuidv4().substr(0, 6);
+            localStorage.setItem(local_id, JSON.stringify(queryParams));
+            router.push(`/flight/checkout?factor=${local_id}` as Route);
+          }
+        } else {
+          setReturnFlightCapacity(data.Classes.AvailableSeat);
+          toggleOpenDetailsDrawer(false);
+          setSelectedReturnFlight(data);
+          if (selectedWentFlight) {
+            const queryParams = createSearchparams(selectedWentFlight, data);
+            const local_id = uuidv4().substr(0, 6);
+            localStorage.setItem(local_id, JSON.stringify(queryParams));
+            router.push(`/flight/checkout?factor=${local_id}` as Route);
+          }
+        }
+      } else {
+        setShowAlertDetails({
+          showAlert: true,
+          alertType: "error",
+          alertMessage:
+            "ظرفیت بلیت مورد نظر کمتر از مسافران اتاق انتخاب شده است",
+        });
+      }
+    } else {
+      if (flightTab === 1) {
+        setWentFlightCapacity(data.Classes.AvailableSeat);
+        toggleOpenDetailsDrawer(false);
+        setSelectedWentFlight(data);
+      } else {
+        setReturnFlightCapacity(data.Classes.AvailableSeat);
+        toggleOpenDetailsDrawer(false);
+        setSelectedReturnFlight(data);
+      }
+    }
+  };
+
+  // choose ticket field object  for kind of search type
+  const chooseTicketFieldObject: {
+    [key: string]: (data: FlightTicketDataType) => void;
+  } = {
+    flight: handleFlightChooseTicket,
+    "flight-accommodation": handleFlightAccommodationChooseTicket,
+  };
+
+  const handleChooseTicket = (
+    data: FlightTicketDataType,
+    classIndex: number = 0
+  ) => {
+    chooseTicketFieldObject[searchType](data);
   };
 
   // handle move to checkout page

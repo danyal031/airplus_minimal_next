@@ -68,6 +68,8 @@ interface ContextProps {
     setShowProgress: Dispatch<SetStateAction<boolean>>;
     config: ConfigDataType | null;
     setConfig: Dispatch<SetStateAction<ConfigDataType | null>>;
+    searchType: string;
+    setSearchType: Dispatch<SetStateAction<string>>;
   };
   flightContext: {
     searchContext: {
@@ -179,11 +181,22 @@ interface ContextProps {
       setAccommodationPassenger: Dispatch<
         SetStateAction<UserInformationDataType[] | []>
       >;
+      selectedRooms: any;
+      setSelectedRooms: Dispatch<SetStateAction<any>>;
+      addedRooms: any;
+      setAddedRooms: Dispatch<SetStateAction<any>>;
     };
   };
-  // flightAccommodationContext:{
-  //   flightAccommodationSearch: {
-  // }
+  flightAccommodationContext: {
+    flightAccommodationSearch: {
+      wentFlightCapacity: number;
+      setWentFlightCapacity: Dispatch<SetStateAction<number>>;
+      returnFlightCapacity: number;
+      setReturnFlightCapacity: Dispatch<SetStateAction<number>>;
+      capacitySelectedAccommodation: number;
+      setCapacitySelectedAccommodation: Dispatch<SetStateAction<number>>;
+    };
+  };
 }
 
 // Create combined context
@@ -209,6 +222,8 @@ const GlobalContext = createContext<ContextProps>({
     setShowProgress: () => {},
     config: null,
     setConfig: () => {},
+    searchType: "flight",
+    setSearchType: () => {},
   },
   flightContext: {
     searchContext: {
@@ -299,13 +314,22 @@ const GlobalContext = createContext<ContextProps>({
       setRoomsDetails: () => {},
       accommodationPassenger: [],
       setAccommodationPassenger: () => {},
+      selectedRooms: {},
+      setSelectedRooms: () => {},
+      addedRooms: [],
+      setAddedRooms: () => {},
     },
   },
-  // flightAccommodationContext: {
-  //   flightAccommodationSearch: {
-
-  //   }
-  // }
+  flightAccommodationContext: {
+    flightAccommodationSearch: {
+      wentFlightCapacity: 0,
+      setWentFlightCapacity: () => {},
+      returnFlightCapacity: 0,
+      setReturnFlightCapacity: () => {},
+      capacitySelectedAccommodation: 0,
+      setCapacitySelectedAccommodation: () => {},
+    },
+  },
 });
 
 interface GlobalContextProviderProps {
@@ -328,7 +352,7 @@ export const GlobalContextProvider = ({
   const [tabValueSearchBox, setTabValueSearchBox] = useState<string>("1");
   const [showAlertDetails, setShowAlertDetails] =
     useState<AlertDetailsDataType>(defaultAlertDetails);
-
+  const [searchType, setSearchType] = useState<string>("flight");
   // flight filter
   const [flightFilter, setFlightFilter] = useState({
     cabinType: [] as string[],
@@ -418,6 +442,13 @@ export const GlobalContextProvider = ({
   const [accommodationPassenger, setAccommodationPassenger] = useState<
     UserInformationDataType[] | []
   >([]);
+  const [selectedRooms, setSelectedRooms] = useState<any>({});
+  const [addedRooms, setAddedRooms] = useState<any>([]);
+  //flight accommodation search
+  const [wentFlightCapacity, setWentFlightCapacity] = useState<number>(0);
+  const [returnFlightCapacity, setReturnFlightCapacity] = useState<number>(0);
+  const [capacitySelectedAccommodation, setCapacitySelectedAccommodation] =
+    useState<number>(0);
   //
 
   // handle error boundary
@@ -452,6 +483,8 @@ export const GlobalContextProvider = ({
               setShowProgress,
               config,
               setConfig,
+              searchType,
+              setSearchType,
             },
 
             flightContext: {
@@ -538,6 +571,20 @@ export const GlobalContextProvider = ({
                 setRoomsDetails,
                 accommodationPassenger,
                 setAccommodationPassenger,
+                selectedRooms,
+                setSelectedRooms,
+                addedRooms,
+                setAddedRooms,
+              },
+            },
+            flightAccommodationContext: {
+              flightAccommodationSearch: {
+                wentFlightCapacity,
+                setWentFlightCapacity,
+                returnFlightCapacity,
+                setReturnFlightCapacity,
+                capacitySelectedAccommodation,
+                setCapacitySelectedAccommodation,
               },
             },
           }}

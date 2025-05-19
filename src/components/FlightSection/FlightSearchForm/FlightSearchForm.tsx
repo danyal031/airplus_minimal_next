@@ -336,11 +336,11 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     const flightAccommodationSearchForm = (
       <div className="bg-paper w-full rounded-xl p-5 hidden md:block">
         <div className="grid grid-cols-12 gap-5">
-          <div className="col-span-5">
+          <div className="col-span-6">
             <RoundWayInput />
           </div>
-          <div className="col-span-2">{renderPassengerInput()}</div>
-          <div className="col-span-3">{renderDatePicker()}</div>
+          {/* <div className="col-span-2">{renderPassengerInput()}</div> */}
+          <div className="col-span-4">{renderDatePicker()}</div>
           <div className="col-span-2">{renderConfirmButton()}</div>
         </div>
       </div>

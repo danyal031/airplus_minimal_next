@@ -90,11 +90,15 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ action }) => {
     setSelectedAirlineFiltered,
   } = useGlobalContext().flightContext.flightFilterContext;
   const { handleFlightSearch } = useGlobalActions().flightActions;
+  const { searchType, setSearchType } = useGlobalContext().global;
   const searchParams = useSearchParams();
   const router = useRouter();
 
   // handle initial value
   useEffect(() => {
+    // initial search type value
+    setSearchType(action);
+
     getAirports()
       .then((res: any) => {
         console.log("res", res);
