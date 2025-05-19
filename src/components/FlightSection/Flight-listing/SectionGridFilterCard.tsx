@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { FC, Suspense, useEffect, useState } from "react";
 import FlightFilterBox from "./FlightFilterBox";
 import FlightsList from "./FlightsList";
 import {
@@ -66,8 +66,11 @@ export const processFlights = (flights: any[]) => {
     inactive: Array.from(inactiveMap.values()),
   };
 };
+interface SectionGridFilterCardProps {
+  action: "flight" | "flight-accommodation";
+}
 
-const SectionGridFilterCard = () => {
+const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ action }) => {
   // initial states
   const [airportsLoading, setAirportsLoading] = useState(true);
   const {

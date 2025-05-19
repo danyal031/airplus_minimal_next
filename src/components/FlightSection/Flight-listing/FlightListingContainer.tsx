@@ -7,7 +7,7 @@ const FlightListingContainer = () => {
     <>
       <div className="relative">
         <Suspense>
-          <SectionGridFilterCard />{" "}
+          <SectionGridFilterCard action="flight" />{" "}
         </Suspense>
       </div>
     </>

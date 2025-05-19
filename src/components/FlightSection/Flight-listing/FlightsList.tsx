@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { FC } from "react";
 import PriceRateBox from "./PriceRateBox";
 import TicketsList from "./TicketsList";
 import SelectedFlightsPanel from "./SelectedFlightsPanel";

@@ -43,7 +43,7 @@ const FlightAccommodationContainer = () => {
   const renderList = () => {
     switch (searchListTab) {
       case "flight":
-        return <SectionGridFilterCard />;
+        return <SectionGridFilterCard action="flight-accommodation" />;
       case "accommodation":
         return <AccommodationListContainer action="flight-accommodation" />;
     }
