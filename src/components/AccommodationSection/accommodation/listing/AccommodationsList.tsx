@@ -35,7 +35,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { v4 as uuidv4 } from "uuid";
 import { isEqual } from "lodash";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ChildCareOutlinedIcon from "@mui/icons-material/ChildCareOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
@@ -333,9 +333,17 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     // selectedRooms,
     // setSelectedRooms,
   } = useGlobalContext().accommodationContext.accommodationSearch;
-  const { capacitySelectedAccommodation, setCapacitySelectedAccommodation } =
-    useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
-  const { setShowAlertDetails } = useGlobalContext().global;
+  const {
+    capacitySelectedAccommodation,
+    setCapacitySelectedAccommodation,
+    wentFlightCapacity,
+    returnFlightCapacity,
+  } = useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
+  const { selectedReturnFlight, selectedWentFlight } =
+    useGlobalContext().flightContext.searchContext;
+  const { setShowAlertDetails, searchType } = useGlobalContext().global;
+
+  const searchParams = useSearchParams();
   const json = useRef(null);
   const router = useRouter();
 
@@ -400,7 +408,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     }
   }, [accommodationId]);
 
-  const handleSelectRoom = (room: any) => {
+  // handle flight-accommodation selected room
+  const handleAccommodationSelectedRoom = (room: any) => {
     const tempRoom = {
       room_type: { ...room },
       ...item,
@@ -411,12 +420,14 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
         to_date: convertToPersianDate,
       },
     };
+
     let tempExistingRoom = null;
     const isRoomAlreadyAdded = selectedRooms.some((existingItem: any) => {
       tempExistingRoom = { ...existingItem };
       delete tempExistingRoom["uuid"];
       return isEqual(tempExistingRoom, tempRoom);
     });
+
     if (
       !isRoomAlreadyAdded ||
       (isRoomAlreadyAdded &&
@@ -438,6 +449,114 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       });
     }
   };
+
+  // handle flight-accommodation selected room
+  const handleFlightAccommodationSelectedRoom = (room: any) => {
+    const tempRoom = {
+      room_type: { ...room },
+      ...item,
+      type: "accommodation",
+      details: {
+        ...item.details,
+        from_date: accommodationFromDate,
+        to_date: convertToPersianDate,
+      },
+    };
+
+    let tempExistingRoom = null;
+    const isRoomAlreadyAdded = selectedRooms.some((existingItem: any) => {
+      tempExistingRoom = { ...existingItem };
+      delete tempExistingRoom["uuid"];
+      return isEqual(tempExistingRoom, tempRoom);
+    });
+
+    const flightCapacity =
+      selectedWentFlight && !selectedReturnFlight
+        ? wentFlightCapacity
+        : selectedReturnFlight && !selectedWentFlight
+        ? returnFlightCapacity
+        : selectedReturnFlight && selectedWentFlight
+        ? Math.min(wentFlightCapacity, returnFlightCapacity)
+        : false;
+
+    console.log("flightCapacity", flightCapacity);
+
+    if (flightCapacity) {
+      if (capacitySelectedAccommodation < flightCapacity) {
+        console.log("sjdlajsdlkajskdl");
+
+        if (
+          !isRoomAlreadyAdded ||
+          (isRoomAlreadyAdded &&
+            selectedRooms.filter(
+              (elm: any) =>
+                elm.id === tempRoom.id &&
+                tempRoom.room_type.id === elm.room_type.id
+            ).length < tempRoom.room_type.capacity.room)
+        ) {
+          setSelectedRooms((prevItems: any) => [
+            ...prevItems,
+            { ...tempRoom, uuid: uuidv4() },
+          ]);
+          setCapacitySelectedAccommodation((prev: number) => prev + 1);
+        } else {
+          setShowAlertDetails({
+            alertMessage: "اتاق خالی موجود نیست",
+            alertType: "error",
+            showAlert: true,
+          });
+        }
+      } else {
+        setShowAlertDetails({
+          showAlert: true,
+          alertType: "error",
+          alertMessage:
+            "تعداد مسافران خود بیشتر از تعداد ظرفیت بلیت پرواز انتخاب شده میباشد",
+        });
+      }
+    } else {
+      if (
+        !isRoomAlreadyAdded ||
+        (isRoomAlreadyAdded &&
+          selectedRooms.filter(
+            (elm: any) =>
+              elm.id === tempRoom.id &&
+              tempRoom.room_type.id === elm.room_type.id
+          ).length < tempRoom.room_type.capacity.room)
+      ) {
+        setSelectedRooms((prevItems: any) => [
+          ...prevItems,
+          { ...tempRoom, uuid: uuidv4() },
+        ]);
+        setCapacitySelectedAccommodation((prev: number) => prev + 1);
+      } else {
+        setShowAlertDetails({
+          alertMessage: "اتاق خالی موجود نیست",
+          alertType: "error",
+          showAlert: true,
+        });
+      }
+    }
+  };
+  useEffect(() => {
+    console.log({
+      wentFlightCapacity,
+      returnFlightCapacity,
+      capacitySelectedAccommodation,
+    });
+  }, [selectedReturnFlight, selectedWentFlight]);
+  // handle selected room type of search field object
+  const selectedRoomFieldObject: {
+    [key: string]: (room: any) => void;
+  } = {
+    accommodation: handleAccommodationSelectedRoom,
+    "flight-accommodation": handleFlightAccommodationSelectedRoom,
+  };
+
+  const handleSelectRoom = (room: any) => {
+    selectedRoomFieldObject[searchType](room);
+  };
+
   function handleDeleteSelectedRoom(id: string) {
     const roomToDelete = selectedRooms.find(
       (element: any) => element.uuid === id
@@ -458,7 +577,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     setSelectedRooms(newArray);
   }
 
-  const createSearchparams = (roomList: any) => {
+  // on accommodation
+  const accommodationCreateSearchparams = (roomList: any) => {
     return {
       data: roomList,
       system_id: false,
@@ -466,6 +586,32 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       time: Date.now(),
     };
   };
+
+  // on flight accommodation
+  const flightAccommodationCreateSearchparams = (roomList: any) => {
+    return {
+      data: roomList,
+      system_id: false,
+      messages: JSON.stringify([]),
+      time: Date.now(),
+      wentTicket: selectedWentFlight,
+      returnTicket: selectedReturnFlight,
+      departureDate: searchParams.get("departing"),
+      returningDate: searchParams.get("returning"),
+    };
+  };
+
+  const createSearchParamsFieldObject: {
+    [key: string]: (roomList: any) => any;
+  } = {
+    accommodation: accommodationCreateSearchparams,
+    "flight-accommodation": flightAccommodationCreateSearchparams,
+  };
+
+  const createSearchparams = (roomList: any) => {
+    return createSearchParamsFieldObject[searchType](roomList);
+  };
+
   const setUrl = (id: string) => {
     router.push(`/accommodation/checkout?factor=${id}`);
   };
@@ -479,7 +625,9 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
   }, [capacitySelectedAccommodation]);
 
   // move to checkout passenger page
-  const handleMoveToCheckoutPage = () => {
+  const handleMoveToCheckoutPage = (
+    searchType: "accommodation" | "flight-accommodation"
+  ) => {
     onAdd(selectedRooms);
     closeDialog();
 
@@ -488,6 +636,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     // const rooms = Object.values(addedRooms).flat();
     const rooms = selectedRooms;
     const queryParams = createSearchparams(rooms);
+    console.log("987987987", searchType);
     console.log("addedRooms", addedRooms);
 
     console.log("queryParams", queryParams);
@@ -598,7 +747,11 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
               disabled={!selectedRooms.length}
               className="w-full"
               onClick={() => {
-                handleMoveToCheckoutPage();
+                handleMoveToCheckoutPage(
+                  searchType === "flight-accommodation"
+                    ? "flight-accommodation"
+                    : "accommodation"
+                );
               }}
             >
               {!selectedRooms.length ? "افزودن" : "اقدام به رزرو"}
@@ -791,12 +944,18 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
   setSelectedRooms,
 }) => {
   // initial states
-  const { setCapacitySelectedAccommodation, capacitySelectedAccommodation } =
-    useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
+  const {
+    setCapacitySelectedAccommodation,
+    capacitySelectedAccommodation,
+    wentFlightCapacity,
+    returnFlightCapacity,
+  } = useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
+  const { selectedWentFlight, selectedReturnFlight } =
+    useGlobalContext().flightContext.searchContext;
+  const { searchType, setShowAlertDetails } = useGlobalContext().global;
 
-  // handle add room passengers
-  const handleAddRoomPassengers = (ageCategory: "child" | "adult") => {
-    setCapacitySelectedAccommodation((prev: number) => prev + 1);
+  // handle add passenger accommodation type
+  const handleAccommodationAddPassenger = (ageCategory: "child" | "adult") => {
     setSelectedRooms((prevRooms: any[]) =>
       prevRooms.map((room, index) => {
         if (room.uuid === item.uuid) {
@@ -814,6 +973,81 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
         return room;
       })
     );
+  };
+
+  // handle add passenger flight accommodation type
+  const handleFlightAccommodationAddPassenger = (
+    ageCategory: "child" | "adult"
+  ) => {
+    const flightCapacity =
+      selectedWentFlight && !selectedReturnFlight
+        ? wentFlightCapacity
+        : selectedReturnFlight && !selectedWentFlight
+        ? returnFlightCapacity
+        : selectedReturnFlight && selectedWentFlight
+        ? Math.min(wentFlightCapacity, returnFlightCapacity)
+        : false;
+    if (flightCapacity) {
+      if (capacitySelectedAccommodation < flightCapacity) {
+        setCapacitySelectedAccommodation((prev: number) => prev + 1);
+        setSelectedRooms((prevRooms: any[]) =>
+          prevRooms.map((room, index) => {
+            if (room.uuid === item.uuid) {
+              return {
+                ...room,
+                room_type: {
+                  ...room.room_type,
+                  passengers: {
+                    ...room.room_type.passengers,
+                    [ageCategory]: room.room_type.passengers[ageCategory] + 1,
+                  },
+                },
+              };
+            }
+            return room;
+          })
+        );
+      } else {
+        setShowAlertDetails({
+          showAlert: true,
+          alertType: "error",
+          alertMessage:
+            "تعداد مسافران خود بیشتر از تعداد ظرفیت بلیت پرواز انتخاب شده میباشد",
+        });
+      }
+    } else {
+      setCapacitySelectedAccommodation((prev: number) => prev + 1);
+      setSelectedRooms((prevRooms: any[]) =>
+        prevRooms.map((room, index) => {
+          if (room.uuid === item.uuid) {
+            return {
+              ...room,
+              room_type: {
+                ...room.room_type,
+                passengers: {
+                  ...room.room_type.passengers,
+                  [ageCategory]: room.room_type.passengers[ageCategory] + 1,
+                },
+              },
+            };
+          }
+          return room;
+        })
+      );
+    }
+  };
+
+  // handle add passengers search type field
+  const addPassengersFieldObject: {
+    [key: string]: (ageCategory: "child" | "adult") => void;
+  } = {
+    accommodation: handleAccommodationAddPassenger,
+    "flight-accommodation": handleFlightAccommodationAddPassenger,
+  };
+
+  // handle add room passengers
+  const handleAddRoomPassengers = (ageCategory: "child" | "adult") => {
+    addPassengersFieldObject[searchType](ageCategory);
   };
   // handle delete room passengers
   const handleDeleteRoomPassengers = (ageCategory: string) => {

@@ -493,13 +493,15 @@ const TicketCard: FC<TicketCardProps> = ({
   // handle choose ticket
   const createSearchparams = (
     wentTicket: FlightTicketDataType,
-    returnTicket: FlightTicketDataType | false
+    returnTicket: FlightTicketDataType | false,
+    searchType?: string
   ) => {
     return {
       wentTicket: wentTicket,
       returnTicket: returnTicket,
       departureDate: searchParams.get("departing"),
       returningDate: searchParams.get("returning"),
+      ...(searchType === "flight-accommodation" ? { data: addedRooms } : {}),
     };
   };
 
@@ -545,24 +547,32 @@ const TicketCard: FC<TicketCardProps> = ({
     if (addedRooms.length > 0) {
       if (data.Classes.AvailableSeat >= capacitySelectedAccommodation) {
         if (flightTab === 1) {
-          setWentFlightCapacity(data.Classes.AvailableSeat);
+          setWentFlightCapacity(Number(data.Classes.AvailableSeat));
           toggleOpenDetailsDrawer(false);
           setSelectedWentFlight(data);
           if (selectedReturnFlight) {
-            const queryParams = createSearchparams(data, selectedReturnFlight);
+            const queryParams = createSearchparams(
+              data,
+              selectedReturnFlight,
+              "flight-accommodation"
+            );
             const local_id = uuidv4().substr(0, 6);
             localStorage.setItem(local_id, JSON.stringify(queryParams));
-            router.push(`/flight/checkout?factor=${local_id}` as Route);
+            router.push(`/accommodation/checkout?factor=${local_id}` as Route);
           }
         } else {
-          setReturnFlightCapacity(data.Classes.AvailableSeat);
+          setReturnFlightCapacity(Number(data.Classes.AvailableSeat));
           toggleOpenDetailsDrawer(false);
           setSelectedReturnFlight(data);
           if (selectedWentFlight) {
-            const queryParams = createSearchparams(selectedWentFlight, data);
+            const queryParams = createSearchparams(
+              selectedWentFlight,
+              data,
+              "flight-accommodation"
+            );
             const local_id = uuidv4().substr(0, 6);
             localStorage.setItem(local_id, JSON.stringify(queryParams));
-            router.push(`/flight/checkout?factor=${local_id}` as Route);
+            router.push(`/accommodation/checkout?factor=${local_id}` as Route);
           }
         }
       } else {
@@ -575,11 +585,11 @@ const TicketCard: FC<TicketCardProps> = ({
       }
     } else {
       if (flightTab === 1) {
-        setWentFlightCapacity(data.Classes.AvailableSeat);
+        setWentFlightCapacity(Number(data.Classes.AvailableSeat));
         toggleOpenDetailsDrawer(false);
         setSelectedWentFlight(data);
       } else {
-        setReturnFlightCapacity(data.Classes.AvailableSeat);
+        setReturnFlightCapacity(Number(data.Classes.AvailableSeat));
         toggleOpenDetailsDrawer(false);
         setSelectedReturnFlight(data);
       }
@@ -600,9 +610,6 @@ const TicketCard: FC<TicketCardProps> = ({
   ) => {
     chooseTicketFieldObject[searchType](data);
   };
-
-  // handle move to checkout page
-  // useEffect(() => {}, [selectedWentFlight, selectedReturnFlight]);
 
   // handle change show details
   const handleChangeShowDetails = () => {

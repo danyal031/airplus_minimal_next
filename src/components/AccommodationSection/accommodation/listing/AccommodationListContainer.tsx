@@ -48,9 +48,15 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
     accommodationDestination,
     accommodationPassengersCapacity,
   } = useGlobalContext().accommodationContext.accommodationSearch;
+  const { setSearchType } = useGlobalContext().global;
 
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // handle initial search type
+  useEffect(() => {
+    setSearchType(action);
+  }, []);
 
   //  handle clear selected rooms
   const handleClearSelectedAccommodation = () => {
