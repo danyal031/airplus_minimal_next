@@ -43,6 +43,7 @@ export const LoginDialog = () => {
   const [showButtonLoading, setShowButtonLoading] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { setShowAlertDetails } = useGlobalContext().global;
 
   const theme = useTheme();
 
@@ -68,6 +69,11 @@ export const LoginDialog = () => {
           setUserId(res.user.uuid);
           handleCloseDialog();
           setShowButtonLoading(false);
+          setShowAlertDetails({
+            showAlert: true,
+            alertType: "success",
+            alertMessage: "با موفقیت وارد حساب کاربری خود شدید",
+          });
         } else {
           console.log("error", res.message);
         }
@@ -92,6 +98,11 @@ export const LoginDialog = () => {
         setUserId(res.user.uuid);
         handleCloseDialog();
         setShowButtonLoading(false);
+        setShowAlertDetails({
+          showAlert: true,
+          alertType: "success",
+          alertMessage: "با موفقیت وارد حساب کاربری خود شدید",
+        });
       })
       .catch((err) => {});
   }
@@ -254,6 +265,7 @@ export const LoginDialog = () => {
             dir="ltr"
           />{" "}
           <TextField
+            type="password"
             size="medium"
             value={password}
             onChange={(e) => {
