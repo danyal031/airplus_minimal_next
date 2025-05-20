@@ -23,12 +23,27 @@ const CheckoutAccommodationContainer = () => {
   // initial states
   const { setAccommodationPassenger, accommodationPassenger } =
     useGlobalContext().accommodationContext.accommodationSearch;
+  const { searchType, setSearchType } = useGlobalContext().global;
   const [labels, setLabels] = useState<LabelsDataTypes[]>([]);
   const [onlineAccommodations, setOnlineAccommodations] = useState<
     AccommodationDataType[]
   >([]);
   const childRef = useRef<any>([]);
   const searchParams = useSearchParams();
+
+  // handle initial search type
+  useEffect(() => {
+    const factorId = searchParams.get("factor");
+    const data: any = JSON.parse(
+      localStorage.getItem(factorId as string) as string
+    );
+
+    if (data.wentTicket && data.data) {
+      setSearchType("flight-accommodation");
+    } else {
+      setSearchType("accommodation");
+    }
+  }, []);
 
   // handle initial accommodation passenger
   useEffect(() => {
@@ -78,6 +93,95 @@ const CheckoutAccommodationContainer = () => {
   useEffect(() => {
     console.log("labels", labels);
   }, [labels]);
+
+  // handle submit accommodation
+  const handleSubmitAccommodation = () => {
+    const finalHotelBookingPayload = onlineAccommodations.map(
+      (room: any, roomIdx: number) => {
+        const roomPassengerLabels = labels.filter(
+          (label) => label.item_idx === roomIdx
+        );
+
+        const firstLabel = roomPassengerLabels[0];
+        const firstPassenger = accommodationPassenger[firstLabel.idx];
+
+        const restLabels = roomPassengerLabels.slice(1);
+
+        const roommates = restLabels.reduce(
+          (acc, label) => {
+            const passenger = accommodationPassenger[label.idx];
+            if (label.age_category === "adult") {
+              acc.adult.push(passenger);
+            } else if (label.age_category === "child") {
+              acc.child.push(passenger);
+            }
+            return acc;
+          },
+          { adult: [], child: [] } as {
+            adult: UserInformationDataType[];
+            child: UserInformationDataType[];
+          }
+        );
+
+        return {
+          action: "online",
+          id: uuidv4(),
+          passenger: firstPassenger,
+          online: {
+            ...room,
+            roomate: roommates,
+          },
+          sell: "30000000",
+          buy: "27002700",
+          validated: true,
+          has_credit: true,
+          provider: room.room_type.board_type_list.supplier,
+          deadline: "",
+          serial: "",
+          pay_deadline: false,
+          currency: { unit: null, exchange: null, amount: null },
+        };
+      }
+    );
+
+    const sum_sell_price = finalHotelBookingPayload.reduce(
+      (sum, item) => sum + parseInt(item.sell, 10),
+      0
+    );
+    const sum_buy_price = finalHotelBookingPayload.reduce(
+      (sum, item) => sum + parseInt(item.buy, 10),
+      0
+    );
+
+    const jsonData: any = {
+      agent: { mobile: "", email: "" },
+      data: finalHotelBookingPayload,
+      income_id: 1,
+      internal: true,
+      passengers: accommodationPassenger,
+      pledgers: [],
+      print: 1,
+      notices: false,
+      sum_sell_price,
+      sum_buy_price,
+    };
+
+    console.log("finalHotelBookingPayload", finalHotelBookingPayload);
+    console.log("jsonData", jsonData);
+  };
+
+  // handle submit flight accommodation
+  const handleSubmitFlightAccommodation = () => {};
+
+  // handle submit type field object
+  const submitTypeFieldObject: { [key: string]: () => void } = {
+    accommodation: handleSubmitAccommodation,
+    "flight-accommodation": handleSubmitFlightAccommodation,
+  };
+  // handle submit
+  const handleSubmit = () => {
+    submitTypeFieldObject[action]();
+  };
 
   // handle onchange user information
   const handleChangeUserInfo = debounce(
@@ -131,7 +235,7 @@ const CheckoutAccommodationContainer = () => {
             ........
           </span>
           <Button
-            // onClick={ handleSendFlightData }
+            onClick={handleSubmit}
             variant="contained"
             color="primary"
             size="medium"
