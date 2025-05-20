@@ -72,7 +72,9 @@ export default function AvatarDropdown({ className = "" }: Props) {
             //   open && "rounded-b-none"
             // }`}
           >
-            حساب کاربری
+            {userData.data.title.fa
+              ? userData.data.title.fa
+              : userData.data.mobile}{" "}
             {/* {open ? <ExpandLessIcon /> : <ExpandMoreIcon />} */}
           </Button>
 
@@ -103,27 +105,6 @@ export default function AvatarDropdown({ className = "" }: Props) {
               disablePadding
               // className="border-x border-primary-main"
             >
-              <ListItemButton
-                className="cursor-pointer"
-                onClick={() => {
-                  router.push("/profile/account");
-                }}
-              >
-                <ListItemText
-                  primary={
-                    userData.data.first_name_fa
-                      ? `${userData.data.first_name_fa} ${userData.data.last_name_fa}`
-                      : userData.data.mobile
-                  }
-                  primaryTypographyProps={{
-                    style: {
-                      fontWeight: "bold",
-                      color: theme.palette.primary.main,
-                    },
-                  }}
-                />
-              </ListItemButton>
-              <Divider variant="fullWidth" />
               <ListItemButton
                 className="cursor-pointer"
                 onClick={() => {
