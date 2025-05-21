@@ -183,6 +183,8 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
       });
       console.log("response***", response);
       if (response.data.Status) {
+        setAccommodationFromDate(departing);
+        setAccommodationToDate(returning);
         setHasMore(response.data.Table.next_page ? true : false);
         // setSelectedDestinationHotel(
         //   response.data.Search.city || response.data.Search.accommodation

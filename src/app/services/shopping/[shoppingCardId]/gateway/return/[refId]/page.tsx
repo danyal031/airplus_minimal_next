@@ -1,4 +1,5 @@
 "use client";
+import AccommodationPaymentStatus from "@/components/FlightSection/paymentStatus/AccommodationPaymentStatus";
 import FlightPaymentStatus from "@/components/FlightSection/paymentStatus/FlightPaymentStatus";
 import React, { useEffect, useState } from "react";
 
@@ -19,6 +20,7 @@ const PaymentStatusPage = ({ params }: ShoppingCardPaymentStatusParamsType) => {
   }, []);
   const paymentStatusComponents = {
     flight: <FlightPaymentStatus params={params} />,
+    accommodation: <AccommodationPaymentStatus params={params} />,
     // lottery: <LotteryPaymentStatus params={params} />,
   };
   return (

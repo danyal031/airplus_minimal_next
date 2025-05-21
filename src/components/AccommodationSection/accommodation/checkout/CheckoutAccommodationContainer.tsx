@@ -1,4 +1,5 @@
 "use client";
+import { Toman } from "@/components/icons/IconToman";
 import PassengerInformation from "@/components/passengers-components/PassengerInformation";
 import { useGlobalContext } from "@/context/store";
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
@@ -6,9 +7,16 @@ import {
   defaultPassengerInformation,
   UserInformationDataType,
 } from "@/DataTypes/globalTypes";
+import { handleStoreFlightJson } from "@/global-files/axioses";
+import {
+  applyMask,
+  calculateAgeCategory,
+  convertToGregorian,
+  formatInputWithCommas,
+} from "@/global-files/function";
 import { Button } from "@mui/material";
 import { debounce } from "lodash";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,13 +31,162 @@ const CheckoutAccommodationContainer = () => {
   // initial states
   const { setAccommodationPassenger, accommodationPassenger } =
     useGlobalContext().accommodationContext.accommodationSearch;
-  const { searchType, setSearchType } = useGlobalContext().global;
+  const { searchType, setSearchType, config, setShowProgress } =
+    useGlobalContext().global;
+  const {
+    selectedWentFlight,
+    selectedReturnFlight,
+    setSelectedReturnFlight,
+    setSelectedWentFlight,
+    flightPassengers,
+  } = useGlobalContext().flightContext.searchContext;
+  const { userData } = useGlobalContext().userContext;
+  const { setOpenLoginDialog } = useGlobalContext().loginContext;
   const [labels, setLabels] = useState<LabelsDataTypes[]>([]);
   const [onlineAccommodations, setOnlineAccommodations] = useState<
     AccommodationDataType[]
   >([]);
+  const [accommodationTotalPrice, setAccommodationTotalPrice] = useState(0);
+  const [flightAccommodationTotalPrice, setFlightAccommodationTotalPrice] =
+    useState(0);
   const childRef = useRef<any>([]);
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // handle total price calculation
+
+  useEffect(() => {
+    if (selectedWentFlight && selectedReturnFlight) {
+      const objectTicket = accommodationPassenger.flatMap(
+        (passenger: UserInformationDataType) => {
+          let tickets: any[] = [];
+
+          if (
+            selectedWentFlight &&
+            !Array.isArray(selectedWentFlight.Classes)
+          ) {
+            tickets = [
+              ...tickets,
+              {
+                action: "online",
+                id: uuidv4(),
+                passenger: passenger,
+                online: {
+                  ...selectedWentFlight,
+                  type: "aircraft",
+                },
+                sell:
+                  calculateAgeCategory(
+                    applyMask("date", passenger.birthday as string)
+                  ) === "INF"
+                    ? selectedWentFlight.Classes.BaseData.Financial.Infant
+                        .Markup.final
+                    : calculateAgeCategory(
+                        applyMask("date", passenger.birthday as string)
+                      ) === "CHI"
+                    ? selectedWentFlight.Classes.BaseData.Financial.Child.Markup
+                        .final
+                    : selectedWentFlight.Classes.BaseData.Financial.Adult.Markup
+                        .final,
+                buy:
+                  calculateAgeCategory(
+                    applyMask("date", passenger.birthday as string)
+                  ) === "INF"
+                    ? selectedWentFlight.Classes.BaseData.Financial.Infant
+                        .Payable
+                    : calculateAgeCategory(
+                        applyMask("date", passenger.birthday as string)
+                      ) === "CHI"
+                    ? selectedWentFlight.Classes.BaseData.Financial.Child
+                        .Payable
+                    : selectedWentFlight.Classes.BaseData.Financial.Adult
+                        .Payable,
+                validated: true,
+                has_credit: true,
+                provider: "",
+                deadline: "",
+                serial: "",
+                pay_deadline: false,
+                currency: { unit: null, exchange: null, amount: null },
+              },
+            ];
+          }
+
+          if (
+            selectedReturnFlight &&
+            !Array.isArray(selectedReturnFlight.Classes)
+          ) {
+            tickets = [
+              ...tickets,
+              {
+                action: "online",
+                id: uuidv4(),
+                passenger: passenger,
+                online: {
+                  ...selectedReturnFlight,
+                  type: "aircraft",
+                },
+                sell:
+                  calculateAgeCategory(
+                    applyMask("date", passenger.birthday as string)
+                  ) === "INF"
+                    ? selectedReturnFlight.Classes.BaseData.Financial.Infant
+                        .Markup.final
+                    : calculateAgeCategory(
+                        applyMask("date", passenger.birthday as string)
+                      ) === "CHI"
+                    ? selectedReturnFlight.Classes.BaseData.Financial.Child
+                        .Markup.final
+                    : selectedReturnFlight.Classes.BaseData.Financial.Adult
+                        .Markup.final,
+                buy:
+                  calculateAgeCategory(
+                    applyMask("date", passenger.birthday as string)
+                  ) === "INF"
+                    ? selectedReturnFlight.Classes.BaseData.Financial.Infant
+                        .Payable
+                    : calculateAgeCategory(
+                        applyMask("date", passenger.birthday as string)
+                      ) === "CHI"
+                    ? selectedReturnFlight.Classes.BaseData.Financial.Child
+                        .Payable
+                    : selectedReturnFlight.Classes.BaseData.Financial.Adult
+                        .Payable,
+                validated: true,
+                has_credit: true,
+                provider: "",
+                deadline: "",
+                serial: "",
+                pay_deadline: false,
+                currency: { unit: null, exchange: null, amount: null },
+              },
+            ];
+          }
+
+          return tickets;
+        }
+      );
+      const totalFlightPrice = objectTicket.reduce(
+        (acc: any, ticket: any) => acc + ticket.sell,
+        0
+      );
+      setFlightAccommodationTotalPrice(totalFlightPrice);
+      console.log("🧍‍♂️ Flight price:", totalFlightPrice);
+    }
+  }, [selectedWentFlight, selectedReturnFlight]);
+
+  useEffect(() => {
+    const factorId = searchParams.get("factor");
+    const data: any = JSON.parse(
+      localStorage.getItem(factorId as string) as string
+    );
+
+    if (data.data && data.wentTicket) {
+      setSearchType("flight-accommodation");
+    } else {
+      setSearchType("accommodation");
+    }
+  }, []);
 
   // handle initial search type
   useEffect(() => {
@@ -37,11 +194,34 @@ const CheckoutAccommodationContainer = () => {
     const data: any = JSON.parse(
       localStorage.getItem(factorId as string) as string
     );
-
     if (data.wentTicket && data.data) {
       setSearchType("flight-accommodation");
+      setSelectedWentFlight(data.wentTicket);
+      setSelectedReturnFlight(data.returnTicket);
+      const factorId = searchParams.get("factor");
+      const accommodations = JSON.parse(
+        localStorage.getItem(factorId as string) as string
+      ).data as AccommodationDataType[];
+      const totalAccommodationPrice = accommodations.reduce(
+        (acc, curr) =>
+          acc + curr.room_type.board_type_list.financial_total.net_price,
+        0
+      );
+      setAccommodationTotalPrice(totalAccommodationPrice);
     } else {
       setSearchType("accommodation");
+      const factorId = searchParams.get("factor");
+      const accommodations = JSON.parse(
+        localStorage.getItem(factorId as string) as string
+      ).data as AccommodationDataType[];
+      const totalAccommodationPrice = accommodations.reduce(
+        (acc, curr) =>
+          acc + curr.room_type.board_type_list.financial_total.net_price,
+        0
+      );
+      setAccommodationTotalPrice(totalAccommodationPrice);
+
+      console.log("🧍‍♂️ Accommodation price:", totalAccommodationPrice);
     }
   }, []);
 
@@ -65,7 +245,7 @@ const CheckoutAccommodationContainer = () => {
     );
 
     setAccommodationPassenger(newPassengers);
-    console.log(666, accommodations);
+    console.log("🧍‍♂️ Accommodations:", accommodations);
 
     console.log("🧍‍♂️ New passengers:", newPassengers);
 
@@ -95,7 +275,207 @@ const CheckoutAccommodationContainer = () => {
   }, [labels]);
 
   // handle submit accommodation
-  const handleSubmitAccommodation = () => {
+  const handleSubmitAccommodation = async () => {
+    if (userData === null) {
+      setOpenLoginDialog(true);
+    } else {
+      const finalHotelBookingPayload = await onlineAccommodations.map(
+        (room: any, roomIdx: number) => {
+          const roomPassengerLabels = labels.filter(
+            (label) => label.item_idx === roomIdx
+          );
+
+          const firstLabel = roomPassengerLabels[0];
+          const firstPassenger = accommodationPassenger[firstLabel.idx];
+
+          const restLabels = roomPassengerLabels.slice(1);
+
+          const roommates = restLabels.reduce(
+            (acc, label) => {
+              const passenger = accommodationPassenger[label.idx];
+              if (label.age_category === "adult") {
+                acc.adult.push(passenger);
+              } else if (label.age_category === "child") {
+                acc.child.push(passenger);
+              }
+              return acc;
+            },
+            { adult: [], child: [] } as {
+              adult: UserInformationDataType[];
+              child: UserInformationDataType[];
+            }
+          );
+
+          console.log("room555", room);
+
+          return {
+            action: "online",
+            id: uuidv4(),
+            passenger: firstPassenger,
+            online: {
+              ...room,
+              roommate: roommates,
+              details: {
+                ...room.details,
+                from_date: convertToGregorian(room.details.from_date),
+                to_date: convertToGregorian(room.details.to_date),
+              },
+            },
+            sell: room.room_type.board_type_list.financial_total.net_price,
+            buy: room.room_type.board_type_list.financial_total.net_price,
+            validated: true,
+            has_credit: true,
+            provider: room.room_type.board_type_list.system_supplier,
+            deadline: "",
+            serial: "",
+            pay_deadline: false,
+            currency: { unit: null, exchange: null, amount: null },
+          };
+        }
+      );
+
+      const sum_sell_price = finalHotelBookingPayload.reduce(
+        (sum, item) => sum + parseInt(item.sell, 10),
+        0
+      );
+      const sum_buy_price = finalHotelBookingPayload.reduce(
+        (sum, item) => sum + parseInt(item.buy, 10),
+        0
+      );
+
+      const id = uuidv4();
+      const jsonData: any = {
+        agent: { mobile: "", email: "" },
+        data: finalHotelBookingPayload,
+        income_id: 1,
+        internal: true,
+        passengers: accommodationPassenger,
+        pledgers: [],
+        print: 1,
+        notices: false,
+        requests: {
+          pay: {
+            amount: sum_sell_price,
+            return: `${config?.communicational.site}/services/shopping/` + id,
+          },
+        },
+        sum_sell_price,
+        sum_buy_price,
+      };
+
+      let allValid = true;
+      childRef.current.forEach((child: any) => {
+        if (child) {
+          child.handleTrigger(); // اجرا کردن trigger
+          if (!child.getIsValid()) {
+            allValid = false;
+          }
+        }
+      });
+
+      if (allValid) {
+        // setShowProgress(true);
+        // handleStoreFlightJson(jsonData)
+        //   .then((res: any) => {
+        //     jsonData["type"] = "accommodation";
+        //     localStorage.setItem(id, JSON.stringify(jsonData));
+        //     router.replace(res.payload.payment_link);
+        //   })
+        //   .catch((err: any) => {
+        //     setShowProgress(false);
+        //   });
+      }
+
+      console.log("finalHotelBookingPayload", finalHotelBookingPayload);
+      console.log("jsonData", jsonData);
+    }
+  };
+
+  // handle submit flight accommodation
+  const handleSubmitFlightAccommodation = () => {
+    const objectTicket = accommodationPassenger.flatMap(
+      (passenger: UserInformationDataType) => {
+        let tickets: any[] = [];
+
+        const ageCategory = calculateAgeCategory(
+          applyMask("date", passenger.birthday as string)
+        );
+
+        const getFinancials = (flight: any) => {
+          if (!flight || Array.isArray(flight.Classes))
+            return { sell: 0, buy: 0 };
+
+          const financial = flight.Classes.BaseData.Financial;
+          switch (ageCategory) {
+            case "INF":
+              return {
+                sell: financial.Infant.Markup.final,
+                buy: financial.Infant.Payable,
+              };
+            case "CHI":
+              return {
+                sell: financial.Child.Markup.final,
+                buy: financial.Child.Payable,
+              };
+            default:
+              return {
+                sell: financial.Adult.Markup.final,
+                buy: financial.Adult.Payable,
+              };
+          }
+        };
+
+        if (selectedWentFlight && !Array.isArray(selectedWentFlight.Classes)) {
+          const { sell, buy } = getFinancials(selectedWentFlight);
+          tickets.push({
+            action: "online",
+            id: uuidv4(),
+            passenger,
+            online: {
+              ...selectedWentFlight,
+              type: "aircraft",
+            },
+            sell,
+            buy,
+            validated: true,
+            has_credit: true,
+            provider: "",
+            deadline: "",
+            serial: "",
+            pay_deadline: false,
+            currency: { unit: null, exchange: null, amount: null },
+          });
+        }
+
+        if (
+          selectedReturnFlight &&
+          !Array.isArray(selectedReturnFlight.Classes)
+        ) {
+          const { sell, buy } = getFinancials(selectedReturnFlight);
+          tickets.push({
+            action: "online",
+            id: uuidv4(),
+            passenger,
+            online: {
+              ...selectedReturnFlight,
+              type: "aircraft",
+            },
+            sell,
+            buy,
+            validated: true,
+            has_credit: true,
+            provider: "",
+            deadline: "",
+            serial: "",
+            pay_deadline: false,
+            currency: { unit: null, exchange: null, amount: null },
+          });
+        }
+
+        return tickets;
+      }
+    );
+
     const finalHotelBookingPayload = onlineAccommodations.map(
       (room: any, roomIdx: number) => {
         const roomPassengerLabels = labels.filter(
@@ -129,10 +509,10 @@ const CheckoutAccommodationContainer = () => {
           passenger: firstPassenger,
           online: {
             ...room,
-            roomate: roommates,
+            roommate: roommates,
           },
-          sell: "30000000",
-          buy: "27002700",
+          sell: room.room_type.board_type_list.financial_total.net_price,
+          buy: room.room_type.board_type_list.financial_total.net_price,
           validated: true,
           has_credit: true,
           provider: room.room_type.board_type_list.supplier,
@@ -144,34 +524,42 @@ const CheckoutAccommodationContainer = () => {
       }
     );
 
-    const sum_sell_price = finalHotelBookingPayload.reduce(
+    const finalFlightAccommodationBookingPayload = [
+      ...objectTicket,
+      ...finalHotelBookingPayload,
+    ];
+
+    const sum_sell_price = finalFlightAccommodationBookingPayload.reduce(
       (sum, item) => sum + parseInt(item.sell, 10),
       0
     );
-    const sum_buy_price = finalHotelBookingPayload.reduce(
+    const sum_buy_price = finalFlightAccommodationBookingPayload.reduce(
       (sum, item) => sum + parseInt(item.buy, 10),
       0
     );
 
+    const id = uuidv4();
     const jsonData: any = {
       agent: { mobile: "", email: "" },
-      data: finalHotelBookingPayload,
-      income_id: 1,
+      data: finalFlightAccommodationBookingPayload,
+      income_id: 15,
       internal: true,
       passengers: accommodationPassenger,
       pledgers: [],
       print: 1,
       notices: false,
+      requests: {
+        pay: {
+          amount: sum_sell_price,
+          return: `${config?.communicational.site}/services/shopping/` + id,
+        },
+      },
       sum_sell_price,
       sum_buy_price,
     };
 
-    console.log("finalHotelBookingPayload", finalHotelBookingPayload);
-    console.log("jsonData", jsonData);
+    console.log("🎟️✈️🛏️ Final Combined Payload", jsonData);
   };
-
-  // handle submit flight accommodation
-  const handleSubmitFlightAccommodation = () => {};
 
   // handle submit type field object
   const submitTypeFieldObject: { [key: string]: () => void } = {
@@ -180,7 +568,7 @@ const CheckoutAccommodationContainer = () => {
   };
   // handle submit
   const handleSubmit = () => {
-    submitTypeFieldObject[action]();
+    submitTypeFieldObject[searchType]();
   };
 
   // handle onchange user information
@@ -225,14 +613,12 @@ const CheckoutAccommodationContainer = () => {
         </span>
         <div className="flex items-center justify-center gap-3">
           <span className="text-base font-semibold text-text-main flex items-center justify-center">
-            {/* { formatInputWithCommas(
-                flightPassengersTickets.reduce(
-                  ( acc: any, ticket: any ) => acc + ticket.sell,
-                  0
-                ) / 10
-              ) }
-              <Toman height={ 14 } width={ 14 } className="text-text-main" /> */}
-            ........
+            {searchType === "accommodation"
+              ? formatInputWithCommas(accommodationTotalPrice / 10)
+              : formatInputWithCommas(
+                  (flightAccommodationTotalPrice + accommodationTotalPrice) / 10
+                )}
+            <Toman height={14} width={14} className="text-text-main" />
           </span>
           <Button
             onClick={handleSubmit}

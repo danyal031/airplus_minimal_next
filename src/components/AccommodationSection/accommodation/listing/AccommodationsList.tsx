@@ -278,6 +278,7 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
             closeDialog={handleCloseRoomsDrawer}
             item={openRoomsDialog.item as AccommodationDataType}
             addedRooms={addedRooms}
+            setAddedRooms={setAddedRooms}
             onAdd={handleAddedRooms}
           />
         )}
@@ -307,6 +308,7 @@ interface RoomListDialogProps {
   jsonData?: any;
   item: AccommodationDataType;
   addedRooms: any;
+  setAddedRooms: any;
   onAdd: any;
   // selectedRooms: any;
   // setSelectedRooms: any;
@@ -318,6 +320,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
   jsonData,
   item,
   addedRooms,
+  setAddedRooms,
   onAdd,
   // selectedRooms,
   // setSelectedRooms,
@@ -330,6 +333,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     accommodationFromDate,
     accommodationToDate,
     accommodationPassengersCapacity,
+    setAccommodationFromDate,
+    setAccommodationToDate,
     // selectedRooms,
     // setSelectedRooms,
   } = useGlobalContext().accommodationContext.accommodationSearch;
@@ -346,6 +351,15 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
   const searchParams = useSearchParams();
   const json = useRef(null);
   const router = useRouter();
+
+  // handle clear selected rooms
+  useEffect(() => {
+    return () => {
+      // setCapacitySelectedAccommodation(0);
+      setSelectedRooms([]);
+      setAddedRooms([]);
+    };
+  }, []);
 
   // handle get rooms
   const getRooms = () => {
@@ -417,9 +431,11 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       details: {
         ...item.details,
         from_date: accommodationFromDate,
-        to_date: convertToPersianDate,
+        to_date: accommodationToDate,
       },
     };
+
+    console.log("temproom", tempRoom);
 
     let tempExistingRoom = null;
     const isRoomAlreadyAdded = selectedRooms.some((existingItem: any) => {
@@ -459,7 +475,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       details: {
         ...item.details,
         from_date: accommodationFromDate,
-        to_date: convertToPersianDate,
+        to_date: accommodationToDate,
       },
     };
 
