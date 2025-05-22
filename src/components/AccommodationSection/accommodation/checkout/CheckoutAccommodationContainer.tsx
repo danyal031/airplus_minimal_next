@@ -7,13 +7,14 @@ import {
   defaultPassengerInformation,
   UserInformationDataType,
 } from "@/DataTypes/globalTypes";
-import { handleStoreFlightJson } from "@/global-files/axioses";
+import { handleStoreFlightJson, lockFlight } from "@/global-files/axioses";
 import {
   applyMask,
   calculateAgeCategory,
   convertToGregorian,
   formatInputWithCommas,
 } from "@/global-files/function";
+import { useShowAlert } from "@/hooks/useShowAlert";
 import { Button } from "@mui/material";
 import { debounce } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -52,6 +53,7 @@ const CheckoutAccommodationContainer = () => {
   const childRef = useRef<any>([]);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { handleAlertDetails } = useShowAlert();
 
   // handle total price calculation
 
@@ -276,119 +278,115 @@ const CheckoutAccommodationContainer = () => {
 
   // handle submit accommodation
   const handleSubmitAccommodation = async () => {
-    if (userData === null) {
-      setOpenLoginDialog(true);
-    } else {
-      const finalHotelBookingPayload = await onlineAccommodations.map(
-        (room: any, roomIdx: number) => {
-          const roomPassengerLabels = labels.filter(
-            (label) => label.item_idx === roomIdx
-          );
+    const finalHotelBookingPayload = await onlineAccommodations.map(
+      (room: any, roomIdx: number) => {
+        const roomPassengerLabels = labels.filter(
+          (label) => label.item_idx === roomIdx
+        );
 
-          const firstLabel = roomPassengerLabels[0];
-          const firstPassenger = accommodationPassenger[firstLabel.idx];
+        const firstLabel = roomPassengerLabels[0];
+        const firstPassenger = accommodationPassenger[firstLabel.idx];
 
-          const restLabels = roomPassengerLabels.slice(1);
+        const restLabels = roomPassengerLabels.slice(1);
 
-          const roommates = restLabels.reduce(
-            (acc, label) => {
-              const passenger = accommodationPassenger[label.idx];
-              if (label.age_category === "adult") {
-                acc.adult.push(passenger);
-              } else if (label.age_category === "child") {
-                acc.child.push(passenger);
-              }
-              return acc;
-            },
-            { adult: [], child: [] } as {
-              adult: UserInformationDataType[];
-              child: UserInformationDataType[];
+        const roommates = restLabels.reduce(
+          (acc, label) => {
+            const passenger = accommodationPassenger[label.idx];
+            if (label.age_category === "adult") {
+              acc.adult.push(passenger);
+            } else if (label.age_category === "child") {
+              acc.child.push(passenger);
             }
-          );
-
-          console.log("room555", room);
-
-          return {
-            action: "online",
-            id: uuidv4(),
-            passenger: firstPassenger,
-            online: {
-              ...room,
-              roommate: roommates,
-              details: {
-                ...room.details,
-                from_date: convertToGregorian(room.details.from_date),
-                to_date: convertToGregorian(room.details.to_date),
-              },
-            },
-            sell: room.room_type.board_type_list.financial_total.net_price,
-            buy: room.room_type.board_type_list.financial_total.net_price,
-            validated: true,
-            has_credit: true,
-            provider: room.room_type.board_type_list.system_supplier,
-            deadline: "",
-            serial: "",
-            pay_deadline: false,
-            currency: { unit: null, exchange: null, amount: null },
-          };
-        }
-      );
-
-      const sum_sell_price = finalHotelBookingPayload.reduce(
-        (sum, item) => sum + parseInt(item.sell, 10),
-        0
-      );
-      const sum_buy_price = finalHotelBookingPayload.reduce(
-        (sum, item) => sum + parseInt(item.buy, 10),
-        0
-      );
-
-      const id = uuidv4();
-      const jsonData: any = {
-        agent: { mobile: "", email: "" },
-        data: finalHotelBookingPayload,
-        income_id: 1,
-        internal: true,
-        passengers: accommodationPassenger,
-        pledgers: [],
-        print: 1,
-        notices: false,
-        requests: {
-          pay: {
-            amount: sum_sell_price,
-            return: `${config?.communicational.site}/services/shopping/` + id,
+            return acc;
           },
-        },
-        sum_sell_price,
-        sum_buy_price,
-      };
-
-      let allValid = true;
-      childRef.current.forEach((child: any) => {
-        if (child) {
-          child.handleTrigger(); // اجرا کردن trigger
-          if (!child.getIsValid()) {
-            allValid = false;
+          { adult: [], child: [] } as {
+            adult: UserInformationDataType[];
+            child: UserInformationDataType[];
           }
-        }
-      });
+        );
 
-      if (allValid) {
-        // setShowProgress(true);
-        // handleStoreFlightJson(jsonData)
-        //   .then((res: any) => {
-        //     jsonData["type"] = "accommodation";
-        //     localStorage.setItem(id, JSON.stringify(jsonData));
-        //     router.replace(res.payload.payment_link);
-        //   })
-        //   .catch((err: any) => {
-        //     setShowProgress(false);
-        //   });
+        console.log("room555", room);
+
+        return {
+          action: "online",
+          id: uuidv4(),
+          passenger: firstPassenger,
+          online: {
+            ...room,
+            roommate: roommates,
+            details: {
+              ...room.details,
+              from_date: convertToGregorian(room.details.from_date),
+              to_date: convertToGregorian(room.details.to_date),
+            },
+          },
+          sell: room.room_type.board_type_list.financial_total.net_price,
+          buy: room.room_type.board_type_list.financial_total.net_price,
+          validated: true,
+          has_credit: true,
+          provider: room.room_type.board_type_list.system_supplier,
+          deadline: "",
+          serial: "",
+          pay_deadline: false,
+          currency: { unit: null, exchange: null, amount: null },
+        };
       }
+    );
 
-      console.log("finalHotelBookingPayload", finalHotelBookingPayload);
-      console.log("jsonData", jsonData);
+    const sum_sell_price = finalHotelBookingPayload.reduce(
+      (sum, item) => sum + parseInt(item.sell, 10),
+      0
+    );
+    const sum_buy_price = finalHotelBookingPayload.reduce(
+      (sum, item) => sum + parseInt(item.buy, 10),
+      0
+    );
+
+    const id = uuidv4();
+    const jsonData: any = {
+      agent: { mobile: "", email: "" },
+      data: finalHotelBookingPayload,
+      income_id: 1,
+      internal: true,
+      passengers: accommodationPassenger,
+      pledgers: [],
+      print: 1,
+      notices: false,
+      requests: {
+        pay: {
+          amount: sum_sell_price,
+          return: `${config?.communicational.site}/services/shopping/` + id,
+        },
+      },
+      sum_sell_price,
+      sum_buy_price,
+    };
+
+    let allValid = true;
+    childRef.current.forEach((child: any) => {
+      if (child) {
+        child.handleTrigger(); // اجرا کردن trigger
+        if (!child.getIsValid()) {
+          allValid = false;
+        }
+      }
+    });
+
+    if (allValid) {
+      setShowProgress(true);
+      handleStoreFlightJson(jsonData)
+        .then((res: any) => {
+          jsonData["type"] = "accommodation";
+          localStorage.setItem(id, JSON.stringify(jsonData));
+          router.replace(res.payload.payment_link);
+        })
+        .catch((err: any) => {
+          setShowProgress(false);
+        });
     }
+
+    console.log("finalHotelBookingPayload", finalHotelBookingPayload);
+    console.log("jsonData", jsonData);
   };
 
   // handle submit flight accommodation
@@ -510,12 +508,17 @@ const CheckoutAccommodationContainer = () => {
           online: {
             ...room,
             roommate: roommates,
+            details: {
+              ...room.details,
+              from_date: convertToGregorian(room.details.from_date),
+              to_date: convertToGregorian(room.details.to_date),
+            },
           },
           sell: room.room_type.board_type_list.financial_total.net_price,
           buy: room.room_type.board_type_list.financial_total.net_price,
           validated: true,
           has_credit: true,
-          provider: room.room_type.board_type_list.supplier,
+          provider: room.room_type.board_type_list.system_supplier,
           deadline: "",
           serial: "",
           pay_deadline: false,
@@ -550,7 +553,8 @@ const CheckoutAccommodationContainer = () => {
       notices: false,
       requests: {
         pay: {
-          amount: sum_sell_price,
+          // amount: sum_sell_price,
+          amount: 10000,
           return: `${config?.communicational.site}/services/shopping/` + id,
         },
       },
@@ -558,7 +562,74 @@ const CheckoutAccommodationContainer = () => {
       sum_buy_price,
     };
 
-    console.log("🎟️✈️🛏️ Final Combined Payload", jsonData);
+    let allValid = true;
+    childRef.current.forEach((child: any) => {
+      if (child) {
+        child.handleTrigger(); // اجرا کردن trigger
+        if (!child.getIsValid()) {
+          allValid = false;
+        }
+      }
+    });
+
+    if (allValid) {
+      setShowProgress(true);
+      lockFlight({
+        data: objectTicket.map((element: any) => {
+          const passengerType = element.passenger.birthday;
+          const passengers = {
+            Adult: 0,
+            Child: 0,
+            Infant: 0,
+          };
+          if (calculateAgeCategory(passengerType) === "ADU") {
+            passengers.Adult += 1;
+          } else if (calculateAgeCategory(passengerType) === "CHI") {
+            passengers.Child += 1;
+          } else if (calculateAgeCategory(passengerType) === "INF") {
+            passengers.Infant += 1;
+          }
+          return {
+            ...element.online,
+            Classes: {
+              ...element.online.Classes,
+              Passengers: passengers,
+            },
+          };
+        }),
+      })
+        .then((lockRes: any) => {
+          console.log("lockRes.status", lockRes.status);
+          console.log("lockRes", lockRes);
+          if (lockRes.status) {
+            jsonData.data = jsonData.data.map((element: any) => {
+              return {
+                ...element,
+                online: {
+                  ...element.online,
+                  Lock: lockRes,
+                },
+              };
+            });
+            handleStoreFlightJson(jsonData)
+              .then((res: any) => {
+                jsonData["type"] = "accommodation";
+                localStorage.setItem(id, JSON.stringify(jsonData));
+                router.replace(res.payload.payment_link);
+              })
+              .catch((err: any) => {
+                setShowProgress(false);
+              });
+          }
+        })
+        .catch((err: any) => {
+          setShowProgress(false);
+          handleAlertDetails(err.response.data.error.message, "error");
+        });
+      // setShowProgress(true);
+    }
+
+    console.log("🎟️✈️🛏️ flight accommodation json data", jsonData);
   };
 
   // handle submit type field object
@@ -568,7 +639,11 @@ const CheckoutAccommodationContainer = () => {
   };
   // handle submit
   const handleSubmit = () => {
-    submitTypeFieldObject[searchType]();
+    if (userData === null) {
+      setOpenLoginDialog(true);
+    } else {
+      submitTypeFieldObject[searchType]();
+    }
   };
 
   // handle onchange user information

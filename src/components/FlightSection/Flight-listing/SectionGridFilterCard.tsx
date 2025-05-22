@@ -310,7 +310,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ action }) => {
       </div>
       <div className="col-span-12 md:col-span-9">
         <Suspense>
-          <FlightsList />
+          <FlightsList action={action} />
         </Suspense>
       </div>
     </div>

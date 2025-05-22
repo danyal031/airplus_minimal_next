@@ -353,13 +353,13 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
   const router = useRouter();
 
   // handle clear selected rooms
-  useEffect(() => {
-    return () => {
-      // setCapacitySelectedAccommodation(0);
-      setSelectedRooms([]);
-      setAddedRooms([]);
-    };
-  }, []);
+  // useEffect(() => {
+  // return () => {
+  // setCapacitySelectedAccommodation(0);
+  // setSelectedRooms([]);
+  // setAddedRooms([]);
+  // };
+  // }, []);
 
   // handle get rooms
   const getRooms = () => {
@@ -499,8 +499,6 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
 
     if (flightCapacity) {
       if (capacitySelectedAccommodation < flightCapacity) {
-        console.log("sjdlajsdlkajskdl");
-
         if (
           !isRoomAlreadyAdded ||
           (isRoomAlreadyAdded &&
@@ -640,10 +638,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     console.log("capacitySelectedAccommodation", capacitySelectedAccommodation);
   }, [capacitySelectedAccommodation]);
 
-  // move to checkout passenger page
-  const handleMoveToCheckoutPage = (
-    searchType: "accommodation" | "flight-accommodation"
-  ) => {
+  // handle accommodation checkout page
+  const handleAccommodationCheckout = () => {
     onAdd(selectedRooms);
     closeDialog();
 
@@ -652,13 +648,57 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     // const rooms = Object.values(addedRooms).flat();
     const rooms = selectedRooms;
     const queryParams = createSearchparams(rooms);
-    console.log("987987987", searchType);
+    // console.log("987987987", searchType);
     console.log("addedRooms", addedRooms);
 
     console.log("queryParams", queryParams);
     console.log("rooms", rooms);
 
     localStorage.setItem(local_id, JSON.stringify(queryParams));
+  };
+
+  // handle flight accommodation checkout page
+  const handleFlightAccommodationCheckout = () => {
+    if (selectedWentFlight && selectedReturnFlight) {
+      onAdd(selectedRooms);
+      closeDialog();
+
+      const local_id = uuidv4().substr(0, 6);
+      setUrl(local_id);
+      // const rooms = Object.values(addedRooms).flat();
+      const rooms = selectedRooms;
+      const queryParams = createSearchparams(rooms);
+      // console.log("987987987", searchType);
+      console.log("addedRooms", addedRooms);
+
+      console.log("queryParams", queryParams);
+      console.log("rooms", rooms);
+
+      localStorage.setItem(local_id, JSON.stringify(queryParams));
+    } else {
+      onAdd(selectedRooms);
+      closeDialog();
+
+      // console.log("987987987", searchType);
+      console.log("addedRooms", addedRooms);
+
+      console.log("rooms", rooms);
+    }
+  };
+
+  // handle move to checkout page field type object
+  const moveToCheckoutPageFieldObject: {
+    [key: string]: (roomList: any) => void;
+  } = {
+    accommodation: handleAccommodationCheckout,
+    "flight-accommodation": handleFlightAccommodationCheckout,
+  };
+
+  // move to checkout passenger page
+  const handleMoveToCheckoutPage = (
+    searchType: "accommodation" | "flight-accommodation"
+  ) => {
+    moveToCheckoutPageFieldObject[searchType](searchType);
   };
 
   // render on desktop
@@ -1167,7 +1207,7 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
             {/* {`${NumberToPersianWordMin.convert(
             calculateNights(fromDate, toDate, "YYYY-MM-DD")
           )} شب اقامت`} */}
-            3 شب{" "}
+            {/* 3 شب{" "} */}
           </span>
           <span className="text-text-main font-bold text-sm">
             {`${formatInputWithCommas(

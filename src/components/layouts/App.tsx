@@ -22,6 +22,44 @@ import Cookies from "universal-cookie";
 // import Loading from "./loading";
 
 const App = ({ children }: { children: React.ReactNode }) => {
+  // (function ultraArt() {
+  //   const art = [
+  //     "  __  __ _____ _   _    __     ___  ____  _   _ _____ ____ _____ __  __ ____  ____ ",
+  //     " |  \\/  | ____| \\ | |   \\ \\   / / \\/ ___|| | | | ____/ ___| ____|  \\/  / ___|/ ___|",
+  //     " | |\\/| |  _| |  \\| |    \\ \\ / /| |\\___ \\| |_| |  _|| |  _|  _| |\\/| \\___ \\___ \\",
+  //     " | |  | | |___| |\\  |     \\ V / | | ___) |  _  | |__| |_| | |___| |  | |___) |__) |",
+  //     " |_|  |_|_____|_| \\_|      \\_/  |_| |____/|_| |_|_____\\____|_____|_|  |_|____/____/",
+  //   ];
+
+  //   // ساخت رشتهٔ لاگ با %c برای هر خط
+  //   const placeholders = art.map((line) => "%c" + line).join("\n");
+
+  //   // تولید استایل گرادیانت برای هر خط
+  //   const styles = art.map((_, i) => {
+  //     const start = Math.round((i / art.length) * 360);
+  //     const end = Math.round(((i + 1) / art.length) * 360);
+  //     return [
+  //       "font-family: monospace",
+  //       "font-size: 12px",
+  //       "background: linear-gradient(90deg, hsl(" +
+  //         start +
+  //         ",100%,75%), hsl(" +
+  //         end +
+  //         ",100%,65%))",
+  //       "-webkit-background-clip: text",
+  //       "color: transparent",
+  //       "text-shadow: 2px 2px 4px rgba(0,0,0,0.3)",
+  //     ].join(";");
+  //   });
+
+  //   console.groupCollapsed(
+  //     "%c🎨 Fancy ASCII Art Notice 🎨",
+  //     "background:#222; color:#eee; padding:4px 8px; border-radius:4px; font-weight:bold;"
+  //   );
+  //   console.log(placeholders, ...styles);
+  //   console.groupEnd();
+  // })();
+
   if (process.env.NODE_ENV === "production") {
     const cookies = new Cookies();
     const devKey = cookies.get("developer");

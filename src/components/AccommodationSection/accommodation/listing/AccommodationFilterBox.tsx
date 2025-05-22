@@ -62,9 +62,12 @@ const AccommodationFilterBox = () => {
           {" "}
           <div
             className="flex items-center justify-between cursor-pointer"
-            onClick={() => handleChangeFilterBoxSections("name")}
+            // onClick={() => handleChangeFilterBoxSections("name")}
           >
-            <span className="text-text-main font-semibold cursor-pointer">
+            <span className="flex items-center justify-center text-text-main font-semibold text-sm">
+              به زودی...{" "}
+            </span>
+            {/* <span className="text-text-main font-semibold cursor-pointer">
               نام هتل
             </span>
             <IconButton size="small">
@@ -73,13 +76,13 @@ const AccommodationFilterBox = () => {
               ) : (
                 <KeyboardArrowDownIcon className="text-sm" />
               )}
-            </IconButton>{" "}
+            </IconButton>{" "} */}
           </div>
-          {openName && (
+          {/* {openName && (
             <div className="grid grid-cols-1">
               <TextField size="small" label="جستجوی نام هتل" />
             </div>
-          )}
+          )} */}
         </div>
       </>
     );
@@ -142,8 +145,10 @@ const AccommodationFilterBox = () => {
       <>
         {" "}
         <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
-          {" "}
-          <div
+          <span className="flex items-center justify-center text-text-main font-semibold text-sm">
+            به زودی...{" "}
+          </span>
+          {/* <div
             className="flex items-center justify-between cursor-pointer"
             onClick={() => handleChangeFilterBoxSections("stars")}
           >
@@ -216,7 +221,7 @@ const AccommodationFilterBox = () => {
                 </div>
               </div>{" "}
             </div>
-          )}
+          )} */}
         </div>
       </>
     );
@@ -228,8 +233,10 @@ const AccommodationFilterBox = () => {
       <>
         {" "}
         <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
-          {" "}
-          <div
+          <span className="flex items-center justify-center text-text-main font-semibold text-sm">
+            به زودی...{" "}
+          </span>
+          {/* <div
             className="flex items-center justify-between cursor-pointer"
             onClick={() => handleChangeFilterBoxSections("rangePrice")}
           >
@@ -255,7 +262,7 @@ const AccommodationFilterBox = () => {
                 max={100}
               />
             </div>
-          )}
+          )} */}
         </div>
       </>
     );
@@ -326,8 +333,10 @@ const AccommodationFilterBox = () => {
       <>
         {" "}
         <div className="bg-paper p-2 rounded-b-xl md:rounded-xl w-full text-sm grid grid-cols-1 gap-3">
-          {" "}
-          <div
+          <span className="flex items-center justify-center text-text-main font-semibold text-sm">
+            به زودی...{" "}
+          </span>{" "}
+          {/* <div
             className="flex items-center justify-between cursor-pointer"
             onClick={() => handleChangeFilterBoxSections("facilities")}
           >
@@ -356,7 +365,7 @@ const AccommodationFilterBox = () => {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>{" "}
       </>
     );
@@ -389,8 +398,10 @@ const AccommodationFilterBox = () => {
     return (
       <>
         <div className="bg-paper p-2 rounded-b-xl md:rounded-lg w-full text-sm grid grid-cols-1 gap-3">
-          {" "}
-          <div
+          <span className="flex items-center justify-center text-text-main font-semibold text-sm">
+            به زودی...{" "}
+          </span>
+          {/* <div
             className="flex items-center justify-between cursor-pointer"
             onClick={() => handleChangeFilterBoxSections("type")}
           >
@@ -417,7 +428,7 @@ const AccommodationFilterBox = () => {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </>
     );

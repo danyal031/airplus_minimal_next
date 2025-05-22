@@ -6,15 +6,21 @@ import SelectedFlightsPanel from "./SelectedFlightsPanel";
 import { useGlobalContext } from "@/context/store";
 import { FlightCardSkelton } from "@/components/Skelton-Components/FlightSection/FlightCard/FlightCardSkelton";
 
-const FlightsList = () => {
+interface FlightsListProps {
+  action: "flight" | "flight-accommodation";
+}
+
+const FlightsList: FC<FlightsListProps> = ({ action }) => {
   // initial states
   const { ticketLoading, travelRoute } =
     useGlobalContext().flightContext.searchContext;
   return (
     <div className="flex flex-col items-start justify-start gap-3">
-      <div className="w-full">
-        <PriceRateBox />
-      </div>
+      {action === "flight" && (
+        <div className="w-full">
+          <PriceRateBox />
+        </div>
+      )}
       {travelRoute === "roundTrip" && (
         <div className="w-full">
           <SelectedFlightsPanel />{" "}
