@@ -18,6 +18,7 @@ import { LoginDialog } from "../Login/LoginDialog";
 import { usePathname } from "next/navigation";
 import { LogoutListener } from "../LogoutListener";
 import Cookies from "universal-cookie";
+import useLogOut from "@/hooks/useLogOut";
 
 // import Loading from "./loading";
 
@@ -147,9 +148,17 @@ const App = ({ children }: { children: React.ReactNode }) => {
       setAppLoading(false);
     }
   }, [config]);
-
+  const { handleLogout } = useLogOut();
   useEffect(() => {
     // handle user data
+    const data: any = JSON.parse(
+      localStorage.getItem("minimal_user") as string
+    );
+    if (data) {
+      if (!data.data.title) {
+        handleLogout();
+      }
+    }
     setUserData(JSON.parse(localStorage.getItem("minimal_user") as string));
 
     // handle get config
