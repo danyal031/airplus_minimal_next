@@ -90,17 +90,27 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
 
   // search flight
   const searchFlight = () => {
-    handleTransfer();
-    handleFlightSearch({
-      origin: origin?.iata as string,
-      destination: destination?.iata as string,
-      departure_date: formatDateWithSlash(fromDate as string),
-      returning_date: toDate ? formatDateWithSlash(toDate) : false,
-    });
+    if (origin && destination && fromDate && !isFlightSearching) {
+      handleTransfer();
+      handleFlightSearch({
+        origin: origin?.iata as string,
+        destination: destination?.iata as string,
+        departure_date: formatDateWithSlash(fromDate as string),
+        returning_date: toDate ? formatDateWithSlash(toDate) : false,
+      });
+    }
   };
 
   const searchFlightAccommodation = () => {
-    handleFlightAccommodationTransfer();
+    if (origin && destination && fromDate && toDate && !isFlightSearching) {
+      handleFlightAccommodationTransfer();
+      handleFlightSearch({
+        origin: origin?.iata as string,
+        destination: destination?.iata as string,
+        departure_date: formatDateWithSlash(fromDate as string),
+        returning_date: toDate ? formatDateWithSlash(toDate) : false,
+      });
+    }
   };
 
   // handle search field object
@@ -110,9 +120,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
   };
 
   const handleClickSubmit = (submit = false) => {
-    if (origin && destination && fromDate && !isFlightSearching) {
-      searchFieldObject[type]();
-    }
+    searchFieldObject[type]();
   };
   const renderDatePicker = () => {
     return (
