@@ -147,10 +147,12 @@ const SearchHeaderReservation = () => {
           </div>
           <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
             <span className={`text-paper font-semibold`}>
-              تاریخ ورود: {searchParams.get("departing")}
+              تاریخ ورود:{" "}
+              {formatDateWithSlash(searchParams.get("departing") as string)}
             </span>{" "}
             <span className={`text-paper font-semibold`}>
-              تاریخ خروج: {searchParams.get("returning")}
+              تاریخ خروج:{" "}
+              {formatDateWithSlash(searchParams.get("returning") as string)}
             </span>
           </div>
         </div>
