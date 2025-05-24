@@ -48,19 +48,37 @@ const AccommodationSearchForm = () => {
   const router = useRouter();
 
   // handle move to search accommodation page
+  // const handleClickSubmit = () => {
+  //   setAccommodationsList([]);
+  //   setFilteredSearchAccommodationsList([]);
+  //   if (accommodationDestination?.category.title === "شهر") {
+  //     router.push(
+  //       `/search/accommodations?destination=${accommodationDestination.title.fa}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+  //     );
+  //   } else if (
+  //     accommodationDestination &&
+  //     accommodationDestination?.category.title !== "شهر"
+  //   ) {
+  //     router.push(
+  //       `/accommodation/details?destination=${accommodationDestination.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+  //     );
+  //   }
+  // };
+
+  // handle move to search accommodation page
   const handleClickSubmit = () => {
     setAccommodationsList([]);
     setFilteredSearchAccommodationsList([]);
     if (accommodationDestination?.category.title === "شهر") {
       router.push(
-        `/search/accommodations?destination=${accommodationDestination.title.fa}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+        `/search/accommodations?destination=${accommodationDestination.title.fa}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}&action=city`
       );
     } else if (
       accommodationDestination &&
       accommodationDestination?.category.title !== "شهر"
     ) {
       router.push(
-        `/accommodation/details?destination=${accommodationDestination.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+        `/search/accommodations?destination=${accommodationDestination.id}&departing=${accommodationFromDate}&returning=${accommodationToDate}&adultCapacity=${accommodationPassengersCapacity.adultCapacity}&childCapacity=${accommodationPassengersCapacity.childCapacity}&action=accommodation`
       );
     }
   };
