@@ -437,6 +437,13 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
 
     console.log("temproom", tempRoom);
 
+    const currentHotelId = tempRoom.id;
+
+    const isDifferentHotel =
+      selectedRooms.length > 0 && selectedRooms[0].id !== currentHotelId;
+
+    console.log("currentHotelId", currentHotelId);
+
     let tempExistingRoom = null;
     const isRoomAlreadyAdded = selectedRooms.some((existingItem: any) => {
       tempExistingRoom = { ...existingItem };
@@ -452,11 +459,16 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
             elm.id === tempRoom.id && tempRoom.room_type.id === elm.room_type.id
         ).length < tempRoom.room_type.capacity.room)
     ) {
-      setSelectedRooms((prevItems: any) => [
-        ...prevItems,
-        { ...tempRoom, uuid: uuidv4() },
-      ]);
-      setCapacitySelectedAccommodation((prev: number) => prev + 1);
+      if (isDifferentHotel) {
+        setSelectedRooms([{ ...tempRoom, uuid: uuidv4() }]);
+        setCapacitySelectedAccommodation(1);
+      } else {
+        setSelectedRooms((prevItems: any) => [
+          ...prevItems,
+          { ...tempRoom, uuid: uuidv4() },
+        ]);
+        setCapacitySelectedAccommodation((prev: number) => prev + 1);
+      }
     } else {
       setShowAlertDetails({
         alertMessage: "اتاق خالی موجود نیست",
@@ -859,8 +871,8 @@ const RoomItem: FC<RoomItemProps> = ({
   onDelete,
 }) => {
   const isMDUp = useMediaQuery((theme: any) => theme.breakpoints.up("md"));
-  const from = new URLSearchParams(window.location.search).get("checkin_date");
-  const to = new URLSearchParams(window.location.search).get("checkout_date");
+  const from = new URLSearchParams(window.location.search).get("departing");
+  const to = new URLSearchParams(window.location.search).get("returning");
   const { accommodationPassengersCapacity } =
     useGlobalContext().accommodationContext.accommodationSearch;
   const isSelected = selectedRooms.some(
