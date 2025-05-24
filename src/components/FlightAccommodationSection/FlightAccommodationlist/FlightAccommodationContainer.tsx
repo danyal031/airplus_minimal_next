@@ -21,21 +21,46 @@ const FlightAccommodationContainer = () => {
 
   const renderFlightAccommodationTab = () => {
     return (
-      <div className="flex items-center justify-center">
-        <ToggleButtonGroup
-          value={searchListTab}
-          exclusive
-          onChange={handleChangeSearchListTab}
-          size="small"
-        >
-          <ToggleButton size="small" value="flight">
-            <FlightIcon />
-          </ToggleButton>
-          <ToggleButton size="small" value="accommodation">
-            <ApartmentIcon />
-          </ToggleButton>
-        </ToggleButtonGroup>
+      <div className="flex items-center justify-center h-14">
+        <div className="p-1 rounded-lg overflow-hidden border-2 border-paper flex items-center justify-center h-full w-1/3">
+          <div
+            onClick={() => setSearchListTab("flight")}
+            className={`${
+              searchListTab === "flight"
+                ? "bg-paper border-primary-main"
+                : "bg-main border-main"
+            } cursor-pointer w-full h-full flex items-center justify-center font-semibold rounded-md border`}
+          >
+            پرواز
+          </div>
+          <div
+            onClick={() => setSearchListTab("accommodation")}
+            className={`${
+              searchListTab === "accommodation"
+                ? "bg-paper border-primary-main"
+                : "bg-main border-main"
+            } cursor-pointer w-full h-full flex items-center justify-center font-semibold rounded-md border`}
+          >
+            اقامتگاه
+          </div>
+        </div>
       </div>
+
+      // <div className="flex items-center justify-center">
+      //   <ToggleButtonGroup
+      //     value={searchListTab}
+      //     exclusive
+      //     onChange={handleChangeSearchListTab}
+      //     size="small"
+      //   >
+      //     <ToggleButton size="small" value="flight">
+      //       <FlightIcon />
+      //     </ToggleButton>
+      //     <ToggleButton size="small" value="accommodation">
+      //       <ApartmentIcon />
+      //     </ToggleButton>
+      //   </ToggleButtonGroup>
+      // </div>
     );
   };
 
