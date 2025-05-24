@@ -100,18 +100,14 @@ export default function AvatarDropdown({ className = "" }: Props) {
               },
             }}
           >
-            <List
-              component="nav"
-              disablePadding
-              // className="border-x border-primary-main"
-            >
+            <List component="nav" disablePadding className="min-w-32">
               <ListItemButton
                 className="cursor-pointer"
                 onClick={() => {
                   router.push("/profile/orders");
                 }}
               >
-                <ListItemText primary="سفرها" />
+                <ListItemText primary="سفرها" className="flex justify-center" />
               </ListItemButton>
               <Divider variant="fullWidth" />
               <Button

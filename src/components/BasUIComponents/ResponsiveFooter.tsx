@@ -252,26 +252,6 @@ const ResponsiveFooter = () => {
                 </Link>
               );
             })}
-            <Button
-              onClick={() => {
-                if (userData) {
-                  setShowAlertDetails({
-                    alertMessage:
-                      "برای ورود به عنوان همکار ابتدا از حساب کاربری خود خارج شوید",
-                    showAlert: true,
-                    alertType: "warning",
-                  });
-                } else {
-                  setColleagueLogin(true);
-                  setOpenLoginDialog(true);
-                }
-              }}
-              variant="outlined"
-              size="small"
-              className="rounded-xl px-3"
-            >
-              ورود همکار
-            </Button>
           </div>{" "}
         </div>
       </>

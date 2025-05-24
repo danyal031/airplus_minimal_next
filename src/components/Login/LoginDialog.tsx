@@ -7,6 +7,8 @@ import {
   DialogTitle,
   IconButton,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -385,6 +387,16 @@ export const LoginDialog = () => {
     }
   };
 
+  // handle change login type
+  const handleChangeLoginType = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => {
+    if (newValue !== null) {
+      setColleagueLogin(newValue);
+    }
+  };
+
   return (
     <>
       <ReCaptcha onValidate={setToken} action="page_view" />
@@ -400,7 +412,26 @@ export const LoginDialog = () => {
           },
         }}
       >
-        <DialogTitle className="flex items-center justify-end p-4">
+        <DialogTitle className="flex items-center justify-between p-4">
+          <div className="flex items-center justify-center">
+            <ToggleButtonGroup
+              value={colleagueLogin}
+              exclusive
+              onChange={handleChangeLoginType}
+              size="small"
+            >
+              <ToggleButton size="small" value={false}>
+                <span className="text-text-main font-semibold text-xs">
+                  ورود مسافر
+                </span>
+              </ToggleButton>
+              <ToggleButton size="small" value={true}>
+                <span className="text-text-main font-semibold text-xs">
+                  ورود همکار
+                </span>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
           <IconButton
             onClick={() => {
               handleCloseDialog();
