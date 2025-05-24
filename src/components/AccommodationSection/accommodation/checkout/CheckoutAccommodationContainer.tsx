@@ -553,8 +553,8 @@ const CheckoutAccommodationContainer = () => {
       notices: false,
       requests: {
         pay: {
-          // amount: sum_sell_price,
-          amount: 10000,
+          amount: sum_sell_price,
+          // amount: 10000,
           return: `${config?.communicational.site}/services/shopping/` + id,
         },
       },
