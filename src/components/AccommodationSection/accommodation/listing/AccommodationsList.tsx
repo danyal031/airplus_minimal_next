@@ -2,8 +2,7 @@
 import { useGlobalContext } from "@/context/store";
 import React, { FC, useEffect, useRef, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import
-{
+import {
   Button,
   Chip,
   Dialog,
@@ -26,8 +25,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import moment from "jalali-moment";
 import customAxios from "@/utils/customAxios";
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
-import
-{
+import {
   calculateNights,
   convertToPersianDate,
   formatInputWithCommas,
@@ -48,17 +46,16 @@ import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 // import InfiniteLoader from "react-window-infinite-loader";
 // import { FixedSizeGrid as Grid } from "react-window";
 
-interface AccommodationsListProps
-{
+interface AccommodationsListProps {
   fetchMore: boolean;
   page: number;
-  fetchAccommodations: ( currentPage: number ) => void;
+  fetchAccommodations: (currentPage: number) => void;
   infiniteScrollRef: any;
   hasMore: boolean;
   scrollableDivRef: any;
   showProgressLoading: boolean;
 }
-const AccommodationsList: FC<AccommodationsListProps> = ( {
+const AccommodationsList: FC<AccommodationsListProps> = ({
   fetchMore,
   page,
   fetchAccommodations,
@@ -66,17 +63,16 @@ const AccommodationsList: FC<AccommodationsListProps> = ( {
   hasMore,
   scrollableDivRef,
   showProgressLoading,
-} ) =>
-{
+}) => {
   // initial states
-  const [ filterTabValue, setFilterTabValue ] = useState<string>( "1" );
-  const [ openRoomsDialog, setOpenRoomsDialog ] = useState<{
+  const [filterTabValue, setFilterTabValue] = useState<string>("1");
+  const [openRoomsDialog, setOpenRoomsDialog] = useState<{
     isOpen: boolean;
     item: AccommodationDataType | null;
-  }>( {
+  }>({
     isOpen: false,
     item: null,
-  } );
+  });
   // const [addedRooms, setAddedRooms] = useState({});
   const {
     accommodationsLoading,
@@ -87,47 +83,40 @@ const AccommodationsList: FC<AccommodationsListProps> = ( {
     setAddedRooms,
   } = useGlobalContext().accommodationContext.accommodationSearch;
 
-  const handleAddedRooms = ( rooms ) =>
-  {
-    setAddedRooms( rooms );
+  const handleAddedRooms = (rooms) => {
+    setAddedRooms(rooms);
   };
 
-  useEffect( () =>
-  {
-    console.log( "addedRooms", addedRooms );
-  }, [ addedRooms ] );
+  useEffect(() => {
+    console.log("addedRooms", addedRooms);
+  }, [addedRooms]);
 
-  const handleCloseRoomsDrawer = () =>
-  {
-    setOpenRoomsDialog( {
+  const handleCloseRoomsDrawer = () => {
+    setOpenRoomsDialog({
       isOpen: false,
       item: null,
-    } );
+    });
   };
 
   // handle change of filter tab
-  const handleFilterTabChange = ( newValue: string ) =>
-  {
-    setFilterTabValue( newValue );
+  const handleFilterTabChange = (newValue: string) => {
+    setFilterTabValue(newValue);
   };
 
   // for handle change type of Show list
-  const handleTypesOfShowList = ( action: string ) =>
-  {
-    switch ( action )
-    {
+  const handleTypesOfShowList = (action: string) => {
+    switch (action) {
       case "list":
-        setTypeOfAccommodation( action );
+        setTypeOfAccommodation(action);
       case "grid":
-        setTypeOfAccommodation( action );
+        setTypeOfAccommodation(action);
       default:
-        console.warn( "Invalid action type:", action );
+        console.warn("Invalid action type:", action);
     }
   };
 
   // for filter tabs
-  const renderFilterTab = () =>
-  {
+  const renderFilterTab = () => {
     const filtersOptions = [
       { id: "1", label: "پیش فرض" },
       { id: "2", label: "ارزانترین" },
@@ -137,91 +126,87 @@ const AccommodationsList: FC<AccommodationsListProps> = ( {
     return (
       <>
         <div className="col-span-7 grid grid-cols-8 gap-0">
-          { filtersOptions.map( ( tab ) =>
-          {
+          {filtersOptions.map((tab) => {
             const isActive = filterTabValue === tab.id;
             return (
               <span
-                key={ tab.id }
-                onClick={ () => handleFilterTabChange( tab.id ) }
-                className={ `truncate col-span-2 text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${ isActive
-                  ? "bg-main text-primary-main"
-                  : "bg-paper text-text-subText"
-                  }` }
+                key={tab.id}
+                onClick={() => handleFilterTabChange(tab.id)}
+                className={`truncate col-span-2 text-sm hover:cursor-pointer flex items-center justify-center font-semibold h-9 rounded-tab-up-sm ${
+                  isActive
+                    ? "bg-main text-primary-main"
+                    : "bg-paper text-text-subText"
+                }`}
               >
-                { tab.label }
+                {tab.label}
               </span>
             );
-          } ) }
+          })}
         </div>
       </>
     );
   };
-  useEffect( () =>
-  {
-    console.log( "filteredSearchAccommodationsList", {
+  useEffect(() => {
+    console.log("filteredSearchAccommodationsList", {
       filteredSearchAccommodationsList,
       accommodationsLoading,
-    } );
-  }, [ filteredSearchAccommodationsList, accommodationsLoading ] );
+    });
+  }, [filteredSearchAccommodationsList, accommodationsLoading]);
   // render accommodations
-  const renderAccommodations = () =>
-  {
+  const renderAccommodations = () => {
     return (
       <>
         <InfiniteScroll
-          ref={ infiniteScrollRef }
-          dataLength={ filteredSearchAccommodationsList.length }
-          next={ fetchAccommodations }
-          hasMore={ hasMore }
-          scrollThreshold={ 1 }
-          loader={ <ListingAccommodationsProgress /> }
+          ref={infiniteScrollRef}
+          dataLength={filteredSearchAccommodationsList.length}
+          next={fetchAccommodations}
+          hasMore={hasMore}
+          scrollThreshold={1}
+          loader={<ListingAccommodationsProgress />}
           className="!overflow-hidden"
         >
-          { filteredSearchAccommodationsList
-            .filter( ( elm ) => elm.min_price !== 0 )
-            .map( ( item, index ) => (
+          {filteredSearchAccommodationsList
+            .filter((elm) => elm.min_price !== 0)
+            .map((item, index) => (
               // <HotelItemCard
               //   item={item}
               //   key={index}
               //   setOpenRoomsDrawer={setOpenRoomsDrawer}
               // />
               <AccommodationCard
-                data={ item }
-                key={ index }
-                setOpenRoomsDialog={ setOpenRoomsDialog }
+                data={item}
+                key={index}
+                setOpenRoomsDialog={setOpenRoomsDialog}
               />
-            ) ) }
+            ))}
         </InfiniteScroll>
-        { !hasMore && filteredSearchAccommodationsList.length > 0 && (
+        {!hasMore && filteredSearchAccommodationsList.length > 0 && (
           <div>
-            { filteredSearchAccommodationsList
-              .filter( ( elm ) => elm.min_price == 0 )
-              .map( ( item, index ) => (
+            {filteredSearchAccommodationsList
+              .filter((elm) => elm.min_price == 0)
+              .map((item, index) => (
                 // <HotelItemCard
                 //   item={item}
                 //   key={index}
                 //   setOpenRoomsDrawer={setOpenRoomsDrawer}
                 // />
                 <AccommodationCard
-                  data={ item }
-                  key={ index }
-                  setOpenRoomsDialog={ setOpenRoomsDialog }
+                  data={item}
+                  key={index}
+                  setOpenRoomsDialog={setOpenRoomsDialog}
                 />
-              ) ) }
+              ))}
           </div>
-        ) }
+        )}
       </>
     );
   };
 
-
   // for Desktop
-  const renderOnDesktop = () =>
-  {
+  const renderOnDesktop = () => {
     return (
       <>
-        { showProgressLoading && <ProgressLoading /> }
+        {showProgressLoading && <ProgressLoading />}
 
         <div className="hidden md:grid grid-cols-1 gap-2">
           <div className="flex items-center justify-start">
@@ -238,7 +223,7 @@ const AccommodationsList: FC<AccommodationsListProps> = ( {
                   مرتب سازی
                 </span>
               </div>
-              { renderFilterTab() }
+              {renderFilterTab()}
               <div className="col-span-2 flex items-end">
                 <div className="w-full flex items-center justify-center gap-0 py-0 px-2 rounded-lg bg-main mt-2 h-8">
                   <span className="text-text-main text-xs font-semibold">
@@ -246,33 +231,32 @@ const AccommodationsList: FC<AccommodationsListProps> = ( {
                   </span>
                   <IconButton
                     size="small"
-                  // onClick={() => {
-                  //   handleTypesOfShowList("list");
-                  // }}
+                    // onClick={() => {
+                    //   handleTypesOfShowList("list");
+                    // }}
                   >
-                    { typeOfAccommodation === "list" ? (
+                    {typeOfAccommodation === "list" ? (
                       <MenuIcon fontSize="small" color="primary" />
                     ) : (
                       <MenuIcon fontSize="small" />
-                    ) }
+                    )}
                   </IconButton>
                   <IconButton
                     size="small"
-                    onClick={ () =>
-                    {
-                      handleTypesOfShowList( "grid" );
-                    } }
+                    onClick={() => {
+                      handleTypesOfShowList("grid");
+                    }}
                   >
-                    { typeOfAccommodation === "grid" ? (
+                    {typeOfAccommodation === "grid" ? (
                       <AppsIcon fontSize="small" color="primary" />
                     ) : (
                       <AppsIcon fontSize="small" />
-                    ) }
+                    )}
                   </IconButton>
                 </div>
               </div>
-              <div className="col-span-10" ref={ scrollableDivRef }>
-                { showProgressLoading ? (
+              <div className="col-span-10" ref={scrollableDivRef}>
+                {showProgressLoading ? (
                   <ListingAccommodationsProgress />
                 ) : filteredSearchAccommodationsList.length > 0 ? (
                   renderAccommodations()
@@ -282,44 +266,42 @@ const AccommodationsList: FC<AccommodationsListProps> = ( {
                       هتلی جهت نمایش وجود ندارد
                     </span>
                   </div>
-                ) }
+                )}
               </div>
             </div>
           </div>
         </div>
-        { openRoomsDialog.isOpen && (
+        {openRoomsDialog.isOpen && (
           <RoomListDialog
-            openDialog={ openRoomsDialog.isOpen }
-            accommodationId={ openRoomsDialog.item?.id as string | number }
-            closeDialog={ handleCloseRoomsDrawer }
-            item={ openRoomsDialog.item as AccommodationDataType }
-            addedRooms={ addedRooms }
-            setAddedRooms={ setAddedRooms }
-            onAdd={ handleAddedRooms }
+            openDialog={openRoomsDialog.isOpen}
+            accommodationId={openRoomsDialog.item?.id as string | number}
+            closeDialog={handleCloseRoomsDrawer}
+            item={openRoomsDialog.item as AccommodationDataType}
+            addedRooms={addedRooms}
+            setAddedRooms={setAddedRooms}
+            onAdd={handleAddedRooms}
           />
-        ) }
+        )}
       </>
     );
   };
 
   // for Mobile
-  const renderOnMobile = () =>
-  {
+  const renderOnMobile = () => {
     return <></>;
   };
 
   return (
     <>
-      { renderOnDesktop() }
-      { renderOnMobile() }
+      {renderOnDesktop()}
+      {renderOnMobile()}
     </>
   );
 };
 
 export default AccommodationsList;
 
-interface RoomListDialogProps
-{
+interface RoomListDialogProps {
   openDialog: boolean;
   closeDialog: () => void;
   accommodationId: number | string;
@@ -331,7 +313,7 @@ interface RoomListDialogProps
   // selectedRooms: any;
   // setSelectedRooms: any;
 }
-const RoomListDialog: FC<RoomListDialogProps> = ( {
+const RoomListDialog: FC<RoomListDialogProps> = ({
   accommodationId,
   closeDialog,
   openDialog,
@@ -342,12 +324,11 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
   onAdd,
   // selectedRooms,
   // setSelectedRooms,
-} ) =>
-{
+}) => {
   // initial states
-  const [ rooms, setRooms ] = useState<any>( [] );
-  const [ showRoomsLoading, setShowRoomsLoading ] = useState<boolean>( false );
-  const [ selectedRooms, setSelectedRooms ] = useState( addedRooms );
+  const [rooms, setRooms] = useState<any>([]);
+  const [showRoomsLoading, setShowRoomsLoading] = useState<boolean>(false);
+  const [selectedRooms, setSelectedRooms] = useState(addedRooms);
   const {
     accommodationFromDate,
     accommodationToDate,
@@ -368,7 +349,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
   const { setShowAlertDetails, searchType } = useGlobalContext().global;
 
   const searchParams = useSearchParams();
-  const json = useRef( null );
+  const json = useRef(null);
   const router = useRouter();
 
   // handle clear selected rooms
@@ -381,75 +362,68 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
   // }, []);
 
   // handle get rooms
-  const getRooms = () =>
-  {
+  const getRooms = () => {
     const sumPassengerCapacity =
       accommodationPassengersCapacity.adultCapacity +
       accommodationPassengersCapacity.childCapacity;
-    setShowRoomsLoading( true );
+    setShowRoomsLoading(true);
     json.current = jsonData
       ? jsonData
       : {
-        // accommodation_id: 425,
-        accommodation_id: accommodationId,
-        checkin_date: moment(
-          new URLSearchParams( window.location.search ).get( "departing" ),
-          "jYYYY-jMM-jDD"
-        ).format( "YYYY-MM-DD" ),
-        checkout_date: moment(
-          new URLSearchParams( window.location.search ).get( "returning" ),
-          "jYYYY-jMM-jDD"
-        ).format( "YYYY-MM-DD" ),
-        passenger_count: sumPassengerCapacity,
-      };
+          // accommodation_id: 425,
+          accommodation_id: accommodationId,
+          checkin_date: moment(
+            new URLSearchParams(window.location.search).get("departing"),
+            "jYYYY-jMM-jDD"
+          ).format("YYYY-MM-DD"),
+          checkout_date: moment(
+            new URLSearchParams(window.location.search).get("returning"),
+            "jYYYY-jMM-jDD"
+          ).format("YYYY-MM-DD"),
+          passenger_count: sumPassengerCapacity,
+        };
 
-    console.log( "sent data", json.current );
+    console.log("sent data", json.current);
 
     customAxios
-      .get( `/online/accommodation/get_room_type_prices`, {
+      .get(`/online/accommodation/get_room_type_prices`, {
         params: json.current,
-      } )
-      .then( ( response ) =>
-      {
-        console.log( "response get rooms", response.data );
+      })
+      .then((response) => {
+        console.log("response get rooms", response.data);
         const newData = {
-          Data: response.data.Data.flatMap( ( item: any ) =>
+          Data: response.data.Data.flatMap((item: any) =>
             item.board_type_list
-              ? item.board_type_list.map( ( board: any ) => ( {
-                ...item,
-                board_type_list: board,
-              } ) )
-              : [ item ]
+              ? item.board_type_list.map((board: any) => ({
+                  ...item,
+                  board_type_list: board,
+                }))
+              : [item]
           ),
         };
 
-        console.log( "newRooms", newData );
+        console.log("newRooms", newData);
 
-        setRooms( newData );
-        setShowRoomsLoading( false );
-      } )
-      .catch( ( error ) =>
-      {
-        console.log( error );
-      } );
+        setRooms(newData);
+        setShowRoomsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  useEffect( () =>
-  {
-    console.log( "room lst", rooms );
-  }, [ rooms ] );
+  useEffect(() => {
+    console.log("room lst", rooms);
+  }, [rooms]);
 
-  useEffect( () =>
-  {
-    if ( accommodationId )
-    {
+  useEffect(() => {
+    if (accommodationId) {
       getRooms();
     }
-  }, [ accommodationId ] );
+  }, [accommodationId]);
 
   // handle flight-accommodation selected room
-  const handleAccommodationSelectedRoom = ( room: any ) =>
-  {
+  const handleAccommodationSelectedRoom = (room: any) => {
     const tempRoom = {
       room_type: { ...room },
       ...item,
@@ -461,43 +435,39 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
       },
     };
 
-    console.log( "temproom", tempRoom );
+    console.log("temproom", tempRoom);
 
     let tempExistingRoom = null;
-    const isRoomAlreadyAdded = selectedRooms.some( ( existingItem: any ) =>
-    {
+    const isRoomAlreadyAdded = selectedRooms.some((existingItem: any) => {
       tempExistingRoom = { ...existingItem };
-      delete tempExistingRoom[ "uuid" ];
-      return isEqual( tempExistingRoom, tempRoom );
-    } );
+      delete tempExistingRoom["uuid"];
+      return isEqual(tempExistingRoom, tempRoom);
+    });
 
     if (
       !isRoomAlreadyAdded ||
-      ( isRoomAlreadyAdded &&
+      (isRoomAlreadyAdded &&
         selectedRooms.filter(
-          ( elm: any ) =>
+          (elm: any) =>
             elm.id === tempRoom.id && tempRoom.room_type.id === elm.room_type.id
-        ).length < tempRoom.room_type.capacity.room )
-    )
-    {
-      setSelectedRooms( ( prevItems: any ) => [
+        ).length < tempRoom.room_type.capacity.room)
+    ) {
+      setSelectedRooms((prevItems: any) => [
         ...prevItems,
         { ...tempRoom, uuid: uuidv4() },
-      ] );
-      setCapacitySelectedAccommodation( ( prev: number ) => prev + 1 );
-    } else
-    {
-      setShowAlertDetails( {
+      ]);
+      setCapacitySelectedAccommodation((prev: number) => prev + 1);
+    } else {
+      setShowAlertDetails({
         alertMessage: "اتاق خالی موجود نیست",
         alertType: "error",
         showAlert: true,
-      } );
+      });
     }
   };
 
   // handle flight-accommodation selected room
-  const handleFlightAccommodationSelectedRoom = ( room: any ) =>
-  {
+  const handleFlightAccommodationSelectedRoom = (room: any) => {
     const tempRoom = {
       room_type: { ...room },
       ...item,
@@ -510,244 +480,218 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
     };
 
     let tempExistingRoom = null;
-    const isRoomAlreadyAdded = selectedRooms.some( ( existingItem: any ) =>
-    {
+    const isRoomAlreadyAdded = selectedRooms.some((existingItem: any) => {
       tempExistingRoom = { ...existingItem };
-      delete tempExistingRoom[ "uuid" ];
-      return isEqual( tempExistingRoom, tempRoom );
-    } );
+      delete tempExistingRoom["uuid"];
+      return isEqual(tempExistingRoom, tempRoom);
+    });
 
     const flightCapacity =
       selectedWentFlight && !selectedReturnFlight
         ? wentFlightCapacity
         : selectedReturnFlight && !selectedWentFlight
-          ? returnFlightCapacity
-          : selectedReturnFlight && selectedWentFlight
-            ? Math.min( wentFlightCapacity, returnFlightCapacity )
-            : false;
+        ? returnFlightCapacity
+        : selectedReturnFlight && selectedWentFlight
+        ? Math.min(wentFlightCapacity, returnFlightCapacity)
+        : false;
 
-    console.log( "flightCapacity", flightCapacity );
+    console.log("flightCapacity", flightCapacity);
 
-    if ( flightCapacity )
-    {
-      if ( capacitySelectedAccommodation < flightCapacity )
-      {
+    if (flightCapacity) {
+      if (capacitySelectedAccommodation < flightCapacity) {
         if (
           !isRoomAlreadyAdded ||
-          ( isRoomAlreadyAdded &&
+          (isRoomAlreadyAdded &&
             selectedRooms.filter(
-              ( elm: any ) =>
+              (elm: any) =>
                 elm.id === tempRoom.id &&
                 tempRoom.room_type.id === elm.room_type.id
-            ).length < tempRoom.room_type.capacity.room )
-        )
-        {
-          setSelectedRooms( ( prevItems: any ) => [
+            ).length < tempRoom.room_type.capacity.room)
+        ) {
+          setSelectedRooms((prevItems: any) => [
             ...prevItems,
             { ...tempRoom, uuid: uuidv4() },
-          ] );
-          setCapacitySelectedAccommodation( ( prev: number ) => prev + 1 );
-        } else
-        {
-          setShowAlertDetails( {
+          ]);
+          setCapacitySelectedAccommodation((prev: number) => prev + 1);
+        } else {
+          setShowAlertDetails({
             alertMessage: "اتاق خالی موجود نیست",
             alertType: "error",
             showAlert: true,
-          } );
+          });
         }
-      } else
-      {
-        setShowAlertDetails( {
+      } else {
+        setShowAlertDetails({
           showAlert: true,
           alertType: "error",
           alertMessage:
             "تعداد مسافران خود بیشتر از تعداد ظرفیت بلیت پرواز انتخاب شده میباشد",
-        } );
+        });
       }
-    } else
-    {
+    } else {
       if (
         !isRoomAlreadyAdded ||
-        ( isRoomAlreadyAdded &&
+        (isRoomAlreadyAdded &&
           selectedRooms.filter(
-            ( elm: any ) =>
+            (elm: any) =>
               elm.id === tempRoom.id &&
               tempRoom.room_type.id === elm.room_type.id
-          ).length < tempRoom.room_type.capacity.room )
-      )
-      {
-        setSelectedRooms( ( prevItems: any ) => [
+          ).length < tempRoom.room_type.capacity.room)
+      ) {
+        setSelectedRooms((prevItems: any) => [
           ...prevItems,
           { ...tempRoom, uuid: uuidv4() },
-        ] );
-        setCapacitySelectedAccommodation( ( prev: number ) => prev + 1 );
-      } else
-      {
-        setShowAlertDetails( {
+        ]);
+        setCapacitySelectedAccommodation((prev: number) => prev + 1);
+      } else {
+        setShowAlertDetails({
           alertMessage: "اتاق خالی موجود نیست",
           alertType: "error",
           showAlert: true,
-        } );
+        });
       }
     }
   };
-  useEffect( () =>
-  {
-    console.log( {
+  useEffect(() => {
+    console.log({
       wentFlightCapacity,
       returnFlightCapacity,
       capacitySelectedAccommodation,
-    } );
-  }, [ selectedReturnFlight, selectedWentFlight ] );
+    });
+  }, [selectedReturnFlight, selectedWentFlight]);
   // handle selected room type of search field object
   const selectedRoomFieldObject: {
-    [ key: string ]: ( room: any ) => void;
+    [key: string]: (room: any) => void;
   } = {
     accommodation: handleAccommodationSelectedRoom,
     "flight-accommodation": handleFlightAccommodationSelectedRoom,
   };
 
-  const handleSelectRoom = ( room: any ) =>
-  {
-    selectedRoomFieldObject[ searchType ]( room );
+  const handleSelectRoom = (room: any) => {
+    selectedRoomFieldObject[searchType](room);
   };
 
-  function handleDeleteSelectedRoom ( id: string )
-  {
+  function handleDeleteSelectedRoom(id: string) {
     const roomToDelete = selectedRooms.find(
-      ( element: any ) => element.uuid === id
+      (element: any) => element.uuid === id
     );
 
-    if ( roomToDelete )
-    {
+    if (roomToDelete) {
       const { passengers } = roomToDelete.room_type;
-      const totalToDecrease = ( passengers.adult || 0 ) + ( passengers.child || 0 );
+      const totalToDecrease = (passengers.adult || 0) + (passengers.child || 0);
 
       setCapacitySelectedAccommodation(
-        ( prev: number ) => prev - totalToDecrease
+        (prev: number) => prev - totalToDecrease
       );
     }
 
     const newArray = selectedRooms.filter(
-      ( element: any ) => element.uuid !== id
+      (element: any) => element.uuid !== id
     );
-    setSelectedRooms( newArray );
+    setSelectedRooms(newArray);
   }
 
   // on accommodation
-  const accommodationCreateSearchparams = ( roomList: any ) =>
-  {
+  const accommodationCreateSearchparams = (roomList: any) => {
     return {
       data: roomList,
       system_id: false,
-      messages: JSON.stringify( [] ),
+      messages: JSON.stringify([]),
       time: Date.now(),
     };
   };
 
   // on flight accommodation
-  const flightAccommodationCreateSearchparams = ( roomList: any ) =>
-  {
+  const flightAccommodationCreateSearchparams = (roomList: any) => {
     return {
       data: roomList,
       system_id: false,
-      messages: JSON.stringify( [] ),
+      messages: JSON.stringify([]),
       time: Date.now(),
       wentTicket: selectedWentFlight,
       returnTicket: selectedReturnFlight,
-      departureDate: searchParams.get( "departing" ),
-      returningDate: searchParams.get( "returning" ),
+      departureDate: searchParams.get("departing"),
+      returningDate: searchParams.get("returning"),
     };
   };
 
   const createSearchParamsFieldObject: {
-    [ key: string ]: ( roomList: any ) => any;
+    [key: string]: (roomList: any) => any;
   } = {
     accommodation: accommodationCreateSearchparams,
     "flight-accommodation": flightAccommodationCreateSearchparams,
   };
 
-  const createSearchparams = ( roomList: any ) =>
-  {
-    return createSearchParamsFieldObject[ searchType ]( roomList );
+  const createSearchparams = (roomList: any) => {
+    return createSearchParamsFieldObject[searchType](roomList);
   };
 
-  const setUrl = ( id: string ) =>
-  {
-    router.push( `/accommodation/checkout?factor=${ id }` );
+  const setUrl = (id: string) => {
+    router.push(`/accommodation/checkout?factor=${id}`);
   };
 
-  useEffect( () =>
-  {
-    console.log( "selectedRooms", selectedRooms );
-  }, [ selectedRooms ] );
-  useEffect( () =>
-  {
-    console.log( "addedRooms", addedRooms );
-  }, [] )
+  useEffect(() => {
+    console.log("selectedRooms", selectedRooms);
+  }, [selectedRooms]);
+  useEffect(() => {
+    console.log("addedRooms", addedRooms);
+  }, []);
 
-
-
-  useEffect( () =>
-  {
-    console.log( "capacitySelectedAccommodation", capacitySelectedAccommodation );
-  }, [ capacitySelectedAccommodation ] );
+  useEffect(() => {
+    console.log("capacitySelectedAccommodation", capacitySelectedAccommodation);
+  }, [capacitySelectedAccommodation]);
 
   // handle accommodation checkout page
-  const handleAccommodationCheckout = () =>
-  {
-    onAdd( selectedRooms );
+  const handleAccommodationCheckout = () => {
+    onAdd(selectedRooms);
     closeDialog();
 
-    const local_id = uuidv4().substr( 0, 6 );
-    setUrl( local_id );
+    const local_id = uuidv4().substr(0, 6);
+    setUrl(local_id);
     // const rooms = Object.values(addedRooms).flat();
     const rooms = selectedRooms;
-    const queryParams = createSearchparams( rooms );
+    const queryParams = createSearchparams(rooms);
     // console.log("987987987", searchType);
-    console.log( "addedRooms", addedRooms );
+    console.log("addedRooms", addedRooms);
 
-    console.log( "queryParams", queryParams );
-    console.log( "rooms", rooms );
+    console.log("queryParams", queryParams);
+    console.log("rooms", rooms);
 
-    localStorage.setItem( local_id, JSON.stringify( queryParams ) );
+    localStorage.setItem(local_id, JSON.stringify(queryParams));
   };
 
   // handle flight accommodation checkout page
-  const handleFlightAccommodationCheckout = () =>
-  {
-    if ( selectedWentFlight && selectedReturnFlight )
-    {
-      onAdd( selectedRooms );
+  const handleFlightAccommodationCheckout = () => {
+    if (selectedWentFlight && selectedReturnFlight) {
+      onAdd(selectedRooms);
       closeDialog();
 
-      const local_id = uuidv4().substr( 0, 6 );
-      setUrl( local_id );
+      const local_id = uuidv4().substr(0, 6);
+      setUrl(local_id);
       // const rooms = Object.values(addedRooms).flat();
       const rooms = selectedRooms;
-      const queryParams = createSearchparams( rooms );
+      const queryParams = createSearchparams(rooms);
       // console.log("987987987", searchType);
-      console.log( "addedRooms", addedRooms );
+      console.log("addedRooms", addedRooms);
 
-      console.log( "queryParams", queryParams );
-      console.log( "rooms", rooms );
+      console.log("queryParams", queryParams);
+      console.log("rooms", rooms);
 
-      localStorage.setItem( local_id, JSON.stringify( queryParams ) );
-    } else
-    {
-      onAdd( selectedRooms );
+      localStorage.setItem(local_id, JSON.stringify(queryParams));
+    } else {
+      onAdd(selectedRooms);
       closeDialog();
 
       // console.log("987987987", searchType);
-      console.log( "addedRooms", addedRooms );
+      console.log("addedRooms", addedRooms);
 
-      console.log( "rooms", rooms );
+      console.log("rooms", rooms);
     }
   };
 
   // handle move to checkout page field type object
   const moveToCheckoutPageFieldObject: {
-    [ key: string ]: ( roomList: any ) => void;
+    [key: string]: (roomList: any) => void;
   } = {
     accommodation: handleAccommodationCheckout,
     "flight-accommodation": handleFlightAccommodationCheckout,
@@ -756,81 +700,80 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
   // move to checkout passenger page
   const handleMoveToCheckoutPage = (
     searchType: "accommodation" | "flight-accommodation"
-  ) =>
-  {
-    moveToCheckoutPageFieldObject[ searchType ]( searchType );
+  ) => {
+    moveToCheckoutPageFieldObject[searchType](searchType);
   };
 
   // render on desktop
   const renderDesktop = () => (
     <Dialog
-      open={ openDialog }
+      open={openDialog}
       fullWidth
       // maxWidth="lg"
-      PaperProps={ {
+      PaperProps={{
         sx: { maxWidth: "1100px", width: "100%", maxHeight: 600 },
-      } }
+      }}
     >
-      <DialogTitle className="text-text-primary text-base">{ `اتاق های موجود در اقامتگاه ${ item.title.fa }` }</DialogTitle>
+      <DialogTitle className="text-text-primary text-base">{`اتاق های موجود در اقامتگاه ${item.title.fa}`}</DialogTitle>
       <IconButton
         aria-label="close"
-        onClick={ closeDialog }
-        sx={ ( theme ) => ( {
+        onClick={closeDialog}
+        sx={(theme) => ({
           position: "absolute",
           right: 8,
           top: 8,
-          color: theme.palette.grey[ 500 ],
-        } ) }
+          color: theme.palette.grey[500],
+        })}
       >
         <CloseIcon />
       </IconButton>
-      <DialogContent sx={ { overflowY: "hidden" } }>
+      <DialogContent sx={{ overflowY: "hidden" }}>
         <div className="grid grid-cols-3 gap-8">
           <div className="h-[450px] col-span-2 space-y-3 overflow-y-auto">
-            { rooms.Data
+            {rooms.Data
               ? rooms.Data.sort(
-                ( a: any, b: any ) =>
-                  ( a.board_type_list !== false ? -1 : 1 ) -
-                  ( b.board_type_list !== false ? -1 : 1 )
-              ).map( ( room: any ) => (
-                <RoomItem
-                  key={ room.id }
-                  item={ room }
-                  handleSelectRoom={ handleSelectRoom }
-                  selectedRooms={ selectedRooms }
-                  onDelete={ handleDeleteSelectedRoom }
-                />
-              ) )
-              : Array.from( new Array( 4 ) ).map( ( _, index ) => (
-                <LoadingRoomItem key={ index } />
-              ) ) }
+                  (a: any, b: any) =>
+                    (a.board_type_list !== false ? -1 : 1) -
+                    (b.board_type_list !== false ? -1 : 1)
+                ).map((room: any) => (
+                  <RoomItem
+                    key={room.id}
+                    item={room}
+                    handleSelectRoom={handleSelectRoom}
+                    selectedRooms={selectedRooms}
+                    onDelete={handleDeleteSelectedRoom}
+                  />
+                ))
+              : Array.from(new Array(4)).map((_, index) => (
+                  <LoadingRoomItem key={index} />
+                ))}
           </div>
           <div className="h-[450px] col-span-1 flex flex-col gap-2 bg-main rounded-md p-3 relative">
             <span className="text-text-main font-bold text-sm">
               اتاق های انتخابی
             </span>
-            { selectedRooms.length ? (
+            {selectedRooms.length ? (
               <div className="space-y-3 flex-1 overflow-y-auto overflow-x-hidden">
-                { selectedRooms.map( ( elm: any, index: number ) => (
+                {selectedRooms.map((elm: any, index: number) => (
                   <SelectedRoomItem
-                    key={ elm.uuid }
-                    item={ elm }
-                    index={ index }
-                    fromDate={ accommodationFromDate }
-                    toDate={ accommodationToDate }
-                    onDelete={ handleDeleteSelectedRoom }
-                    selectedRooms={ selectedRooms }
-                    setSelectedRooms={ setSelectedRooms }
+                    key={elm.uuid}
+                    item={elm}
+                    index={index}
+                    fromDate={accommodationFromDate}
+                    toDate={accommodationToDate}
+                    onDelete={handleDeleteSelectedRoom}
+                    selectedRooms={selectedRooms}
+                    setSelectedRooms={setSelectedRooms}
                   />
-                ) ) }
+                ))}
                 <div className="flex items-center justify-between px-5">
                   <span className="text-text-main font-bold text-sm">
                     مجموع
                   </span>
                   <span className="text-text-main font-bold text-sm">
-                    { `${ formatInputWithCommas(
+                    {`${formatInputWithCommas(
                       selectedRooms.reduce(
-                        ( acc, curr ) =>
+                        (acc, curr) =>
                           acc +
                           parseInt(
                             curr.room_type.board_type_list.financial_total
@@ -838,7 +781,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
                           ),
                         0
                       )
-                    ) } ریال` }
+                    )} ریال`}
                   </span>
                 </div>
               </div>
@@ -848,30 +791,29 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
                   loading="lazy"
                   className="object-cover"
                   alt=""
-                  width={ 70 }
-                  height={ 70 }
-                  src={ "/assets/images/accommodationSection/hotel-key.svg" }
+                  width={70}
+                  height={70}
+                  src={"/assets/images/accommodationSection/hotel-key.svg"}
                 />
                 <p className="text-text-main font-bold text-sm">
                   اتاق مورد نظر خود را انتخاب کنید.
                 </p>
               </div>
-            ) }
+            )}
             <Button
               size="large"
               variant="contained"
-              disabled={ !selectedRooms.length }
+              disabled={!selectedRooms.length}
               className="w-full"
-              onClick={ () =>
-              {
+              onClick={() => {
                 handleMoveToCheckoutPage(
                   searchType === "flight-accommodation"
                     ? "flight-accommodation"
                     : "accommodation"
                 );
-              } }
+              }}
             >
-              { !selectedRooms.length ? "افزودن" : "اقدام به رزرو" }
+              {!selectedRooms.length ? "افزودن" : "اقدام به رزرو"}
             </Button>
           </div>
         </div>
@@ -879,58 +821,55 @@ const RoomListDialog: FC<RoomListDialogProps> = ( {
     </Dialog>
   );
 
-  return <>{ renderDesktop() }</>;
+  return <>{renderDesktop()}</>;
 };
 
-const LoadingRoomItem = () =>
-{
+const LoadingRoomItem = () => {
   return (
     <div className="rounded-[15px] py-10 px-16 grid grid-cols-5 border">
       <div className="col-span-4 flex items-center gap-10">
-        <Skeleton variant="rounded" width={ 60 } height={ 60 } />
+        <Skeleton variant="rounded" width={60} height={60} />
         <div className="flex flex-col gap-10">
-          <Skeleton variant="rounded" height={ 5 } width="80%" />
+          <Skeleton variant="rounded" height={5} width="80%" />
           <div className="flex items-center gap-3">
-            <Skeleton variant="rounded" width={ 60 } height={ 15 } />
-            <Skeleton variant="rounded" width={ 70 } height={ 15 } />
+            <Skeleton variant="rounded" width={60} height={15} />
+            <Skeleton variant="rounded" width={70} height={15} />
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-8 col-span-1">
-        <Skeleton variant="rounded" height={ 5 } width="80%" />
-        <Skeleton variant="rounded" width={ "100%" } height={ 30 } />
+        <Skeleton variant="rounded" height={5} width="80%" />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
       </div>
     </div>
   );
 };
 
-interface RoomItemProps
-{
+interface RoomItemProps {
   item: any;
   handleSelectRoom: any;
   selectedRooms: any;
   onDelete: any;
 }
 
-const RoomItem: FC<RoomItemProps> = ( {
+const RoomItem: FC<RoomItemProps> = ({
   item,
   handleSelectRoom,
   selectedRooms,
   onDelete,
-} ) =>
-{
-  const isMDUp = useMediaQuery( ( theme: any ) => theme.breakpoints.up( "md" ) );
-  const from = new URLSearchParams( window.location.search ).get( "checkin_date" );
-  const to = new URLSearchParams( window.location.search ).get( "checkout_date" );
+}) => {
+  const isMDUp = useMediaQuery((theme: any) => theme.breakpoints.up("md"));
+  const from = new URLSearchParams(window.location.search).get("checkin_date");
+  const to = new URLSearchParams(window.location.search).get("checkout_date");
   const { accommodationPassengersCapacity } =
     useGlobalContext().accommodationContext.accommodationSearch;
   const isSelected = selectedRooms.some(
-    ( elm: any ) =>
+    (elm: any) =>
       elm.room_type.id === item.id &&
       elm.room_type.board_type_list.id === item.board_type_list.id
   );
   const selectedNumber = selectedRooms.filter(
-    ( elm: any ) =>
+    (elm: any) =>
       elm.room_type.id === item.id &&
       elm.room_type.board_type_list.id === item.board_type_list.id
   ).length;
@@ -940,18 +879,18 @@ const RoomItem: FC<RoomItemProps> = ( {
       <div className="w-full col-span-2 md:col-span-3 flex items-center gap-2">
         <Image
           className="object-cover"
-          width={ 80 }
-          height={ 80 }
+          width={80}
+          height={80}
           alt=""
-          src={ "/assets/images/accommodationSection/roombed.svg" }
+          src={"/assets/images/accommodationSection/roombed.svg"}
         />
         <div className="flex-1 grid grid-cols-1 gap-3">
-          <Tooltip title={ item.title.fa }>
+          <Tooltip title={item.title.fa}>
             <span className="block text-text-primary text-sm font-semibold truncate w-full">
-              { item.title.fa }
+              {item.title.fa}
             </span>
           </Tooltip>
-          { item.board_type_list && (
+          {item.board_type_list && (
             <div className="flex items-center justify-start">
               <Chip
                 label={
@@ -964,51 +903,50 @@ const RoomItem: FC<RoomItemProps> = ( {
                 {item.board_type_list.title.fa || item.board_type_list.title.en}
               </span> */}
             </div>
-          ) }
+          )}
         </div>
       </div>
       <div className="col-span-1 flex flex-col items-center justify-center gap-2">
-        { item.board_type_list && (
+        {item.board_type_list && (
           <span className="text-sm text-text-main">
-            { isSelected
+            {isSelected
               ? "تعداد اتاق"
-              : `قیمت برای ${ calculateNights( from, to, "jYYYY-jMM-jDD" ) } شب` }
+              : `قیمت برای ${calculateNights(from, to, "jYYYY-jMM-jDD")} شب`}
           </span>
-        ) }
-        { isSelected ? (
+        )}
+        {isSelected ? (
           <div className="w-full flex items-center justify-between">
             <Button
               size="small"
               variant="contained"
               className=""
-              onClick={ () =>
-                handleSelectRoom( {
+              onClick={() =>
+                handleSelectRoom({
                   ...item,
                   passengers: {
                     adult: 1,
                     child: 0,
                   },
-                } )
+                })
               }
             >
               <AddIcon />
             </Button>
-            <span className="text-sm text-text-main">{ `${ selectedNumber } اتاق` }</span>
+            <span className="text-sm text-text-main">{`${selectedNumber} اتاق`}</span>
             <Button
               size="small"
               variant="contained"
-              onClick={ () =>
-              {
+              onClick={() => {
                 onDelete(
                   selectedRooms.find(
-                    ( elm: any ) =>
+                    (elm: any) =>
                       elm.room_type.id === item.id &&
                       elm.room_type.board_type_list.id ===
-                      item.board_type_list.id
+                        item.board_type_list.id
                   ).uuid
                 );
-              } }
-              disabled={ selectedNumber == 1 }
+              }}
+              disabled={selectedNumber == 1}
             >
               <RemoveIcon />
             </Button>
@@ -1018,36 +956,35 @@ const RoomItem: FC<RoomItemProps> = ( {
             variant="contained"
             size="small"
             className="rounded-lg"
-            disabled={ !item.board_type_list }
-            onClick={ () =>
-              handleSelectRoom( {
+            disabled={!item.board_type_list}
+            onClick={() =>
+              handleSelectRoom({
                 ...item,
                 passengers: {
                   adult: 1,
                   child: 0,
                 },
-              } )
+              })
             }
           >
-            { item.board_type_list ? (
+            {item.board_type_list ? (
               <>
-                { formatInputWithCommas(
-                  parseInt( item.board_type_list.financial_total.net_price )
-                ) }
+                {formatInputWithCommas(
+                  parseInt(item.board_type_list.financial_total.net_price)
+                )}
                 &nbsp;<span className="text-[11px]">ریال</span>
               </>
             ) : (
               "تکمیل ظرفیت"
-            ) }
+            )}
           </Button>
-        ) }
+        )}
       </div>
     </div>
   );
 };
 
-interface SelectedRoomItemProps
-{
+interface SelectedRoomItemProps {
   item: any;
   fromDate: any;
   toDate: any;
@@ -1056,7 +993,7 @@ interface SelectedRoomItemProps
   selectedRooms: any;
   setSelectedRooms: any;
 }
-const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
+const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
   item,
   fromDate,
   toDate,
@@ -1064,8 +1001,7 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
   onDelete,
   selectedRooms,
   setSelectedRooms,
-} ) =>
-{
+}) => {
   // initial states
   const {
     setCapacitySelectedAccommodation,
@@ -1078,149 +1014,133 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
   const { searchType, setShowAlertDetails } = useGlobalContext().global;
 
   // handle add passenger accommodation type
-  const handleAccommodationAddPassenger = ( ageCategory: "child" | "adult" ) =>
-  {
-    setSelectedRooms( ( prevRooms: any[] ) =>
-      prevRooms.map( ( room, index ) =>
-      {
-        if ( room.uuid === item.uuid )
-        {
+  const handleAccommodationAddPassenger = (ageCategory: "child" | "adult") => {
+    setSelectedRooms((prevRooms: any[]) =>
+      prevRooms.map((room, index) => {
+        if (room.uuid === item.uuid) {
           return {
             ...room,
             room_type: {
               ...room.room_type,
               passengers: {
                 ...room.room_type.passengers,
-                [ ageCategory ]: room.room_type.passengers[ ageCategory ] + 1,
+                [ageCategory]: room.room_type.passengers[ageCategory] + 1,
               },
             },
           };
         }
         return room;
-      } )
+      })
     );
   };
 
   // handle add passenger flight accommodation type
   const handleFlightAccommodationAddPassenger = (
     ageCategory: "child" | "adult"
-  ) =>
-  {
+  ) => {
     const flightCapacity =
       selectedWentFlight && !selectedReturnFlight
         ? wentFlightCapacity
         : selectedReturnFlight && !selectedWentFlight
-          ? returnFlightCapacity
-          : selectedReturnFlight && selectedWentFlight
-            ? Math.min( wentFlightCapacity, returnFlightCapacity )
-            : false;
-    if ( flightCapacity )
-    {
-      if ( capacitySelectedAccommodation < flightCapacity )
-      {
-        setCapacitySelectedAccommodation( ( prev: number ) => prev + 1 );
-        setSelectedRooms( ( prevRooms: any[] ) =>
-          prevRooms.map( ( room, index ) =>
-          {
-            if ( room.uuid === item.uuid )
-            {
+        ? returnFlightCapacity
+        : selectedReturnFlight && selectedWentFlight
+        ? Math.min(wentFlightCapacity, returnFlightCapacity)
+        : false;
+    if (flightCapacity) {
+      if (capacitySelectedAccommodation < flightCapacity) {
+        setCapacitySelectedAccommodation((prev: number) => prev + 1);
+        setSelectedRooms((prevRooms: any[]) =>
+          prevRooms.map((room, index) => {
+            if (room.uuid === item.uuid) {
               return {
                 ...room,
                 room_type: {
                   ...room.room_type,
                   passengers: {
                     ...room.room_type.passengers,
-                    [ ageCategory ]: room.room_type.passengers[ ageCategory ] + 1,
+                    [ageCategory]: room.room_type.passengers[ageCategory] + 1,
                   },
                 },
               };
             }
             return room;
-          } )
+          })
         );
-      } else
-      {
-        setShowAlertDetails( {
+      } else {
+        setShowAlertDetails({
           showAlert: true,
           alertType: "error",
           alertMessage:
             "تعداد مسافران خود بیشتر از تعداد ظرفیت بلیت پرواز انتخاب شده میباشد",
-        } );
+        });
       }
-    } else
-    {
-      setCapacitySelectedAccommodation( ( prev: number ) => prev + 1 );
-      setSelectedRooms( ( prevRooms: any[] ) =>
-        prevRooms.map( ( room, index ) =>
-        {
-          if ( room.uuid === item.uuid )
-          {
+    } else {
+      setCapacitySelectedAccommodation((prev: number) => prev + 1);
+      setSelectedRooms((prevRooms: any[]) =>
+        prevRooms.map((room, index) => {
+          if (room.uuid === item.uuid) {
             return {
               ...room,
               room_type: {
                 ...room.room_type,
                 passengers: {
                   ...room.room_type.passengers,
-                  [ ageCategory ]: room.room_type.passengers[ ageCategory ] + 1,
+                  [ageCategory]: room.room_type.passengers[ageCategory] + 1,
                 },
               },
             };
           }
           return room;
-        } )
+        })
       );
     }
   };
 
   // handle add passengers search type field
   const addPassengersFieldObject: {
-    [ key: string ]: ( ageCategory: "child" | "adult" ) => void;
+    [key: string]: (ageCategory: "child" | "adult") => void;
   } = {
     accommodation: handleAccommodationAddPassenger,
     "flight-accommodation": handleFlightAccommodationAddPassenger,
   };
 
   // handle add room passengers
-  const handleAddRoomPassengers = ( ageCategory: "child" | "adult" ) =>
-  {
-    addPassengersFieldObject[ searchType ]( ageCategory );
+  const handleAddRoomPassengers = (ageCategory: "child" | "adult") => {
+    addPassengersFieldObject[searchType](ageCategory);
   };
   // handle delete room passengers
-  const handleDeleteRoomPassengers = ( ageCategory: string ) =>
-  {
-    setCapacitySelectedAccommodation( ( prev: number ) => prev - 1 );
-    setSelectedRooms( ( prevRooms: any[] ) =>
-      prevRooms.map( ( room, index ) =>
-      {
-        if ( room.uuid === item.uuid )
-        {
+  const handleDeleteRoomPassengers = (ageCategory: string) => {
+    setCapacitySelectedAccommodation((prev: number) => prev - 1);
+    setSelectedRooms((prevRooms: any[]) =>
+      prevRooms.map((room, index) => {
+        if (room.uuid === item.uuid) {
           return {
             ...room,
             room_type: {
               ...room.room_type,
               passengers: {
                 ...room.room_type.passengers,
-                [ ageCategory ]: room.room_type.passengers[ ageCategory ] - 1,
+                [ageCategory]: room.room_type.passengers[ageCategory] - 1,
               },
             },
           };
         }
         return room;
-      } )
+      })
     );
   };
   return (
     <div className="w-full rounded-md border border-primary-main divide-y divide-primary-main">
       <div className="flex items-center justify-between p-1 px-3">
         <div className="rounded-full py-2 text-text-primary font-medium text-xs whitespace-nowrap">
-          { `اتاق ${ index + 1 }` }
+          {`اتاق ${index + 1}`}
         </div>
-        <Tooltip title={ item.room_type.title.fa }>
+        <Tooltip title={item.room_type.title.fa}>
           <span className="text-text-primary font-bold text-[14px] truncate">
-            { item.room_type.title.fa }
+            {item.room_type.title.fa}
           </span>
         </Tooltip>
-        <IconButton onClick={ () => onDelete( item.uuid ) }>
+        <IconButton onClick={() => onDelete(item.uuid)}>
           <CloseIcon className="text-primary-main" fontSize="small" />
         </IconButton>
       </div>
@@ -1230,7 +1150,7 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
             <PeopleAltOutlinedIcon fontSize="small" />
             <div className="flex items-center justify-center gap-1">
               <IconButton
-                onClick={ () => handleAddRoomPassengers( "adult" ) }
+                onClick={() => handleAddRoomPassengers("adult")}
                 disabled={
                   item.room_type.passengers.adult ===
                   item.room_type.capacity.adult
@@ -1241,11 +1161,11 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
                 <AddOutlinedIcon fontSize="small" />
               </IconButton>
               <span className="text-sm text-text-main">
-                { item.room_type.passengers.adult }
+                {item.room_type.passengers.adult}
               </span>
               <IconButton
-                onClick={ () => handleDeleteRoomPassengers( "adult" ) }
-                disabled={ item.room_type.passengers.adult === 1 }
+                onClick={() => handleDeleteRoomPassengers("adult")}
+                disabled={item.room_type.passengers.adult === 1}
                 size="small"
                 color="primary"
               >
@@ -1257,10 +1177,9 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
             <ChildCareOutlinedIcon fontSize="small" />
             <div className="flex items-center justify-center gap-1">
               <IconButton
-                onClick={ () =>
-                {
-                  handleAddRoomPassengers( "child" );
-                } }
+                onClick={() => {
+                  handleAddRoomPassengers("child");
+                }}
                 disabled={
                   item.room_type.passengers.child ===
                   item.room_type.capacity.child
@@ -1271,20 +1190,19 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
                 <AddOutlinedIcon fontSize="small" />
               </IconButton>
               <span className="text-sm text-text-main">
-                { item.room_type.passengers.child }
+                {item.room_type.passengers.child}
               </span>
               <IconButton
-                onClick={ () =>
-                {
-                  handleDeleteRoomPassengers( "child" );
-                } }
-                disabled={ item.room_type.passengers.child === 0 }
+                onClick={() => {
+                  handleDeleteRoomPassengers("child");
+                }}
+                disabled={item.room_type.passengers.child === 0}
                 size="small"
                 color="primary"
               >
                 <RemoveOutlinedIcon fontSize="small" />
               </IconButton>
-            </div>{ " " }
+            </div>{" "}
           </div>
         </div>
         <div className="flex items-center justify-center gap-2">
@@ -1292,12 +1210,12 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ( {
             {/* {`${NumberToPersianWordMin.convert(
             calculateNights(fromDate, toDate, "YYYY-MM-DD")
           )} شب اقامت`} */}
-            {/* 3 شب{" "} */ }
+            {/* 3 شب{" "} */}
           </span>
           <span className="text-text-main font-bold text-sm">
-            { `${ formatInputWithCommas(
-              parseInt( item.room_type.board_type_list.financial_total.net_price )
-            ) } ریال` }
+            {`${formatInputWithCommas(
+              parseInt(item.room_type.board_type_list.financial_total.net_price)
+            )} ریال`}
           </span>
         </div>
       </div>
