@@ -5,10 +5,11 @@ import FlightIcon from "@mui/icons-material/Flight";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import SectionGridFilterCard from "@/components/FlightSection/Flight-listing/SectionGridFilterCard";
 import AccommodationListContainer from "@/components/AccommodationSection/accommodation/listing/AccommodationListContainer";
+import { useGlobalContext } from "@/context/store";
 const FlightAccommodationContainer = () => {
   // initial states
-  const [searchListTab, setSearchListTab] = useState<string>("flight");
-
+  const { searchListTab, setSearchListTab } =
+    useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
   // handle change search list tab
   const handleChangeSearchListTab = (
     event: React.MouseEvent<HTMLElement>,

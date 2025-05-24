@@ -343,6 +343,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     setCapacitySelectedAccommodation,
     wentFlightCapacity,
     returnFlightCapacity,
+    setSearchListTab,
   } = useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
   const { selectedReturnFlight, selectedWentFlight } =
     useGlobalContext().flightContext.searchContext;
@@ -693,7 +694,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     } else {
       onAdd(selectedRooms);
       closeDialog();
-
+      setSearchListTab("accommodation");
       // console.log("987987987", searchType);
       console.log("addedRooms", addedRooms);
 
@@ -825,7 +826,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
                 );
               }}
             >
-              {!selectedRooms.length ? "افزودن" : "اقدام به رزرو"}
+              {!selectedRooms.length ? "افزودن" : "ادامه فرآیند رزرو"}
             </Button>
           </div>
         </div>

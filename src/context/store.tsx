@@ -195,6 +195,8 @@ interface ContextProps {
       setReturnFlightCapacity: Dispatch<SetStateAction<number>>;
       capacitySelectedAccommodation: number;
       setCapacitySelectedAccommodation: Dispatch<SetStateAction<number>>;
+      searchListTab: string;
+      setSearchListTab: Dispatch<SetStateAction<string>>;
     };
   };
 }
@@ -328,6 +330,8 @@ const GlobalContext = createContext<ContextProps>({
       setReturnFlightCapacity: () => {},
       capacitySelectedAccommodation: 0,
       setCapacitySelectedAccommodation: () => {},
+      searchListTab: "flight",
+      setSearchListTab: () => {},
     },
   },
 });
@@ -449,6 +453,7 @@ export const GlobalContextProvider = ({
   const [returnFlightCapacity, setReturnFlightCapacity] = useState<number>(0);
   const [capacitySelectedAccommodation, setCapacitySelectedAccommodation] =
     useState<number>(0);
+  const [searchListTab, setSearchListTab] = useState<string>("flight");
   //
 
   // handle error boundary
@@ -585,6 +590,8 @@ export const GlobalContextProvider = ({
                 setReturnFlightCapacity,
                 capacitySelectedAccommodation,
                 setCapacitySelectedAccommodation,
+                searchListTab,
+                setSearchListTab,
               },
             },
           }}

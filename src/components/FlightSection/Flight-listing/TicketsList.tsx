@@ -471,6 +471,8 @@ const TicketCard: FC<TicketCardProps> = ({
     capacitySelectedAccommodation,
     setWentFlightCapacity,
     setReturnFlightCapacity,
+    searchListTab,
+    setSearchListTab,
   } = useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -559,6 +561,8 @@ const TicketCard: FC<TicketCardProps> = ({
             const local_id = uuidv4().substr(0, 6);
             localStorage.setItem(local_id, JSON.stringify(queryParams));
             router.push(`/accommodation/checkout?factor=${local_id}` as Route);
+          } else {
+            setFlightTab(2);
           }
         } else {
           setReturnFlightCapacity(Number(data.Classes.AvailableSeat));
@@ -573,6 +577,8 @@ const TicketCard: FC<TicketCardProps> = ({
             const local_id = uuidv4().substr(0, 6);
             localStorage.setItem(local_id, JSON.stringify(queryParams));
             router.push(`/accommodation/checkout?factor=${local_id}` as Route);
+          } else {
+            setFlightTab(1);
           }
         }
       } else {
@@ -588,10 +594,20 @@ const TicketCard: FC<TicketCardProps> = ({
         setWentFlightCapacity(Number(data.Classes.AvailableSeat));
         toggleOpenDetailsDrawer(false);
         setSelectedWentFlight(data);
+        if (selectedReturnFlight) {
+          setSearchListTab("accommodation");
+        } else {
+          setFlightTab(2);
+        }
       } else {
         setReturnFlightCapacity(Number(data.Classes.AvailableSeat));
         toggleOpenDetailsDrawer(false);
         setSelectedReturnFlight(data);
+        if (selectedWentFlight) {
+          setSearchListTab("accommodation");
+        } else {
+          setFlightTab(1);
+        }
       }
     }
   };
