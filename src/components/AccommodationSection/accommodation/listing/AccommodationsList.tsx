@@ -742,7 +742,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       </IconButton>
       <DialogContent sx={{ overflowY: "hidden" }}>
         <div className="grid grid-cols-3 gap-8">
-          <div className="h-[450px] col-span-2 space-y-3 overflow-y-auto bg-rose-500">
+          <div className="h-[450px] col-span-2 space-y-3 overflow-y-auto">
             {!showRoomsLoading ? (
               rooms.Data.length > 0 ? (
                 rooms.Data.sort(
