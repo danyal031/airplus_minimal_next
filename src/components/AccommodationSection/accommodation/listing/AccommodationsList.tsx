@@ -499,6 +499,11 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       return isEqual(tempExistingRoom, tempRoom);
     });
 
+    const currentHotelId = tempRoom.id;
+
+    const isDifferentHotel =
+      selectedRooms.length > 0 && selectedRooms[0].id !== currentHotelId;
+
     const flightCapacity =
       selectedWentFlight && !selectedReturnFlight
         ? wentFlightCapacity
@@ -521,11 +526,16 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
                 tempRoom.room_type.id === elm.room_type.id
             ).length < tempRoom.room_type.capacity.room)
         ) {
-          setSelectedRooms((prevItems: any) => [
-            ...prevItems,
-            { ...tempRoom, uuid: uuidv4() },
-          ]);
-          setCapacitySelectedAccommodation((prev: number) => prev + 1);
+          if (isDifferentHotel) {
+            setSelectedRooms([{ ...tempRoom, uuid: uuidv4() }]);
+            setCapacitySelectedAccommodation(1);
+          } else {
+            setSelectedRooms((prevItems: any) => [
+              ...prevItems,
+              { ...tempRoom, uuid: uuidv4() },
+            ]);
+            setCapacitySelectedAccommodation((prev: number) => prev + 1);
+          }
         } else {
           setShowAlertDetails({
             alertMessage: "اتاق خالی موجود نیست",
@@ -551,11 +561,16 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
               tempRoom.room_type.id === elm.room_type.id
           ).length < tempRoom.room_type.capacity.room)
       ) {
-        setSelectedRooms((prevItems: any) => [
-          ...prevItems,
-          { ...tempRoom, uuid: uuidv4() },
-        ]);
-        setCapacitySelectedAccommodation((prev: number) => prev + 1);
+        if (isDifferentHotel) {
+          setSelectedRooms([{ ...tempRoom, uuid: uuidv4() }]);
+          setCapacitySelectedAccommodation(1);
+        } else {
+          setSelectedRooms((prevItems: any) => [
+            ...prevItems,
+            { ...tempRoom, uuid: uuidv4() },
+          ]);
+          setCapacitySelectedAccommodation((prev: number) => prev + 1);
+        }
       } else {
         setShowAlertDetails({
           alertMessage: "اتاق خالی موجود نیست",
@@ -565,6 +580,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       }
     }
   };
+
   useEffect(() => {
     console.log({
       wentFlightCapacity,
@@ -572,6 +588,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       capacitySelectedAccommodation,
     });
   }, [selectedReturnFlight, selectedWentFlight]);
+
   // handle selected room type of search field object
   const selectedRoomFieldObject: {
     [key: string]: (room: any) => void;
