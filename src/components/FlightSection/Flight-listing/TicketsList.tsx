@@ -1071,6 +1071,40 @@ const TicketCard: FC<TicketCardProps> = ({
                 {expandMoreTicket &&
                   itemGroup.slice(1).map((subItem, subIndex) => (
                     <div className="flex flex-col items-center justify-center gap-2">
+                      {subItem.Classes.BaseData.Financial.Adult.Markup.discount
+                        .percent !== 0 &&
+                        subItem.Classes.AvailableSeat &&
+                        subItem.Classes.BaseData.Financial.Adult.Markup
+                          .final !== 0 && (
+                          <div className="flex items-center justify-center gap-3">
+                            <div className="flex items-center justify-center gap-0">
+                              <span
+                                className="text-sm"
+                                style={{
+                                  textDecoration: "line-through",
+                                  color: "#888",
+                                }}
+                              >
+                                {formatInputWithCommas(
+                                  subItem.Classes.BaseData.Financial.Adult
+                                    .Markup.discount.base_fare / 10
+                                )}
+                              </span>
+                              {/* <Toman
+                            height={15}
+                            width={15}
+                            className="text-[#888]"
+                          /> */}
+                            </div>
+                            <span className="text-sm text-[#888]">
+                              %
+                              {
+                                subItem.Classes.BaseData.Financial.Adult.Markup
+                                  .discount.percent
+                              }
+                            </span>
+                          </div>
+                        )}
                       <Button
                         disabled={
                           !subItem.Classes.AvailableSeat ||
