@@ -327,7 +327,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
 }) => {
   // initial states
   const [rooms, setRooms] = useState<any>([]);
-  const [showRoomsLoading, setShowRoomsLoading] = useState<boolean>(false);
+  const [showRoomsLoading, setShowRoomsLoading] = useState<boolean>(true);
   const [selectedRooms, setSelectedRooms] = useState(addedRooms);
   const {
     accommodationFromDate,
@@ -742,9 +742,10 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       </IconButton>
       <DialogContent sx={{ overflowY: "hidden" }}>
         <div className="grid grid-cols-3 gap-8">
-          <div className="h-[450px] col-span-2 space-y-3 overflow-y-auto">
-            {rooms.Data
-              ? rooms.Data.sort(
+          <div className="h-[450px] col-span-2 space-y-3 overflow-y-auto bg-rose-500">
+            {!showRoomsLoading ? (
+              rooms.Data.length > 0 ? (
+                rooms.Data.sort(
                   (a: any, b: any) =>
                     (a.board_type_list !== false ? -1 : 1) -
                     (b.board_type_list !== false ? -1 : 1)
@@ -757,9 +758,16 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
                     onDelete={handleDeleteSelectedRoom}
                   />
                 ))
-              : Array.from(new Array(4)).map((_, index) => (
-                  <LoadingRoomItem key={index} />
-                ))}
+              ) : (
+                <div className="text-text-main font-semibold text-lg h-full flex items-center justify-center">
+                  <span> اتاقی جهت نمایش موجود نیست</span>
+                </div>
+              )
+            ) : (
+              Array.from(new Array(4)).map((_, index) => (
+                <LoadingRoomItem key={index} />
+              ))
+            )}
           </div>
           <div className="h-[450px] col-span-1 flex flex-col gap-2 bg-main rounded-md p-3 relative">
             <span className="text-text-main font-bold text-sm">
