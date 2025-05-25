@@ -998,9 +998,43 @@ const TicketCard: FC<TicketCardProps> = ({
             </div>
           </div>
           <div className="p-2 col-span-1 border-dashed border-r-2 border-paper flex items-center justify-center">
-            <div className="flex items-start justify-center gap-2">
+            <div className="flex items-start justify-start gap-2 min-w-40">
               <div className="flex flex-col items-center justify-center gap-4">
                 <div className="flex flex-col items-center justify-center gap-2">
+                  {data.Classes.BaseData.Financial.Adult.Markup.discount
+                    .percent !== 0 &&
+                    data.Classes.AvailableSeat &&
+                    data.Classes.BaseData.Financial.Adult.Markup.final !==
+                      0 && (
+                      <div className="flex items-center justify-center gap-3">
+                        <div className="flex items-center justify-center gap-0">
+                          <span
+                            className="text-sm"
+                            style={{
+                              textDecoration: "line-through",
+                              color: "#888",
+                            }}
+                          >
+                            {formatInputWithCommas(
+                              data.Classes.BaseData.Financial.Adult.Markup
+                                .discount.base_fare / 10
+                            )}
+                          </span>
+                          {/* <Toman
+                            height={15}
+                            width={15}
+                            className="text-[#888]"
+                          /> */}
+                        </div>
+                        <span className="text-sm text-[#888]">
+                          %
+                          {
+                            data.Classes.BaseData.Financial.Adult.Markup
+                              .discount.percent
+                          }
+                        </span>
+                      </div>
+                    )}
                   <Button
                     disabled={
                       !data.Classes.AvailableSeat ||

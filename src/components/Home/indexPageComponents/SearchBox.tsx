@@ -268,7 +268,7 @@ const SearchBoxOnMobile: FC<SearchBoxOnMobileProps> = ({ config }) => {
   const renderForm = () => {
     switch (tabValueSearchBox) {
       case "1":
-        return <FlightSearchForm />;
+        return <FlightSearchForm type="flight" />;
       // case "2":
       //   return <ResidenceSearchFormOnDesktop />;
       default:

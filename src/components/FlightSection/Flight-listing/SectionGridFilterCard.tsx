@@ -146,7 +146,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ action }) => {
     const destination = searchParams.get("destination") as string;
 
     const departureParam = searchParams.get("departing");
-    const returningParam = searchParams.get("departing");
+    const returningParam = searchParams.get("returning");
 
     const departure_date = departureParam
       ? formatDateWithSlash(departureParam)
