@@ -397,6 +397,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
             item.board_type_list
               ? item.board_type_list.map((board: any) => ({
                   ...item,
+                  uuid: uuidv4(),
                   board_type_list: board,
                 }))
               : [item]
@@ -457,7 +458,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
       (isRoomAlreadyAdded &&
         selectedRooms.filter(
           (elm: any) =>
-            elm.id === tempRoom.id && tempRoom.room_type.id === elm.room_type.id
+            elm.id === tempRoom.id &&
+            tempRoom.room_type.uuid === elm.room_type.uuid
         ).length < tempRoom.room_type.capacity.room)
     ) {
       if (isDifferentHotel) {
@@ -523,7 +525,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
             selectedRooms.filter(
               (elm: any) =>
                 elm.id === tempRoom.id &&
-                tempRoom.room_type.id === elm.room_type.id
+                tempRoom.room_type.uuid === elm.room_type.uuid
             ).length < tempRoom.room_type.capacity.room)
         ) {
           if (isDifferentHotel) {
@@ -558,7 +560,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
           selectedRooms.filter(
             (elm: any) =>
               elm.id === tempRoom.id &&
-              tempRoom.room_type.id === elm.room_type.id
+              tempRoom.room_type.uuid === elm.room_type.uuid
           ).length < tempRoom.room_type.capacity.room)
       ) {
         if (isDifferentHotel) {
@@ -903,12 +905,12 @@ const RoomItem: FC<RoomItemProps> = ({
     useGlobalContext().accommodationContext.accommodationSearch;
   const isSelected = selectedRooms.some(
     (elm: any) =>
-      elm.room_type.id === item.id &&
+      elm.room_type.uuid === item.uuid &&
       elm.room_type.board_type_list.id === item.board_type_list.id
   );
   const selectedNumber = selectedRooms.filter(
     (elm: any) =>
-      elm.room_type.id === item.id &&
+      elm.room_type.uuid === item.uuid &&
       elm.room_type.board_type_list.id === item.board_type_list.id
   ).length;
 
@@ -978,7 +980,7 @@ const RoomItem: FC<RoomItemProps> = ({
                 onDelete(
                   selectedRooms.find(
                     (elm: any) =>
-                      elm.room_type.id === item.id &&
+                      elm.room_type.uuid === item.uuid &&
                       elm.room_type.board_type_list.id ===
                         item.board_type_list.id
                   ).uuid
