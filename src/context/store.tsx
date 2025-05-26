@@ -127,6 +127,10 @@ interface ContextProps {
       setAllowToSearchFlight: Dispatch<SetStateAction<boolean>>;
       isFlightSearching: boolean;
       setIsFlightSearching: Dispatch<SetStateAction<boolean>>;
+      suggestedFlights: FlightTicketDataType[] | [];
+      setSuggestedFlights: Dispatch<
+        SetStateAction<FlightTicketDataType[] | []>
+      >;
     };
     flightFilterContext: {
       flightFilter: any;
@@ -185,6 +189,10 @@ interface ContextProps {
       setSelectedRooms: Dispatch<SetStateAction<any>>;
       addedRooms: any;
       setAddedRooms: Dispatch<SetStateAction<any>>;
+      suggestedAccommodations: AccommodationsListDataType[] | [];
+      setSuggestedAccommodations: Dispatch<
+        SetStateAction<AccommodationsListDataType[] | []>
+      >;
     };
   };
   flightAccommodationContext: {
@@ -197,6 +205,12 @@ interface ContextProps {
       setCapacitySelectedAccommodation: Dispatch<SetStateAction<number>>;
       searchListTab: string;
       setSearchListTab: Dispatch<SetStateAction<string>>;
+      numberStars: number;
+      setNumberStars: Dispatch<SetStateAction<number>>;
+      flightOnlyCharters: boolean;
+      setFlightOnlyCharters: Dispatch<SetStateAction<boolean>>;
+      accommodationOnlyCharters: boolean;
+      setAccommodationOnlyCharters: Dispatch<SetStateAction<boolean>>;
     };
   };
 }
@@ -271,6 +285,8 @@ const GlobalContext = createContext<ContextProps>({
       setAllowToSearchFlight: () => {},
       isFlightSearching: false,
       setIsFlightSearching: () => {},
+      suggestedFlights: [],
+      setSuggestedFlights: () => {},
     },
     flightFilterContext: {
       flightFilter: {
@@ -320,6 +336,8 @@ const GlobalContext = createContext<ContextProps>({
       setSelectedRooms: () => {},
       addedRooms: [],
       setAddedRooms: () => {},
+      suggestedAccommodations: [],
+      setSuggestedAccommodations: () => {},
     },
   },
   flightAccommodationContext: {
@@ -332,6 +350,12 @@ const GlobalContext = createContext<ContextProps>({
       setCapacitySelectedAccommodation: () => {},
       searchListTab: "flight",
       setSearchListTab: () => {},
+      numberStars: 5,
+      setNumberStars: () => {},
+      flightOnlyCharters: false,
+      setFlightOnlyCharters: () => {},
+      accommodationOnlyCharters: false,
+      setAccommodationOnlyCharters: () => {},
     },
   },
 });
@@ -412,6 +436,9 @@ export const GlobalContextProvider = ({
   const [allowToSearchFlight, setAllowToSearchFlight] =
     useState<boolean>(false);
   const [isFlightSearching, setIsFlightSearching] = useState<boolean>(false);
+  const [suggestedFlights, setSuggestedFlights] = useState<
+    FlightTicketDataType[] | []
+  >([]);
   // search Accommodation
   const [accommodationFromDate, setAccommodationFromDate] = useState<
     string | null
@@ -448,12 +475,19 @@ export const GlobalContextProvider = ({
   >([]);
   const [selectedRooms, setSelectedRooms] = useState<any>({});
   const [addedRooms, setAddedRooms] = useState<any>([]);
+  const [suggestedAccommodations, setSuggestedAccommodations] = useState<
+    AccommodationsListDataType[] | []
+  >([]);
   //flight accommodation search
   const [wentFlightCapacity, setWentFlightCapacity] = useState<number>(0);
   const [returnFlightCapacity, setReturnFlightCapacity] = useState<number>(0);
   const [capacitySelectedAccommodation, setCapacitySelectedAccommodation] =
     useState<number>(0);
   const [searchListTab, setSearchListTab] = useState<string>("flight");
+  const [numberStars, setNumberStars] = useState<number>(5);
+  const [flightOnlyCharters, setFlightOnlyCharters] = useState<boolean>(false);
+  const [accommodationOnlyCharters, setAccommodationOnlyCharters] =
+    useState<boolean>(false);
   //
 
   // handle error boundary
@@ -536,6 +570,8 @@ export const GlobalContextProvider = ({
                 setAllowToSearchFlight,
                 isFlightSearching,
                 setIsFlightSearching,
+                suggestedFlights,
+                setSuggestedFlights,
               },
               flightFilterContext: {
                 flightFilter,
@@ -580,6 +616,8 @@ export const GlobalContextProvider = ({
                 setSelectedRooms,
                 addedRooms,
                 setAddedRooms,
+                suggestedAccommodations,
+                setSuggestedAccommodations,
               },
             },
             flightAccommodationContext: {
@@ -592,6 +630,12 @@ export const GlobalContextProvider = ({
                 setCapacitySelectedAccommodation,
                 searchListTab,
                 setSearchListTab,
+                numberStars,
+                setNumberStars,
+                flightOnlyCharters,
+                setFlightOnlyCharters,
+                accommodationOnlyCharters,
+                setAccommodationOnlyCharters,
               },
             },
           }}

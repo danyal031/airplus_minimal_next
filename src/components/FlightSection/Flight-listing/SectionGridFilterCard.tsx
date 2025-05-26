@@ -156,12 +156,16 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ action }) => {
       departureParam && returningParam && returningParam !== "false"
         ? formatDateWithSlash(returningParam)
         : false;
+    const flightOnlyCharter =
+      searchParams.get("flightOnlyCharters") === "true" ? true : false;
+
     if (!isFlightSearching) {
       handleFlightSearch({
         origin,
         destination,
         departure_date,
         returning_date,
+        only_charters: flightOnlyCharter,
       });
     }
 

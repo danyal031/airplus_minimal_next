@@ -14,11 +14,13 @@ interface ContextProps {
       destination,
       departure_date,
       returning_date,
+      only_charters,
     }: {
       origin: string;
       destination: string;
       departure_date: string;
       returning_date: string | false;
+      only_charters: boolean;
     }) => void;
   };
 }
@@ -43,6 +45,8 @@ export const GlobalActionsProvider = ({
     setSearchFlightResponseData,
     setIsFlightSearching,
   } = useGlobalContext().flightContext.searchContext;
+  const { setFlightOnlyCharters } =
+    useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
   //   initial states
 
   const handleFlightSearch = ({
@@ -50,11 +54,13 @@ export const GlobalActionsProvider = ({
     destination,
     departure_date,
     returning_date,
+    only_charters,
   }: {
     origin: string;
     destination: string;
     departure_date: string;
     returning_date: string | false;
+    only_charters: boolean;
   }) => {
     setFilteredSearchFlightResponseData(null);
     setTicketLoading(true);
@@ -64,6 +70,7 @@ export const GlobalActionsProvider = ({
       destination,
       departure_date,
       returning_date,
+      only_charters,
     })
       .then((response: any) => {
         console.log("flight search response:", response);
@@ -85,7 +92,7 @@ export const GlobalActionsProvider = ({
           setToDate(null);
           setTravelRoute("oneWay");
         }
-
+        setFlightOnlyCharters(only_charters);
         const wentResult = processFlights(response.data.Went);
         const returnResult = processFlights(response.data.Return);
 

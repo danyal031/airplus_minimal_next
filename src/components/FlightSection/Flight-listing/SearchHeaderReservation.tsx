@@ -13,6 +13,8 @@ const SearchHeaderReservation = () => {
   // initial states
   const { origin, destination, fromDate, toDate } =
     useGlobalContext().flightContext.searchContext;
+  const { setFlightOnlyCharters, setAccommodationOnlyCharters } =
+    useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
   const [showSummarySearch, setShowSummarySearch] = useState<boolean>(true);
   const [tabValue, setTabValue] = useState<string>("1");
   const searchParams = useSearchParams();

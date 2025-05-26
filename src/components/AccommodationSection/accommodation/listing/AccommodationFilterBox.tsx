@@ -15,14 +15,20 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import VillaIcon from "@mui/icons-material/Villa";
 import HomeIcon from "@mui/icons-material/Home";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import SearchIcon from "@mui/icons-material/Search";
+import { useRouter } from "next/navigation";
+import { Route } from "next";
 const AccommodationFilterBox = () => {
   // initial states
   const [openName, setOpenName] = useState<boolean>(false);
+  const [accommodationName, setAccommodationName] = useState<string>("");
+
   const [openStars, setOpenStars] = useState<boolean>(false);
   const [openRangePrice, setOpenRangePrice] = useState<boolean>(false);
   const [openFacilities, setOpenFacilities] = useState<boolean>(false);
   const [openType, setOpenType] = useState<boolean>(false);
   const theme = useTheme();
+  const router = useRouter();
   // handle change filter box section
   const handleChangeFilterBoxSections = (section: string) => {
     switch (section) {
@@ -37,6 +43,17 @@ const AccommodationFilterBox = () => {
       case "type":
         return setOpenType(!openType);
     }
+  };
+
+  // handle apply filter box
+  const handleApplyFilter = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    searchParams.set("name", accommodationName);
+
+    const newPath = `${window.location.pathname}?${searchParams.toString()}`;
+
+    router.push(newPath as Route);
   };
 
   //   for summery filter
@@ -62,12 +79,9 @@ const AccommodationFilterBox = () => {
           {" "}
           <div
             className="flex items-center justify-between cursor-pointer"
-            // onClick={() => handleChangeFilterBoxSections("name")}
+            onClick={() => handleChangeFilterBoxSections("name")}
           >
-            <span className="flex items-center justify-center text-text-main font-semibold text-sm">
-              به زودی...{" "}
-            </span>
-            {/* <span className="text-text-main font-semibold cursor-pointer">
+            <span className="text-text-main font-semibold cursor-pointer">
               نام هتل
             </span>
             <IconButton size="small">
@@ -76,13 +90,26 @@ const AccommodationFilterBox = () => {
               ) : (
                 <KeyboardArrowDownIcon className="text-sm" />
               )}
-            </IconButton>{" "} */}
+            </IconButton>{" "}
           </div>
-          {/* {openName && (
-            <div className="grid grid-cols-1">
-              <TextField size="small" label="جستجوی نام هتل" />
+          {openName && (
+            <div className="flex items-center justify-center gap-1">
+              <TextField
+                value={accommodationName}
+                onChange={(e) => setAccommodationName(e.target.value)}
+                className="flex-1"
+                size="small"
+                label="جستجوی نام هتل"
+              />
+              <IconButton
+                onClick={handleApplyFilter}
+                color="primary"
+                size="small"
+              >
+                <SearchIcon fontSize="small" />
+              </IconButton>
             </div>
-          )} */}
+          )}
         </div>
       </>
     );

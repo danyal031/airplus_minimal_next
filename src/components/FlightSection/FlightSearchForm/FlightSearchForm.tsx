@@ -2,13 +2,20 @@
 import {
   Box,
   Button,
+  Checkbox,
   Drawer,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
   IconButton,
   Popover,
+  Radio,
+  RadioGroup,
   TextField,
   useTheme,
 } from "@mui/material";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -20,7 +27,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SearchIcon from "@mui/icons-material/Search";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   applyMask,
   convertPersianToEnglishNumbers,
@@ -52,13 +59,31 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     accommodationPassengersCapacity,
     setAccommodationPassengersCapacity,
   } = useGlobalContext().accommodationContext.accommodationSearch;
+  const {
+    numberStars,
+    setNumberStars,
+    flightOnlyCharters,
+    setFlightOnlyCharters,
+    accommodationOnlyCharters,
+    setAccommodationOnlyCharters,
+  } = useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
   // popOver state
   const [anchorEl, setAnchorEl] = useState(null);
   const [openPassengerCapacityPopover, setOpenPassengerCapacityPopover] =
     useState<boolean>(false);
-
   // handle navigate
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // handle initial value
+  useEffect(() => {
+    const accommodationOnlyCharter =
+      searchParams.get("accommodationOnlyCharters") === "true" ? true : false;
+    const flightOnlyCharter =
+      searchParams.get("flightOnlyCharters") === "true" ? true : false;
+    setAccommodationOnlyCharters(accommodationOnlyCharter);
+    setFlightOnlyCharters(flightOnlyCharter);
+  }, []);
 
   const handleTransfer = () => {
     router.push(
@@ -84,7 +109,9 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
         toDate ? convertPersianToEnglishNumbers(toDate as string) : false
       }&adultCapacity=${
         accommodationPassengersCapacity.adultCapacity
-      }&childCapacity=${accommodationPassengersCapacity.childCapacity}`
+      }&childCapacity=${
+        accommodationPassengersCapacity.childCapacity
+      }&flightOnlyCharters=${flightOnlyCharters}&accommodationOnlyCharters=${accommodationOnlyCharters}&stars=${numberStars}`
     );
   };
 
@@ -97,6 +124,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
         destination: destination?.iata as string,
         departure_date: formatDateWithSlash(fromDate as string),
         returning_date: toDate ? formatDateWithSlash(toDate) : false,
+        only_charters: false,
       });
     }
   };
@@ -109,6 +137,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
         destination: destination?.iata as string,
         departure_date: formatDateWithSlash(fromDate as string),
         returning_date: toDate ? formatDateWithSlash(toDate) : false,
+        only_charters: flightOnlyCharters,
       });
     }
   };
@@ -146,7 +175,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
           }}
           variant="contained"
           size="small"
-          className="w-full h-full rounded-lg"
+          className="w-full h-fit rounded-lg"
         >
           جستجو
         </Button>
@@ -327,6 +356,94 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     );
   };
 
+  // handle render star input
+  const renderStarInput = () => {
+    return (
+      <TextField
+        size="small"
+        type="number"
+        dir="ltr"
+        label="ستاره اقامتگاه"
+        value={numberStars}
+        inputProps={{ min: 1, max: 5 }}
+        onChange={(e) => {
+          const value = parseInt(e.target.value, 10);
+          if (value >= 1 && value <= 5) {
+            setNumberStars(value);
+          } else if (e.target.value === "") {
+            setNumberStars(5);
+          }
+        }}
+      />
+    );
+  };
+
+  // handle onchange flight charter
+  const handleOnchangeFlightCharter = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFlightOnlyCharters(event.target.checked);
+  };
+
+  // handle onchange accommodation charter
+  const handleOnchangeAccommodationCharter = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setAccommodationOnlyCharters(event.target.checked);
+  };
+
+  // handle render flight type input
+  const renderFlightTypeInput = () => {
+    return (
+      <FormGroup>
+        <FormControlLabel
+          className="text-text-main"
+          sx={{
+            "& .MuiFormControlLabel-label": {
+              fontSize: "14px",
+              fontWeight: 500,
+            },
+          }}
+          control={
+            <Checkbox
+              checked={flightOnlyCharters}
+              onChange={handleOnchangeFlightCharter}
+              size="small"
+              color="primary"
+            />
+          }
+          label="پرواز های چارتری"
+        />
+      </FormGroup>
+    );
+  };
+
+  // handle render accommodation type input
+  const renderAccommodationTypeInput = () => {
+    return (
+      <FormGroup>
+        <FormControlLabel
+          className="text-text-main"
+          sx={{
+            "& .MuiFormControlLabel-label": {
+              fontSize: "14px",
+              fontWeight: 500,
+            },
+          }}
+          control={
+            <Checkbox
+              checked={accommodationOnlyCharters}
+              onChange={handleOnchangeAccommodationCharter}
+              size="small"
+              color="primary"
+            />
+          }
+          label="هتل های چارتری"
+        />
+      </FormGroup>
+    );
+  };
+
   // for render flight search form in desktop
   const renderSearchFormOnDesktop = () => {
     const flightSearchForm = (
@@ -344,12 +461,19 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     const flightAccommodationSearchForm = (
       <div className="bg-paper w-full rounded-xl p-5 hidden md:block">
         <div className="grid grid-cols-12 gap-5">
-          <div className="col-span-6">
-            <RoundWayInput />
+          <div className="col-span-10 grid grid-cols-12 gap-5">
+            <div className="col-span-6">
+              <RoundWayInput />
+            </div>
+            {/* <div className="col-span-2">{renderPassengerInput()}</div> */}
+            <div className="col-span-4">{renderDatePicker()}</div>
+            <div className="col-span-2">{renderStarInput()}</div>
+            <div className="col-span-2">{renderFlightTypeInput()}</div>
+            <div className="col-span-2">{renderAccommodationTypeInput()}</div>
           </div>
-          {/* <div className="col-span-2">{renderPassengerInput()}</div> */}
-          <div className="col-span-4">{renderDatePicker()}</div>
-          <div className="col-span-2">{renderConfirmButton()}</div>
+          <div className="col-span-2 flex items-center">
+            {renderConfirmButton()}
+          </div>
         </div>
       </div>
     );

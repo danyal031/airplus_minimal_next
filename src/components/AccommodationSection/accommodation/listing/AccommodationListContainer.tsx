@@ -2,7 +2,10 @@
 import { useGlobalContext } from "@/context/store";
 import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
 import { getAccommodationsList, getMinPrice } from "@/global-files/axioses";
-import { convertPersianToEnglishNumbers } from "@/global-files/function";
+import {
+  convertPersianToEnglishNumbers,
+  convertToGregorian,
+} from "@/global-files/function";
 import {
   ReadonlyURLSearchParams,
   useRouter,
@@ -50,6 +53,9 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
     accommodationPassengersCapacity,
     addedRooms,
   } = useGlobalContext().accommodationContext.accommodationSearch;
+  const { setAccommodationOnlyCharters, setNumberStars } =
+    useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
+
   const { setSearchType } = useGlobalContext().global;
 
   const searchParams = useSearchParams();
@@ -137,6 +143,11 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
     const type = action === "flight-accommodation" ? "iata" : searchType;
     const adult_capacity = Number(searchParams.get("adultCapacity"));
     const child_capacity = Number(searchParams.get("childCapacity"));
+    const accommodationOnlyCharter =
+      searchParams.get("accommodationOnlyCharters") === "true" ? true : false;
+    const stars = Number(searchParams.get("stars"));
+    const accommodationName = searchParams.get("name");
+    console.log("###", stars, accommodationOnlyCharter);
 
     setIsFetching(true);
     handleClearSelectedAccommodation();
@@ -152,10 +163,17 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
     controllerRef.current = controller;
     const json = {
       value: destination,
-      checkin_date: departing,
-      checkout_date: returning,
+      checkin_date: convertToGregorian(departing),
+      checkout_date: convertToGregorian(returning),
       type,
-      filters: false,
+      filters: {
+        only_charters: accommodationOnlyCharter,
+        ...(stars &&
+          !isNaN(stars) && {
+            stars: Array.from({ length: stars }, (_, i) => stars - i),
+          }),
+        ...(accommodationName && { name: accommodationName }),
+      },
       paginate: {
         draw: pageValue,
         length: 20,
@@ -165,7 +183,6 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
     try {
       console.log("json", {
         ...json,
-        filters: false,
         paginate: {
           draw: pageValue,
           length: 20,
@@ -176,7 +193,7 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
         signal: controller.signal,
         params: {
           ...json,
-          filters: false,
+          // filters: false,
           paginate: {
             draw: pageValue,
             length: 20,
@@ -188,6 +205,8 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
       if (response.data.Status) {
         setAccommodationFromDate(departing);
         setAccommodationToDate(returning);
+        setAccommodationOnlyCharters(accommodationOnlyCharter);
+        setNumberStars(stars);
         setHasMore(response.data.Table.next_page ? true : false);
         // setSelectedDestinationHotel(
         //   response.data.Search.city || response.data.Search.accommodation
@@ -219,6 +238,8 @@ const AccommodationListContainer: FC<AccommodationListContainerProps> = ({
           setPage((prev) => prev + 1);
         } else {
           console.log("آیتمی وجود ندارد");
+          setAccommodationsLoading(false);
+          setShowProgressLoading(false);
         }
       }
     } catch (error: any) {

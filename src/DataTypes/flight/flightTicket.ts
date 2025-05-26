@@ -28,6 +28,7 @@ export type onlineFlightSearchInputType = {
   destination: string | null;
   departure_date: string | null | false;
   returning_date: string | null | false;
+  only_charters: boolean;
 };
 
 //? flight ticket type
