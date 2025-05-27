@@ -175,7 +175,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
           }}
           variant="contained"
           size="small"
-          className="w-full h-fit rounded-lg"
+          className="w-full h-full rounded-lg"
         >
           جستجو
         </Button>
@@ -459,17 +459,19 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
     );
 
     const flightAccommodationSearchForm = (
-      <div className="bg-paper w-full rounded-xl p-5 hidden md:block">
+      <div className="bg-paper w-full rounded-xl p-5 hidden md:grid grid-cols-1 gap-2">
+        <div className="flex items-center justify-start gap-2">
+          <div className="">{renderFlightTypeInput()}</div>
+          <div className="">{renderAccommodationTypeInput()}</div>
+        </div>
         <div className="grid grid-cols-12 gap-5">
-          <div className="col-span-10 grid grid-cols-12 gap-5">
+          <div className="col-span-10 grid grid-cols-12 gap-1">
             <div className="col-span-6">
               <RoundWayInput />
             </div>
             {/* <div className="col-span-2">{renderPassengerInput()}</div> */}
             <div className="col-span-4">{renderDatePicker()}</div>
             <div className="col-span-2">{renderStarInput()}</div>
-            <div className="col-span-2">{renderFlightTypeInput()}</div>
-            <div className="col-span-2">{renderAccommodationTypeInput()}</div>
           </div>
           <div className="col-span-2 flex items-center">
             {renderConfirmButton()}
