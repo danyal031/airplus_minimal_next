@@ -17,7 +17,7 @@ export const minimal_light_1 = {
 export const minimal_light_2 = {
   // light theme
   primary: {
-    main: "#584",
+    main: "#04326e",
   },
   background: {
     main: "#EFEFEF",
@@ -25,7 +25,7 @@ export const minimal_light_2 = {
   },
   text: {
     main: "#31020E",
-    subText: "#A21441",
+    subText: "#C1B2B6",
   },
   divider: "#D4D4D4",
 };

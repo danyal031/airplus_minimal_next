@@ -72,8 +72,8 @@ const App = ({ children }: { children: React.ReactNode }) => {
   // initial states
   // theme colors
   const themes = {
-    "minimal-light-1": minimal_light_1,
-    "minimal-light-2": minimal_light_2,
+    "erp.mehromah24.com": minimal_light_1,
+    "erp.samentour.ir": minimal_light_2,
   };
   // const [themeKey, setThemeKey] = useState<keyof typeof themes | null>(() => {
   //   const config = localStorage.getItem("minimal_config");
@@ -171,7 +171,8 @@ const App = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("minimal_config", JSON.stringify(res));
         setShowProgressConfig(false);
         setConfig(res);
-        setThemeKey(res.design.theme);
+        // setThemeKey(res.design.theme);
+        setThemeKey(res.erp_domain);
         document.title = `خرید بلیت هواپیما | ${res.brand.fa}`;
       })
       .catch(() => {});
