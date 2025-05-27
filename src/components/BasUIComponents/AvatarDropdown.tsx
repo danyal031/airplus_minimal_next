@@ -16,6 +16,8 @@ import { LoginDialog } from "../Login/LoginDialog";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/context/store";
 import useLogOut from "@/hooks/useLogOut";
+import AirlinesIcon from "@mui/icons-material/Airlines";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 export default function AvatarDropdown({ className = "" }: Props) {
   // initial states
@@ -100,14 +102,41 @@ export default function AvatarDropdown({ className = "" }: Props) {
               },
             }}
           >
-            <List component="nav" disablePadding className="min-w-32">
+            <List component="nav" disablePadding className="min-w-[200px]">
               <ListItemButton
                 className="cursor-pointer"
                 onClick={() => {
                   router.push("/profile/orders");
                 }}
               >
-                <ListItemText primary="سفرها" className="flex justify-center" />
+                <AirlinesIcon fontSize="small" />
+                <ListItemText primary="سفرها" className="flex justify-start" />
+              </ListItemButton>{" "}
+              <ListItemButton
+                // disabled
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push("/profile/transactions");
+                }}
+              >
+                <PersonOutlinedIcon fontSize="small" />
+                <ListItemText
+                  primary="تراکنش ها"
+                  className="flex justify-start"
+                />
+              </ListItemButton>
+              <ListItemButton
+                disabled
+                className="cursor-pointer"
+                // onClick={() => {
+                //   router.push("/profile/orders");
+                // }}
+              >
+                <PersonOutlinedIcon fontSize="small" />
+                <ListItemText
+                  primary="پروفایل"
+                  className="flex justify-start"
+                />
               </ListItemButton>
               <Divider variant="fullWidth" />
               <Button

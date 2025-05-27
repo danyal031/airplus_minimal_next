@@ -94,6 +94,17 @@ export const LoginDialog = () => {
     setShowButtonLoading(true);
     getAuthBasic({ password, userName })
       .then((res: any) => {
+        console.log(88888, res);
+
+        if (res.error) {
+          setShowButtonLoading(false);
+          setShowAlertDetails({
+            showAlert: true,
+            alertType: "error",
+            alertMessage: res.error.message,
+          });
+          return;
+        }
         localStorage.setItem("access_token", res.access_token);
         localStorage.setItem("minimal_user", JSON.stringify(res.user));
         setUserData(res.user);
@@ -106,7 +117,9 @@ export const LoginDialog = () => {
           alertMessage: "با موفقیت وارد حساب کاربری خود شدید",
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        // console.log(88888, err);
+      });
   }
 
   // handle otp onchange

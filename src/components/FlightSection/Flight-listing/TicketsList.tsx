@@ -1001,8 +1001,9 @@ const TicketCard: FC<TicketCardProps> = ({
             <div className="flex items-start justify-start gap-2 min-w-40">
               <div className="flex flex-col items-center justify-center gap-4">
                 <div className="flex flex-col items-center justify-center gap-2">
-                  {data.Classes.BaseData.Financial.Adult.Markup.discount
-                    .percent !== 0 &&
+                  {data.Classes.BaseData.Financial.Adult.Markup !== 0 &&
+                    data.Classes.BaseData.Financial.Adult.Markup.discount
+                      .percent !== 0 &&
                     data.Classes.AvailableSeat &&
                     data.Classes.BaseData.Financial.Adult.Markup.final !==
                       0 && (
@@ -1037,8 +1038,11 @@ const TicketCard: FC<TicketCardProps> = ({
                     )}
                   <Button
                     disabled={
-                      !data.Classes.AvailableSeat ||
-                      data.Classes.BaseData.Financial.Adult.Markup.final === 0
+                      data.Classes.BaseData.Financial.Adult.Markup !== 0
+                        ? !data.Classes.AvailableSeat ||
+                          data.Classes.BaseData.Financial.Adult.Markup.final ===
+                            0
+                        : true
                     }
                     onClick={() => {
                       handleChooseTicket(data, 0);
@@ -1052,11 +1056,17 @@ const TicketCard: FC<TicketCardProps> = ({
                       "تکمیل ظرفیت"
                     ) : (
                       <>
-                        {formatInputWithCommas(
-                          data.Classes.BaseData.Financial.Adult.Markup.final /
-                            10
+                        {data.Classes.BaseData.Financial.Adult.Markup !== 0 ? (
+                          <>
+                            {formatInputWithCommas(
+                              data.Classes.BaseData.Financial.Adult.Markup
+                                .final / 10
+                            )}
+                            <Toman />
+                          </>
+                        ) : (
+                          "نامشخص"
                         )}
-                        <Toman />
                       </>
                     )}
                   </Button>{" "}
@@ -1071,8 +1081,9 @@ const TicketCard: FC<TicketCardProps> = ({
                 {expandMoreTicket &&
                   itemGroup.slice(1).map((subItem, subIndex) => (
                     <div className="flex flex-col items-center justify-center gap-2">
-                      {subItem.Classes.BaseData.Financial.Adult.Markup.discount
-                        .percent !== 0 &&
+                      {subItem.Classes.BaseData.Financial.Adult.Markup !== 0 &&
+                        subItem.Classes.BaseData.Financial.Adult.Markup.discount
+                          .percent !== 0 &&
                         subItem.Classes.AvailableSeat &&
                         subItem.Classes.BaseData.Financial.Adult.Markup
                           .final !== 0 && (
@@ -1107,9 +1118,11 @@ const TicketCard: FC<TicketCardProps> = ({
                         )}
                       <Button
                         disabled={
-                          !subItem.Classes.AvailableSeat ||
-                          subItem.Classes.BaseData.Financial.Adult.Markup
-                            .final === 0
+                          subItem.Classes.BaseData.Financial.Adult.Markup !== 0
+                            ? !subItem.Classes.AvailableSeat ||
+                              subItem.Classes.BaseData.Financial.Adult.Markup
+                                .final === 0
+                            : true
                         }
                         onClick={() => {
                           handleChooseTicket(subItem, 0);
@@ -1124,11 +1137,18 @@ const TicketCard: FC<TicketCardProps> = ({
                           "تکمیل ظرفیت"
                         ) : (
                           <>
-                            {formatInputWithCommas(
-                              subItem.Classes.BaseData.Financial.Adult.Markup
-                                .final / 10
+                            {subItem.Classes.BaseData.Financial.Adult.Markup !==
+                            0 ? (
+                              <>
+                                {formatInputWithCommas(
+                                  subItem.Classes.BaseData.Financial.Adult
+                                    .Markup.final / 10
+                                )}
+                                <Toman />
+                              </>
+                            ) : (
+                              "نامشخص"
                             )}
-                            <Toman />
                           </>
                         )}
                       </Button>{" "}

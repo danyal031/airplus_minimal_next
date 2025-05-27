@@ -5,23 +5,29 @@ import { iranyekanxFonts } from "./theme/localFont";
 import { headers } from "next/headers";
 import { getConfig } from "@/global-files/axioses";
 
+// export async function generateMetadata() {
+//   const host = headers().get("host");
+
+//   const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL_2 + "/config", {
+//     cache: "no-store",
+//     headers: {
+//       domain: "localhost",
+//     },
+//   });
+//   // if (!res.ok) throw new Error("Failed to fetch config");
+//   const data = await res.json();
+//   console.log(data);
+
+//   // const { data } = await res.json();
+//   // const { post } = data || {};
+//   // return { title: `پست ${post.title}` };
+// }
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const host = headers().get("host"); // ex: "example.com"
-
-  // console.log("host:", host);
-
-  // handle get config
-  // getConfig()
-  //   .then((res: any) => {
-  //     localStorage.setItem("minimal_config", JSON.stringify(res));
-
-  //     // setThemeKey(res.design.theme);
-  //   })
-  //   .catch(() => {});
   return (
     <html
       lang="en"

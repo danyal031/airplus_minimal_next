@@ -8,10 +8,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import FlightSearchForm from "../FlightSearchForm/FlightSearchForm";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 import { formatDateWithSlash } from "@/global-files/function";
+import { getAirports } from "@/global-files/axioses";
 
 const SearchHeaderReservation = () => {
   // initial states
-  const { origin, destination, fromDate, toDate } =
+  const { origin, destination, fromDate, toDate, setAirports } =
     useGlobalContext().flightContext.searchContext;
   const { setFlightOnlyCharters, setAccommodationOnlyCharters } =
     useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
@@ -20,6 +21,19 @@ const SearchHeaderReservation = () => {
   const searchParams = useSearchParams();
   const path = usePathname();
   const [openSearchDrawer, setOpenSearchDrawer] = useState<boolean>(false);
+
+  // handle get airports
+  useEffect(() => {
+    getAirports()
+      .then((res: any) => {
+        console.log("res", res);
+        if (res.status) {
+          setAirports(res.data.titles);
+          // setAirportsLoading(false);
+        }
+      })
+      .catch((err) => {});
+  }, []);
 
   // handle initial tab value state
   useEffect(() => {
@@ -194,7 +208,7 @@ const SearchHeaderReservation = () => {
   const renderSummerySearch = () => {
     switch (tabValue) {
       case "1":
-        return origin && destination ? (
+        return origin && destination && fromDate && toDate ? (
           flightSummerySearch()
         ) : (
           <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
@@ -204,7 +218,7 @@ const SearchHeaderReservation = () => {
       case "2":
         return accommodationSummerySearch();
       case "3":
-        return origin && destination ? (
+        return origin && destination && fromDate && toDate ? (
           flightAccommodationSummerySearch()
         ) : (
           <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
@@ -329,14 +343,14 @@ const SearchHeaderReservation = () => {
               <span> {destination?.title_fa} </span>
             </span>{" "}
             <div className="flex items-center justify-center gap-3 text-xs">
-              <span className={`text-paper font-light opacity-50`}>
+              {/* <span className={`text-paper font-light opacity-50`}>
                 رفت: {formatDateWithSlash(fromDate as string)}
               </span>{" "}
               {toDate && (
                 <span className={`text-paper font-light opacity-50`}>
                   برگشت: {formatDateWithSlash(toDate as string)}
                 </span>
-              )}
+              )} */}
             </div>
           </div>
           <Button
@@ -372,7 +386,7 @@ const SearchHeaderReservation = () => {
           className={`text-paper overflow-hidden rounded-xl md:hidden grid grid-cols-1 gap-0`}
         >
           {renderTabOnMobile()}
-          {origin && destination ? (
+          {origin && destination && fromDate && toDate ? (
             renderSummerySearchOnMobile()
           ) : (
             <div className="flex items-center justify-center text-black">
