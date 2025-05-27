@@ -195,13 +195,14 @@ const App = ({ children }: { children: React.ReactNode }) => {
     if (!localStorage.getItem("minimal_config")) {
       setShowProgressConfig(true);
     }
+
     getConfig()
       .then((res: any) => {
         localStorage.setItem("minimal_config", JSON.stringify(res));
         setShowProgressConfig(false);
         setConfig(res);
         // setThemeKey(res.design.theme);
-        setThemeKey(res.hub.theme);
+        setThemeKey(res.hub.palette);
         document.title = `خرید بلیت هواپیما | ${res.brand.fa}`;
       })
       .catch(() => {});
