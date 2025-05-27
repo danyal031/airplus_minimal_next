@@ -10,7 +10,34 @@ import { ThemeProvider } from "@mui/material/styles";
 import ResponsiveAppBar from "../BasUIComponents/ResponsiveAppBar";
 import ResponsiveFooter from "../BasUIComponents/ResponsiveFooter";
 import CssBaseline from "@mui/material/CssBaseline";
-import { minimal_light_1, minimal_light_2 } from "@/global-files/themeColors";
+import {
+  minimal_light_1,
+  minimal_light_10,
+  minimal_light_11,
+  minimal_light_12,
+  minimal_light_13,
+  minimal_light_14,
+  minimal_light_15,
+  minimal_light_16,
+  minimal_light_17,
+  minimal_light_18,
+  minimal_light_19,
+  minimal_light_2,
+  minimal_light_20,
+  minimal_light_21,
+  minimal_light_22,
+  minimal_light_23,
+  minimal_light_24,
+  minimal_light_25,
+  minimal_light_26,
+  minimal_light_3,
+  minimal_light_4,
+  minimal_light_5,
+  minimal_light_6,
+  minimal_light_7,
+  minimal_light_8,
+  minimal_light_9,
+} from "@/global-files/themeColors";
 import { getConfig } from "@/global-files/axioses";
 import axios from "axios";
 import ProgressLoading from "../BasUIComponents/ProgressLoading";
@@ -50,8 +77,32 @@ const App = ({ children }: { children: React.ReactNode }) => {
   // initial states
   // theme colors
   const themes = {
-    "erp.mehromah24.com": minimal_light_1,
-    "erp.samentour.ir": minimal_light_2,
+    1: minimal_light_1,
+    2: minimal_light_2,
+    3: minimal_light_3,
+    4: minimal_light_4,
+    5: minimal_light_5,
+    6: minimal_light_6,
+    7: minimal_light_7,
+    8: minimal_light_8,
+    9: minimal_light_9,
+    10: minimal_light_10,
+    11: minimal_light_11,
+    12: minimal_light_12,
+    13: minimal_light_13,
+    14: minimal_light_14,
+    15: minimal_light_15,
+    16: minimal_light_16,
+    17: minimal_light_17,
+    18: minimal_light_18,
+    19: minimal_light_19,
+    20: minimal_light_20,
+    21: minimal_light_21,
+    22: minimal_light_22,
+    23: minimal_light_23,
+    24: minimal_light_24,
+    25: minimal_light_25,
+    26: minimal_light_26,
   };
   // const [themeKey, setThemeKey] = useState<keyof typeof themes | null>(() => {
   //   const config = localStorage.getItem("minimal_config");
@@ -150,7 +201,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
         setShowProgressConfig(false);
         setConfig(res);
         // setThemeKey(res.design.theme);
-        setThemeKey(res.erp_domain);
+        setThemeKey(res.hub.theme);
         document.title = `خرید بلیت هواپیما | ${res.brand.fa}`;
       })
       .catch(() => {});
