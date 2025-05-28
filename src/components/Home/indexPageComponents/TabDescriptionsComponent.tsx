@@ -18,7 +18,7 @@ const TabDescriptionsComponent = () => {
       case "1":
         return (
           <>
-            <PopularRoutes />
+            {/* <PopularRoutes /> */}
             <FrequentlyQuestions />
             <FlightDescription />
           </>
