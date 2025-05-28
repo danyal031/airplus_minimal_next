@@ -50,7 +50,25 @@ import useLogOut from "@/hooks/useLogOut";
 // import Loading from "./loading";
 
 const App = ({ children }: { children: React.ReactNode }) => {
+  // let airplusLogPrinted = false;
+
   if (process.env.NODE_ENV === "production") {
+    // if (!airplusLogPrinted) {
+    //   console.log(
+    //     "%c💡 Powered by Airplus 💡",
+    //     [
+    //       "font-size: 18px",
+    //       'font-family: "Segoe UI", Tahoma, sans-serif',
+    //       "color: #39ff14",
+    //       "padding: 6px 12px",
+    //       "border: 2px solid #39ff14",
+    //       "border-radius: 4px",
+    //       "text-shadow: 0 0 8px #39ff14, 0 0 12px #39ff14",
+    //       "background: rgba(0, 0, 0, 0.8)",
+    //     ].join(";")
+    //   );
+    //   airplusLogPrinted = true;
+    // }
     const cookies = new Cookies();
     const devKey = cookies.get("developer");
     if (devKey !== "dadeh724!@#") {
