@@ -1,10 +1,8 @@
 import CheckoutAccommodationContainer from "@/components/AccommodationSection/accommodation/checkout/CheckoutAccommodationContainer";
 import React from "react";
 
-const page = () =>
-{
-  const renderOnDesktop = () =>
-  {
+const page = () => {
+  const renderOnDesktop = () => {
     return (
       <>
         <div className="hidden md:grid grid-cols-12 gap-5">
@@ -21,9 +19,9 @@ const page = () =>
     );
   };
   return (
-    <div className="mx-4 lg:mx-auto lg:container md:my-16 my-6 ">
-      { renderOnDesktop() }
-      {/* {renderOnMobile()} */ }
+    <div className="mx-4 lg:mx-auto lg:container md:my-16 my-6">
+      {renderOnDesktop()}
+      {/* {renderOnMobile()} */}
     </div>
   );
 };

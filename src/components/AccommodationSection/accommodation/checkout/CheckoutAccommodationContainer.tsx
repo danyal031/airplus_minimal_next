@@ -3,6 +3,7 @@ import { Toman } from "@/components/icons/IconToman";
 import PassengerInformation from "@/components/passengers-components/PassengerInformation";
 import { useGlobalContext } from "@/context/store";
 import { AccommodationDataType } from "@/DataTypes/accommodation/accommodationTypes";
+import { FlightTicketDataType } from "@/DataTypes/flight/flightTicket";
 import {
   defaultPassengerInformation,
   UserInformationDataType,
@@ -15,7 +16,7 @@ import {
   formatInputWithCommas,
 } from "@/global-files/function";
 import { useShowAlert } from "@/hooks/useShowAlert";
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { debounce } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -50,6 +51,7 @@ const CheckoutAccommodationContainer = () => {
   const [accommodationTotalPrice, setAccommodationTotalPrice] = useState(0);
   const [flightAccommodationTotalPrice, setFlightAccommodationTotalPrice] =
     useState(0);
+
   const childRef = useRef<any>([]);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -740,8 +742,158 @@ const CheckoutAccommodationContainer = () => {
     );
   };
 
+  // handle render accommodation reservation details
+  const renderAccommodationReservationDetails = () => {
+    return (
+      <div className="flex flex-col items-start justify-center gap-2">
+        <span className="text-text-main text-sm font-semibold">
+          اتاق های مورد نظر{" "}
+        </span>
+        <div className="flex items-center justify-center gap-3">
+          {onlineAccommodations.map((item: any) => (
+            <Chip
+              key={item.id}
+              color="primary"
+              label={
+                <div>
+                  {item.room_type.title.fa}
+                  {" | "}
+                  {item.title.fa}
+                  {" | "}
+                  {formatInputWithCommas(
+                    item.room_type.board_type_list.financial_total.net_price /
+                      10
+                  ) + " تومان"}
+                </div>
+              }
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // handle render flight accommodation reservation details
+  const renderFlightAccommodationReservationDetails = () => {
+    return (
+      selectedWentFlight &&
+      selectedReturnFlight && (
+        <div className="grid grid-cols-1 gap-5">
+          <div className="flex flex-col items-start justify-center gap-2">
+            <span className="text-text-main text-sm font-semibold">
+              پرواز های انتخاب شده
+            </span>
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-text-main text-base font-semibold">
+                x {accommodationPassenger.length}
+              </span>
+              <Chip
+                color="primary"
+                label={
+                  <div>
+                    پرواز رفت:{" "}
+                    <strong
+                      style={{ fontWeight: "bold" }}
+                      className="text-base"
+                    >
+                      {selectedWentFlight.DepartureDateTime.split(" ")[1].split(
+                        ":"
+                      )[0] +
+                        ":" +
+                        selectedWentFlight.DepartureDateTime.split(
+                          " "
+                        )[1].split(":")[1]}
+                    </strong>
+                    {" | "}
+                    {selectedWentFlight?.Airline.title_fa} {" | "}
+                    {selectedWentFlight.Origin.Iata.title_fa} {" به "}
+                    {selectedWentFlight.Destination.Iata.title_fa}
+                    {" | "}
+                    {formatInputWithCommas(
+                      selectedWentFlight.Classes.BaseData.Financial.Adult.Markup
+                        .final / 10
+                    ) + " تومان"}
+                  </div>
+                }
+              />
+              <span className="text-lg text-text-main font-bold"> | </span>
+              <span className="text-text-main text-base font-semibold">
+                x {accommodationPassenger.length}
+              </span>
+              <Chip
+                color="primary"
+                label={
+                  <div>
+                    پرواز برگشت:{" "}
+                    <strong
+                      style={{ fontWeight: "bold" }}
+                      className="text-base"
+                    >
+                      {selectedReturnFlight?.DepartureDateTime.split(
+                        " "
+                      )[1].split(":")[0] +
+                        ":" +
+                        selectedReturnFlight?.DepartureDateTime.split(
+                          " "
+                        )[1].split(":")[1]}
+                    </strong>
+                    {" | "}
+                    {selectedReturnFlight?.Airline.title_fa} {" | "}
+                    {selectedReturnFlight?.Origin.Iata.title_fa} {" به "}
+                    {selectedReturnFlight?.Destination.Iata.title_fa}
+                    {" | "}
+                    {formatInputWithCommas(
+                      selectedReturnFlight.Classes.BaseData.Financial.Adult
+                        .Markup.final / 10
+                    ) + " تومان"}
+                  </div>
+                }
+              />
+            </div>
+          </div>
+          <div className="flex flex-col items-start justify-center gap-2">
+            <span className="text-text-main text-sm font-semibold">
+              اتاق های مورد نظر{" "}
+            </span>
+            <div className="flex items-center justify-center gap-3">
+              {onlineAccommodations.map((item: any) => (
+                <Chip
+                  key={item.id}
+                  color="primary"
+                  label={
+                    <div>
+                      {item.room_type.title.fa}
+                      {" | "}
+                      {item.title.fa}
+                      {" | "}
+                      {formatInputWithCommas(
+                        item.room_type.board_type_list.financial_total
+                          .net_price / 10
+                      ) + " تومان"}
+                    </div>
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    );
+  };
+
+  // handle render Reservation status statement
+  const reservationStatusStatement = () => {
+    switch (searchType) {
+      case "accommodation":
+        return renderAccommodationReservationDetails();
+      case "flight-accommodation":
+        return renderFlightAccommodationReservationDetails();
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 gap-5">
+      {reservationStatusStatement()}
       <div className="px-4 md:px-0">
         <div className="bg-paper rounded-xl grid grid-cols-1 gap-0">
           {renderHeaderContainer()}
