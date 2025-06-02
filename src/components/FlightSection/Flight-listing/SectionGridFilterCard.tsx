@@ -99,15 +99,15 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ action }) => {
     // initial search type value
     setSearchType(action);
 
-    getAirports()
-      .then((res: any) => {
-        console.log("res", res);
-        if (res.status) {
-          setAirports(res.data.titles);
-          setAirportsLoading(false);
-        }
-      })
-      .catch((err) => {});
+    // getAirports()
+    //   .then((res: any) => {
+    //     console.log("res", res);
+    //     if (res.status) {
+    //       setAirports(res.data.titles);
+    //       setAirportsLoading(false);
+    //     }
+    //   })
+    //   .catch((err) => {});
   }, []);
 
   const paramsValidation = (searchParams: ReadonlyURLSearchParams) => {

@@ -3,7 +3,7 @@ import React, { FC, lazy, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import { useGlobalContext } from "@/context/store";
-import { getAirports } from "@/global-files/axioses";
+// import { getAirports } from "@/global-files/axioses";
 import Link from "next/link";
 // for lazy loading
 const SearchBox = lazy(() => import("./indexPageComponents/SearchBox"));
@@ -12,21 +12,28 @@ const TabDescriptionsComponent = lazy(
   () => import("./indexPageComponents/TabDescriptionsComponent")
 );
 
-const HomeComponents = () => {
+interface HomeComponentsProps {
+  airports: AirportDataType[];
+}
+
+const HomeComponents: FC<HomeComponentsProps> = ({ airports }) => {
   // initial states
   const { setAirports } = useGlobalContext().flightContext.searchContext;
 
   // handle initial value
+  // useEffect(() => {
+  //   getAirports()
+  //     .then((res: any) => {
+  //       console.log("res", res);
+  //       if (res.status) {
+  //         setAirports(res.data.titles);
+  //         // setAirportsLoading(false);
+  //       }
+  //     })
+  //     .catch((err) => {});
+  // }, []);
   useEffect(() => {
-    getAirports()
-      .then((res: any) => {
-        console.log("res", res);
-        if (res.status) {
-          setAirports(res.data.titles);
-          // setAirportsLoading(false);
-        }
-      })
-      .catch((err) => {});
+    setAirports(airports);
   }, []);
 
   // base animation for each component

@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import FlightSearchForm from "../FlightSearchForm/FlightSearchForm";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 import { formatDateWithSlash } from "@/global-files/function";
-import { getAirports } from "@/global-files/axioses";
+// import { getAirports } from "@/global-files/axioses";
 
 const SearchHeaderReservation = () => {
   // initial states
@@ -23,17 +23,17 @@ const SearchHeaderReservation = () => {
   const [openSearchDrawer, setOpenSearchDrawer] = useState<boolean>(false);
 
   // handle get airports
-  useEffect(() => {
-    getAirports()
-      .then((res: any) => {
-        console.log("res", res);
-        if (res.status) {
-          setAirports(res.data.titles);
-          // setAirportsLoading(false);
-        }
-      })
-      .catch((err) => {});
-  }, []);
+  // useEffect(() => {
+  //   getAirports()
+  //     .then((res: any) => {
+  //       console.log("res", res);
+  //       if (res.status) {
+  //         setAirports(res.data.titles);
+  //         // setAirportsLoading(false);
+  //       }
+  //     })
+  //     .catch((err) => {});
+  // }, []);
 
   // handle initial tab value state
   useEffect(() => {

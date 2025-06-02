@@ -8,6 +8,13 @@ const nextConfig = {
   },
   images: {
     domains: ["storage.service01.ir", "images.pexels.com"],
+    // remotePatterns: [
+    //   {
+    //     protocol: "https",
+    //     hostname: "storage.service01.ir",
+    //     pathname: "/**", // همه مسیرها در این دامنه مجاز هستند
+    //   },
+    // ],
   },
   logging: {
     fetches: {

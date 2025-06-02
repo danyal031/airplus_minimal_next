@@ -18,7 +18,7 @@ import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
 import FlightAccommodationSearchForm from "@/components/FlightAccommodationSection/FlightAccommodationSearchForm/FlightAccommodationSearchForm";
-import { getAirports } from "@/global-files/axioses";
+// import { getAirports } from "@/global-files/axioses";
 
 const SearchBox = () => {
   // initial states
@@ -26,17 +26,17 @@ const SearchBox = () => {
   const { config } = useGlobalContext().global;
 
   // handle get airports
-  useEffect(() => {
-    getAirports()
-      .then((res: any) => {
-        console.log("res", res);
-        if (res.status) {
-          setAirports(res.data.titles);
-          // setAirportsLoading(false);
-        }
-      })
-      .catch((err) => {});
-  }, []);
+  // useEffect(() => {
+  //   getAirports()
+  //     .then((res: any) => {
+  //       console.log("res", res);
+  //       if (res.status) {
+  //         setAirports(res.data.titles);
+  //         // setAirportsLoading(false);
+  //       }
+  //     })
+  //     .catch((err) => {});
+  // }, []);
 
   return (
     <>
