@@ -3,7 +3,6 @@ import "@/styles/custom.css";
 import { GlobalContextProvider } from "@/context/store";
 import { iranyekanxFonts } from "./theme/localFont";
 import { headers } from "next/headers";
-import { getConfig } from "@/global-files/axioses";
 
 export async function generateMetadata() {
   const host = headers().get("host");
@@ -14,6 +13,9 @@ export async function generateMetadata() {
       // domain: "localhost",
       domain: host as string,
     },
+    // next: {
+    //   tags: ["config"],
+    // },
   });
   // if (!res.ok) throw new Error("Failed to fetch config");
   const data = await res.json();
@@ -34,6 +36,8 @@ export async function generateMetadata() {
     },
   };
 }
+
+// export const metaData = {};
 
 export default function RootLayout({
   children,
