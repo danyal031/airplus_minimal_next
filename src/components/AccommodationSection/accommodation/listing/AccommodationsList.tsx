@@ -10,6 +10,7 @@ import {
   DialogTitle,
   IconButton,
   Skeleton,
+  TextField,
   Tooltip,
   useMediaQuery,
 } from "@mui/material";
@@ -40,6 +41,9 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ChildCareOutlinedIcon from "@mui/icons-material/ChildCareOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
+import * as yup from "yup";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 // import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 // import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
 
@@ -349,6 +353,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     useGlobalContext().flightContext.searchContext;
   const { setShowAlertDetails, searchType } = useGlobalContext().global;
 
+  const [itemsTrigger, setItemsTrigger] = useState(false);
+
   const searchParams = useSearchParams();
   const json = useRef(null);
   const router = useRouter();
@@ -434,7 +440,9 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
         ...item.details,
         from_date: accommodationFromDate,
         to_date: accommodationToDate,
+        note: "",
       },
+      validated: true,
     };
 
     console.log("temproom", tempRoom);
@@ -804,6 +812,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
                     onDelete={handleDeleteSelectedRoom}
                     selectedRooms={selectedRooms}
                     setSelectedRooms={setSelectedRooms}
+                    itemsTrigger={itemsTrigger}
+                    setItemsTrigger={setItemsTrigger}
                   />
                 ))}
                 <div className="flex items-center justify-between px-5">
@@ -966,7 +976,12 @@ const RoomItem: FC<RoomItemProps> = ({
                   passengers: {
                     adult: 1,
                     child: 0,
+                    extra_child: 0,
+                    infant: 0,
+                    extra_infant: 0,
+                    extra: 0,
                   },
+                  children_age: [],
                 })
               }
             >
@@ -1003,7 +1018,12 @@ const RoomItem: FC<RoomItemProps> = ({
                 passengers: {
                   adult: 1,
                   child: 0,
+                  extra_child: 0,
+                  infant: 0,
+                  extra_infant: 0,
+                  extra: 0,
                 },
+                children_age: [],
               })
             }
           >
@@ -1032,6 +1052,8 @@ interface SelectedRoomItemProps {
   onDelete: any;
   selectedRooms: any;
   setSelectedRooms: any;
+  itemsTrigger: boolean;
+  setItemsTrigger: any;
 }
 const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
   item,
@@ -1041,8 +1063,22 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
   onDelete,
   selectedRooms,
   setSelectedRooms,
+  itemsTrigger,
+  setItemsTrigger,
 }) => {
   // initial states
+  const [adultCount, setAdultCount] = useState(item.room_type.passengers.adult);
+  const [childCount, setChildCount] = useState(
+    item.room_type.passengers.child +
+      item.room_type.passengers.infant +
+      item.room_type.passengers.extra_child +
+      item.room_type.passengers.extra_infant
+  );
+  const [extraBed, setExtraBed] = useState(item.room_type.passengers.extra);
+  const [childrenAge, setChildrenAge] = useState(
+    item.room_type.children_age || []
+  );
+
   const {
     setCapacitySelectedAccommodation,
     capacitySelectedAccommodation,
@@ -1052,6 +1088,108 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
   const { selectedWentFlight, selectedReturnFlight } =
     useGlobalContext().flightContext.searchContext;
   const { searchType, setShowAlertDetails } = useGlobalContext().global;
+
+  const schema = yup.object().shape({
+    children: yup
+      .array()
+      .of(
+        yup
+          .number()
+          .required()
+          .min(0, "سن نمی‌تواند منفی باشد")
+          .max(
+            item.room_type.age.child || 6,
+            `سن کودک حداکثر ${item.room_type.age.child || 6} سال است`
+          )
+      )
+      .required(),
+  });
+  const {
+    control,
+    setValue,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      children: [],
+    },
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+    console.log("errors", errors);
+  }, [errors]);
+
+  useEffect(() => {
+    item["validated"] = isValid;
+  }, [isValid]);
+
+  useEffect(() => {
+    if (itemsTrigger) {
+      trigger();
+      setItemsTrigger(false);
+    }
+  }, [itemsTrigger]);
+
+  function classifyPassengers() {
+    let remainingAdultCapacity = item.room_type.beds - adultCount;
+
+    let passengers = {
+      adult: adultCount,
+      child: 0,
+      infant: 0,
+      extra: extraBed,
+      extra_child: 0,
+      extra_infant: 0,
+    };
+
+    const sorted = [...childrenAge].sort((a, b) => {
+      return b - a;
+    });
+
+    sorted.forEach((age) => {
+      const isInfant = age < item.room_type.age.infant;
+      if (remainingAdultCapacity > 0) {
+        if (isInfant) passengers.infant += 1;
+        else passengers.child += 1;
+        remainingAdultCapacity--;
+      } else {
+        if (isInfant) passengers.extra_infant += 1;
+        else passengers.extra_child += 1;
+      }
+    });
+    item.room_type.passengers = { ...passengers };
+    console.log("passengers", item.room_type.passengers);
+  }
+
+  useEffect(() => {
+    classifyPassengers();
+  }, [childCount, childrenAge]);
+
+  const handleChangeChildrenAge = (count: any) => {
+    setChildrenAge((prev: any) => {
+      const newAges = [...prev.slice(0, count)];
+      while (newAges.length < count) {
+        newAges.push(null);
+      }
+      return newAges;
+    });
+  };
+
+  const handleAgeChange = (index: any, newValue: any) => {
+    const updatedAges = [...childrenAge];
+    let value: any = newValue ? Number(newValue) : null;
+    updatedAges[index] = value;
+    setValue(`children.${index}`, value);
+    trigger(`children.${index}`);
+    setChildrenAge(updatedAges);
+    item.room_type.children_age = updatedAges;
+  };
+
+  useEffect(() => {
+    console.log("room Price", calculateRoomPrice(item.room_type));
+  }, [adultCount, childCount, childrenAge]);
 
   // handle add passenger accommodation type
   const handleAccommodationAddPassenger = (ageCategory: "child" | "adult") => {
@@ -1184,16 +1322,31 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
           <CloseIcon className="text-primary-main" fontSize="small" />
         </IconButton>
       </div>
-      <div className="flex items-start justify-between p-2">
-        <div className="flex flex-col items-center justify-center gap-1">
-          <div className="flex items-center justify-center">
-            <PeopleAltOutlinedIcon fontSize="small" />
+      <div className="grid grid-cols-1 gap-3 p-2">
+        <div className="grid grid-cols-1 gap-1">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center gap-1">
+              <PeopleAltOutlinedIcon fontSize="small" />
+              <span className="text-xs font-semibold text-text-main">
+                بزرگسال
+              </span>
+            </div>
             <div className="flex items-center justify-center gap-1">
               <IconButton
-                onClick={() => handleAddRoomPassengers("adult")}
+                // onClick={() => handleAddRoomPassengers("adult")}
+                // disabled={
+                //   item.room_type.passengers.adult ===
+                //   item.room_type.capacity.adult
+                // }
+                onClick={() => {
+                  item.room_type.passengers.adult = adultCount + 1;
+                  setAdultCount((prev: any) => prev + 1);
+                }}
                 disabled={
-                  item.room_type.passengers.adult ===
-                  item.room_type.capacity.adult
+                  item.room_type.beds -
+                    Math.max(0, childCount - item.room_type.capacity.child) ===
+                  adultCount
+                  // item.room_type.capacity.adult === adultCount
                 }
                 size="small"
                 color="primary"
@@ -1201,11 +1354,17 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
                 <AddOutlinedIcon fontSize="small" />
               </IconButton>
               <span className="text-sm text-text-main">
-                {item.room_type.passengers.adult}
+                {/* {item.room_type.passengers.adult} */}
+                {adultCount}
               </span>
               <IconButton
-                onClick={() => handleDeleteRoomPassengers("adult")}
-                disabled={item.room_type.passengers.adult === 1}
+                // onClick={() => handleDeleteRoomPassengers("adult")}
+                // disabled={item.room_type.passengers.adult === 1}
+                onClick={() => {
+                  item.room_type.passengers.adult = adultCount - 1;
+                  setAdultCount((prev: any) => prev - 1);
+                }}
+                disabled={adultCount === 1}
                 size="small"
                 color="primary"
               >
@@ -1213,16 +1372,30 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
               </IconButton>
             </div>
           </div>
-          <div className="flex items-center justify-center">
-            <ChildCareOutlinedIcon fontSize="small" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center gap-1">
+              <ChildCareOutlinedIcon fontSize="small" />
+              <span className="text-xs font-semibold text-text-main">کودک</span>
+            </div>
             <div className="flex items-center justify-center gap-1">
               <IconButton
+                // onClick={() => {
+                //   handleAddRoomPassengers("child");
+                // }}
+                // disabled={
+                //   item.room_type.passengers.child ===
+                //   item.room_type.capacity.child
+                // }
                 onClick={() => {
-                  handleAddRoomPassengers("child");
+                  handleChangeChildrenAge(childCount + 1);
+                  setChildCount((prev: any) => prev + 1);
                 }}
                 disabled={
-                  item.room_type.passengers.child ===
-                  item.room_type.capacity.child
+                  item.room_type.beds -
+                    adultCount +
+                    item.room_type.capacity.child ===
+                    childCount && item.room_type.age.child > 0
+                  // item.room_type.capacity.child === childCount + infantCount
                 }
                 size="small"
                 color="primary"
@@ -1230,35 +1403,224 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
                 <AddOutlinedIcon fontSize="small" />
               </IconButton>
               <span className="text-sm text-text-main">
-                {item.room_type.passengers.child}
+                {/* {item.room_type.passengers.child} */}
+                {childCount}
               </span>
               <IconButton
+                // onClick={() => {
+                //   handleDeleteRoomPassengers("child");
+                // }}
+                // disabled={item.room_type.passengers.child === 0}
                 onClick={() => {
-                  handleDeleteRoomPassengers("child");
+                  handleChangeChildrenAge(childCount - 1);
+                  setChildCount((prev: any) => prev - 1);
                 }}
-                disabled={item.room_type.passengers.child === 0}
+                disabled={childCount === 0}
                 size="small"
                 color="primary"
               >
                 <RemoveOutlinedIcon fontSize="small" />
               </IconButton>
             </div>{" "}
+          </div>{" "}
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col items-start justify-center gap-1">
+              <span className="text-xs font-semibold text-text-main">
+                تخت اضافه
+              </span>
+              <span className="text-[10px] font-semibold opacity-80 text-text-main">
+                {item.room_type.extra_bed > 0 && (
+                  <p className="text-text-muted text-12">
+                    {`هزینه مسافر اضافه: ${formatInputWithCommas(
+                      item.room_type.board_type_list.financial_total
+                        .extra_bed_price
+                    )} ریال`}
+                  </p>
+                )}
+              </span>
+            </div>
+            <div className="flex items-center justify-center gap-1">
+              <IconButton
+                onClick={() => {
+                  setExtraBed((prev: any) => prev + 1);
+                  item.room_type.passengers.extra += 1;
+                }}
+                disabled={item.room_type.extra_bed === extraBed}
+                size="small"
+                color="primary"
+              >
+                <AddOutlinedIcon fontSize="small" />
+              </IconButton>
+              <span className="text-sm text-text-main">{extraBed}</span>
+              <IconButton
+                onClick={() => {
+                  setExtraBed((prev: any) => prev - 1);
+                  item.room_type.passengers.extra -= 1;
+                }}
+                disabled={extraBed === 0}
+                size="small"
+                color="primary"
+              >
+                <RemoveOutlinedIcon fontSize="small" />
+              </IconButton>
+            </div>
           </div>
         </div>
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-text-main text-xs font-medium">
-            {/* {`${NumberToPersianWordMin.convert(
-            calculateNights(fromDate, toDate, "YYYY-MM-DD")
-          )} شب اقامت`} */}
-            {/* 3 شب{" "} */}
-          </span>
+        <div className="grid grid-cols-1 gap-3">
+          {childrenAge.map((age: any, index: number) => (
+            <Controller
+              control={control}
+              name={`children.${index}`}
+              render={({ filed }: any) => (
+                <TextField
+                  {...filed}
+                  fullWidth
+                  label={`سن کودک ${ordinals[index]} را وارد کنید.`}
+                  value={age}
+                  type="number"
+                  error={!!errors.children?.[index]}
+                  helperText={
+                    errors.children?.[index] &&
+                    (errors.children?.[index]?.type === "max" ||
+                      errors.children?.[index]?.type === "min")
+                      ? errors.children[index].message
+                      : ""
+                  }
+                  onChange={(e) => handleAgeChange(index, e.target.value)}
+                  autoComplete="off"
+                  size="small"
+                />
+              )}
+            />
+          ))}
+        </div>
+        <div className="flex items-center justify-end gap-2">
+          <span className="text-text-main text-xs font-medium"></span>
           <span className="text-text-main font-bold text-sm">
             {`${formatInputWithCommas(
               parseInt(item.room_type.board_type_list.financial_total.net_price)
             )} ریال`}
           </span>
         </div>
+        {item.room_type.capacity.child > 0 &&
+          calculateExtraChildren(adultCount, childCount, item.room_type.beds) >
+            0 && (
+            <>
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-sm text-text-main">{`هزینه کودک اضافه ${item.room_type.age.infant} تا ${item.room_type.age.child} سال`}</span>
+                <div className="font-bold">
+                  <span className="text-sm text-text-main">
+                    {item.room_type.board_type_list.financial_total.child_price
+                      ? formatInputWithCommas(
+                          item.room_type.board_type_list.financial_total
+                            .child_price
+                        )
+                      : "رایگان"}
+                  </span>
+                  {item.room_type.board_type_list.financial_total.child_price >
+                    0 && <span className="text-sm mr-3">ریال</span>}
+                </div>
+              </div>
+              {item.room_type.age.infant > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-text-main text-sm">{`کودک اضافه زیر ${item.room_type.age.infant} سال`}</span>
+                  <span className="font-semibold text-text-main text-sm">
+                    رایگان
+                  </span>
+                </div>
+              )}
+            </>
+          )}
       </div>
     </div>
   );
 };
+
+function calculateExtraChildren(adults: any, children: any, maxCapacity: any) {
+  const totalPeople = adults + children;
+  if (totalPeople <= maxCapacity) {
+    return 0; // هیچ کودکی مشمول هزینه نیست
+  } else {
+    const extraPeople = totalPeople - maxCapacity;
+    return Math.min(children, extraPeople); // تعداد کودکان مشمول هزینه
+  }
+}
+
+function calculateRoomPrice(roomType: any) {
+  const basePrice = roomType.board_type_list.financial_total.net_price;
+  const maxAdults = roomType.beds;
+  const maxExtraChildren = roomType.capacity.child;
+  const adult = roomType.passengers.adult;
+
+  let total = basePrice;
+
+  let remainingAdultSlots = maxAdults - adult;
+
+  let childAges = [...roomType.children_age];
+  const promotedToAdult = [];
+
+  // اولویت ارتقای کودکان دارای هزینه (مثلاً کودک 10 ساله)
+  const chargeableChildren = childAges.filter(
+    (age) => age >= roomType.age.infant && age <= roomType.age.child
+  );
+
+  const freeChildren = childAges.filter((age) => age < roomType.age.infant);
+  // ارتقای کودکان دارای هزینه به بزرگسال (برای جلوگیری از هزینه اضافی)
+  for (
+    let i = 0;
+    i < chargeableChildren.length && remainingAdultSlots > 0;
+    i++
+  ) {
+    const idx = childAges.indexOf(chargeableChildren[i]);
+    promotedToAdult.push(childAges[idx]);
+    childAges.splice(idx, 1);
+    remainingAdultSlots--;
+  }
+
+  // در صورت باقی ماندن ظرفیت، کودکان رایگان هم ارتقا پیدا می‌کنند
+  for (let i = 0; i < freeChildren.length && remainingAdultSlots > 0; i++) {
+    const idx = childAges.indexOf(freeChildren[i]);
+    promotedToAdult.push(childAges[idx]);
+    childAges.splice(idx, 1);
+    remainingAdultSlots--;
+  }
+
+  // حالا آن کودکانی که باقی ماندند و خارج از ظرفیت هستند را بررسی کنیم
+  const chargeableLeft = childAges.filter(
+    (age) => age >= roomType.age.infant && age <= roomType.age.child
+  );
+
+  const freeLeft = childAges.filter((age) => age < roomType.age.infant);
+
+  const finalChargeableCount = Math.min(
+    chargeableLeft.length,
+    maxExtraChildren
+  );
+  const extraChildCost =
+    finalChargeableCount * roomType.board_type_list.financial_total.child_price;
+
+  return total + extraChildCost;
+}
+
+const ordinals = [
+  "اول",
+  "دوم",
+  "سوم",
+  "چهارم",
+  "پنجم",
+  "ششم",
+  "هفتم",
+  "هشتم",
+  "نهم",
+  "دهم",
+  "یازدهم",
+  "دوازدهم",
+  "سیزدهم",
+  "چهاردهم",
+  "پانزدهم",
+  "شانزدهم",
+  "هفدهم",
+  "هجدهم",
+  "نوزدهم",
+  "بیستم",
+];
