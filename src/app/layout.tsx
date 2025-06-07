@@ -39,22 +39,19 @@ import { headers } from "next/headers";
 
 // export const metaData = {};
 
-
-
-export default function RootLayout ( {
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}> )
-{
+}>) {
   return (
     <html
       lang="en"
       dir="rtl"
-      className={ `${ iranyekanxFonts.variable } font-sans ss02` }
+      className={`${iranyekanxFonts.variable} font-sans ss02`}
     >
-      <body className={ `${ iranyekanxFonts.variable } font-sans ss02` }>
-        <GlobalContextProvider>{ children }</GlobalContextProvider>
+      <body className={`${iranyekanxFonts.variable} font-sans ss02`}>
+        <GlobalContextProvider>{children}</GlobalContextProvider>
       </body>
     </html>
   );
