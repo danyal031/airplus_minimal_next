@@ -744,6 +744,10 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
     moveToCheckoutPageFieldObject[searchType](searchType);
   };
 
+  useEffect(() => {
+    console.log("rooms@@@", rooms);
+  }, [selectedRooms]);
+
   // render on desktop
   const renderDesktop = () => (
     <Dialog
@@ -800,22 +804,26 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
             <span className="text-text-main font-bold text-sm">
               اتاق های انتخابی
             </span>
-            {selectedRooms.length ? (
+            {selectedRooms.length > 0 ? (
               <div className="space-y-3 flex-1 overflow-y-auto overflow-x-hidden">
-                {selectedRooms.map((elm: any, index: number) => (
-                  <SelectedRoomItem
-                    key={elm.uuid}
-                    item={elm}
-                    index={index}
-                    fromDate={accommodationFromDate}
-                    toDate={accommodationToDate}
-                    onDelete={handleDeleteSelectedRoom}
-                    selectedRooms={selectedRooms}
-                    setSelectedRooms={setSelectedRooms}
-                    itemsTrigger={itemsTrigger}
-                    setItemsTrigger={setItemsTrigger}
-                  />
-                ))}
+                {selectedRooms.map((elm: any, index: number) => {
+                  // console.log("elm", elm);
+
+                  return (
+                    <SelectedRoomItem
+                      key={elm.uuid}
+                      item={elm}
+                      index={index}
+                      fromDate={accommodationFromDate}
+                      toDate={accommodationToDate}
+                      onDelete={handleDeleteSelectedRoom}
+                      selectedRooms={selectedRooms}
+                      setSelectedRooms={setSelectedRooms}
+                      itemsTrigger={itemsTrigger}
+                      setItemsTrigger={setItemsTrigger}
+                    />
+                  );
+                })}
                 <div className="flex items-center justify-between px-5">
                   <span className="text-text-main font-bold text-sm">
                     مجموع
@@ -1159,8 +1167,20 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
         else passengers.extra_child += 1;
       }
     });
-    item.room_type.passengers = { ...passengers };
-    console.log("passengers", item.room_type.passengers);
+    // item.room_type.passengers = { ...passengers };
+    setSelectedRooms((prevRooms: any[]) => {
+      return prevRooms.map((room) => {
+        if (room.uuid === item.uuid) {
+          return {
+            ...room,
+            room_type: {
+              ...room.room_type,
+              passengers: { ...passengers },
+            },
+          };
+        }
+      });
+    });
   }
 
   useEffect(() => {
@@ -1307,6 +1327,47 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
       })
     );
   };
+
+  // handle add extra bed
+  const handleAddExtraBed = () => {
+    setSelectedRooms((prevRooms: any[]) =>
+      prevRooms.map((room, index) => {
+        if (room.uuid === item.uuid) {
+          return {
+            ...room,
+            room_type: {
+              ...room.room_type,
+              passengers: {
+                ...room.room_type.passengers,
+                extra: room.room_type.passengers.extra + 1,
+              },
+            },
+          };
+        }
+      })
+    );
+  };
+
+  // handle delete extra bed
+  const handleDeleteExtraBed = () => {
+    setSelectedRooms((prevRooms: any[]) =>
+      prevRooms.map((room, index) => {
+        if (room.uuid === item.uuid) {
+          return {
+            ...room,
+            room_type: {
+              ...room.room_type,
+              passengers: {
+                ...room.room_type.passengers,
+                extra: room.room_type.passengers.extra - 1,
+              },
+            },
+          };
+        }
+      })
+    );
+  };
+
   return (
     <div className="w-full rounded-md border border-primary-main divide-y divide-primary-main">
       <div className="flex items-center justify-between p-1 px-3">
@@ -1339,7 +1400,8 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
                 //   item.room_type.capacity.adult
                 // }
                 onClick={() => {
-                  item.room_type.passengers.adult = adultCount + 1;
+                  // item.room_type.passengers.adult = adultCount + 1;
+                  handleAddRoomPassengers("adult");
                   setAdultCount((prev: any) => prev + 1);
                 }}
                 disabled={
@@ -1361,7 +1423,8 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
                 // onClick={() => handleDeleteRoomPassengers("adult")}
                 // disabled={item.room_type.passengers.adult === 1}
                 onClick={() => {
-                  item.room_type.passengers.adult = adultCount - 1;
+                  // item.room_type.passengers.adult = adultCount - 1;
+                  handleDeleteRoomPassengers("adult");
                   setAdultCount((prev: any) => prev - 1);
                 }}
                 disabled={adultCount === 1}
@@ -1443,7 +1506,8 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
               <IconButton
                 onClick={() => {
                   setExtraBed((prev: any) => prev + 1);
-                  item.room_type.passengers.extra += 1;
+                  handleAddExtraBed();
+                  // item.room_type.passengers.extra += 1;
                 }}
                 disabled={item.room_type.extra_bed === extraBed}
                 size="small"
@@ -1455,7 +1519,8 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
               <IconButton
                 onClick={() => {
                   setExtraBed((prev: any) => prev - 1);
-                  item.room_type.passengers.extra -= 1;
+                  handleDeleteExtraBed();
+                  // item.room_type.passengers.extra -= 1;
                 }}
                 disabled={extraBed === 0}
                 size="small"
