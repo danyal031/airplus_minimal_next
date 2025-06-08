@@ -62,7 +62,7 @@ const ServicesOnDesktop = () => {
                     }}
                     src={tourismTour.src}
                     alt={tourismTour.title}
-                    className="object-cover"
+                    className="object-right"
                     fill
                   />
                 </div>

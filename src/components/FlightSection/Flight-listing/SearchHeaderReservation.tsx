@@ -16,11 +16,19 @@ const SearchHeaderReservation = () => {
     useGlobalContext().flightContext.searchContext;
   const { setFlightOnlyCharters, setAccommodationOnlyCharters } =
     useGlobalContext().flightAccommodationContext.flightAccommodationSearch;
+  const { setSearchType, searchType } = useGlobalContext().global;
   const [showSummarySearch, setShowSummarySearch] = useState<boolean>(true);
   const [tabValue, setTabValue] = useState<string>("1");
   const searchParams = useSearchParams();
   const path = usePathname();
   const [openSearchDrawer, setOpenSearchDrawer] = useState<boolean>(false);
+  //
+  const [departingAccommodation, setDepartingAccommodation] =
+    useState<string>("");
+  const [returningAccommodation, setReturningAccommodation] =
+    useState<string>("");
+  const [selectedAccommodation, setSelectedAccommodation] =
+    useState<string>("");
 
   // handle get airports
   // useEffect(() => {
@@ -42,12 +50,18 @@ const SearchHeaderReservation = () => {
     switch (pathName) {
       case "flights":
         setTabValue("1");
+        setSearchType("flight");
         break;
       case "accommodations":
         setTabValue("2");
+        setSearchType("accommodation");
+        setDepartingAccommodation(searchParams.get("departing") as string);
+        setReturningAccommodation(searchParams.get("returning") as string);
+        setSelectedAccommodation(searchParams.get("destination") as string);
         break;
       case "flight-accommodation":
         setTabValue("3");
+        setSearchType("flight-accommodation");
         break;
     }
     console.log("pat55555hName", pathName);
@@ -124,28 +138,42 @@ const SearchHeaderReservation = () => {
   // for flight
   const flightSummerySearch = () => {
     return (
-      <>
-        <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
-          <div className="col-span-4 flex items-center justify-center">
-            <div className="font-semibold text-paper text-sm">
-              <span>بلیط هواپیما</span>
-              <span> {origin?.title_fa} </span>
-              <span> به </span>
-              <span> {destination?.title_fa} </span>
-            </div>{" "}
+      <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
+        {searchType === "flight" ? (
+          origin && destination && fromDate ? (
+            <>
+              <div className="col-span-4 flex items-center justify-center">
+                <div className="font-semibold text-paper text-sm">
+                  <span>بلیط هواپیما</span>
+                  <span> {origin?.title_fa} </span>
+                  <span> به </span>
+                  <span> {destination?.title_fa} </span>
+                </div>{" "}
+              </div>
+              <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
+                <span className={`text-paper font-semibold`}>
+                  رفت: {formatDateWithSlash(fromDate as string)}
+                </span>{" "}
+                {toDate && (
+                  <span className={`text-paper font-semibold`}>
+                    برگشت: {formatDateWithSlash(toDate as string)}
+                  </span>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="col-span-12 flex items-center justify-center">
+              <span className="text-paper text-sm">در حال بارگذاری ...</span>
+            </div>
+          )
+        ) : (
+          <div className="col-span-12 flex items-center justify-center">
+            <span className="text-paper text-sm">
+              جستجویی در این قسمت انجام نشده است
+            </span>
           </div>
-          <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
-            <span className={`text-paper font-semibold`}>
-              رفت: {formatDateWithSlash(fromDate as string)}
-            </span>{" "}
-            {toDate && (
-              <span className={`text-paper font-semibold`}>
-                برگشت: {formatDateWithSlash(toDate as string)}
-              </span>
-            )}
-          </div>
-        </div>
-      </>
+        )}
+      </div>
     );
   };
 
@@ -155,22 +183,30 @@ const SearchHeaderReservation = () => {
       <>
         {" "}
         <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
-          <div className="col-span-4 flex items-center justify-center">
-            <div className="font-semibold text-paper text-sm">
-              <span>هتل های </span>
-              <span>{searchParams.get("destination")}</span>
-            </div>{" "}
-          </div>
-          <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
-            <span className={`text-paper font-semibold`}>
-              تاریخ ورود:{" "}
-              {formatDateWithSlash(searchParams.get("departing") as string)}
-            </span>{" "}
-            <span className={`text-paper font-semibold`}>
-              تاریخ خروج:{" "}
-              {formatDateWithSlash(searchParams.get("returning") as string)}
-            </span>
-          </div>
+          {searchType === "accommodation" ? (
+            <>
+              <div className="col-span-4 flex items-center justify-center">
+                <div className="font-semibold text-paper text-sm">
+                  <span>هتل های </span>
+                  <span>{selectedAccommodation}</span>
+                </div>{" "}
+              </div>
+              <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
+                <span className={`text-paper font-semibold`}>
+                  تاریخ ورود: {formatDateWithSlash(departingAccommodation)}
+                </span>{" "}
+                <span className={`text-paper font-semibold`}>
+                  تاریخ خروج: {formatDateWithSlash(returningAccommodation)}
+                </span>
+              </div>
+            </>
+          ) : (
+            <div className="col-span-12 flex items-center justify-center">
+              <span className="text-paper text-sm">
+                جستجویی در این قسمت انجام نشده است
+              </span>
+            </div>
+          )}
         </div>
       </>
     );
@@ -179,52 +215,74 @@ const SearchHeaderReservation = () => {
   const flightAccommodationSummerySearch = () => {
     return (
       <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
-        <div className="col-span-4 flex items-center justify-center gap-6">
-          <div className="font-semibold text-paper text-sm">
-            <span>بلیط هواپیما</span>
-            <span> {origin?.title_fa} </span>
-            <span> به </span>
-            <span> {destination?.title_fa} </span>
-          </div>{" "}
-          <div className="font-semibold text-paper text-sm">
-            <span>هتل های </span>
-            <span> {destination?.title_fa} </span>
-          </div>{" "}
-        </div>
-        <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
-          <span className={`text-paper font-semibold`}>
-            رفت: {formatDateWithSlash(fromDate as string)}
-          </span>{" "}
-          {toDate && (
-            <span className={`text-paper font-semibold`}>
-              برگشت: {formatDateWithSlash(toDate as string)}
+        {searchType === "flight-accommodation" ? (
+          origin && destination && fromDate && toDate ? (
+            <>
+              <div className="col-span-4 flex items-center justify-center gap-6">
+                <div className="font-semibold text-paper text-sm">
+                  <span>بلیط هواپیما</span>
+                  <span> {origin?.title_fa} </span>
+                  <span> به </span>
+                  <span> {destination?.title_fa} </span>
+                </div>{" "}
+                <div className="font-semibold text-paper text-sm">
+                  <span>هتل های </span>
+                  <span> {destination?.title_fa} </span>
+                </div>{" "}
+              </div>
+              <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
+                <span className={`text-paper font-semibold`}>
+                  رفت: {formatDateWithSlash(fromDate as string)}
+                </span>{" "}
+                <span className={`text-paper font-semibold`}>
+                  برگشت: {formatDateWithSlash(toDate as string)}
+                </span>
+              </div>
+            </>
+          ) : (
+            <div className="col-span-12 flex items-center justify-center">
+              <span className="text-paper text-sm">در حال بارگذاری ...</span>
+            </div>
+          )
+        ) : (
+          <div className="col-span-12 flex items-center justify-center">
+            <span className="text-paper text-sm">
+              جستجویی در این قسمت انجام نشده است
             </span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     );
   };
 
   const renderSummerySearch = () => {
+    // switch (tabValue) {
+    //   case "1":
+    //     return origin && destination && fromDate && toDate ? (
+    //       flightSummerySearch()
+    //     ) : (
+    //       <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
+    //         درحال بارگذاری...{" "}
+    //       </div>
+    //     );
+    //   case "2":
+    //     return accommodationSummerySearch();
+    //   case "3":
+    //     return origin && destination && fromDate && toDate ? (
+    //       flightAccommodationSummerySearch()
+    //     ) : (
+    //       <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
+    //         درحال بارگذاری...{" "}
+    //       </div>
+    //     );
+    // }
     switch (tabValue) {
       case "1":
-        return origin && destination && fromDate && toDate ? (
-          flightSummerySearch()
-        ) : (
-          <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
-            درحال بارگذاری...{" "}
-          </div>
-        );
+        return flightSummerySearch();
       case "2":
         return accommodationSummerySearch();
       case "3":
-        return origin && destination && fromDate && toDate ? (
-          flightAccommodationSummerySearch()
-        ) : (
-          <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
-            درحال بارگذاری...{" "}
-          </div>
-        );
+        return flightAccommodationSummerySearch();
     }
   };
 

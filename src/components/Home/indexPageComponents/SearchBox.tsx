@@ -77,7 +77,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
       case "2":
         return "residence-pattern.svg";
       case "3":
-        return "flight-pattern.svg";
+        return "accommodation-flight-pattern.svg";
       // default:
       //   return "flight-pattern.svg";
     }
@@ -88,7 +88,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
       { id: "2", label: "اقامتگاه", active: true },
-      { id: "3", label: "پرواز و اقامتگاه", active: true },
+      { id: "3", label: "بلیت و اقامتگاه", active: true },
       // { id: "3", label: "اتوبوس", active: false },
       // { id: "4", label: "تور", active: false },
       // { id: "5", label: "قطار", active: false },
@@ -201,7 +201,7 @@ const SearchBoxOnMobile: FC<SearchBoxOnMobileProps> = ({ config }) => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
       { id: "2", label: "اقامتگاه", active: false },
-      { id: "3", label: "پرواز و اقامتگاه", active: false },
+      { id: "3", label: "بلیت و اقامتگاه", active: false },
       // { id: "3", label: "اتوبوس", active: false },
       // { id: "4", label: "تور", active: false },
       // { id: "5", label: "قطار", active: false },

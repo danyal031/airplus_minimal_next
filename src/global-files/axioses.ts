@@ -250,7 +250,7 @@ export const getOnlineFlightSearch = (props: onlineFlightSearchInputType) => {
 
   return new Promise((resolve, reject) => {
     customAxios
-      .post(process.env.NEXT_PUBLIC_BASE_URL_2 + "/online/flight/search", props)
+      .post(process.env.NEXT_PUBLIC_BASE_URL_2 + "/online/search/flight", props)
       .then((response) => {
         // Handle successful response here
         console.log("response", response);

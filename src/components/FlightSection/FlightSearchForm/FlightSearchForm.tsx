@@ -412,7 +412,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
               color="primary"
             />
           }
-          label="پرواز های چارتری"
+          label="بلیت های چارتری"
         />
       </FormGroup>
     );
@@ -438,7 +438,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ type }) => {
               color="primary"
             />
           }
-          label="هتل های چارتری"
+          label="اقامتگاه های چارتری"
         />
       </FormGroup>
     );
