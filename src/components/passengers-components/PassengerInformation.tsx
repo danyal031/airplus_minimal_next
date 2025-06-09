@@ -80,6 +80,7 @@ interface PassengerInformationProps {
   setPassengers: (passengers: UserInformationDataType[] | []) => void;
   labels?: LabelsDataTypes[];
   online?: AccommodationDataType[];
+  passengerNumberInRoom: any;
 }
 
 interface PassengerRef {
@@ -101,6 +102,7 @@ const PassengerInformation = forwardRef<
       handleRemovePassenger = () => {},
       labels,
       online,
+      passengerNumberInRoom,
     },
     ref
   ) => {
@@ -333,12 +335,20 @@ const PassengerInformation = forwardRef<
                     </span>
                     <span className="font-semibold text-base">
                       {"مسافر "}
-                      {labels[index].passenger_idx + 1}
+                      {passengerNumberInRoom}
                     </span>
                     <span className="font-semibold text-xs">
                       (
                       {labels[index].age_category === "adult"
                         ? "بزرگسال"
+                        : labels[index].age_category == "extra_infant"
+                        ? "نوزاد اضافه"
+                        : labels[index].age_category == "infant"
+                        ? "نوزاد"
+                        : labels[index].age_category == "extra_child"
+                        ? "کودک اضاف"
+                        : labels[index].age_category == "extra"
+                        ? "سرویس اضافه"
                         : "کودک"}
                       )
                     </span>

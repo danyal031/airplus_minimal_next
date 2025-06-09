@@ -44,6 +44,7 @@ import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useShowAlert } from "@/hooks/useShowAlert";
 // import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 // import { AccommodationsListDataType } from "@/DataTypes/accommodation/accommodationsListTypes";
 
@@ -87,7 +88,13 @@ const AccommodationsList: FC<AccommodationsListProps> = ({
     setAddedRooms,
   } = useGlobalContext().accommodationContext.accommodationSearch;
 
-  const handleAddedRooms = (rooms) => {
+  const handleAddedRooms = (accoId: any, rooms: any) => {
+    // if (rooms.length) {
+    //   setAddedRooms((prev) => ({ ...prev, [accoId]: rooms }));
+    // } else {
+    //   let { [accoId]: _, ...rest } = addedRooms;
+    //   setAddedRooms(rest);
+    // }
     setAddedRooms(rooms);
   };
 
@@ -682,8 +689,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
   }, [capacitySelectedAccommodation]);
 
   // handle accommodation checkout page
-  const handleAccommodationCheckout = () => {
-    onAdd(selectedRooms);
+  const handleAccommodationCheckout = (accoId: any) => {
+    onAdd(accoId, selectedRooms);
     closeDialog();
 
     const local_id = uuidv4().substr(0, 6);
@@ -701,9 +708,9 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
   };
 
   // handle flight accommodation checkout page
-  const handleFlightAccommodationCheckout = () => {
+  const handleFlightAccommodationCheckout = (accoId: any) => {
     if (selectedWentFlight && selectedReturnFlight) {
-      onAdd(selectedRooms);
+      onAdd(accoId, selectedRooms);
       closeDialog();
 
       const local_id = uuidv4().substr(0, 6);
@@ -739,9 +746,10 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
 
   // move to checkout passenger page
   const handleMoveToCheckoutPage = (
-    searchType: "accommodation" | "flight-accommodation"
+    searchType: "accommodation" | "flight-accommodation",
+    accoId: any
   ) => {
-    moveToCheckoutPageFieldObject[searchType](searchType);
+    moveToCheckoutPageFieldObject[searchType](accoId);
   };
 
   useEffect(() => {
@@ -807,8 +815,8 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
             {selectedRooms.length > 0 ? (
               <div className="space-y-3 flex-1 overflow-y-auto overflow-x-hidden">
                 {selectedRooms.map((elm: any, index: number) => {
-                  // console.log("elm", elm);
-
+                  console.log("elmmmmmmmmmmmm", elm.uuid);
+                  // return <>{elm.uuid}</>;
                   return (
                     <SelectedRoomItem
                       key={elm.uuid}
@@ -831,11 +839,21 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
                   <span className="text-text-main font-bold text-sm">
                     {`${formatInputWithCommas(
                       selectedRooms.reduce(
-                        (acc, curr) =>
+                        (acc: any, curr: any) =>
                           acc +
                           parseInt(
+                            // calculateRoomPrice(curr.room_type)
                             curr.room_type.board_type_list.financial_total
-                              .net_price
+                              .net_price +
+                              curr.room_type.board_type_list.financial_total
+                                .extra_bed_price *
+                                curr.room_type.passengers.extra +
+                              curr.room_type.board_type_list.financial_total
+                                .child_price *
+                                curr.room_type.passengers.extra_child
+
+                            // curr.room_type.board_type_list.financial_total
+                            //   .net_price
                           ),
                         0
                       )
@@ -864,11 +882,26 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
               disabled={!selectedRooms.length}
               className="w-full"
               onClick={() => {
-                handleMoveToCheckoutPage(
-                  searchType === "flight-accommodation"
-                    ? "flight-accommodation"
-                    : "accommodation"
-                );
+                let itemsValidated = true;
+                selectedRooms.forEach((element: any) => {
+                  if (element.validated === false) itemsValidated = false;
+                });
+                if (itemsValidated) {
+                  handleMoveToCheckoutPage(
+                    searchType === "flight-accommodation"
+                      ? "flight-accommodation"
+                      : "accommodation",
+                    item.id
+                  );
+                  // onClose();
+                } else {
+                  setItemsTrigger(true);
+                  setShowAlertDetails({
+                    showAlert: true,
+                    alertType: "error",
+                    alertMessage: "لطفا فیلدهای ضروری را به درستی وارد کنید",
+                  });
+                }
               }}
             >
               {!selectedRooms.length ? "افزودن" : "ادامه فرآیند رزرو"}
@@ -1168,20 +1201,20 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
         else passengers.extra_child += 1;
       }
     });
-    // item.room_type.passengers = { ...passengers };
-    setSelectedRooms((prevRooms: any[]) => {
-      return prevRooms.map((room) => {
-        if (room.uuid === item.uuid) {
-          return {
-            ...room,
-            room_type: {
-              ...room.room_type,
-              passengers: { ...passengers },
-            },
-          };
-        }
-      });
-    });
+    item.room_type.passengers = { ...passengers };
+    // setSelectedRooms((prevRooms: any[]) => {
+    //   return prevRooms.map((room) => {
+    //     if (room.uuid === item.uuid) {
+    //       return {
+    //         ...room,
+    //         room_type: {
+    //           ...room.room_type,
+    //           passengers: { ...passengers },
+    //         },
+    //       };
+    //     }
+    //   });
+    // });
   }
 
   useEffect(() => {
@@ -1208,9 +1241,9 @@ const SelectedRoomItem: FC<SelectedRoomItemProps> = ({
     item.room_type.children_age = updatedAges;
   };
 
-  useEffect(() => {
-    console.log("room Price", calculateRoomPrice(item.room_type));
-  }, [adultCount, childCount, childrenAge]);
+  // useEffect(() => {
+  //   console.log("room Price", calculateRoomPrice(item.room_type));
+  // }, [adultCount, childCount, childrenAge]);
 
   // handle add passenger accommodation type
   const handleAccommodationAddPassenger = (ageCategory: "child" | "adult") => {

@@ -25,7 +25,13 @@ import { v4 as uuidv4 } from "uuid";
 export interface LabelsDataTypes {
   item_idx: number;
   passenger_idx: number;
-  age_category: "adult" | "child";
+  age_category:
+    | "adult"
+    | "child"
+    | "infant"
+    | "extra_infant"
+    | "extra_child"
+    | "extra";
   idx?: number;
 }
 
@@ -238,8 +244,16 @@ const CheckoutAccommodationContainer = () => {
     setOnlineAccommodations(accommodations);
     const newPassengers: UserInformationDataType[] = accommodations.flatMap(
       (acc: any) => {
-        const { adult = 0, child = 0 } = acc.room_type.passengers;
-        const totalPassengers = adult + child;
+        const {
+          adult = 0,
+          child = 0,
+          infant = 0,
+          extra_child = 0,
+          extra_infant = 0,
+          extra = 0,
+        } = acc.room_type.passengers;
+        const totalPassengers =
+          adult + child + infant + extra_child + extra_infant + extra;
 
         return Array.from({ length: totalPassengers }).map(() => ({
           ...defaultPassengerInformation,
@@ -270,6 +284,34 @@ const CheckoutAccommodationContainer = () => {
           age_category: "child",
         });
       }
+      for (let i = 0; i < item?.room_type?.passengers.infant; i++) {
+        tempLabel.push({
+          item_idx: index,
+          passenger_idx: i,
+          age_category: "infant",
+        });
+      }
+      for (let i = 0; i < item?.room_type?.passengers.extra_child; i++) {
+        tempLabel.push({
+          item_idx: index,
+          passenger_idx: i,
+          age_category: "extra_child",
+        });
+      }
+      for (let i = 0; i < item?.room_type?.passengers.extra_infant; i++) {
+        tempLabel.push({
+          item_idx: index,
+          passenger_idx: i,
+          age_category: "extra_infant",
+        });
+      }
+      for (let i = 0; i < item?.room_type?.passengers.extra; i++) {
+        tempLabel.push({
+          item_idx: index,
+          passenger_idx: i,
+          age_category: "extra",
+        });
+      }
     });
     setLabels(tempLabel.map((i, idx) => ({ ...i, idx })));
   }, []);
@@ -294,9 +336,17 @@ const CheckoutAccommodationContainer = () => {
         const roommates = restLabels.reduce(
           (acc, label) => {
             const passenger = accommodationPassenger[label.idx];
-            if (label.age_category === "adult") {
+            if (
+              label.age_category === "adult" ||
+              label.age_category === "extra"
+            ) {
               acc.adult.push(passenger);
-            } else if (label.age_category === "child") {
+            } else if (
+              label.age_category === "child" ||
+              label.age_category === "extra_child" ||
+              label.age_category === "extra_infant" ||
+              label.age_category === "infant"
+            ) {
               acc.child.push(passenger);
             }
             return acc;
@@ -723,20 +773,28 @@ const CheckoutAccommodationContainer = () => {
     return (
       <>
         {accommodationPassenger.map(
-          (item: UserInformationDataType, index: number) => (
-            <PassengerInformation
-              key={item.id}
-              item={item}
-              type="accommodation"
-              passengers={accommodationPassenger}
-              setPassengers={setAccommodationPassenger}
-              ref={(el) => (childRef.current[index] = el)}
-              index={index}
-              handleOnChange={handleChangeUserInfo}
-              labels={labels}
-              online={onlineAccommodations}
-            />
-          )
+          (item: UserInformationDataType, index: number) => {
+            let roomIdx = labels && labels[index]?.item_idx;
+            let passengerNumberInRoom = labels
+              ? labels.slice(0, index + 1).filter((l) => l.item_idx === roomIdx)
+                  .length
+              : index + 1;
+            return (
+              <PassengerInformation
+                key={item.id}
+                item={item}
+                type="accommodation"
+                passengers={accommodationPassenger}
+                setPassengers={setAccommodationPassenger}
+                ref={(el) => (childRef.current[index] = el)}
+                index={index}
+                handleOnChange={handleChangeUserInfo}
+                labels={labels}
+                online={onlineAccommodations}
+                passengerNumberInRoom={passengerNumberInRoom}
+              />
+            );
+          }
         )}
       </>
     );
