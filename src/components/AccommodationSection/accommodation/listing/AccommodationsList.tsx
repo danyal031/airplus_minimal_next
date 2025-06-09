@@ -468,7 +468,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
           (elm: any) =>
             elm.id === tempRoom.id &&
             tempRoom.room_type.uuid === elm.room_type.uuid
-        ).length < tempRoom.room_type.capacity.room)
+        ).length < tempRoom.room_type.capacity.purchase)
     ) {
       if (isDifferentHotel) {
         setSelectedRooms([{ ...tempRoom, uuid: uuidv4() }]);
@@ -534,7 +534,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
               (elm: any) =>
                 elm.id === tempRoom.id &&
                 tempRoom.room_type.uuid === elm.room_type.uuid
-            ).length < tempRoom.room_type.capacity.room)
+            ).length < tempRoom.room_type.capacity.purchase)
         ) {
           if (isDifferentHotel) {
             setSelectedRooms([{ ...tempRoom, uuid: uuidv4() }]);
@@ -569,7 +569,7 @@ const RoomListDialog: FC<RoomListDialogProps> = ({
             (elm: any) =>
               elm.id === tempRoom.id &&
               tempRoom.room_type.uuid === elm.room_type.uuid
-          ).length < tempRoom.room_type.capacity.room)
+          ).length < tempRoom.room_type.capacity.purchase)
       ) {
         if (isDifferentHotel) {
           setSelectedRooms([{ ...tempRoom, uuid: uuidv4() }]);
@@ -978,6 +978,7 @@ const RoomItem: FC<RoomItemProps> = ({
               size="small"
               variant="contained"
               className=""
+              disabled={selectedNumber == item.capacity.purchase}
               onClick={() =>
                 handleSelectRoom({
                   ...item,
