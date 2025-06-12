@@ -438,22 +438,28 @@ const AccommodationSearchForm = () => {
 
   const renderAccommodationSearchFormOnDesktop = () => {
     return (
-      <>
-        <div className="hidden md:block bg-paper w-full rounded-xl p-5">
-          <div className="grid grid-cols-12 gap-5">
-            <div className="col-span-5">{renderRoundWayInput()}</div>
-            {/* <div className="col-span-2">{renderPassengerInput()}</div> */}
-            <div className="col-span-5">{renderDatePicker()}</div>
-            <div className="col-span-2">{renderConfirmButton()}</div>
-          </div>
+      <div className="hidden md:block bg-paper w-full rounded-xl p-5">
+        <div className="grid grid-cols-12 gap-5">
+          <div className="col-span-5">{renderRoundWayInput()}</div>
+          {/* <div className="col-span-2">{renderPassengerInput()}</div> */}
+          <div className="col-span-5">{renderDatePicker()}</div>
+          <div className="col-span-2">{renderConfirmButton()}</div>
         </div>
-      </>
+      </div>
     );
   };
 
   // for mobile
   const renderAccommodationSearchFormOnMobile = () => {
-    return <></>;
+    return (
+      <div className="md:hidden rounded-b-lg p-3 bg-paper w-full">
+        <div className="grid grid-cols-1 gap-2">
+          {renderRoundWayInput()}
+          {renderDatePicker()}
+          {renderConfirmButton()}
+        </div>
+      </div>
+    );
   };
 
   return (
