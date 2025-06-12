@@ -1,5 +1,3 @@
-"use client";
-
 import { useGlobalContext } from "@/context/store";
 
 const useLogOut = () => {

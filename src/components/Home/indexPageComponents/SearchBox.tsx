@@ -2,7 +2,7 @@
 import Lottie from "lottie-react";
 import React, { FC, useEffect, useState } from "react";
 import comingSoonLottie from "../../../../public/assets/lottie/coming_soon_lottie.json";
-import { Tab } from "@mui/material";
+import { Tab, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -18,12 +18,14 @@ import { AirportDataType } from "@/DataTypes/flight/flightTicket";
 import AccommodationSearchForm from "@/components/AccommodationSection/AccommodationSearchForm/AccommodationSearchForm";
 import { ConfigDataType } from "@/DataTypes/globalTypes";
 import FlightAccommodationSearchForm from "@/components/FlightAccommodationSection/FlightAccommodationSearchForm/FlightAccommodationSearchForm";
+import useResponsive from "@/hooks/useResponsive";
 // import { getAirports } from "@/global-files/axioses";
 
 const SearchBox = () => {
   // initial states
   const { setAirports } = useGlobalContext().flightContext.searchContext;
   const { config } = useGlobalContext().global;
+  const { isDesktop } = useResponsive();
 
   // handle get airports
   // useEffect(() => {
@@ -40,8 +42,11 @@ const SearchBox = () => {
 
   return (
     <>
-      <SearchBoxOnDesktop config={config} />
-      <SearchBoxOnMobile config={config} />
+      {isDesktop ? (
+        <SearchBoxOnDesktop config={config} />
+      ) : (
+        <SearchBoxOnMobile config={config} />
+      )}
     </>
   );
 };
@@ -180,7 +185,7 @@ const SearchBoxOnDesktop: FC<SearchBoxOnDesktopProps> = ({ config }) => {
   };
 
   return (
-    <div className="hidden md:flex flex-col items-center justify-start gap-0">
+    <div className="flex flex-col items-center justify-start gap-0">
       {renderReservationsBanner()}
       {renderTab()}
       {renderForm()}
@@ -289,7 +294,7 @@ const SearchBoxOnMobile: FC<SearchBoxOnMobileProps> = ({ config }) => {
   };
   return (
     <>
-      <div className="md:hidden rounded-xl flex flex-col items-center justify-start gap-0 overflow-hidden">
+      <div className="rounded-xl flex flex-col items-center justify-start gap-0 overflow-hidden">
         {renderTab()}
         {renderForm()}
       </div>
