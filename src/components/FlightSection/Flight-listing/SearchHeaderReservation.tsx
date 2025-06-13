@@ -175,10 +175,10 @@ const SearchHeaderReservation = () => {
         </div>
       );
     // for mobile
-    const onMobile =
-      searchType === "flight" ? (
-        origin && destination && fromDate ? (
-          <div className="md:hidden flex items-center justify-between col-span-12">
+    const onMobile = (
+      <div className="md:hidden col-span-12">
+        {searchType === "flight" ? (
+          origin && destination && fromDate ? (
             <div className="flex flex-col items-start justify-center gap-1">
               <span className="font-semibold text-paper text-xs">
                 <span>بلیط هواپیما</span>
@@ -197,28 +197,20 @@ const SearchHeaderReservation = () => {
                 )}
               </div>
             </div>
-            <Button
-              onClick={toggleSearchDrawer(true)}
-              endIcon={<SearchIcon fontSize="small" />}
-              size="small"
-              variant="contained"
-              className={`bg-paper text-primary-main rounded-lg`}
-            >
-              جستجو
-            </Button>
-          </div>
+          ) : (
+            <div className="col-span-12 flex items-center justify-center">
+              <span className="text-paper text-sm">در حال بارگذاری ...</span>
+            </div>
+          )
         ) : (
           <div className="col-span-12 flex items-center justify-center">
-            <span className="text-paper text-sm">در حال بارگذاری ...</span>
+            <span className="text-paper text-sm">
+              جستجویی در این قسمت انجام نشده است
+            </span>
           </div>
-        )
-      ) : (
-        <div className="col-span-12 flex items-center justify-center">
-          <span className="text-paper text-sm">
-            جستجویی در این قسمت انجام نشده است
-          </span>
-        </div>
-      );
+        )}
+      </div>
+    );
 
     return (
       <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
@@ -413,59 +405,32 @@ const SearchHeaderReservation = () => {
     );
   };
 
-  const renderSummerySearchOnMobile = () => {
+  const renderSummerySearchTypeOnMobile = () => {
     switch (tabValue) {
       case "1":
         return flightSummerySearch();
       case "2":
         return accommodationSummerySearch();
     }
-    // const drawerContent = renderForm();
-    // return (
-    //   <>
-    //     <div className="bg-primary-main p-2 flex items-center justify-between">
-    //       <div className="flex flex-col items-start justify-center gap-1">
-    //         <span className="font-semibold text-paper text-xs">
-    //           <span>بلیط هواپیما</span>
-    //           <span> {origin?.title_fa} </span>
-    //           <span> به </span>
-    //           <span> {destination?.title_fa} </span>
-    //         </span>{" "}
-    //         <div className="flex items-center justify-center gap-3 text-xs">
-    //           {/* <span className={`text-paper font-light opacity-50`}>
-    //             رفت: {formatDateWithSlash(fromDate as string)}
-    //           </span>{" "}
-    //           {toDate && (
-    //             <span className={`text-paper font-light opacity-50`}>
-    //               برگشت: {formatDateWithSlash(toDate as string)}
-    //             </span>
-    //           )} */}
-    //         </div>
-    //       </div>
-    //       <Button
-    //         onClick={toggleSearchDrawer(true)}
-    //         endIcon={<SearchIcon fontSize="small" />}
-    //         size="small"
-    //         variant="contained"
-    //         className={`bg-paper text-primary-main rounded-lg`}
-    //       >
-    //         جستجو
-    //       </Button>
-    //     </div>
-    //     <Drawer
-    //       anchor={"bottom"}
-    //       PaperProps={{
-    //         sx: {
-    //           padding: 2,
-    //         },
-    //       }}
-    //       open={openSearchDrawer}
-    //       onClose={toggleSearchDrawer(false)}
-    //     >
-    //       {drawerContent}
-    //     </Drawer>{" "}
-    //   </>
-    // );
+  };
+
+  const renderSummerySearchOnMobile = () => {
+    return (
+      <div className="flex items-center justify-between bg-primary-main rounded-b-2xl p-2">
+        {renderSummerySearchTypeOnMobile()}
+        <span>
+          <Button
+            onClick={toggleSearchDrawer(true)}
+            endIcon={<SearchIcon fontSize="small" />}
+            size="small"
+            variant="contained"
+            className={`bg-paper text-primary-main rounded-lg`}
+          >
+            جستجو
+          </Button>
+        </span>
+      </div>
+    );
   };
 
   // for render on mobile
