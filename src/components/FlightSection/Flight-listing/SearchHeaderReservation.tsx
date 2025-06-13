@@ -137,48 +137,103 @@ const SearchHeaderReservation = () => {
   // render types of summery search
   // for flight
   const flightSummerySearch = () => {
-    return (
-      <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
-        {searchType === "flight" ? (
-          origin && destination && fromDate ? (
-            <>
-              <div className="col-span-4 flex items-center justify-center">
-                <div className="font-semibold text-paper text-sm">
-                  <span>بلیط هواپیما</span>
-                  <span> {origin?.title_fa} </span>
-                  <span> به </span>
-                  <span> {destination?.title_fa} </span>
-                </div>{" "}
-              </div>
-              <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
+    // for desktop
+
+    const onDesktop =
+      searchType === "flight" ? (
+        origin && destination && fromDate ? (
+          <div className="hidden md:grid grid-cols-12 col-span-12">
+            <div className="col-span-4 flex items-center justify-center">
+              <div className="font-semibold text-paper text-sm">
+                <span>بلیط هواپیما</span>
+                <span> {origin?.title_fa} </span>
+                <span> به </span>
+                <span> {destination?.title_fa} </span>
+              </div>{" "}
+            </div>
+            <div className="col-span-8 flex items-center justify-center gap-6 text-sm">
+              <span className={`text-paper font-semibold`}>
+                رفت: {formatDateWithSlash(fromDate as string)}
+              </span>{" "}
+              {toDate && (
                 <span className={`text-paper font-semibold`}>
+                  برگشت: {formatDateWithSlash(toDate as string)}
+                </span>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="col-span-12 flex items-center justify-center">
+            <span className="text-paper text-sm">در حال بارگذاری ...</span>
+          </div>
+        )
+      ) : (
+        <div className="col-span-12 flex items-center justify-center">
+          <span className="text-paper text-sm">
+            جستجویی در این قسمت انجام نشده است
+          </span>
+        </div>
+      );
+    // for mobile
+    const onMobile =
+      searchType === "flight" ? (
+        origin && destination && fromDate ? (
+          <div className="md:hidden flex items-center justify-between col-span-12">
+            <div className="flex flex-col items-start justify-center gap-1">
+              <span className="font-semibold text-paper text-xs">
+                <span>بلیط هواپیما</span>
+                <span> {origin?.title_fa} </span>
+                <span> به </span>
+                <span> {destination?.title_fa} </span>
+              </span>{" "}
+              <div className="flex items-center justify-center gap-3 text-xs">
+                <span className={`text-paper font-light opacity-50`}>
                   رفت: {formatDateWithSlash(fromDate as string)}
                 </span>{" "}
                 {toDate && (
-                  <span className={`text-paper font-semibold`}>
+                  <span className={`text-paper font-light opacity-50`}>
                     برگشت: {formatDateWithSlash(toDate as string)}
                   </span>
                 )}
               </div>
-            </>
-          ) : (
-            <div className="col-span-12 flex items-center justify-center">
-              <span className="text-paper text-sm">در حال بارگذاری ...</span>
             </div>
-          )
+            <Button
+              onClick={toggleSearchDrawer(true)}
+              endIcon={<SearchIcon fontSize="small" />}
+              size="small"
+              variant="contained"
+              className={`bg-paper text-primary-main rounded-lg`}
+            >
+              جستجو
+            </Button>
+          </div>
         ) : (
           <div className="col-span-12 flex items-center justify-center">
-            <span className="text-paper text-sm">
-              جستجویی در این قسمت انجام نشده است
-            </span>
+            <span className="text-paper text-sm">در حال بارگذاری ...</span>
           </div>
-        )}
+        )
+      ) : (
+        <div className="col-span-12 flex items-center justify-center">
+          <span className="text-paper text-sm">
+            جستجویی در این قسمت انجام نشده است
+          </span>
+        </div>
+      );
+
+    return (
+      <div className="bg-primary-main rounded-b-2xl grid grid-cols-12 p-2">
+        {onDesktop}
+        {onMobile}
       </div>
     );
   };
 
   // for accommodations
   const accommodationSummerySearch = () => {
+    // for desktop
+    // const onDesktop =()
+    // for mobile
+    // const onMobile=()
     return (
       <>
         {" "}
@@ -256,26 +311,6 @@ const SearchHeaderReservation = () => {
   };
 
   const renderSummerySearch = () => {
-    // switch (tabValue) {
-    //   case "1":
-    //     return origin && destination && fromDate && toDate ? (
-    //       flightSummerySearch()
-    //     ) : (
-    //       <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
-    //         درحال بارگذاری...{" "}
-    //       </div>
-    //     );
-    //   case "2":
-    //     return accommodationSummerySearch();
-    //   case "3":
-    //     return origin && destination && fromDate && toDate ? (
-    //       flightAccommodationSummerySearch()
-    //     ) : (
-    //       <div className="flex items-center justify-center text-paper bg-primary-main p-2 rounded-b-2xl text-sm">
-    //         درحال بارگذاری...{" "}
-    //       </div>
-    //     );
-    // }
     switch (tabValue) {
       case "1":
         return flightSummerySearch();
@@ -319,17 +354,7 @@ const SearchHeaderReservation = () => {
               {showSummarySearch ? "جستجو" : "بستن"}
             </Button>
           </div>
-          {/* {showSummarySearch ? renderSummerySearch() : renderForm()}{" "} */}
-          {showSummarySearch
-            ? // origin && destination ? (
-              //   renderSummerySearch()
-              // ) : (
-              //   <div className="flex items-center justify-center text-black">
-              //     loading...
-              //   </div>
-              // )
-              renderSummerySearch()
-            : renderForm()}
+          {showSummarySearch ? renderSummerySearch() : renderForm()}
         </div>
       </>
     );
@@ -339,7 +364,7 @@ const SearchHeaderReservation = () => {
   const renderTabOnMobile = () => {
     const tabs = [
       { id: "1", label: "پرواز", active: true },
-      { id: "2", label: "اقامتگاه", active: false },
+      { id: "2", label: "اقامتگاه", active: true },
       { id: "3", label: "پرواز و اقامتگاه", active: false },
       // { id: "3", label: "اتوبوس" },
       // { id: "4", label: "تور" },
@@ -389,37 +414,69 @@ const SearchHeaderReservation = () => {
   };
 
   const renderSummerySearchOnMobile = () => {
-    const drawerContent = renderForm();
+    switch (tabValue) {
+      case "1":
+        return flightSummerySearch();
+      case "2":
+        return accommodationSummerySearch();
+    }
+    // const drawerContent = renderForm();
+    // return (
+    //   <>
+    //     <div className="bg-primary-main p-2 flex items-center justify-between">
+    //       <div className="flex flex-col items-start justify-center gap-1">
+    //         <span className="font-semibold text-paper text-xs">
+    //           <span>بلیط هواپیما</span>
+    //           <span> {origin?.title_fa} </span>
+    //           <span> به </span>
+    //           <span> {destination?.title_fa} </span>
+    //         </span>{" "}
+    //         <div className="flex items-center justify-center gap-3 text-xs">
+    //           {/* <span className={`text-paper font-light opacity-50`}>
+    //             رفت: {formatDateWithSlash(fromDate as string)}
+    //           </span>{" "}
+    //           {toDate && (
+    //             <span className={`text-paper font-light opacity-50`}>
+    //               برگشت: {formatDateWithSlash(toDate as string)}
+    //             </span>
+    //           )} */}
+    //         </div>
+    //       </div>
+    //       <Button
+    //         onClick={toggleSearchDrawer(true)}
+    //         endIcon={<SearchIcon fontSize="small" />}
+    //         size="small"
+    //         variant="contained"
+    //         className={`bg-paper text-primary-main rounded-lg`}
+    //       >
+    //         جستجو
+    //       </Button>
+    //     </div>
+    //     <Drawer
+    //       anchor={"bottom"}
+    //       PaperProps={{
+    //         sx: {
+    //           padding: 2,
+    //         },
+    //       }}
+    //       open={openSearchDrawer}
+    //       onClose={toggleSearchDrawer(false)}
+    //     >
+    //       {drawerContent}
+    //     </Drawer>{" "}
+    //   </>
+    // );
+  };
+
+  // for render on mobile
+  const renderOnMobile = () => {
     return (
       <>
-        <div className="bg-primary-main p-2 flex items-center justify-between">
-          <div className="flex flex-col items-start justify-center gap-1">
-            <span className="font-semibold text-paper text-xs">
-              <span>بلیط هواپیما</span>
-              <span> {origin?.title_fa} </span>
-              <span> به </span>
-              <span> {destination?.title_fa} </span>
-            </span>{" "}
-            <div className="flex items-center justify-center gap-3 text-xs">
-              {/* <span className={`text-paper font-light opacity-50`}>
-                رفت: {formatDateWithSlash(fromDate as string)}
-              </span>{" "}
-              {toDate && (
-                <span className={`text-paper font-light opacity-50`}>
-                  برگشت: {formatDateWithSlash(toDate as string)}
-                </span>
-              )} */}
-            </div>
-          </div>
-          <Button
-            onClick={toggleSearchDrawer(true)}
-            endIcon={<SearchIcon fontSize="small" />}
-            size="small"
-            variant="contained"
-            className={`bg-paper text-primary-main rounded-lg`}
-          >
-            جستجو
-          </Button>
+        <div
+          className={`text-paper overflow-hidden rounded-xl md:hidden grid grid-cols-1 gap-0`}
+        >
+          {renderTabOnMobile()}
+          {renderSummerySearchOnMobile()}
         </div>
         <Drawer
           anchor={"bottom"}
@@ -431,27 +488,8 @@ const SearchHeaderReservation = () => {
           open={openSearchDrawer}
           onClose={toggleSearchDrawer(false)}
         >
-          {drawerContent}
+          {renderForm()}
         </Drawer>{" "}
-      </>
-    );
-  };
-  // for render on mobile
-  const renderOnMobile = () => {
-    return (
-      <>
-        <div
-          className={`text-paper overflow-hidden rounded-xl md:hidden grid grid-cols-1 gap-0`}
-        >
-          {renderTabOnMobile()}
-          {origin && destination && fromDate && toDate ? (
-            renderSummerySearchOnMobile()
-          ) : (
-            <div className="flex items-center justify-center text-black">
-              درحال بارگذاری...
-            </div>
-          )}
-        </div>
       </>
     );
   };
